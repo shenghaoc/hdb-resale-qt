@@ -10,6 +10,7 @@ Item {
     property int phase: 0
     property double started: Date.now()
     property string chosen: ""
+    property bool modelLifetimeChecked: false
     property bool burstArmed: false
     property int burstFired: 0
     property var retainedSelectedItem: null
@@ -56,12 +57,20 @@ Item {
         return targetMap.mapItems.length === expected.length
     }
     function ready(rows, mapped) {
-        return attributionImage.status === Image.Ready && Resales.visibleCount === rows && targetList.count === rows
+        const complete = attributionImage.status === Image.Ready && Resales.visibleCount === rows && targetList.count === rows
             && targetMap.mapItems.length === mapped
             && townControl.currentIndex === Resales.townIndex
             && townControl.currentText === Resales.town
             && JSON.parse(Resales.townsJson)[Resales.townIndex] === Resales.town
             && priceControl.value === Resales.maximumPrice && identitiesAgree()
+        if (!complete) return false
+        if (!modelLifetimeChecked) {
+            modelLifetimeChecked = true
+            // Gate-only lifetime regression. Normal UI/startup never forces QML GC.
+            gc()
+            console.log("HDB_MODEL_LIFETIME_GC")
+        }
+        return identitiesAgree()
     }
     function advance(name) {
         console.log("HDB_SCALE_STEP " + name + " ms=" + (Date.now()-started)

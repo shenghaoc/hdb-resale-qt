@@ -19,3 +19,16 @@ class ScaleGateTests(unittest.TestCase):
    with self.subTest(code=code):
     with self.assertRaises(RuntimeError):verify(code,log)
 if __name__=='__main__':unittest.main()
+
+class ModelLifetimeContractTests(unittest.TestCase):
+ def test_qml_model_has_persistent_reference_and_gate_only_gc_regression(self):
+  root=Path(__file__).resolve().parents[1]
+  main=(root/'src/HdbResale.App/Main.qml').read_text()
+  gate=(root/'src/HdbResale.App/ScaleGate.qml').read_text()
+  self.assertIn('readonly property var locatedMapModel:',main)
+  self.assertIn('window.locatedMapModel',main)
+  self.assertIn('incubateDelegates: false',main)
+  self.assertIn('drop-model-anchor',main)
+  self.assertNotIn('gc()',main)
+  self.assertIn('HDB_MODEL_LIFETIME_GC',gate)
+  self.assertIn('gc()',gate)

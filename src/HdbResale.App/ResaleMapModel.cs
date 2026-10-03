@@ -42,7 +42,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
         Towns = new[] { "All towns" }.Concat(import.Accepted.Select(t => t.Town).Distinct().Order(StringComparer.Ordinal)).ToArray();
         MeasureStartup("town-labels");
         state = new(import.Accepted);
-        // The startup-only probe uses all prices to exercise all 1,921 markers.
+        // The startup-only probe uses all prices to exercise every located address marker.
         if (StartupProbe) state.Filter("All towns", MaximumAvailablePrice);
         MeasureStartup("state-construction");
         MapPoints = new(state.Visible, startupProfile is null ? null : MeasureStartup);

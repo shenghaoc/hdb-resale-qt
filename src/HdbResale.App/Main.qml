@@ -13,6 +13,11 @@ ApplicationWindow {
     minimumHeight: 600
     title: "HDB Resale · Native fixture explorer"
 
+    // The pinned Bridge creates a parentless, JavaScript-owned model wrapper.
+    // Keep its JS reference alive across QML GC, including all filter updates.
+    readonly property bool dropModelAnchor: Resales.scaleGate && Resales.runtimeGateFault === "drop-model-anchor"
+    readonly property var locatedMapModel: dropModelAnchor || (Resales.startupProbe && Resales.startupView !== "full") ? null : Resales.mapPoints
+
     Loader {
         active: Resales.runtimeGate
         sourceComponent: Component {
@@ -132,7 +137,11 @@ ApplicationWindow {
                     // Exact official logo/text is provided by the always-visible overlay below.
                     copyrightsVisible: false
                     MapItemView {
-                        model: Resales.startupProbe && Resales.startupView !== "full" ? null : Resales.mapPoints
+                        // QML-exposed by pinned Qt 6.12 (revision 5.12), though
+                        // omitted from its public MapItemView documentation.
+                        // Bulk synchronous creation is measured; no point is culled.
+                        incubateDelegates: false
+                        model: window.dropModelAnchor ? Resales.mapPoints : window.locatedMapModel
                         delegate: MapQuickItem {
                             Component.onCompleted: if (map.traceDelegates) { map.createdDelegates++; map.lastDelegateCreatedMs = Date.now() }
                             Component.onDestruction: if (map.traceDelegates) { map.destroyedDelegates++; map.lastDelegateDestroyedMs = Date.now() }
