@@ -305,3 +305,11 @@ This repository uses a lightweight rapid-development workflow:
 The Bridge README's linked snapshot documentation returned HTTP 404 during
 setup; API declarations in the official C# source and official examples were
 consulted instead. No APIs were inferred from the Rust/Python bridges.
+
+## Milestone 8: startup and transient memory
+
+[Measured raw-import improvements](docs/startup/README.md) preserve the M7 UI,
+full source/evidence contracts and in-memory domain model. Opt-in allocated-byte
+profiling separates CSV, footprints, domain work and native readiness; no startup
+artifact, database or production forced collection is introduced. See the
+[M8 verification record](docs/startup/verification.md) for measured results.

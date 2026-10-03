@@ -1,0 +1,3467 @@
+{
+  "scope": "Sequential .NET-only experiments, same Release harness, pinned full inputs. Each process executes three iterations. Every import/state/aggregation survives a diagnostic forced compacting GC; explanatory probes follow it and are not additive import stages. Timing is host-load-sensitive; final scalar experiment was visibly contended and supports allocation claims only. Native baseline/final reports are separate.",
+  "runs": {
+    "baseline": [
+      {
+        "run": 0,
+        "transactions": 241920,
+        "addresses": 9755,
+        "located": 52514,
+        "markers": 1921,
+        "rejected": 11,
+        "diagnostics": 11,
+        "retained": 241775048,
+        "fields": 2903052,
+        "measurements": [
+          {
+            "name": "property-evidence",
+            "ms": 98.2372,
+            "threadAllocated": 42954800,
+            "processAllocated": 42956032,
+            "managed": 5373752,
+            "working": 54132736
+          },
+          {
+            "name": "postal-evidence",
+            "ms": 62.8757,
+            "threadAllocated": 28934192,
+            "processAllocated": 28936544,
+            "managed": 12139320,
+            "working": 63737856
+          },
+          {
+            "name": "footprints",
+            "ms": 2154.7097,
+            "threadAllocated": 422921872,
+            "processAllocated": 422925936,
+            "managed": 266568184,
+            "working": 301985792
+          },
+          {
+            "name": "evidence-index",
+            "ms": 22.7871,
+            "threadAllocated": 5286888,
+            "processAllocated": 5286888,
+            "managed": 267278336,
+            "working": 302227456
+          },
+          {
+            "name": "transaction-csv",
+            "ms": 3350.9081,
+            "threadAllocated": 3970380504,
+            "processAllocated": 3970397856,
+            "managed": 463595152,
+            "working": 502992896
+          },
+          {
+            "name": "validation-facts",
+            "ms": 477.4866,
+            "threadAllocated": 76480488,
+            "processAllocated": 76480488,
+            "managed": 500867432,
+            "working": 543215616
+          },
+          {
+            "name": "matching-resolution",
+            "ms": 434.8968,
+            "threadAllocated": 43188864,
+            "processAllocated": 43190352,
+            "managed": 511689448,
+            "working": 574271488
+          },
+          {
+            "name": "transaction-domain",
+            "ms": 168.9836,
+            "threadAllocated": 35498584,
+            "processAllocated": 35498584,
+            "managed": 538304208,
+            "working": 595320832
+          },
+          {
+            "name": "import-return",
+            "ms": 0.2045,
+            "threadAllocated": 112,
+            "processAllocated": 112,
+            "managed": 538312432,
+            "working": 595320832
+          },
+          {
+            "name": "state",
+            "ms": 9.6134,
+            "threadAllocated": 5928584,
+            "processAllocated": 5928584,
+            "managed": 544239640,
+            "working": 595324928
+          },
+          {
+            "name": "aggregation",
+            "ms": 69.75,
+            "threadAllocated": 10042072,
+            "processAllocated": 10042408,
+            "managed": 549444992,
+            "working": 595591168
+          },
+          {
+            "name": "town-budget",
+            "ms": 17.6386,
+            "threadAllocated": 51992,
+            "processAllocated": 51992,
+            "managed": 549505016,
+            "working": 595607552
+          },
+          {
+            "name": "reset",
+            "ms": 15.403,
+            "threadAllocated": 1894568,
+            "processAllocated": 1894568,
+            "managed": 551399368,
+            "working": 597499904
+          },
+          {
+            "name": "diagnostic-retained-after-import",
+            "ms": 253.391,
+            "threadAllocated": 0,
+            "processAllocated": 0,
+            "managed": 241758600,
+            "working": 581292032
+          },
+          {
+            "name": "probe-io-address-evidence.csv",
+            "ms": 0.8954,
+            "threadAllocated": 132960,
+            "processAllocated": 132960,
+            "managed": 241906144,
+            "working": 581296128
+          },
+          {
+            "name": "probe-io-postal-address-evidence.csv",
+            "ms": 0.056,
+            "threadAllocated": 408,
+            "processAllocated": 408,
+            "managed": 241906144,
+            "working": 581296128
+          },
+          {
+            "name": "probe-io-transactions.csv",
+            "ms": 3.1514,
+            "threadAllocated": 360,
+            "processAllocated": 360,
+            "managed": 241913952,
+            "working": 581296128
+          },
+          {
+            "name": "probe-io-building-evidence.geojson",
+            "ms": 6.5494,
+            "threadAllocated": 400,
+            "processAllocated": 400,
+            "managed": 241913952,
+            "working": 581296128
+          },
+          {
+            "name": "probe-textfieldparser-fields-only",
+            "ms": 1307.4339,
+            "threadAllocated": 3679759368,
+            "processAllocated": 3679759368,
+            "managed": 245102712,
+            "working": 352960512
+          },
+          {
+            "name": "probe-address-distinct",
+            "ms": 39.3649,
+            "threadAllocated": 1098336,
+            "processAllocated": 1098336,
+            "managed": 246202240,
+            "working": 353107968
+          },
+          {
+            "name": "probe-normalization-distinct",
+            "ms": 3.317,
+            "threadAllocated": 2019016,
+            "processAllocated": 2019016,
+            "managed": 244017152,
+            "working": 327745536
+          }
+        ]
+      },
+      {
+        "run": 1,
+        "transactions": 241920,
+        "addresses": 9755,
+        "located": 52514,
+        "markers": 1921,
+        "rejected": 11,
+        "diagnostics": 11,
+        "retained": 241908784,
+        "fields": 2903052,
+        "measurements": [
+          {
+            "name": "property-evidence",
+            "ms": 52.0623,
+            "threadAllocated": 42932976,
+            "processAllocated": 42932976,
+            "managed": 255229320,
+            "working": 321105920
+          },
+          {
+            "name": "postal-evidence",
+            "ms": 27.1504,
+            "threadAllocated": 28781968,
+            "processAllocated": 28782304,
+            "managed": 254528168,
+            "working": 325632000
+          },
+          {
+            "name": "footprints",
+            "ms": 733.4053,
+            "threadAllocated": 286876848,
+            "processAllocated": 286876872,
+            "managed": 487663984,
+            "working": 561631232
+          },
+          {
+            "name": "evidence-index",
+            "ms": 6.3174,
+            "threadAllocated": 5286488,
+            "processAllocated": 5286488,
+            "managed": 492967816,
+            "working": 561627136
+          },
+          {
+            "name": "transaction-csv",
+            "ms": 3124.0104,
+            "threadAllocated": 3970380472,
+            "processAllocated": 3970386520,
+            "managed": 457359760,
+            "working": 516603904
+          },
+          {
+            "name": "validation-facts",
+            "ms": 284.8961,
+            "threadAllocated": 76471328,
+            "processAllocated": 76471328,
+            "managed": 499392896,
+            "working": 544972800
+          },
+          {
+            "name": "matching-resolution",
+            "ms": 202.863,
+            "threadAllocated": 43179808,
+            "processAllocated": 43179808,
+            "managed": 525687472,
+            "working": 570679296
+          },
+          {
+            "name": "transaction-domain",
+            "ms": 114.715,
+            "threadAllocated": 35486232,
+            "processAllocated": 35486232,
+            "managed": 552610016,
+            "working": 602533888
+          },
+          {
+            "name": "import-return",
+            "ms": 0.0028,
+            "threadAllocated": 112,
+            "processAllocated": 112,
+            "managed": 552618240,
+            "working": 602533888
+          },
+          {
+            "name": "state",
+            "ms": 12.8964,
+            "threadAllocated": 3830000,
+            "processAllocated": 3830000,
+            "managed": 556447976,
+            "working": 606359552
+          },
+          {
+            "name": "aggregation",
+            "ms": 109.4957,
+            "threadAllocated": 10016536,
+            "processAllocated": 10016536,
+            "managed": 557477832,
+            "working": 606359552
+          },
+          {
+            "name": "town-budget",
+            "ms": 18.1813,
+            "threadAllocated": 51992,
+            "processAllocated": 51992,
+            "managed": 557529632,
+            "working": 606359552
+          },
+          {
+            "name": "reset",
+            "ms": 15.4836,
+            "threadAllocated": 1894568,
+            "processAllocated": 1894568,
+            "managed": 559432208,
+            "working": 608256000
+          },
+          {
+            "name": "diagnostic-retained-after-import",
+            "ms": 310.1585,
+            "threadAllocated": 0,
+            "processAllocated": 0,
+            "managed": 241892336,
+            "working": 578752512
+          },
+          {
+            "name": "probe-io-address-evidence.csv",
+            "ms": 0.2693,
+            "threadAllocated": 1632,
+            "processAllocated": 3024,
+            "managed": 241908784,
+            "working": 578752512
+          },
+          {
+            "name": "probe-io-postal-address-evidence.csv",
+            "ms": 0.0585,
+            "threadAllocated": 408,
+            "processAllocated": 408,
+            "managed": 241908784,
+            "working": 578752512
+          },
+          {
+            "name": "probe-io-transactions.csv",
+            "ms": 5.42,
+            "threadAllocated": 360,
+            "processAllocated": 360,
+            "managed": 241916360,
+            "working": 578752512
+          },
+          {
+            "name": "probe-io-building-evidence.geojson",
+            "ms": 8.9921,
+            "threadAllocated": 400,
+            "processAllocated": 400,
+            "managed": 241916360,
+            "working": 578752512
+          },
+          {
+            "name": "probe-textfieldparser-fields-only",
+            "ms": 1459.2595,
+            "threadAllocated": 3679759240,
+            "processAllocated": 3679759240,
+            "managed": 244076336,
+            "working": 308727808
+          },
+          {
+            "name": "probe-address-distinct",
+            "ms": 72.4212,
+            "threadAllocated": 1098272,
+            "processAllocated": 1098272,
+            "managed": 245175864,
+            "working": 308727808
+          },
+          {
+            "name": "probe-normalization-distinct",
+            "ms": 1.8175,
+            "threadAllocated": 2019016,
+            "processAllocated": 2019016,
+            "managed": 243011512,
+            "working": 308727808
+          }
+        ]
+      },
+      {
+        "run": 2,
+        "transactions": 241920,
+        "addresses": 9755,
+        "located": 52514,
+        "markers": 1921,
+        "rejected": 11,
+        "diagnostics": 11,
+        "retained": 241910856,
+        "fields": 2903052,
+        "measurements": [
+          {
+            "name": "property-evidence",
+            "ms": 38.7721,
+            "threadAllocated": 42932976,
+            "processAllocated": 42932976,
+            "managed": 254323576,
+            "working": 314839040
+          },
+          {
+            "name": "postal-evidence",
+            "ms": 35.7427,
+            "threadAllocated": 28781968,
+            "processAllocated": 28781968,
+            "managed": 253619336,
+            "working": 319578112
+          },
+          {
+            "name": "footprints",
+            "ms": 940.5152,
+            "threadAllocated": 286876608,
+            "processAllocated": 286876608,
+            "managed": 492341992,
+            "working": 553512960
+          },
+          {
+            "name": "evidence-index",
+            "ms": 8.9439,
+            "threadAllocated": 5286488,
+            "processAllocated": 5286488,
+            "managed": 492343008,
+            "working": 553541632
+          },
+          {
+            "name": "transaction-csv",
+            "ms": 2992.4372,
+            "threadAllocated": 3970380656,
+            "processAllocated": 3970392728,
+            "managed": 456473392,
+            "working": 518144000
+          },
+          {
+            "name": "validation-facts",
+            "ms": 259.6328,
+            "threadAllocated": 76471328,
+            "processAllocated": 76471328,
+            "managed": 498823536,
+            "working": 550711296
+          },
+          {
+            "name": "matching-resolution",
+            "ms": 180.3555,
+            "threadAllocated": 43179808,
+            "processAllocated": 43179808,
+            "managed": 525408432,
+            "working": 570789888
+          },
+          {
+            "name": "transaction-domain",
+            "ms": 89.7575,
+            "threadAllocated": 35486232,
+            "processAllocated": 35486232,
+            "managed": 552332432,
+            "working": 599781376
+          },
+          {
+            "name": "import-return",
+            "ms": 0.0037,
+            "threadAllocated": 112,
+            "processAllocated": 112,
+            "managed": 552332432,
+            "working": 599781376
+          },
+          {
+            "name": "state",
+            "ms": 10.0246,
+            "threadAllocated": 3830000,
+            "processAllocated": 3829952,
+            "managed": 556162168,
+            "working": 603652096
+          },
+          {
+            "name": "aggregation",
+            "ms": 83.9209,
+            "threadAllocated": 10016552,
+            "processAllocated": 10018568,
+            "managed": 528508424,
+            "working": 604917760
+          },
+          {
+            "name": "town-budget",
+            "ms": 14.0097,
+            "threadAllocated": 51992,
+            "processAllocated": 51992,
+            "managed": 482259096,
+            "working": 604921856
+          },
+          {
+            "name": "reset",
+            "ms": 7.4667,
+            "threadAllocated": 1894568,
+            "processAllocated": 1894568,
+            "managed": 456116248,
+            "working": 606818304
+          },
+          {
+            "name": "diagnostic-retained-after-import",
+            "ms": 311.8856,
+            "threadAllocated": 0,
+            "processAllocated": 0,
+            "managed": 241894408,
+            "working": 577413120
+          },
+          {
+            "name": "probe-io-address-evidence.csv",
+            "ms": 0.1559,
+            "threadAllocated": 1632,
+            "processAllocated": 2688,
+            "managed": 241910856,
+            "working": 577413120
+          },
+          {
+            "name": "probe-io-postal-address-evidence.csv",
+            "ms": 0.0264,
+            "threadAllocated": 408,
+            "processAllocated": 408,
+            "managed": 241910856,
+            "working": 577413120
+          },
+          {
+            "name": "probe-io-transactions.csv",
+            "ms": 2.9912,
+            "threadAllocated": 360,
+            "processAllocated": 360,
+            "managed": 241918432,
+            "working": 577413120
+          },
+          {
+            "name": "probe-io-building-evidence.geojson",
+            "ms": 7.0894,
+            "threadAllocated": 400,
+            "processAllocated": 400,
+            "managed": 241918432,
+            "working": 577413120
+          },
+          {
+            "name": "probe-textfieldparser-fields-only",
+            "ms": 1369.5146,
+            "threadAllocated": 3679759240,
+            "processAllocated": 3679759240,
+            "managed": 243869152,
+            "working": 309198848
+          },
+          {
+            "name": "probe-address-distinct",
+            "ms": 33.8905,
+            "threadAllocated": 1098272,
+            "processAllocated": 1098272,
+            "managed": 244968680,
+            "working": 309198848
+          },
+          {
+            "name": "probe-normalization-distinct",
+            "ms": 1.5677,
+            "threadAllocated": 2019016,
+            "processAllocated": 2019016,
+            "managed": 246991784,
+            "working": 309202944
+          }
+        ]
+      }
+    ],
+    "header-index": [
+      {
+        "run": 0,
+        "transactions": 241920,
+        "addresses": 9755,
+        "located": 52514,
+        "markers": 1921,
+        "rejected": 11,
+        "diagnostics": 11,
+        "retained": 241775120,
+        "fields": 2903052,
+        "measurements": [
+          {
+            "name": "property-evidence",
+            "ms": 83.3445,
+            "threadAllocated": 39365728,
+            "processAllocated": 39366960,
+            "managed": 4612712,
+            "working": 49426432
+          },
+          {
+            "name": "postal-evidence",
+            "ms": 50.6213,
+            "threadAllocated": 26006304,
+            "processAllocated": 26007984,
+            "managed": 6121264,
+            "working": 55775232
+          },
+          {
+            "name": "footprints",
+            "ms": 1412.6055,
+            "threadAllocated": 422904408,
+            "processAllocated": 422913624,
+            "managed": 260533904,
+            "working": 300290048
+          },
+          {
+            "name": "evidence-index",
+            "ms": 19.2458,
+            "threadAllocated": 5286888,
+            "processAllocated": 5286888,
+            "managed": 265837720,
+            "working": 300535808
+          },
+          {
+            "name": "transaction-csv",
+            "ms": 2599.7078,
+            "threadAllocated": 3693625120,
+            "processAllocated": 3693629184,
+            "managed": 312501552,
+            "working": 351158272
+          },
+          {
+            "name": "validation-facts",
+            "ms": 417.8474,
+            "threadAllocated": 76480488,
+            "processAllocated": 76480488,
+            "managed": 353563960,
+            "working": 391421952
+          },
+          {
+            "name": "matching-resolution",
+            "ms": 277.0205,
+            "threadAllocated": 43182376,
+            "processAllocated": 43182712,
+            "managed": 378947272,
+            "working": 416772096
+          },
+          {
+            "name": "transaction-domain",
+            "ms": 100.0584,
+            "threadAllocated": 35498584,
+            "processAllocated": 35498920,
+            "managed": 406017728,
+            "working": 445853696
+          },
+          {
+            "name": "import-return",
+            "ms": 0.2904,
+            "threadAllocated": 112,
+            "processAllocated": 112,
+            "managed": 406017728,
+            "working": 445853696
+          },
+          {
+            "name": "state",
+            "ms": 18.5719,
+            "threadAllocated": 5928584,
+            "processAllocated": 5928584,
+            "managed": 411953160,
+            "working": 451514368
+          },
+          {
+            "name": "aggregation",
+            "ms": 107.5206,
+            "threadAllocated": 10054408,
+            "processAllocated": 10054744,
+            "managed": 414863784,
+            "working": 456237056
+          },
+          {
+            "name": "town-budget",
+            "ms": 20.7359,
+            "threadAllocated": 51992,
+            "processAllocated": 51992,
+            "managed": 414915584,
+            "working": 456491008
+          },
+          {
+            "name": "reset",
+            "ms": 14.6731,
+            "threadAllocated": 1894568,
+            "processAllocated": 1894544,
+            "managed": 416809936,
+            "working": 458694656
+          },
+          {
+            "name": "diagnostic-retained-after-import",
+            "ms": 283.2696,
+            "threadAllocated": 6504,
+            "processAllocated": 8520,
+            "managed": 241758672,
+            "working": 409481216
+          },
+          {
+            "name": "probe-io-address-evidence.csv",
+            "ms": 0.9046,
+            "threadAllocated": 132960,
+            "processAllocated": 132960,
+            "managed": 241906216,
+            "working": 409489408
+          },
+          {
+            "name": "probe-io-postal-address-evidence.csv",
+            "ms": 0.0623,
+            "threadAllocated": 408,
+            "processAllocated": 408,
+            "managed": 241906216,
+            "working": 409489408
+          },
+          {
+            "name": "probe-io-transactions.csv",
+            "ms": 3.1165,
+            "threadAllocated": 360,
+            "processAllocated": 360,
+            "managed": 241914040,
+            "working": 409489408
+          },
+          {
+            "name": "probe-io-building-evidence.geojson",
+            "ms": 6.86,
+            "threadAllocated": 400,
+            "processAllocated": 400,
+            "managed": 241914040,
+            "working": 409489408
+          },
+          {
+            "name": "probe-textfieldparser-fields-only",
+            "ms": 1354.3243,
+            "threadAllocated": 3679759368,
+            "processAllocated": 3679759368,
+            "managed": 244880784,
+            "working": 327467008
+          },
+          {
+            "name": "probe-address-distinct",
+            "ms": 40.997,
+            "threadAllocated": 1098336,
+            "processAllocated": 1098336,
+            "managed": 245980312,
+            "working": 327512064
+          },
+          {
+            "name": "probe-normalization-distinct",
+            "ms": 1.9884,
+            "threadAllocated": 2019016,
+            "processAllocated": 2019016,
+            "managed": 243795224,
+            "working": 327512064
+          }
+        ]
+      },
+      {
+        "run": 1,
+        "transactions": 241920,
+        "addresses": 9755,
+        "located": 52514,
+        "markers": 1921,
+        "rejected": 11,
+        "diagnostics": 11,
+        "retained": 241908856,
+        "fields": 2903052,
+        "measurements": [
+          {
+            "name": "property-evidence",
+            "ms": 55.5427,
+            "threadAllocated": 39343840,
+            "processAllocated": 39343840,
+            "managed": 250857856,
+            "working": 332177408
+          },
+          {
+            "name": "postal-evidence",
+            "ms": 21.6898,
+            "threadAllocated": 25854088,
+            "processAllocated": 25854424,
+            "managed": 250590296,
+            "working": 334655488
+          },
+          {
+            "name": "footprints",
+            "ms": 774.0697,
+            "threadAllocated": 286894000,
+            "processAllocated": 286900072,
+            "managed": 146133288,
+            "working": 431775744
+          },
+          {
+            "name": "evidence-index",
+            "ms": 7.0722,
+            "threadAllocated": 5286488,
+            "processAllocated": 5286488,
+            "managed": 151437128,
+            "working": 431775744
+          },
+          {
+            "name": "transaction-csv",
+            "ms": 2293.9861,
+            "threadAllocated": 3693625248,
+            "processAllocated": 3693635328,
+            "managed": 313060864,
+            "working": 401088512
+          },
+          {
+            "name": "validation-facts",
+            "ms": 233.6053,
+            "threadAllocated": 76471328,
+            "processAllocated": 76471328,
+            "managed": 352772160,
+            "working": 423096320
+          },
+          {
+            "name": "matching-resolution",
+            "ms": 239.7427,
+            "threadAllocated": 43179808,
+            "processAllocated": 43179808,
+            "managed": 378892016,
+            "working": 429096960
+          },
+          {
+            "name": "transaction-domain",
+            "ms": 191.1194,
+            "threadAllocated": 35486264,
+            "processAllocated": 35488160,
+            "managed": 388395024,
+            "working": 460529664
+          },
+          {
+            "name": "import-return",
+            "ms": 0.0025,
+            "threadAllocated": 112,
+            "processAllocated": 112,
+            "managed": 388059688,
+            "working": 460529664
+          },
+          {
+            "name": "state",
+            "ms": 12.7079,
+            "threadAllocated": 3830000,
+            "processAllocated": 3830000,
+            "managed": 359236936,
+            "working": 462430208
+          },
+          {
+            "name": "aggregation",
+            "ms": 133.6669,
+            "threadAllocated": 10016536,
+            "processAllocated": 10016536,
+            "managed": 266393688,
+            "working": 468307968
+          },
+          {
+            "name": "town-budget",
+            "ms": 16.8187,
+            "threadAllocated": 51992,
+            "processAllocated": 51992,
+            "managed": 266445488,
+            "working": 468307968
+          },
+          {
+            "name": "reset",
+            "ms": 8.2214,
+            "threadAllocated": 1894568,
+            "processAllocated": 1894568,
+            "managed": 268339840,
+            "working": 468307968
+          },
+          {
+            "name": "diagnostic-retained-after-import",
+            "ms": 230.5409,
+            "threadAllocated": 0,
+            "processAllocated": 0,
+            "managed": 241892408,
+            "working": 460197888
+          },
+          {
+            "name": "probe-io-address-evidence.csv",
+            "ms": 0.161,
+            "threadAllocated": 1632,
+            "processAllocated": 1632,
+            "managed": 241908856,
+            "working": 460193792
+          },
+          {
+            "name": "probe-io-postal-address-evidence.csv",
+            "ms": 0.0409,
+            "threadAllocated": 408,
+            "processAllocated": 408,
+            "managed": 241908856,
+            "working": 460197888
+          },
+          {
+            "name": "probe-io-transactions.csv",
+            "ms": 3.4236,
+            "threadAllocated": 360,
+            "processAllocated": 360,
+            "managed": 241916448,
+            "working": 460210176
+          },
+          {
+            "name": "probe-io-building-evidence.geojson",
+            "ms": 7.3003,
+            "threadAllocated": 400,
+            "processAllocated": 400,
+            "managed": 241916448,
+            "working": 460210176
+          },
+          {
+            "name": "probe-textfieldparser-fields-only",
+            "ms": 1453.1526,
+            "threadAllocated": 3679759240,
+            "processAllocated": 3679759240,
+            "managed": 244286616,
+            "working": 329613312
+          },
+          {
+            "name": "probe-address-distinct",
+            "ms": 30.6128,
+            "threadAllocated": 1098272,
+            "processAllocated": 1098272,
+            "managed": 245386144,
+            "working": 329605120
+          },
+          {
+            "name": "probe-normalization-distinct",
+            "ms": 2.1178,
+            "threadAllocated": 2019016,
+            "processAllocated": 2019016,
+            "managed": 243221096,
+            "working": 329605120
+          }
+        ]
+      },
+      {
+        "run": 2,
+        "transactions": 241920,
+        "addresses": 9755,
+        "located": 52514,
+        "markers": 1921,
+        "rejected": 11,
+        "diagnostics": 11,
+        "retained": 241910928,
+        "fields": 2903052,
+        "measurements": [
+          {
+            "name": "property-evidence",
+            "ms": 31.7673,
+            "threadAllocated": 39343840,
+            "processAllocated": 39343840,
+            "managed": 246610496,
+            "working": 333500416
+          },
+          {
+            "name": "postal-evidence",
+            "ms": 29.5287,
+            "threadAllocated": 25854088,
+            "processAllocated": 25854088,
+            "managed": 247999592,
+            "working": 335601664
+          },
+          {
+            "name": "footprints",
+            "ms": 755.4552,
+            "threadAllocated": 286892912,
+            "processAllocated": 286896944,
+            "managed": 377559136,
+            "working": 541360128
+          },
+          {
+            "name": "evidence-index",
+            "ms": 10.503,
+            "threadAllocated": 5286488,
+            "processAllocated": 5286488,
+            "managed": 378354080,
+            "working": 541368320
+          },
+          {
+            "name": "transaction-csv",
+            "ms": 2489.7895,
+            "threadAllocated": 3693625272,
+            "processAllocated": 3693631320,
+            "managed": 313220112,
+            "working": 432558080
+          },
+          {
+            "name": "validation-facts",
+            "ms": 209.0552,
+            "threadAllocated": 76471328,
+            "processAllocated": 76471328,
+            "managed": 350352032,
+            "working": 436760576
+          },
+          {
+            "name": "matching-resolution",
+            "ms": 167.3853,
+            "threadAllocated": 43179808,
+            "processAllocated": 43179808,
+            "managed": 378020048,
+            "working": 436772864
+          },
+          {
+            "name": "transaction-domain",
+            "ms": 85.9405,
+            "threadAllocated": 35486232,
+            "processAllocated": 35486232,
+            "managed": 404465304,
+            "working": 455176192
+          },
+          {
+            "name": "import-return",
+            "ms": 0.0032,
+            "threadAllocated": 112,
+            "processAllocated": 112,
+            "managed": 404465304,
+            "working": 455176192
+          },
+          {
+            "name": "state",
+            "ms": 6.8351,
+            "threadAllocated": 3830000,
+            "processAllocated": 3830000,
+            "managed": 408295040,
+            "working": 456949760
+          },
+          {
+            "name": "aggregation",
+            "ms": 38.3692,
+            "threadAllocated": 10016536,
+            "processAllocated": 10016536,
+            "managed": 413206336,
+            "working": 464080896
+          },
+          {
+            "name": "town-budget",
+            "ms": 8.4127,
+            "threadAllocated": 51992,
+            "processAllocated": 51992,
+            "managed": 413258136,
+            "working": 464089088
+          },
+          {
+            "name": "reset",
+            "ms": 5.8975,
+            "threadAllocated": 1894568,
+            "processAllocated": 1894568,
+            "managed": 415152488,
+            "working": 465981440
+          },
+          {
+            "name": "diagnostic-retained-after-import",
+            "ms": 221.9561,
+            "threadAllocated": 0,
+            "processAllocated": 0,
+            "managed": 241894480,
+            "working": 457359360
+          },
+          {
+            "name": "probe-io-address-evidence.csv",
+            "ms": 0.2473,
+            "threadAllocated": 1632,
+            "processAllocated": 1632,
+            "managed": 241910928,
+            "working": 457359360
+          },
+          {
+            "name": "probe-io-postal-address-evidence.csv",
+            "ms": 0.0333,
+            "threadAllocated": 408,
+            "processAllocated": 408,
+            "managed": 241910928,
+            "working": 457359360
+          },
+          {
+            "name": "probe-io-transactions.csv",
+            "ms": 2.899,
+            "threadAllocated": 360,
+            "processAllocated": 360,
+            "managed": 241918520,
+            "working": 457359360
+          },
+          {
+            "name": "probe-io-building-evidence.geojson",
+            "ms": 6.8695,
+            "threadAllocated": 400,
+            "processAllocated": 400,
+            "managed": 241918520,
+            "working": 457359360
+          },
+          {
+            "name": "probe-textfieldparser-fields-only",
+            "ms": 1306.0014,
+            "threadAllocated": 3679759240,
+            "processAllocated": 3679759240,
+            "managed": 244975552,
+            "working": 333885440
+          },
+          {
+            "name": "probe-address-distinct",
+            "ms": 28.1159,
+            "threadAllocated": 1098272,
+            "processAllocated": 1098272,
+            "managed": 246075080,
+            "working": 333889536
+          },
+          {
+            "name": "probe-normalization-distinct",
+            "ms": 2.0594,
+            "threadAllocated": 2019016,
+            "processAllocated": 2019016,
+            "managed": 243889880,
+            "working": 333889536
+          }
+        ]
+      }
+    ],
+    "fast": [
+      {
+        "run": 0,
+        "transactions": 241920,
+        "addresses": 9755,
+        "located": 52514,
+        "markers": 1921,
+        "rejected": 11,
+        "diagnostics": 11,
+        "retained": 241749784,
+        "fields": 2903052,
+        "measurements": [
+          {
+            "name": "property-evidence",
+            "ms": 30.0464,
+            "threadAllocated": 3629488,
+            "processAllocated": 3629488,
+            "managed": 3698728,
+            "working": 39620608
+          },
+          {
+            "name": "postal-evidence",
+            "ms": 15.1783,
+            "threadAllocated": 2323424,
+            "processAllocated": 2324328,
+            "managed": 4849952,
+            "working": 47239168
+          },
+          {
+            "name": "footprint-file-read",
+            "ms": 185.7523,
+            "threadAllocated": 228594200,
+            "processAllocated": 228596888,
+            "managed": 232891488,
+            "working": 276955136
+          },
+          {
+            "name": "footprint-json",
+            "ms": 412.4041,
+            "threadAllocated": 134219016,
+            "processAllocated": 134219664,
+            "managed": 252564888,
+            "working": 385703936
+          },
+          {
+            "name": "footprints",
+            "ms": 739.3698,
+            "threadAllocated": 59634120,
+            "processAllocated": 59641008,
+            "managed": 265213576,
+            "working": 305917952
+          },
+          {
+            "name": "evidence-index",
+            "ms": 20.1408,
+            "threadAllocated": 5286888,
+            "processAllocated": 5286888,
+            "managed": 265018912,
+            "working": 306200576
+          },
+          {
+            "name": "transaction-csv",
+            "ms": 487.6557,
+            "threadAllocated": 219389056,
+            "processAllocated": 219391104,
+            "managed": 309925768,
+            "working": 475795456
+          },
+          {
+            "name": "validation-facts",
+            "ms": 469.4773,
+            "threadAllocated": 76482928,
+            "processAllocated": 76483864,
+            "managed": 346047392,
+            "working": 407818240
+          },
+          {
+            "name": "matching-resolution",
+            "ms": 280.305,
+            "threadAllocated": 43194736,
+            "processAllocated": 43195408,
+            "managed": 372193872,
+            "working": 425082880
+          },
+          {
+            "name": "transaction-domain",
+            "ms": 111.7147,
+            "threadAllocated": 35498584,
+            "processAllocated": 35498584,
+            "managed": 399279368,
+            "working": 447115264
+          },
+          {
+            "name": "import-return",
+            "ms": 0.2269,
+            "threadAllocated": 112,
+            "processAllocated": 112,
+            "managed": 399279368,
+            "working": 447119360
+          },
+          {
+            "name": "state",
+            "ms": 17.9843,
+            "threadAllocated": 5928584,
+            "processAllocated": 5928584,
+            "managed": 405214800,
+            "working": 452730880
+          },
+          {
+            "name": "aggregation",
+            "ms": 89.6238,
+            "threadAllocated": 10042072,
+            "processAllocated": 10042408,
+            "managed": 406769112,
+            "working": 462053376
+          },
+          {
+            "name": "town-budget",
+            "ms": 25.1508,
+            "threadAllocated": 51992,
+            "processAllocated": 51992,
+            "managed": 406829136,
+            "working": 462061568
+          },
+          {
+            "name": "reset",
+            "ms": 12.4012,
+            "threadAllocated": 1894568,
+            "processAllocated": 1894568,
+            "managed": 408723488,
+            "working": 463962112
+          },
+          {
+            "name": "diagnostic-retained-after-import",
+            "ms": 240.4651,
+            "threadAllocated": 0,
+            "processAllocated": 0,
+            "managed": 241741560,
+            "working": 433983488
+          },
+          {
+            "name": "probe-io-address-evidence.csv",
+            "ms": 2.3095,
+            "threadAllocated": 141344,
+            "processAllocated": 143360,
+            "managed": 241900608,
+            "working": 434016256
+          },
+          {
+            "name": "probe-io-postal-address-evidence.csv",
+            "ms": 0.1718,
+            "threadAllocated": 408,
+            "processAllocated": 408,
+            "managed": 241900608,
+            "working": 434016256
+          },
+          {
+            "name": "probe-io-transactions.csv",
+            "ms": 3.1712,
+            "threadAllocated": 360,
+            "processAllocated": 360,
+            "managed": 241900608,
+            "working": 434016256
+          },
+          {
+            "name": "probe-io-building-evidence.geojson",
+            "ms": 6.4063,
+            "threadAllocated": 400,
+            "processAllocated": 400,
+            "managed": 241908832,
+            "working": 434016256
+          },
+          {
+            "name": "probe-textfieldparser-fields-only",
+            "ms": 1719.9604,
+            "threadAllocated": 3679768216,
+            "processAllocated": 3679768216,
+            "managed": 244181240,
+            "working": 326471680
+          },
+          {
+            "name": "probe-address-distinct",
+            "ms": 39.2084,
+            "threadAllocated": 1098336,
+            "processAllocated": 1098336,
+            "managed": 245288992,
+            "working": 326496256
+          },
+          {
+            "name": "probe-normalization-distinct",
+            "ms": 4.1944,
+            "threadAllocated": 2019016,
+            "processAllocated": 2019016,
+            "managed": 243116192,
+            "working": 326496256
+          }
+        ]
+      },
+      {
+        "run": 1,
+        "transactions": 241920,
+        "addresses": 9755,
+        "located": 52514,
+        "markers": 1921,
+        "rejected": 11,
+        "diagnostics": 11,
+        "retained": 241909104,
+        "fields": 2903052,
+        "measurements": [
+          {
+            "name": "property-evidence",
+            "ms": 23.9709,
+            "threadAllocated": 3627328,
+            "processAllocated": 3627328,
+            "managed": 248958888,
+            "working": 327983104
+          },
+          {
+            "name": "postal-evidence",
+            "ms": 1.5319,
+            "threadAllocated": 2171208,
+            "processAllocated": 2171208,
+            "managed": 251139216,
+            "working": 327983104
+          },
+          {
+            "name": "footprint-file-read",
+            "ms": 272.597,
+            "threadAllocated": 228577872,
+            "processAllocated": 228578208,
+            "managed": 475798480,
+            "working": 555446272
+          },
+          {
+            "name": "footprint-json",
+            "ms": 284.7452,
+            "threadAllocated": 72,
+            "processAllocated": 72,
+            "managed": 475798480,
+            "working": 555454464
+          },
+          {
+            "name": "footprints",
+            "ms": 220.0592,
+            "threadAllocated": 58298912,
+            "processAllocated": 58300952,
+            "managed": 148345624,
+            "working": 523952128
+          },
+          {
+            "name": "evidence-index",
+            "ms": 13.1954,
+            "threadAllocated": 5286488,
+            "processAllocated": 5286488,
+            "managed": 149321248,
+            "working": 503005184
+          },
+          {
+            "name": "transaction-csv",
+            "ms": 440.7901,
+            "threadAllocated": 219389376,
+            "processAllocated": 219395424,
+            "managed": 311071560,
+            "working": 407285760
+          },
+          {
+            "name": "validation-facts",
+            "ms": 283.4897,
+            "threadAllocated": 76471360,
+            "processAllocated": 76473136,
+            "managed": 351982672,
+            "working": 428130304
+          },
+          {
+            "name": "matching-resolution",
+            "ms": 195.5602,
+            "threadAllocated": 43179808,
+            "processAllocated": 43179808,
+            "managed": 377400728,
+            "working": 435974144
+          },
+          {
+            "name": "transaction-domain",
+            "ms": 104.2209,
+            "threadAllocated": 35486232,
+            "processAllocated": 35486232,
+            "managed": 404469968,
+            "working": 457011200
+          },
+          {
+            "name": "import-return",
+            "ms": 0.0021,
+            "threadAllocated": 112,
+            "processAllocated": 112,
+            "managed": 404478192,
+            "working": 457019392
+          },
+          {
+            "name": "state",
+            "ms": 16.6097,
+            "threadAllocated": 3830000,
+            "processAllocated": 3830000,
+            "managed": 408307928,
+            "working": 460738560
+          },
+          {
+            "name": "aggregation",
+            "ms": 110.3665,
+            "threadAllocated": 10016536,
+            "processAllocated": 10016536,
+            "managed": 410987056,
+            "working": 468041728
+          },
+          {
+            "name": "town-budget",
+            "ms": 18.7367,
+            "threadAllocated": 51992,
+            "processAllocated": 51992,
+            "managed": 411038856,
+            "working": 468041728
+          },
+          {
+            "name": "reset",
+            "ms": 14.5551,
+            "threadAllocated": 1894568,
+            "processAllocated": 1894568,
+            "managed": 412933208,
+            "working": 469934080
+          },
+          {
+            "name": "diagnostic-retained-after-import",
+            "ms": 245.6664,
+            "threadAllocated": 0,
+            "processAllocated": 0,
+            "managed": 241892656,
+            "working": 436260864
+          },
+          {
+            "name": "probe-io-address-evidence.csv",
+            "ms": 0.2464,
+            "threadAllocated": 1632,
+            "processAllocated": 3024,
+            "managed": 241909104,
+            "working": 436256768
+          },
+          {
+            "name": "probe-io-postal-address-evidence.csv",
+            "ms": 0.031,
+            "threadAllocated": 408,
+            "processAllocated": 408,
+            "managed": 241909104,
+            "working": 436256768
+          },
+          {
+            "name": "probe-io-transactions.csv",
+            "ms": 2.9974,
+            "threadAllocated": 360,
+            "processAllocated": 360,
+            "managed": 241916976,
+            "working": 436260864
+          },
+          {
+            "name": "probe-io-building-evidence.geojson",
+            "ms": 6.5322,
+            "threadAllocated": 400,
+            "processAllocated": 400,
+            "managed": 241916976,
+            "working": 436260864
+          },
+          {
+            "name": "probe-textfieldparser-fields-only",
+            "ms": 1317.4038,
+            "threadAllocated": 3679759240,
+            "processAllocated": 3679759240,
+            "managed": 244817680,
+            "working": 334274560
+          },
+          {
+            "name": "probe-address-distinct",
+            "ms": 30.0793,
+            "threadAllocated": 1098272,
+            "processAllocated": 1098272,
+            "managed": 245925432,
+            "working": 334278656
+          },
+          {
+            "name": "probe-normalization-distinct",
+            "ms": 1.9643,
+            "threadAllocated": 2019016,
+            "processAllocated": 2019016,
+            "managed": 243732056,
+            "working": 334278656
+          }
+        ]
+      },
+      {
+        "run": 2,
+        "transactions": 241920,
+        "addresses": 9755,
+        "located": 52514,
+        "markers": 1921,
+        "rejected": 11,
+        "diagnostics": 11,
+        "retained": 241903288,
+        "fields": 2903052,
+        "measurements": [
+          {
+            "name": "property-evidence",
+            "ms": 2.9373,
+            "threadAllocated": 3627328,
+            "processAllocated": 3627328,
+            "managed": 249586192,
+            "working": 335515648
+          },
+          {
+            "name": "postal-evidence",
+            "ms": 7.9896,
+            "threadAllocated": 2171208,
+            "processAllocated": 2171208,
+            "managed": 249338088,
+            "working": 338186240
+          },
+          {
+            "name": "footprint-file-read",
+            "ms": 225.628,
+            "threadAllocated": 228586024,
+            "processAllocated": 228588016,
+            "managed": 367455136,
+            "working": 544657408
+          },
+          {
+            "name": "footprint-json",
+            "ms": 273.8351,
+            "threadAllocated": 72,
+            "processAllocated": 72,
+            "managed": 367463360,
+            "working": 544661504
+          },
+          {
+            "name": "footprints",
+            "ms": 204.978,
+            "threadAllocated": 58298664,
+            "processAllocated": 58298664,
+            "managed": 377505976,
+            "working": 515555328
+          },
+          {
+            "name": "evidence-index",
+            "ms": 10.3155,
+            "threadAllocated": 5286488,
+            "processAllocated": 5286488,
+            "managed": 378326248,
+            "working": 515559424
+          },
+          {
+            "name": "transaction-csv",
+            "ms": 449.8871,
+            "threadAllocated": 219389056,
+            "processAllocated": 219393088,
+            "managed": 310207488,
+            "working": 542015488
+          },
+          {
+            "name": "validation-facts",
+            "ms": 199.3463,
+            "threadAllocated": 76471328,
+            "processAllocated": 76471328,
+            "managed": 350343176,
+            "working": 545824768
+          },
+          {
+            "name": "matching-resolution",
+            "ms": 146.8213,
+            "threadAllocated": 43179808,
+            "processAllocated": 43179808,
+            "managed": 378013480,
+            "working": 546119680
+          },
+          {
+            "name": "transaction-domain",
+            "ms": 87.9214,
+            "threadAllocated": 35486232,
+            "processAllocated": 35486232,
+            "managed": 404455960,
+            "working": 573153280
+          },
+          {
+            "name": "import-return",
+            "ms": 0.2058,
+            "threadAllocated": 112,
+            "processAllocated": 112,
+            "managed": 404455960,
+            "working": 573161472
+          },
+          {
+            "name": "state",
+            "ms": 8.1951,
+            "threadAllocated": 3830000,
+            "processAllocated": 3829952,
+            "managed": 408293920,
+            "working": 577003520
+          },
+          {
+            "name": "aggregation",
+            "ms": 66.8832,
+            "threadAllocated": 10016696,
+            "processAllocated": 10018712,
+            "managed": 377734320,
+            "working": 470253568
+          },
+          {
+            "name": "town-budget",
+            "ms": 8.9147,
+            "threadAllocated": 51992,
+            "processAllocated": 51992,
+            "managed": 350310280,
+            "working": 470253568
+          },
+          {
+            "name": "reset",
+            "ms": 6.6915,
+            "threadAllocated": 1894568,
+            "processAllocated": 1894568,
+            "managed": 333099104,
+            "working": 472154112
+          },
+          {
+            "name": "diagnostic-retained-after-import",
+            "ms": 235.1032,
+            "threadAllocated": 0,
+            "processAllocated": 0,
+            "managed": 241895064,
+            "working": 452702208
+          },
+          {
+            "name": "probe-io-address-evidence.csv",
+            "ms": 0.1644,
+            "threadAllocated": 1632,
+            "processAllocated": 3648,
+            "managed": 241911512,
+            "working": 452706304
+          },
+          {
+            "name": "probe-io-postal-address-evidence.csv",
+            "ms": 0.0301,
+            "threadAllocated": 408,
+            "processAllocated": 408,
+            "managed": 241911512,
+            "working": 452706304
+          },
+          {
+            "name": "probe-io-transactions.csv",
+            "ms": 2.9206,
+            "threadAllocated": 360,
+            "processAllocated": 360,
+            "managed": 241919384,
+            "working": 452706304
+          },
+          {
+            "name": "probe-io-building-evidence.geojson",
+            "ms": 6.2892,
+            "threadAllocated": 400,
+            "processAllocated": 400,
+            "managed": 241919384,
+            "working": 452706304
+          },
+          {
+            "name": "probe-textfieldparser-fields-only",
+            "ms": 1343.6688,
+            "threadAllocated": 3679759240,
+            "processAllocated": 3679759240,
+            "managed": 244984568,
+            "working": 335769600
+          },
+          {
+            "name": "probe-address-distinct",
+            "ms": 46.0063,
+            "threadAllocated": 1098272,
+            "processAllocated": 1098272,
+            "managed": 246084096,
+            "working": 335769600
+          },
+          {
+            "name": "probe-normalization-distinct",
+            "ms": 1.9237,
+            "threadAllocated": 2019016,
+            "processAllocated": 2019016,
+            "managed": 243898976,
+            "working": 335769600
+          }
+        ]
+      }
+    ],
+    "fast-pool": [
+      {
+        "run": 0,
+        "transactions": 241920,
+        "addresses": 9755,
+        "located": 52514,
+        "markers": 1921,
+        "rejected": 11,
+        "diagnostics": 11,
+        "retained": 201361992,
+        "fields": 2903052,
+        "measurements": [
+          {
+            "name": "property-evidence",
+            "ms": 29.1123,
+            "threadAllocated": 3629488,
+            "processAllocated": 3629488,
+            "managed": 3698728,
+            "working": 40030208
+          },
+          {
+            "name": "postal-evidence",
+            "ms": 14.4982,
+            "threadAllocated": 2323424,
+            "processAllocated": 2324328,
+            "managed": 4849984,
+            "working": 47853568
+          },
+          {
+            "name": "footprint-file-read",
+            "ms": 224.3496,
+            "threadAllocated": 228594200,
+            "processAllocated": 228596888,
+            "managed": 232891496,
+            "working": 277839872
+          },
+          {
+            "name": "footprint-json",
+            "ms": 476.7795,
+            "threadAllocated": 134219016,
+            "processAllocated": 134219696,
+            "managed": 252573120,
+            "working": 386945024
+          },
+          {
+            "name": "footprints",
+            "ms": 766.067,
+            "threadAllocated": 60064872,
+            "processAllocated": 60065568,
+            "managed": 260049496,
+            "working": 301551616
+          },
+          {
+            "name": "evidence-index",
+            "ms": 22.2464,
+            "threadAllocated": 5286888,
+            "processAllocated": 5286888,
+            "managed": 265353352,
+            "working": 301789184
+          },
+          {
+            "name": "transaction-csv",
+            "ms": 517.5822,
+            "threadAllocated": 219389176,
+            "processAllocated": 219391168,
+            "managed": 310029880,
+            "working": 471613440
+          },
+          {
+            "name": "validation-facts",
+            "ms": 381.1318,
+            "threadAllocated": 41865760,
+            "processAllocated": 41865760,
+            "managed": 351174584,
+            "working": 517001216
+          },
+          {
+            "name": "matching-resolution",
+            "ms": 341.0583,
+            "threadAllocated": 43187176,
+            "processAllocated": 43189192,
+            "managed": 201372072,
+            "working": 399069184
+          },
+          {
+            "name": "transaction-domain",
+            "ms": 160.3789,
+            "threadAllocated": 35498584,
+            "processAllocated": 35499928,
+            "managed": 209252184,
+            "working": 383946752
+          },
+          {
+            "name": "import-return",
+            "ms": 0.3328,
+            "threadAllocated": 112,
+            "processAllocated": 112,
+            "managed": 209252184,
+            "working": 383946752
+          },
+          {
+            "name": "state",
+            "ms": 13.3304,
+            "threadAllocated": 5928584,
+            "processAllocated": 5928584,
+            "managed": 215187616,
+            "working": 383950848
+          },
+          {
+            "name": "aggregation",
+            "ms": 75.6591,
+            "threadAllocated": 10042072,
+            "processAllocated": 10042408,
+            "managed": 220347080,
+            "working": 384577536
+          },
+          {
+            "name": "town-budget",
+            "ms": 9.4074,
+            "threadAllocated": 51992,
+            "processAllocated": 51992,
+            "managed": 220398880,
+            "working": 384581632
+          },
+          {
+            "name": "reset",
+            "ms": 13.3717,
+            "threadAllocated": 1894568,
+            "processAllocated": 1894568,
+            "managed": 222301456,
+            "working": 384581632
+          },
+          {
+            "name": "diagnostic-retained-after-import",
+            "ms": 66.2666,
+            "threadAllocated": 0,
+            "processAllocated": 0,
+            "managed": 201345544,
+            "working": 337555456
+          },
+          {
+            "name": "probe-io-address-evidence.csv",
+            "ms": 1.5104,
+            "threadAllocated": 141344,
+            "processAllocated": 141344,
+            "managed": 201504592,
+            "working": 337580032
+          },
+          {
+            "name": "probe-io-postal-address-evidence.csv",
+            "ms": 0.045,
+            "threadAllocated": 408,
+            "processAllocated": 408,
+            "managed": 201504592,
+            "working": 337580032
+          },
+          {
+            "name": "probe-io-transactions.csv",
+            "ms": 3.406,
+            "threadAllocated": 360,
+            "processAllocated": 360,
+            "managed": 201504592,
+            "working": 337580032
+          },
+          {
+            "name": "probe-io-building-evidence.geojson",
+            "ms": 6.9231,
+            "threadAllocated": 400,
+            "processAllocated": 400,
+            "managed": 201512816,
+            "working": 337580032
+          },
+          {
+            "name": "probe-textfieldparser-fields-only",
+            "ms": 1689.0652,
+            "threadAllocated": 3679768216,
+            "processAllocated": 3679780552,
+            "managed": 204727448,
+            "working": 260427776
+          },
+          {
+            "name": "probe-address-distinct",
+            "ms": 29.3302,
+            "threadAllocated": 1098336,
+            "processAllocated": 1098336,
+            "managed": 205826976,
+            "working": 260464640
+          },
+          {
+            "name": "probe-normalization-distinct",
+            "ms": 3.0751,
+            "threadAllocated": 2019016,
+            "processAllocated": 2019016,
+            "managed": 203641888,
+            "working": 260464640
+          }
+        ]
+      },
+      {
+        "run": 1,
+        "transactions": 241920,
+        "addresses": 9755,
+        "located": 52514,
+        "markers": 1921,
+        "rejected": 11,
+        "diagnostics": 11,
+        "retained": 201519232,
+        "fields": 2903052,
+        "measurements": [
+          {
+            "name": "property-evidence",
+            "ms": 30.8001,
+            "threadAllocated": 3627328,
+            "processAllocated": 3627328,
+            "managed": 209480256,
+            "working": 260972544
+          },
+          {
+            "name": "postal-evidence",
+            "ms": 6.9638,
+            "threadAllocated": 2171208,
+            "processAllocated": 2171208,
+            "managed": 209006752,
+            "working": 260972544
+          },
+          {
+            "name": "footprint-file-read",
+            "ms": 302.3821,
+            "threadAllocated": 228594176,
+            "processAllocated": 228598568,
+            "managed": 367471520,
+            "working": 445403136
+          },
+          {
+            "name": "footprint-json",
+            "ms": 285.5357,
+            "threadAllocated": 72,
+            "processAllocated": 72,
+            "managed": 367471520,
+            "working": 445403136
+          },
+          {
+            "name": "footprints",
+            "ms": 217.6906,
+            "threadAllocated": 58298664,
+            "processAllocated": 58298664,
+            "managed": 377785248,
+            "working": 447324160
+          },
+          {
+            "name": "evidence-index",
+            "ms": 11.6527,
+            "threadAllocated": 5286488,
+            "processAllocated": 5286488,
+            "managed": 378483848,
+            "working": 447320064
+          },
+          {
+            "name": "transaction-csv",
+            "ms": 435.7059,
+            "threadAllocated": 219389104,
+            "processAllocated": 219391120,
+            "managed": 310194304,
+            "working": 513036288
+          },
+          {
+            "name": "validation-facts",
+            "ms": 258.5775,
+            "threadAllocated": 41857904,
+            "processAllocated": 41859896,
+            "managed": 346357984,
+            "working": 522354688
+          },
+          {
+            "name": "matching-resolution",
+            "ms": 189.8355,
+            "threadAllocated": 43179808,
+            "processAllocated": 43179808,
+            "managed": 374503240,
+            "working": 553013248
+          },
+          {
+            "name": "transaction-domain",
+            "ms": 112.9499,
+            "threadAllocated": 35486232,
+            "processAllocated": 35486232,
+            "managed": 401546768,
+            "working": 577032192
+          },
+          {
+            "name": "import-return",
+            "ms": 0.0023,
+            "threadAllocated": 112,
+            "processAllocated": 112,
+            "managed": 401546768,
+            "working": 577032192
+          },
+          {
+            "name": "state",
+            "ms": 14.371,
+            "threadAllocated": 3830000,
+            "processAllocated": 3830000,
+            "managed": 405376504,
+            "working": 580878336
+          },
+          {
+            "name": "aggregation",
+            "ms": 98.091,
+            "threadAllocated": 10016536,
+            "processAllocated": 10016536,
+            "managed": 406386792,
+            "working": 580870144
+          },
+          {
+            "name": "town-budget",
+            "ms": 6.1222,
+            "threadAllocated": 51992,
+            "processAllocated": 51992,
+            "managed": 406446816,
+            "working": 580870144
+          },
+          {
+            "name": "reset",
+            "ms": 10.3519,
+            "threadAllocated": 1894568,
+            "processAllocated": 1894568,
+            "managed": 408341168,
+            "working": 582766592
+          },
+          {
+            "name": "diagnostic-retained-after-import",
+            "ms": 160.3016,
+            "threadAllocated": 0,
+            "processAllocated": 0,
+            "managed": 201502784,
+            "working": 572051456
+          },
+          {
+            "name": "probe-io-address-evidence.csv",
+            "ms": 0.2344,
+            "threadAllocated": 1632,
+            "processAllocated": 1632,
+            "managed": 201519232,
+            "working": 572051456
+          },
+          {
+            "name": "probe-io-postal-address-evidence.csv",
+            "ms": 0.0321,
+            "threadAllocated": 408,
+            "processAllocated": 408,
+            "managed": 201519232,
+            "working": 572051456
+          },
+          {
+            "name": "probe-io-transactions.csv",
+            "ms": 4.1786,
+            "threadAllocated": 360,
+            "processAllocated": 360,
+            "managed": 201527104,
+            "working": 572059648
+          },
+          {
+            "name": "probe-io-building-evidence.geojson",
+            "ms": 7.2473,
+            "threadAllocated": 400,
+            "processAllocated": 400,
+            "managed": 201527104,
+            "working": 572071936
+          },
+          {
+            "name": "probe-textfieldparser-fields-only",
+            "ms": 1498.9445,
+            "threadAllocated": 3679759240,
+            "processAllocated": 3679759240,
+            "managed": 203672712,
+            "working": 287227904
+          },
+          {
+            "name": "probe-address-distinct",
+            "ms": 17.7655,
+            "threadAllocated": 1098272,
+            "processAllocated": 1098272,
+            "managed": 204772240,
+            "working": 287236096
+          },
+          {
+            "name": "probe-normalization-distinct",
+            "ms": 1.9304,
+            "threadAllocated": 2019016,
+            "processAllocated": 2019016,
+            "managed": 202607600,
+            "working": 287236096
+          }
+        ]
+      },
+      {
+        "run": 2,
+        "transactions": 241920,
+        "addresses": 9755,
+        "located": 52514,
+        "markers": 1921,
+        "rejected": 11,
+        "diagnostics": 11,
+        "retained": 201521640,
+        "fields": 2903052,
+        "measurements": [
+          {
+            "name": "property-evidence",
+            "ms": 4.9223,
+            "threadAllocated": 3627328,
+            "processAllocated": 3627328,
+            "managed": 208239504,
+            "working": 288387072
+          },
+          {
+            "name": "postal-evidence",
+            "ms": 1.9346,
+            "threadAllocated": 2171208,
+            "processAllocated": 2171208,
+            "managed": 210418872,
+            "working": 288391168
+          },
+          {
+            "name": "footprint-file-read",
+            "ms": 240.8846,
+            "threadAllocated": 228586024,
+            "processAllocated": 228588016,
+            "managed": 367455144,
+            "working": 470585344
+          },
+          {
+            "name": "footprint-json",
+            "ms": 319.4042,
+            "threadAllocated": 72,
+            "processAllocated": 72,
+            "managed": 367463368,
+            "working": 470585344
+          },
+          {
+            "name": "footprints",
+            "ms": 217.3773,
+            "threadAllocated": 58298664,
+            "processAllocated": 58298664,
+            "managed": 376706432,
+            "working": 477589504
+          },
+          {
+            "name": "evidence-index",
+            "ms": 11.7126,
+            "threadAllocated": 5286488,
+            "processAllocated": 5286488,
+            "managed": 377722552,
+            "working": 477589504
+          },
+          {
+            "name": "transaction-csv",
+            "ms": 779.571,
+            "threadAllocated": 219389104,
+            "processAllocated": 219391120,
+            "managed": 309954088,
+            "working": 546312192
+          },
+          {
+            "name": "validation-facts",
+            "ms": 643.6963,
+            "threadAllocated": 41850424,
+            "processAllocated": 41852176,
+            "managed": 348638616,
+            "working": 561737728
+          },
+          {
+            "name": "matching-resolution",
+            "ms": 184.6782,
+            "threadAllocated": 43179808,
+            "processAllocated": 43179808,
+            "managed": 376602280,
+            "working": 578215936
+          },
+          {
+            "name": "transaction-domain",
+            "ms": 135.634,
+            "threadAllocated": 35486232,
+            "processAllocated": 35486232,
+            "managed": 403439584,
+            "working": 581988352
+          },
+          {
+            "name": "import-return",
+            "ms": 0.0067,
+            "threadAllocated": 112,
+            "processAllocated": 112,
+            "managed": 403447808,
+            "working": 581988352
+          },
+          {
+            "name": "state",
+            "ms": 10.7733,
+            "threadAllocated": 3830000,
+            "processAllocated": 3830000,
+            "managed": 407277544,
+            "working": 585822208
+          },
+          {
+            "name": "aggregation",
+            "ms": 33.6007,
+            "threadAllocated": 10016536,
+            "processAllocated": 10016536,
+            "managed": 413361384,
+            "working": 585822208
+          },
+          {
+            "name": "town-budget",
+            "ms": 4.7499,
+            "threadAllocated": 51992,
+            "processAllocated": 51992,
+            "managed": 413413184,
+            "working": 585822208
+          },
+          {
+            "name": "reset",
+            "ms": 5.7651,
+            "threadAllocated": 1894568,
+            "processAllocated": 1894568,
+            "managed": 415315760,
+            "working": 587714560
+          },
+          {
+            "name": "diagnostic-retained-after-import",
+            "ms": 172.349,
+            "threadAllocated": 0,
+            "processAllocated": 0,
+            "managed": 201505192,
+            "working": 527609856
+          },
+          {
+            "name": "probe-io-address-evidence.csv",
+            "ms": 0.2728,
+            "threadAllocated": 1632,
+            "processAllocated": 2688,
+            "managed": 201521640,
+            "working": 527605760
+          },
+          {
+            "name": "probe-io-postal-address-evidence.csv",
+            "ms": 0.0328,
+            "threadAllocated": 408,
+            "processAllocated": 408,
+            "managed": 201521640,
+            "working": 527605760
+          },
+          {
+            "name": "probe-io-transactions.csv",
+            "ms": 3.5985,
+            "threadAllocated": 360,
+            "processAllocated": 360,
+            "managed": 201529512,
+            "working": 527613952
+          },
+          {
+            "name": "probe-io-building-evidence.geojson",
+            "ms": 12.0078,
+            "threadAllocated": 400,
+            "processAllocated": 400,
+            "managed": 201529512,
+            "working": 527613952
+          },
+          {
+            "name": "probe-textfieldparser-fields-only",
+            "ms": 1723.5953,
+            "threadAllocated": 3679759240,
+            "processAllocated": 3679759240,
+            "managed": 205301960,
+            "working": 265633792
+          },
+          {
+            "name": "probe-address-distinct",
+            "ms": 18.4414,
+            "threadAllocated": 1098272,
+            "processAllocated": 1098272,
+            "managed": 206401488,
+            "working": 265633792
+          },
+          {
+            "name": "probe-normalization-distinct",
+            "ms": 1.8821,
+            "threadAllocated": 2019016,
+            "processAllocated": 2019016,
+            "managed": 204216376,
+            "working": 265633792
+          }
+        ]
+      }
+    ],
+    "fast-pool-bytes": [
+      {
+        "run": 0,
+        "transactions": 241920,
+        "addresses": 9755,
+        "located": 52514,
+        "markers": 1921,
+        "rejected": 11,
+        "diagnostics": 11,
+        "retained": 134250152,
+        "fields": 2903052,
+        "measurements": [
+          {
+            "name": "property-evidence",
+            "ms": 30.3288,
+            "threadAllocated": 3629488,
+            "processAllocated": 3629488,
+            "managed": 3698728,
+            "working": 39358464
+          },
+          {
+            "name": "postal-evidence",
+            "ms": 15.962,
+            "threadAllocated": 2323424,
+            "processAllocated": 2324328,
+            "managed": 4849968,
+            "working": 47202304
+          },
+          {
+            "name": "footprint-file-read",
+            "ms": 42.5017,
+            "threadAllocated": 57012584,
+            "processAllocated": 57012584,
+            "managed": 61870296,
+            "working": 104321024
+          },
+          {
+            "name": "footprint-json",
+            "ms": 415.2937,
+            "threadAllocated": 67117160,
+            "processAllocated": 67117808,
+            "managed": 128443544,
+            "working": 159379456
+          },
+          {
+            "name": "footprints",
+            "ms": 856.7692,
+            "threadAllocated": 59690280,
+            "processAllocated": 59698848,
+            "managed": 139826472,
+            "working": 181014528
+          },
+          {
+            "name": "evidence-index",
+            "ms": 21.8732,
+            "threadAllocated": 5286888,
+            "processAllocated": 5286888,
+            "managed": 140149584,
+            "working": 183013376
+          },
+          {
+            "name": "transaction-csv",
+            "ms": 551.15,
+            "threadAllocated": 219389344,
+            "processAllocated": 219392376,
+            "managed": 243085320,
+            "working": 299094016
+          },
+          {
+            "name": "validation-facts",
+            "ms": 351.6223,
+            "threadAllocated": 41859568,
+            "processAllocated": 41859568,
+            "managed": 283004656,
+            "working": 343310336
+          },
+          {
+            "name": "matching-resolution",
+            "ms": 300.3114,
+            "threadAllocated": 43182400,
+            "processAllocated": 43183072,
+            "managed": 311480056,
+            "working": 370683904
+          },
+          {
+            "name": "transaction-domain",
+            "ms": 117.2038,
+            "threadAllocated": 35498584,
+            "processAllocated": 35498584,
+            "managed": 338599560,
+            "working": 394059776
+          },
+          {
+            "name": "import-return",
+            "ms": 0.2083,
+            "threadAllocated": 112,
+            "processAllocated": 112,
+            "managed": 338607784,
+            "working": 394067968
+          },
+          {
+            "name": "state",
+            "ms": 18.4491,
+            "threadAllocated": 5928584,
+            "processAllocated": 5928584,
+            "managed": 344534736,
+            "working": 399810560
+          },
+          {
+            "name": "aggregation",
+            "ms": 98.6523,
+            "threadAllocated": 10042072,
+            "processAllocated": 10042408,
+            "managed": 346614736,
+            "working": 408440832
+          },
+          {
+            "name": "town-budget",
+            "ms": 8.8149,
+            "threadAllocated": 51992,
+            "processAllocated": 51992,
+            "managed": 346674760,
+            "working": 408457216
+          },
+          {
+            "name": "reset",
+            "ms": 15.9447,
+            "threadAllocated": 1894568,
+            "processAllocated": 1894568,
+            "managed": 348569112,
+            "working": 410353664
+          },
+          {
+            "name": "diagnostic-retained-after-import",
+            "ms": 172.9264,
+            "threadAllocated": 0,
+            "processAllocated": 0,
+            "managed": 134233704,
+            "working": 382357504
+          },
+          {
+            "name": "probe-io-address-evidence.csv",
+            "ms": 1.4943,
+            "threadAllocated": 141344,
+            "processAllocated": 141344,
+            "managed": 134392752,
+            "working": 382382080
+          },
+          {
+            "name": "probe-io-postal-address-evidence.csv",
+            "ms": 0.0423,
+            "threadAllocated": 408,
+            "processAllocated": 408,
+            "managed": 134392752,
+            "working": 382382080
+          },
+          {
+            "name": "probe-io-transactions.csv",
+            "ms": 2.9459,
+            "threadAllocated": 360,
+            "processAllocated": 360,
+            "managed": 134392752,
+            "working": 382382080
+          },
+          {
+            "name": "probe-io-building-evidence.geojson",
+            "ms": 7.0903,
+            "threadAllocated": 400,
+            "processAllocated": 400,
+            "managed": 134400976,
+            "working": 382382080
+          },
+          {
+            "name": "probe-textfieldparser-fields-only",
+            "ms": 1933.838,
+            "threadAllocated": 3679780552,
+            "processAllocated": 3679780552,
+            "managed": 136952064,
+            "working": 230125568
+          },
+          {
+            "name": "probe-address-distinct",
+            "ms": 85.8835,
+            "threadAllocated": 1098336,
+            "processAllocated": 1098336,
+            "managed": 138051592,
+            "working": 230187008
+          },
+          {
+            "name": "probe-normalization-distinct",
+            "ms": 3.1372,
+            "threadAllocated": 2019016,
+            "processAllocated": 2019016,
+            "managed": 135887104,
+            "working": 230187008
+          }
+        ]
+      },
+      {
+        "run": 1,
+        "transactions": 241920,
+        "addresses": 9755,
+        "located": 52514,
+        "markers": 1921,
+        "rejected": 11,
+        "diagnostics": 11,
+        "retained": 134407392,
+        "fields": 2903052,
+        "measurements": [
+          {
+            "name": "property-evidence",
+            "ms": 27.7939,
+            "threadAllocated": 3627328,
+            "processAllocated": 3627328,
+            "managed": 141734504,
+            "working": 232534016
+          },
+          {
+            "name": "postal-evidence",
+            "ms": 1.5997,
+            "threadAllocated": 2171208,
+            "processAllocated": 2171208,
+            "managed": 143914816,
+            "working": 232534016
+          },
+          {
+            "name": "footprint-file-read",
+            "ms": 59.415,
+            "threadAllocated": 57012512,
+            "processAllocated": 57012512,
+            "managed": 200926920,
+            "working": 289546240
+          },
+          {
+            "name": "footprint-json",
+            "ms": 274.5288,
+            "threadAllocated": 72,
+            "processAllocated": 72,
+            "managed": 200926920,
+            "working": 289746944
+          },
+          {
+            "name": "footprints",
+            "ms": 211.2295,
+            "threadAllocated": 58298904,
+            "processAllocated": 58299264,
+            "managed": 205171776,
+            "working": 297414656
+          },
+          {
+            "name": "evidence-index",
+            "ms": 17.0336,
+            "threadAllocated": 5286488,
+            "processAllocated": 5286488,
+            "managed": 206402296,
+            "working": 297406464
+          },
+          {
+            "name": "transaction-csv",
+            "ms": 550.1168,
+            "threadAllocated": 219389208,
+            "processAllocated": 219395256,
+            "managed": 255717712,
+            "working": 352808960
+          },
+          {
+            "name": "validation-facts",
+            "ms": 218.9297,
+            "threadAllocated": 41850408,
+            "processAllocated": 41850408,
+            "managed": 283312728,
+            "working": 371806208
+          },
+          {
+            "name": "matching-resolution",
+            "ms": 177.5627,
+            "threadAllocated": 43179808,
+            "processAllocated": 43179808,
+            "managed": 311168896,
+            "working": 384311296
+          },
+          {
+            "name": "transaction-domain",
+            "ms": 114.2428,
+            "threadAllocated": 35486232,
+            "processAllocated": 35486232,
+            "managed": 337869504,
+            "working": 414425088
+          },
+          {
+            "name": "import-return",
+            "ms": 0.0016,
+            "threadAllocated": 112,
+            "processAllocated": 112,
+            "managed": 337877728,
+            "working": 414425088
+          },
+          {
+            "name": "state",
+            "ms": 15.0924,
+            "threadAllocated": 3830000,
+            "processAllocated": 3830000,
+            "managed": 341707464,
+            "working": 416346112
+          },
+          {
+            "name": "aggregation",
+            "ms": 84.7051,
+            "threadAllocated": 10016536,
+            "processAllocated": 10016536,
+            "managed": 347257416,
+            "working": 416337920
+          },
+          {
+            "name": "town-budget",
+            "ms": 6.0329,
+            "threadAllocated": 51992,
+            "processAllocated": 51992,
+            "managed": 347309216,
+            "working": 416337920
+          },
+          {
+            "name": "reset",
+            "ms": 12.4764,
+            "threadAllocated": 1894568,
+            "processAllocated": 1894568,
+            "managed": 349211792,
+            "working": 418230272
+          },
+          {
+            "name": "diagnostic-retained-after-import",
+            "ms": 169.4423,
+            "threadAllocated": 0,
+            "processAllocated": 0,
+            "managed": 134390944,
+            "working": 411459584
+          },
+          {
+            "name": "probe-io-address-evidence.csv",
+            "ms": 0.3023,
+            "threadAllocated": 1632,
+            "processAllocated": 1632,
+            "managed": 134407392,
+            "working": 411463680
+          },
+          {
+            "name": "probe-io-postal-address-evidence.csv",
+            "ms": 0.0355,
+            "threadAllocated": 408,
+            "processAllocated": 408,
+            "managed": 134407392,
+            "working": 411463680
+          },
+          {
+            "name": "probe-io-transactions.csv",
+            "ms": 3.0026,
+            "threadAllocated": 360,
+            "processAllocated": 360,
+            "managed": 134415264,
+            "working": 411463680
+          },
+          {
+            "name": "probe-io-building-evidence.geojson",
+            "ms": 6.4298,
+            "threadAllocated": 400,
+            "processAllocated": 400,
+            "managed": 134415264,
+            "working": 411484160
+          },
+          {
+            "name": "probe-textfieldparser-fields-only",
+            "ms": 1291.6298,
+            "threadAllocated": 3679759240,
+            "processAllocated": 3679759240,
+            "managed": 137826600,
+            "working": 236711936
+          },
+          {
+            "name": "probe-address-distinct",
+            "ms": 19.6194,
+            "threadAllocated": 1098272,
+            "processAllocated": 1098272,
+            "managed": 138934352,
+            "working": 236732416
+          },
+          {
+            "name": "probe-normalization-distinct",
+            "ms": 2.0563,
+            "threadAllocated": 2019016,
+            "processAllocated": 2019016,
+            "managed": 136740224,
+            "working": 236732416
+          }
+        ]
+      },
+      {
+        "run": 2,
+        "transactions": 241920,
+        "addresses": 9755,
+        "located": 52514,
+        "markers": 1921,
+        "rejected": 11,
+        "diagnostics": 11,
+        "retained": 134422088,
+        "fields": 2903052,
+        "measurements": [
+          {
+            "name": "property-evidence",
+            "ms": 3.6121,
+            "threadAllocated": 3627328,
+            "processAllocated": 3627328,
+            "managed": 142562272,
+            "working": 237944832
+          },
+          {
+            "name": "postal-evidence",
+            "ms": 7.0389,
+            "threadAllocated": 2171208,
+            "processAllocated": 2171208,
+            "managed": 141912640,
+            "working": 240619520
+          },
+          {
+            "name": "footprint-file-read",
+            "ms": 34.7165,
+            "threadAllocated": 57012512,
+            "processAllocated": 57012512,
+            "managed": 198932968,
+            "working": 297631744
+          },
+          {
+            "name": "footprint-json",
+            "ms": 269.8577,
+            "threadAllocated": 72,
+            "processAllocated": 72,
+            "managed": 198932968,
+            "working": 297652224
+          },
+          {
+            "name": "footprints",
+            "ms": 212.182,
+            "threadAllocated": 58298664,
+            "processAllocated": 58298664,
+            "managed": 205773008,
+            "working": 302702592
+          },
+          {
+            "name": "evidence-index",
+            "ms": 10.4588,
+            "threadAllocated": 5286488,
+            "processAllocated": 5286488,
+            "managed": 206788872,
+            "working": 302710784
+          },
+          {
+            "name": "transaction-csv",
+            "ms": 466.9853,
+            "threadAllocated": 219389352,
+            "processAllocated": 219391368,
+            "managed": 243770272,
+            "working": 406294528
+          },
+          {
+            "name": "validation-facts",
+            "ms": 223.598,
+            "threadAllocated": 41850408,
+            "processAllocated": 41850408,
+            "managed": 284367344,
+            "working": 430366720
+          },
+          {
+            "name": "matching-resolution",
+            "ms": 210.6115,
+            "threadAllocated": 43210928,
+            "processAllocated": 43212800,
+            "managed": 301564840,
+            "working": 444837888
+          },
+          {
+            "name": "transaction-domain",
+            "ms": 115.9115,
+            "threadAllocated": 35486232,
+            "processAllocated": 35486232,
+            "managed": 328415136,
+            "working": 470654976
+          },
+          {
+            "name": "import-return",
+            "ms": 0.0026,
+            "threadAllocated": 112,
+            "processAllocated": 112,
+            "managed": 328423360,
+            "working": 470654976
+          },
+          {
+            "name": "state",
+            "ms": 7.1267,
+            "threadAllocated": 3830000,
+            "processAllocated": 3830000,
+            "managed": 332253096,
+            "working": 470659072
+          },
+          {
+            "name": "aggregation",
+            "ms": 30.8732,
+            "threadAllocated": 10016536,
+            "processAllocated": 10016536,
+            "managed": 338362640,
+            "working": 470659072
+          },
+          {
+            "name": "town-budget",
+            "ms": 5.7201,
+            "threadAllocated": 51992,
+            "processAllocated": 51992,
+            "managed": 338422664,
+            "working": 470659072
+          },
+          {
+            "name": "reset",
+            "ms": 7.8959,
+            "threadAllocated": 1894568,
+            "processAllocated": 1894568,
+            "managed": 340317016,
+            "working": 470659072
+          },
+          {
+            "name": "diagnostic-retained-after-import",
+            "ms": 138.8888,
+            "threadAllocated": 0,
+            "processAllocated": 0,
+            "managed": 134405640,
+            "working": 442482688
+          },
+          {
+            "name": "probe-io-address-evidence.csv",
+            "ms": 0.1619,
+            "threadAllocated": 1632,
+            "processAllocated": 1632,
+            "managed": 134422088,
+            "working": 442482688
+          },
+          {
+            "name": "probe-io-postal-address-evidence.csv",
+            "ms": 0.0302,
+            "threadAllocated": 408,
+            "processAllocated": 408,
+            "managed": 134422088,
+            "working": 442482688
+          },
+          {
+            "name": "probe-io-transactions.csv",
+            "ms": 4.0573,
+            "threadAllocated": 360,
+            "processAllocated": 360,
+            "managed": 134429960,
+            "working": 442490880
+          },
+          {
+            "name": "probe-io-building-evidence.geojson",
+            "ms": 83.0558,
+            "threadAllocated": 400,
+            "processAllocated": 400,
+            "managed": 134429960,
+            "working": 442490880
+          },
+          {
+            "name": "probe-textfieldparser-fields-only",
+            "ms": 1312.7961,
+            "threadAllocated": 3679759240,
+            "processAllocated": 3679759240,
+            "managed": 138202408,
+            "working": 231489536
+          },
+          {
+            "name": "probe-address-distinct",
+            "ms": 32.7845,
+            "threadAllocated": 1098272,
+            "processAllocated": 1098272,
+            "managed": 139301936,
+            "working": 231489536
+          },
+          {
+            "name": "probe-normalization-distinct",
+            "ms": 2.0895,
+            "threadAllocated": 2019016,
+            "processAllocated": 2019016,
+            "managed": 137116824,
+            "working": 231489536
+          }
+        ]
+      }
+    ],
+    "fast-pool-bytes-scalar": [
+      {
+        "run": 0,
+        "transactions": 241920,
+        "addresses": 9755,
+        "located": 52514,
+        "markers": 1921,
+        "rejected": 11,
+        "diagnostics": 11,
+        "retained": 134249912,
+        "fields": 2903052,
+        "measurements": [
+          {
+            "name": "property-evidence",
+            "ms": 83.2466,
+            "threadAllocated": 3629488,
+            "processAllocated": 3629488,
+            "managed": 3698728,
+            "working": 39718912
+          },
+          {
+            "name": "postal-evidence",
+            "ms": 45.4032,
+            "threadAllocated": 2323424,
+            "processAllocated": 2324328,
+            "managed": 4849984,
+            "working": 47460352
+          },
+          {
+            "name": "footprint-file-read",
+            "ms": 297.8204,
+            "threadAllocated": 57012584,
+            "processAllocated": 57012584,
+            "managed": 61870312,
+            "working": 104632320
+          },
+          {
+            "name": "footprint-json",
+            "ms": 889.0469,
+            "threadAllocated": 67117160,
+            "processAllocated": 67117808,
+            "managed": 128443560,
+            "working": 159977472
+          },
+          {
+            "name": "footprints",
+            "ms": 1111.4615,
+            "threadAllocated": 10328584,
+            "processAllocated": 10335808,
+            "managed": 137474896,
+            "working": 172285952
+          },
+          {
+            "name": "evidence-index",
+            "ms": 64.0144,
+            "threadAllocated": 5286888,
+            "processAllocated": 5286888,
+            "managed": 140828984,
+            "working": 177963008
+          },
+          {
+            "name": "transaction-csv",
+            "ms": 1620.9391,
+            "threadAllocated": 219389240,
+            "processAllocated": 219392296,
+            "managed": 241741840,
+            "working": 304222208
+          },
+          {
+            "name": "validation-facts",
+            "ms": 870.7343,
+            "threadAllocated": 41859568,
+            "processAllocated": 41859568,
+            "managed": 283007432,
+            "working": 348405760
+          },
+          {
+            "name": "matching-resolution",
+            "ms": 613.1603,
+            "threadAllocated": 43182400,
+            "processAllocated": 43183072,
+            "managed": 311844872,
+            "working": 374652928
+          },
+          {
+            "name": "transaction-domain",
+            "ms": 301.8328,
+            "threadAllocated": 35498584,
+            "processAllocated": 35498584,
+            "managed": 338943920,
+            "working": 398004224
+          },
+          {
+            "name": "import-return",
+            "ms": 0.154,
+            "threadAllocated": 112,
+            "processAllocated": 112,
+            "managed": 338943920,
+            "working": 398004224
+          },
+          {
+            "name": "state",
+            "ms": 52.5107,
+            "threadAllocated": 5928584,
+            "processAllocated": 5928584,
+            "managed": 344879352,
+            "working": 403603456
+          },
+          {
+            "name": "aggregation",
+            "ms": 254.7691,
+            "threadAllocated": 10042072,
+            "processAllocated": 10042408,
+            "managed": 347649848,
+            "working": 411332608
+          },
+          {
+            "name": "town-budget",
+            "ms": 21.7629,
+            "threadAllocated": 51992,
+            "processAllocated": 51992,
+            "managed": 347701648,
+            "working": 411336704
+          },
+          {
+            "name": "reset",
+            "ms": 27.1168,
+            "threadAllocated": 1894568,
+            "processAllocated": 1894568,
+            "managed": 349604224,
+            "working": 413233152
+          },
+          {
+            "name": "diagnostic-retained-after-import",
+            "ms": 443.0655,
+            "threadAllocated": 0,
+            "processAllocated": 0,
+            "managed": 134233464,
+            "working": 381030400
+          },
+          {
+            "name": "probe-io-address-evidence.csv",
+            "ms": 3.4461,
+            "threadAllocated": 153680,
+            "processAllocated": 153680,
+            "managed": 134404872,
+            "working": 381091840
+          },
+          {
+            "name": "probe-io-postal-address-evidence.csv",
+            "ms": 0.0755,
+            "threadAllocated": 408,
+            "processAllocated": 408,
+            "managed": 134404872,
+            "working": 381091840
+          },
+          {
+            "name": "probe-io-transactions.csv",
+            "ms": 11.2341,
+            "threadAllocated": 360,
+            "processAllocated": 360,
+            "managed": 134404872,
+            "working": 381091840
+          },
+          {
+            "name": "probe-io-building-evidence.geojson",
+            "ms": 18.4227,
+            "threadAllocated": 400,
+            "processAllocated": 400,
+            "managed": 134413096,
+            "working": 381091840
+          },
+          {
+            "name": "probe-textfieldparser-fields-only",
+            "ms": 3289.0711,
+            "threadAllocated": 3679768216,
+            "processAllocated": 3679768216,
+            "managed": 137377000,
+            "working": 231317504
+          },
+          {
+            "name": "probe-address-distinct",
+            "ms": 68.9394,
+            "threadAllocated": 1098336,
+            "processAllocated": 1098336,
+            "managed": 138476528,
+            "working": 231374848
+          },
+          {
+            "name": "probe-normalization-distinct",
+            "ms": 6.8012,
+            "threadAllocated": 2019016,
+            "processAllocated": 2019016,
+            "managed": 136291384,
+            "working": 231374848
+          }
+        ]
+      },
+      {
+        "run": 1,
+        "transactions": 241920,
+        "addresses": 9755,
+        "located": 52514,
+        "markers": 1921,
+        "rejected": 11,
+        "diagnostics": 11,
+        "retained": 134407152,
+        "fields": 2903052,
+        "measurements": [
+          {
+            "name": "property-evidence",
+            "ms": 67.8889,
+            "threadAllocated": 3627328,
+            "processAllocated": 3627328,
+            "managed": 142143736,
+            "working": 232824832
+          },
+          {
+            "name": "postal-evidence",
+            "ms": 25.4832,
+            "threadAllocated": 2171208,
+            "processAllocated": 2171208,
+            "managed": 141842656,
+            "working": 235446272
+          },
+          {
+            "name": "footprint-file-read",
+            "ms": 146.9991,
+            "threadAllocated": 57012512,
+            "processAllocated": 57012512,
+            "managed": 198854760,
+            "working": 292655104
+          },
+          {
+            "name": "footprint-json",
+            "ms": 589.1742,
+            "threadAllocated": 72,
+            "processAllocated": 72,
+            "managed": 198862984,
+            "working": 292663296
+          },
+          {
+            "name": "footprints",
+            "ms": 540.6921,
+            "threadAllocated": 9984872,
+            "processAllocated": 9984872,
+            "managed": 207055224,
+            "working": 296464384
+          },
+          {
+            "name": "evidence-index",
+            "ms": 76.1703,
+            "threadAllocated": 5286488,
+            "processAllocated": 5286824,
+            "managed": 207828952,
+            "working": 305881088
+          },
+          {
+            "name": "transaction-csv",
+            "ms": 1408.1591,
+            "threadAllocated": 219389136,
+            "processAllocated": 219393168,
+            "managed": 243208432,
+            "working": 410185728
+          },
+          {
+            "name": "validation-facts",
+            "ms": 484.333,
+            "threadAllocated": 41850408,
+            "processAllocated": 41850408,
+            "managed": 283318720,
+            "working": 431697920
+          },
+          {
+            "name": "matching-resolution",
+            "ms": 363.6881,
+            "threadAllocated": 43179808,
+            "processAllocated": 43179832,
+            "managed": 311525592,
+            "working": 446394368
+          },
+          {
+            "name": "transaction-domain",
+            "ms": 331.091,
+            "threadAllocated": 35486232,
+            "processAllocated": 35486232,
+            "managed": 338555584,
+            "working": 471625728
+          },
+          {
+            "name": "import-return",
+            "ms": 0.002,
+            "threadAllocated": 112,
+            "processAllocated": 112,
+            "managed": 338555584,
+            "working": 471629824
+          },
+          {
+            "name": "state",
+            "ms": 44.5275,
+            "threadAllocated": 3830000,
+            "processAllocated": 3830000,
+            "managed": 342385320,
+            "working": 473526272
+          },
+          {
+            "name": "aggregation",
+            "ms": 249.0829,
+            "threadAllocated": 10016536,
+            "processAllocated": 10016536,
+            "managed": 343489216,
+            "working": 473522176
+          },
+          {
+            "name": "town-budget",
+            "ms": 9.6901,
+            "threadAllocated": 51992,
+            "processAllocated": 51992,
+            "managed": 343549240,
+            "working": 473522176
+          },
+          {
+            "name": "reset",
+            "ms": 26.9519,
+            "threadAllocated": 1894568,
+            "processAllocated": 1894568,
+            "managed": 345443592,
+            "working": 475418624
+          },
+          {
+            "name": "diagnostic-retained-after-import",
+            "ms": 370.4253,
+            "threadAllocated": 0,
+            "processAllocated": 0,
+            "managed": 134390704,
+            "working": 443236352
+          },
+          {
+            "name": "probe-io-address-evidence.csv",
+            "ms": 0.3276,
+            "threadAllocated": 1632,
+            "processAllocated": 1632,
+            "managed": 134407152,
+            "working": 443236352
+          },
+          {
+            "name": "probe-io-postal-address-evidence.csv",
+            "ms": 0.0324,
+            "threadAllocated": 408,
+            "processAllocated": 408,
+            "managed": 134407152,
+            "working": 443236352
+          },
+          {
+            "name": "probe-io-transactions.csv",
+            "ms": 2.9511,
+            "threadAllocated": 360,
+            "processAllocated": 360,
+            "managed": 134415024,
+            "working": 443236352
+          },
+          {
+            "name": "probe-io-building-evidence.geojson",
+            "ms": 18.6072,
+            "threadAllocated": 400,
+            "processAllocated": 400,
+            "managed": 134415024,
+            "working": 443269120
+          },
+          {
+            "name": "probe-textfieldparser-fields-only",
+            "ms": 3142.2932,
+            "threadAllocated": 3679759240,
+            "processAllocated": 3679759240,
+            "managed": 136601840,
+            "working": 237146112
+          },
+          {
+            "name": "probe-address-distinct",
+            "ms": 94.4493,
+            "threadAllocated": 1098272,
+            "processAllocated": 1098272,
+            "managed": 137709592,
+            "working": 237150208
+          },
+          {
+            "name": "probe-normalization-distinct",
+            "ms": 5.8465,
+            "threadAllocated": 2019016,
+            "processAllocated": 2019016,
+            "managed": 135536384,
+            "working": 237150208
+          }
+        ]
+      },
+      {
+        "run": 2,
+        "transactions": 241920,
+        "addresses": 9755,
+        "located": 52514,
+        "markers": 1921,
+        "rejected": 11,
+        "diagnostics": 11,
+        "retained": 134409352,
+        "fields": 2903052,
+        "measurements": [
+          {
+            "name": "property-evidence",
+            "ms": 10.7504,
+            "threadAllocated": 3627328,
+            "processAllocated": 3627328,
+            "managed": 141368808,
+            "working": 238510080
+          },
+          {
+            "name": "postal-evidence",
+            "ms": 2.932,
+            "threadAllocated": 2171208,
+            "processAllocated": 2171208,
+            "managed": 143549144,
+            "working": 238522368
+          },
+          {
+            "name": "footprint-file-read",
+            "ms": 103.0611,
+            "threadAllocated": 57012512,
+            "processAllocated": 57012512,
+            "managed": 200569472,
+            "working": 295546880
+          },
+          {
+            "name": "footprint-json",
+            "ms": 561.3703,
+            "threadAllocated": 72,
+            "processAllocated": 72,
+            "managed": 200569472,
+            "working": 295571456
+          },
+          {
+            "name": "footprints",
+            "ms": 403.3447,
+            "threadAllocated": 9985112,
+            "processAllocated": 9985112,
+            "managed": 206217792,
+            "working": 301166592
+          },
+          {
+            "name": "evidence-index",
+            "ms": 81.2045,
+            "threadAllocated": 5286488,
+            "processAllocated": 5286488,
+            "managed": 207391104,
+            "working": 311586816
+          },
+          {
+            "name": "transaction-csv",
+            "ms": 1246.1616,
+            "threadAllocated": 219389128,
+            "processAllocated": 219393160,
+            "managed": 242890840,
+            "working": 407031808
+          },
+          {
+            "name": "validation-facts",
+            "ms": 221.4843,
+            "threadAllocated": 41850408,
+            "processAllocated": 41850408,
+            "managed": 283323216,
+            "working": 430833664
+          },
+          {
+            "name": "matching-resolution",
+            "ms": 163.7874,
+            "threadAllocated": 43179808,
+            "processAllocated": 43179808,
+            "managed": 311358520,
+            "working": 444887040
+          },
+          {
+            "name": "transaction-domain",
+            "ms": 125.3362,
+            "threadAllocated": 35486232,
+            "processAllocated": 35486232,
+            "managed": 338291640,
+            "working": 466055168
+          },
+          {
+            "name": "import-return",
+            "ms": 0.0021,
+            "threadAllocated": 112,
+            "processAllocated": 112,
+            "managed": 338299864,
+            "working": 466055168
+          },
+          {
+            "name": "state",
+            "ms": 12.9775,
+            "threadAllocated": 3830000,
+            "processAllocated": 3830000,
+            "managed": 342129600,
+            "working": 467832832
+          },
+          {
+            "name": "aggregation",
+            "ms": 45.5711,
+            "threadAllocated": 10016536,
+            "processAllocated": 10016536,
+            "managed": 342647576,
+            "working": 467832832
+          },
+          {
+            "name": "town-budget",
+            "ms": 4.3903,
+            "threadAllocated": 51992,
+            "processAllocated": 51992,
+            "managed": 342699376,
+            "working": 467832832
+          },
+          {
+            "name": "reset",
+            "ms": 10.4649,
+            "threadAllocated": 1894568,
+            "processAllocated": 1894568,
+            "managed": 344601952,
+            "working": 469725184
+          },
+          {
+            "name": "diagnostic-retained-after-import",
+            "ms": 143.9158,
+            "threadAllocated": 0,
+            "processAllocated": 0,
+            "managed": 134392904,
+            "working": 462422016
+          },
+          {
+            "name": "probe-io-address-evidence.csv",
+            "ms": 0.2214,
+            "threadAllocated": 1632,
+            "processAllocated": 1632,
+            "managed": 134409352,
+            "working": 462422016
+          },
+          {
+            "name": "probe-io-postal-address-evidence.csv",
+            "ms": 0.0347,
+            "threadAllocated": 408,
+            "processAllocated": 408,
+            "managed": 134409352,
+            "working": 462422016
+          },
+          {
+            "name": "probe-io-transactions.csv",
+            "ms": 4.055,
+            "threadAllocated": 360,
+            "processAllocated": 360,
+            "managed": 134417224,
+            "working": 462422016
+          },
+          {
+            "name": "probe-io-building-evidence.geojson",
+            "ms": 15.5375,
+            "threadAllocated": 400,
+            "processAllocated": 400,
+            "managed": 134417224,
+            "working": 462426112
+          },
+          {
+            "name": "probe-textfieldparser-fields-only",
+            "ms": 1442.8973,
+            "threadAllocated": 3679759240,
+            "processAllocated": 3679759240,
+            "managed": 136378888,
+            "working": 235237376
+          },
+          {
+            "name": "probe-address-distinct",
+            "ms": 23.8698,
+            "threadAllocated": 1098272,
+            "processAllocated": 1098272,
+            "managed": 137486640,
+            "working": 235241472
+          },
+          {
+            "name": "probe-normalization-distinct",
+            "ms": 1.9288,
+            "threadAllocated": 2019016,
+            "processAllocated": 2019016,
+            "managed": 139509744,
+            "working": 235241472
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,2435 @@
+{
+  "platform": "Debian13.6 x86_64 XFCE X11, .NET SDK10.0.401/runtime10.0.12, Qt6.12.0, BridgeLinux0.4.0-beta",
+  "baseline_source": "e65bec5 (diagnostic instrumentation with original M7 importer)",
+  "optimized_source": "ad0827a",
+  "notes": [
+    "Sequential same-input/provider/cache measurements; not randomized or cold-network tests.",
+    "Startup views use all241920rows and1921markers. qml-shell is a minimal separate diagnostic QML shell; map-shell is production layout/provider without map marker model.",
+    "Total processseconds include startup, diagnostic post-readiness collection and teardown. QML intervals include lazy Bridge consumption/bindings/layout/25ms cadence, not isolated GPU/Bridge costs.",
+    "Ordinary gates do not force collection. Their5second state and25/45second process bounds are unchanged."
+  ],
+  "startup": {
+    "baseline": {
+      "qml-shell": [
+        {
+          "seconds": 8.229240012999071,
+          "process_exit": 0,
+          "verified": true,
+          "view": "qml-shell",
+          "iteration": 1,
+          "stages": [
+            {
+              "Operation": "property-evidence",
+              "Milliseconds": 85.2967,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 42950736,
+              "ProcessAllocatedBytes": 42950736,
+              "ManagedBytes": 43878792,
+              "WorkingSetBytes": 182337536
+            },
+            {
+              "Operation": "postal-evidence",
+              "Milliseconds": 102.4834,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 29114272,
+              "ProcessAllocatedBytes": 29114272,
+              "ManagedBytes": 73082408,
+              "WorkingSetBytes": 218660864
+            },
+            {
+              "Operation": "footprint-file-read",
+              "Milliseconds": 195.8416,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 228578752,
+              "ProcessAllocatedBytes": 228579904,
+              "ManagedBytes": 237024072,
+              "WorkingSetBytes": 400687104
+            },
+            {
+              "Operation": "footprint-json",
+              "Milliseconds": 472.0322,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 134219304,
+              "ProcessAllocatedBytes": 134220288,
+              "ManagedBytes": 306216752,
+              "WorkingSetBytes": 512901120
+            },
+            {
+              "Operation": "footprints",
+              "Milliseconds": 764.5199,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 59585224,
+              "ProcessAllocatedBytes": 59585248,
+              "ManagedBytes": 365984344,
+              "WorkingSetBytes": 559173632
+            },
+            {
+              "Operation": "evidence-index",
+              "Milliseconds": 25.1195,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 5287672,
+              "ProcessAllocatedBytes": 5287672,
+              "ManagedBytes": 371290720,
+              "WorkingSetBytes": 564596736
+            },
+            {
+              "Operation": "transaction-csv",
+              "Milliseconds": 4655.873,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 3970381368,
+              "ProcessAllocatedBytes": 3970386440,
+              "ManagedBytes": 466789728,
+              "WorkingSetBytes": 718323712
+            },
+            {
+              "Operation": "validation-facts",
+              "Milliseconds": 317.1192,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 76481016,
+              "ProcessAllocatedBytes": 76481016,
+              "ManagedBytes": 543445504,
+              "WorkingSetBytes": 736833536
+            },
+            {
+              "Operation": "matching-resolution",
+              "Milliseconds": 272.2613,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 43198624,
+              "ProcessAllocatedBytes": 43198624,
+              "ManagedBytes": 586719600,
+              "WorkingSetBytes": 753946624
+            },
+            {
+              "Operation": "transaction-domain",
+              "Milliseconds": 23.1438,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 35499456,
+              "ProcessAllocatedBytes": 35499456,
+              "ManagedBytes": 622313536,
+              "WorkingSetBytes": 757850112
+            },
+            {
+              "Operation": "import-return",
+              "Milliseconds": 0.1895,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 976,
+              "ProcessAllocatedBytes": 976,
+              "ManagedBytes": 622321760,
+              "WorkingSetBytes": 757850112
+            },
+            {
+              "Operation": "town-labels",
+              "Milliseconds": 61.8618,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 5512,
+              "ProcessAllocatedBytes": 5512,
+              "ManagedBytes": 622329984,
+              "WorkingSetBytes": 757936128
+            },
+            {
+              "Operation": "state-construction",
+              "Milliseconds": 54.897,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 7865272,
+              "ProcessAllocatedBytes": 7865272,
+              "ManagedBytes": 630192576,
+              "WorkingSetBytes": 765571072
+            },
+            {
+              "Operation": "map-aggregation",
+              "Milliseconds": 89.9182,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 10144208,
+              "ProcessAllocatedBytes": 10144208,
+              "ManagedBytes": 640372008,
+              "WorkingSetBytes": 775462912
+            },
+            {
+              "Operation": "map-model-population",
+              "Milliseconds": 0.2861,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 16280,
+              "ProcessAllocatedBytes": 16280,
+              "ManagedBytes": 640387424,
+              "WorkingSetBytes": 775483392
+            },
+            {
+              "Operation": "models-constructed",
+              "Milliseconds": 0.0344,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 848,
+              "ProcessAllocatedBytes": 848,
+              "ManagedBytes": 640395648,
+              "WorkingSetBytes": 775491584
+            },
+            {
+              "Operation": "qml-ready-qml-shell",
+              "Milliseconds": 232.9314,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 18320,
+              "ProcessAllocatedBytes": 42944,
+              "ManagedBytes": 640436744,
+              "WorkingSetBytes": 816758784
+            },
+            {
+              "Operation": "diagnostic-retained-native",
+              "Milliseconds": 424.756,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 1128,
+              "ProcessAllocatedBytes": 1128,
+              "ManagedBytes": 242098496,
+              "WorkingSetBytes": 641695744
+            }
+          ],
+          "ready": "HDB_STARTUP_READY view=qml-shell rows=241920 markers=1921 sidebar-role-reads=0 map-role-reads=0",
+          "clean_exit": true
+        },
+        {
+          "seconds": 8.249528320000536,
+          "process_exit": 0,
+          "verified": true,
+          "view": "qml-shell",
+          "iteration": 2,
+          "stages": [
+            {
+              "Operation": "property-evidence",
+              "Milliseconds": 84.9602,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 42950736,
+              "ProcessAllocatedBytes": 42950736,
+              "ManagedBytes": 43878952,
+              "WorkingSetBytes": 183296000
+            },
+            {
+              "Operation": "postal-evidence",
+              "Milliseconds": 94.2268,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 29114400,
+              "ProcessAllocatedBytes": 29114400,
+              "ManagedBytes": 73082648,
+              "WorkingSetBytes": 219619328
+            },
+            {
+              "Operation": "footprint-file-read",
+              "Milliseconds": 210.4588,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 228578744,
+              "ProcessAllocatedBytes": 228579896,
+              "ManagedBytes": 237024072,
+              "WorkingSetBytes": 402014208
+            },
+            {
+              "Operation": "footprint-json",
+              "Milliseconds": 494.0741,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 134219304,
+              "ProcessAllocatedBytes": 134220320,
+              "ManagedBytes": 306241096,
+              "WorkingSetBytes": 514220032
+            },
+            {
+              "Operation": "footprints",
+              "Milliseconds": 767.888,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 59949432,
+              "ProcessAllocatedBytes": 59949456,
+              "ManagedBytes": 366365400,
+              "WorkingSetBytes": 560881664
+            },
+            {
+              "Operation": "evidence-index",
+              "Milliseconds": 26.6945,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 5287664,
+              "ProcessAllocatedBytes": 5287664,
+              "ManagedBytes": 371673728,
+              "WorkingSetBytes": 566333440
+            },
+            {
+              "Operation": "transaction-csv",
+              "Milliseconds": 4595.5964,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 3970381528,
+              "ProcessAllocatedBytes": 3970386568,
+              "ManagedBytes": 466570680,
+              "WorkingSetBytes": 719454208
+            },
+            {
+              "Operation": "validation-facts",
+              "Milliseconds": 302.5929,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 76481024,
+              "ProcessAllocatedBytes": 76481024,
+              "ManagedBytes": 543226424,
+              "WorkingSetBytes": 738119680
+            },
+            {
+              "Operation": "matching-resolution",
+              "Milliseconds": 281.9473,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 43198624,
+              "ProcessAllocatedBytes": 43198624,
+              "ManagedBytes": 586500456,
+              "WorkingSetBytes": 755179520
+            },
+            {
+              "Operation": "transaction-domain",
+              "Milliseconds": 22.3129,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 35499456,
+              "ProcessAllocatedBytes": 35499456,
+              "ManagedBytes": 622094368,
+              "WorkingSetBytes": 759087104
+            },
+            {
+              "Operation": "import-return",
+              "Milliseconds": 0.2874,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 976,
+              "ProcessAllocatedBytes": 976,
+              "ManagedBytes": 622094368,
+              "WorkingSetBytes": 759091200
+            },
+            {
+              "Operation": "town-labels",
+              "Milliseconds": 54.2285,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 5512,
+              "ProcessAllocatedBytes": 5512,
+              "ManagedBytes": 622102592,
+              "WorkingSetBytes": 759177216
+            },
+            {
+              "Operation": "state-construction",
+              "Milliseconds": 61.5419,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 7865272,
+              "ProcessAllocatedBytes": 7865272,
+              "ManagedBytes": 629973408,
+              "WorkingSetBytes": 766816256
+            },
+            {
+              "Operation": "map-aggregation",
+              "Milliseconds": 100.834,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 10168832,
+              "ProcessAllocatedBytes": 10168832,
+              "ManagedBytes": 640177240,
+              "WorkingSetBytes": 776482816
+            },
+            {
+              "Operation": "map-model-population",
+              "Milliseconds": 0.3275,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 16280,
+              "ProcessAllocatedBytes": 16280,
+              "ManagedBytes": 640192656,
+              "WorkingSetBytes": 776499200
+            },
+            {
+              "Operation": "models-constructed",
+              "Milliseconds": 0.0271,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 848,
+              "ProcessAllocatedBytes": 848,
+              "ManagedBytes": 640192656,
+              "WorkingSetBytes": 776499200
+            },
+            {
+              "Operation": "qml-ready-qml-shell",
+              "Milliseconds": 203.449,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 18320,
+              "ProcessAllocatedBytes": 18320,
+              "ManagedBytes": 640219136,
+              "WorkingSetBytes": 823541760
+            },
+            {
+              "Operation": "diagnostic-retained-native",
+              "Milliseconds": 539.5866,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 1128,
+              "ProcessAllocatedBytes": 1128,
+              "ManagedBytes": 242098496,
+              "WorkingSetBytes": 648699904
+            }
+          ],
+          "ready": "HDB_STARTUP_READY view=qml-shell rows=241920 markers=1921 sidebar-role-reads=0 map-role-reads=0",
+          "clean_exit": true
+        }
+      ],
+      "map-shell": [
+        {
+          "seconds": 9.289909842998895,
+          "process_exit": 0,
+          "verified": true,
+          "view": "map-shell",
+          "iteration": 1,
+          "stages": [
+            {
+              "Operation": "property-evidence",
+              "Milliseconds": 100.7427,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 42950736,
+              "ProcessAllocatedBytes": 42950736,
+              "ManagedBytes": 43871120,
+              "WorkingSetBytes": 190615552
+            },
+            {
+              "Operation": "postal-evidence",
+              "Milliseconds": 112.0068,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 29112288,
+              "ProcessAllocatedBytes": 29112288,
+              "ManagedBytes": 73083032,
+              "WorkingSetBytes": 226742272
+            },
+            {
+              "Operation": "footprint-file-read",
+              "Milliseconds": 346.286,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 228578752,
+              "ProcessAllocatedBytes": 228579904,
+              "ManagedBytes": 237023176,
+              "WorkingSetBytes": 409468928
+            },
+            {
+              "Operation": "footprint-json",
+              "Milliseconds": 523.7762,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 134219304,
+              "ProcessAllocatedBytes": 134220336,
+              "ManagedBytes": 306111288,
+              "WorkingSetBytes": 523141120
+            },
+            {
+              "Operation": "footprints",
+              "Milliseconds": 728.1859,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 59959176,
+              "ProcessAllocatedBytes": 59959176,
+              "ManagedBytes": 366245032,
+              "WorkingSetBytes": 568221696
+            },
+            {
+              "Operation": "evidence-index",
+              "Milliseconds": 23.9261,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 5287672,
+              "ProcessAllocatedBytes": 5287672,
+              "ManagedBytes": 371553320,
+              "WorkingSetBytes": 573603840
+            },
+            {
+              "Operation": "transaction-csv",
+              "Milliseconds": 4958.6977,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 3970381424,
+              "ProcessAllocatedBytes": 3970386496,
+              "ManagedBytes": 466637496,
+              "WorkingSetBytes": 726724608
+            },
+            {
+              "Operation": "validation-facts",
+              "Milliseconds": 424.3871,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 76481024,
+              "ProcessAllocatedBytes": 76497368,
+              "ManagedBytes": 543309576,
+              "WorkingSetBytes": 745304064
+            },
+            {
+              "Operation": "matching-resolution",
+              "Milliseconds": 281.6455,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 43206904,
+              "ProcessAllocatedBytes": 43206904,
+              "ManagedBytes": 586595184,
+              "WorkingSetBytes": 762343424
+            },
+            {
+              "Operation": "transaction-domain",
+              "Milliseconds": 26.9238,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 35499456,
+              "ProcessAllocatedBytes": 35499456,
+              "ManagedBytes": 622189128,
+              "WorkingSetBytes": 766255104
+            },
+            {
+              "Operation": "import-return",
+              "Milliseconds": 0.2573,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 976,
+              "ProcessAllocatedBytes": 976,
+              "ManagedBytes": 622189128,
+              "WorkingSetBytes": 766259200
+            },
+            {
+              "Operation": "town-labels",
+              "Milliseconds": 64.7206,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 5512,
+              "ProcessAllocatedBytes": 5512,
+              "ManagedBytes": 622197352,
+              "WorkingSetBytes": 766345216
+            },
+            {
+              "Operation": "state-construction",
+              "Milliseconds": 45.2928,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 7865272,
+              "ProcessAllocatedBytes": 7865272,
+              "ManagedBytes": 630068168,
+              "WorkingSetBytes": 774017024
+            },
+            {
+              "Operation": "map-aggregation",
+              "Milliseconds": 85.879,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 10144208,
+              "ProcessAllocatedBytes": 10144208,
+              "ManagedBytes": 640239624,
+              "WorkingSetBytes": 783724544
+            },
+            {
+              "Operation": "map-model-population",
+              "Milliseconds": 0.3082,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 16272,
+              "ProcessAllocatedBytes": 16272,
+              "ManagedBytes": 640263264,
+              "WorkingSetBytes": 783749120
+            },
+            {
+              "Operation": "models-constructed",
+              "Milliseconds": 0.0422,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 848,
+              "ProcessAllocatedBytes": 848,
+              "ManagedBytes": 640263264,
+              "WorkingSetBytes": 783749120
+            },
+            {
+              "Operation": "qml-ready-map-shell",
+              "Milliseconds": 417.8532,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 487584,
+              "ProcessAllocatedBytes": 487584,
+              "ManagedBytes": 640756720,
+              "WorkingSetBytes": 855228416
+            },
+            {
+              "Operation": "diagnostic-retained-native",
+              "Milliseconds": 478.3567,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 1136,
+              "ProcessAllocatedBytes": 3512,
+              "ManagedBytes": 242205424,
+              "WorkingSetBytes": 679936000
+            }
+          ],
+          "ready": "HDB_STARTUP_READY view=map-shell rows=241920 markers=1921 sidebar-role-reads=40 map-role-reads=0",
+          "clean_exit": true
+        },
+        {
+          "seconds": 8.491708362998907,
+          "process_exit": 0,
+          "verified": true,
+          "view": "map-shell",
+          "iteration": 2,
+          "stages": [
+            {
+              "Operation": "property-evidence",
+              "Milliseconds": 83.9803,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 42950736,
+              "ProcessAllocatedBytes": 42950736,
+              "ManagedBytes": 43879096,
+              "WorkingSetBytes": 189599744
+            },
+            {
+              "Operation": "postal-evidence",
+              "Milliseconds": 97.6551,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 29114464,
+              "ProcessAllocatedBytes": 29114464,
+              "ManagedBytes": 73082784,
+              "WorkingSetBytes": 225910784
+            },
+            {
+              "Operation": "footprint-file-read",
+              "Milliseconds": 210.2066,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 228578744,
+              "ProcessAllocatedBytes": 228579896,
+              "ManagedBytes": 237024016,
+              "WorkingSetBytes": 407941120
+            },
+            {
+              "Operation": "footprint-json",
+              "Milliseconds": 460.9827,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 134219304,
+              "ProcessAllocatedBytes": 134220288,
+              "ManagedBytes": 306119976,
+              "WorkingSetBytes": 520146944
+            },
+            {
+              "Operation": "footprints",
+              "Milliseconds": 828.2155,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 59605288,
+              "ProcessAllocatedBytes": 59605312,
+              "ManagedBytes": 365910168,
+              "WorkingSetBytes": 567148544
+            },
+            {
+              "Operation": "evidence-index",
+              "Milliseconds": 31.6414,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 5287672,
+              "ProcessAllocatedBytes": 5287672,
+              "ManagedBytes": 371210272,
+              "WorkingSetBytes": 572534784
+            },
+            {
+              "Operation": "transaction-csv",
+              "Milliseconds": 4634.7708,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 3970381568,
+              "ProcessAllocatedBytes": 3970386640,
+              "ManagedBytes": 466442128,
+              "WorkingSetBytes": 726278144
+            },
+            {
+              "Operation": "validation-facts",
+              "Milliseconds": 421.7202,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 76481024,
+              "ProcessAllocatedBytes": 76481024,
+              "ManagedBytes": 543097896,
+              "WorkingSetBytes": 744812544
+            },
+            {
+              "Operation": "matching-resolution",
+              "Milliseconds": 296.5921,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 43223248,
+              "ProcessAllocatedBytes": 43223248,
+              "ManagedBytes": 586396672,
+              "WorkingSetBytes": 761864192
+            },
+            {
+              "Operation": "transaction-domain",
+              "Milliseconds": 20.5224,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 35499456,
+              "ProcessAllocatedBytes": 35499456,
+              "ManagedBytes": 621990600,
+              "WorkingSetBytes": 765771776
+            },
+            {
+              "Operation": "import-return",
+              "Milliseconds": 0.2384,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 976,
+              "ProcessAllocatedBytes": 976,
+              "ManagedBytes": 621990600,
+              "WorkingSetBytes": 765771776
+            },
+            {
+              "Operation": "town-labels",
+              "Milliseconds": 45.9077,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 5512,
+              "ProcessAllocatedBytes": 5512,
+              "ManagedBytes": 621998824,
+              "WorkingSetBytes": 765861888
+            },
+            {
+              "Operation": "state-construction",
+              "Milliseconds": 42.3311,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 7865272,
+              "ProcessAllocatedBytes": 7865272,
+              "ManagedBytes": 629869640,
+              "WorkingSetBytes": 773496832
+            },
+            {
+              "Operation": "map-aggregation",
+              "Milliseconds": 80.4196,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 10144208,
+              "ProcessAllocatedBytes": 10144208,
+              "ManagedBytes": 640042112,
+              "WorkingSetBytes": 783032320
+            },
+            {
+              "Operation": "map-model-population",
+              "Milliseconds": 0.2606,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 16280,
+              "ProcessAllocatedBytes": 16280,
+              "ManagedBytes": 640065752,
+              "WorkingSetBytes": 783056896
+            },
+            {
+              "Operation": "models-constructed",
+              "Milliseconds": 0.0302,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 848,
+              "ProcessAllocatedBytes": 848,
+              "ManagedBytes": 640065752,
+              "WorkingSetBytes": 783056896
+            },
+            {
+              "Operation": "qml-ready-map-shell",
+              "Milliseconds": 313.6724,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 491008,
+              "ProcessAllocatedBytes": 491008,
+              "ManagedBytes": 640559208,
+              "WorkingSetBytes": 854839296
+            },
+            {
+              "Operation": "diagnostic-retained-native",
+              "Milliseconds": 415.0388,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 1136,
+              "ProcessAllocatedBytes": 1136,
+              "ManagedBytes": 242198616,
+              "WorkingSetBytes": 679772160
+            }
+          ],
+          "ready": "HDB_STARTUP_READY view=map-shell rows=241920 markers=1921 sidebar-role-reads=40 map-role-reads=0",
+          "clean_exit": true
+        }
+      ],
+      "full": [
+        {
+          "seconds": 10.572523919003288,
+          "process_exit": 0,
+          "verified": true,
+          "view": "full",
+          "iteration": 1,
+          "stages": [
+            {
+              "Operation": "property-evidence",
+              "Milliseconds": 82.727,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 42950736,
+              "ProcessAllocatedBytes": 42950736,
+              "ManagedBytes": 43879088,
+              "WorkingSetBytes": 191660032
+            },
+            {
+              "Operation": "postal-evidence",
+              "Milliseconds": 94.273,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 29112280,
+              "ProcessAllocatedBytes": 29112280,
+              "ManagedBytes": 73082688,
+              "WorkingSetBytes": 227991552
+            },
+            {
+              "Operation": "footprint-file-read",
+              "Milliseconds": 198.0896,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 228578744,
+              "ProcessAllocatedBytes": 228579896,
+              "ManagedBytes": 237023168,
+              "WorkingSetBytes": 410107904
+            },
+            {
+              "Operation": "footprint-json",
+              "Milliseconds": 435.4169,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 134219304,
+              "ProcessAllocatedBytes": 134220288,
+              "ManagedBytes": 305812896,
+              "WorkingSetBytes": 522293248
+            },
+            {
+              "Operation": "footprints",
+              "Milliseconds": 737.4281,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 59692808,
+              "ProcessAllocatedBytes": 59692832,
+              "ManagedBytes": 365685440,
+              "WorkingSetBytes": 572026880
+            },
+            {
+              "Operation": "evidence-index",
+              "Milliseconds": 26.4223,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 5287672,
+              "ProcessAllocatedBytes": 5287672,
+              "ManagedBytes": 370993768,
+              "WorkingSetBytes": 577466368
+            },
+            {
+              "Operation": "transaction-csv",
+              "Milliseconds": 5010.736,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 3970381376,
+              "ProcessAllocatedBytes": 3970411072,
+              "ManagedBytes": 466362488,
+              "WorkingSetBytes": 731410432
+            },
+            {
+              "Operation": "validation-facts",
+              "Milliseconds": 430.8007,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 76481016,
+              "ProcessAllocatedBytes": 76481016,
+              "ManagedBytes": 543012872,
+              "WorkingSetBytes": 749113344
+            },
+            {
+              "Operation": "matching-resolution",
+              "Milliseconds": 272.8507,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 43198624,
+              "ProcessAllocatedBytes": 43198624,
+              "ManagedBytes": 586287000,
+              "WorkingSetBytes": 766160896
+            },
+            {
+              "Operation": "transaction-domain",
+              "Milliseconds": 18.8958,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 35499456,
+              "ProcessAllocatedBytes": 35499456,
+              "ManagedBytes": 621880928,
+              "WorkingSetBytes": 770064384
+            },
+            {
+              "Operation": "import-return",
+              "Milliseconds": 0.4503,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 976,
+              "ProcessAllocatedBytes": 976,
+              "ManagedBytes": 621889152,
+              "WorkingSetBytes": 770064384
+            },
+            {
+              "Operation": "town-labels",
+              "Milliseconds": 63.0588,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 5512,
+              "ProcessAllocatedBytes": 5512,
+              "ManagedBytes": 621897376,
+              "WorkingSetBytes": 770166784
+            },
+            {
+              "Operation": "state-construction",
+              "Milliseconds": 43.9474,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 7865264,
+              "ProcessAllocatedBytes": 7865264,
+              "ManagedBytes": 629759968,
+              "WorkingSetBytes": 777785344
+            },
+            {
+              "Operation": "map-aggregation",
+              "Milliseconds": 73.0813,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 10144208,
+              "ProcessAllocatedBytes": 10144208,
+              "ManagedBytes": 639941064,
+              "WorkingSetBytes": 787214336
+            },
+            {
+              "Operation": "map-model-population",
+              "Milliseconds": 0.2802,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 16280,
+              "ProcessAllocatedBytes": 16280,
+              "ManagedBytes": 639956480,
+              "WorkingSetBytes": 787230720
+            },
+            {
+              "Operation": "models-constructed",
+              "Milliseconds": 0.034,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 848,
+              "ProcessAllocatedBytes": 848,
+              "ManagedBytes": 639958288,
+              "WorkingSetBytes": 787230720
+            },
+            {
+              "Operation": "qml-ready-full",
+              "Milliseconds": 2222.87,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 37015632,
+              "ProcessAllocatedBytes": 37017024,
+              "ManagedBytes": 597468200,
+              "WorkingSetBytes": 985956352
+            },
+            {
+              "Operation": "diagnostic-retained-native",
+              "Milliseconds": 331.931,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 1120,
+              "ProcessAllocatedBytes": 1120,
+              "ManagedBytes": 242225056,
+              "WorkingSetBytes": 765186048
+            }
+          ],
+          "ready": "HDB_STARTUP_READY view=full rows=241920 markers=1921 sidebar-role-reads=45 map-role-reads=13447",
+          "clean_exit": true
+        },
+        {
+          "seconds": 9.865263759998925,
+          "process_exit": 0,
+          "verified": true,
+          "view": "full",
+          "iteration": 2,
+          "stages": [
+            {
+              "Operation": "property-evidence",
+              "Milliseconds": 78.0783,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 42950736,
+              "ProcessAllocatedBytes": 42950736,
+              "ManagedBytes": 43879088,
+              "WorkingSetBytes": 190255104
+            },
+            {
+              "Operation": "postal-evidence",
+              "Milliseconds": 91.469,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 29114720,
+              "ProcessAllocatedBytes": 29114720,
+              "ManagedBytes": 73082792,
+              "WorkingSetBytes": 226664448
+            },
+            {
+              "Operation": "footprint-file-read",
+              "Milliseconds": 192.116,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 228578744,
+              "ProcessAllocatedBytes": 228579896,
+              "ManagedBytes": 237024008,
+              "WorkingSetBytes": 408698880
+            },
+            {
+              "Operation": "footprint-json",
+              "Milliseconds": 463.282,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 134219304,
+              "ProcessAllocatedBytes": 134220288,
+              "ManagedBytes": 306071608,
+              "WorkingSetBytes": 520908800
+            },
+            {
+              "Operation": "footprints",
+              "Milliseconds": 849.6001,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 59859888,
+              "ProcessAllocatedBytes": 59884536,
+              "ManagedBytes": 366132208,
+              "WorkingSetBytes": 567500800
+            },
+            {
+              "Operation": "evidence-index",
+              "Milliseconds": 25.586,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 5287672,
+              "ProcessAllocatedBytes": 5287672,
+              "ManagedBytes": 371432320,
+              "WorkingSetBytes": 572923904
+            },
+            {
+              "Operation": "transaction-csv",
+              "Milliseconds": 4416.5093,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 3970381328,
+              "ProcessAllocatedBytes": 3970386400,
+              "ManagedBytes": 466862352,
+              "WorkingSetBytes": 726339584
+            },
+            {
+              "Operation": "validation-facts",
+              "Milliseconds": 359.343,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 76481024,
+              "ProcessAllocatedBytes": 76481024,
+              "ManagedBytes": 543522496,
+              "WorkingSetBytes": 745279488
+            },
+            {
+              "Operation": "matching-resolution",
+              "Milliseconds": 294.0917,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 43198616,
+              "ProcessAllocatedBytes": 43198616,
+              "ManagedBytes": 586796472,
+              "WorkingSetBytes": 762339328
+            },
+            {
+              "Operation": "transaction-domain",
+              "Milliseconds": 17.4769,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 35499456,
+              "ProcessAllocatedBytes": 35499456,
+              "ManagedBytes": 622390384,
+              "WorkingSetBytes": 766242816
+            },
+            {
+              "Operation": "import-return",
+              "Milliseconds": 0.1854,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 976,
+              "ProcessAllocatedBytes": 976,
+              "ManagedBytes": 622390384,
+              "WorkingSetBytes": 766242816
+            },
+            {
+              "Operation": "town-labels",
+              "Milliseconds": 60.7017,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 5512,
+              "ProcessAllocatedBytes": 5512,
+              "ManagedBytes": 622398608,
+              "WorkingSetBytes": 766324736
+            },
+            {
+              "Operation": "state-construction",
+              "Milliseconds": 52.9499,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 7865264,
+              "ProcessAllocatedBytes": 7865264,
+              "ManagedBytes": 630269424,
+              "WorkingSetBytes": 773963776
+            },
+            {
+              "Operation": "map-aggregation",
+              "Milliseconds": 83.0778,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 10144208,
+              "ProcessAllocatedBytes": 10144208,
+              "ManagedBytes": 640441136,
+              "WorkingSetBytes": 783929344
+            },
+            {
+              "Operation": "map-model-population",
+              "Milliseconds": 0.3382,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 16280,
+              "ProcessAllocatedBytes": 16280,
+              "ManagedBytes": 640464776,
+              "WorkingSetBytes": 783949824
+            },
+            {
+              "Operation": "models-constructed",
+              "Milliseconds": 0.0392,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 848,
+              "ProcessAllocatedBytes": 848,
+              "ManagedBytes": 640464776,
+              "WorkingSetBytes": 783949824
+            },
+            {
+              "Operation": "qml-ready-full",
+              "Milliseconds": 2057.2875,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 36943696,
+              "ProcessAllocatedBytes": 36945088,
+              "ManagedBytes": 597934384,
+              "WorkingSetBytes": 981311488
+            },
+            {
+              "Operation": "diagnostic-retained-native",
+              "Milliseconds": 300.4526,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 1128,
+              "ProcessAllocatedBytes": 1128,
+              "ManagedBytes": 242224408,
+              "WorkingSetBytes": 761032704
+            }
+          ],
+          "ready": "HDB_STARTUP_READY view=full rows=241920 markers=1921 sidebar-role-reads=45 map-role-reads=13447",
+          "clean_exit": true
+        }
+      ]
+    },
+    "final": {
+      "qml-shell": [
+        {
+          "seconds": 3.7152599510009168,
+          "process_exit": 0,
+          "verified": true,
+          "view": "qml-shell",
+          "iteration": 1,
+          "stages": [
+            {
+              "Operation": "property-evidence",
+              "Milliseconds": 17.4462,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 3628320,
+              "ProcessAllocatedBytes": 3628320,
+              "ManagedBytes": 4435720,
+              "WorkingSetBytes": 143777792
+            },
+            {
+              "Operation": "postal-evidence",
+              "Milliseconds": 47.4311,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 2509800,
+              "ProcessAllocatedBytes": 2509800,
+              "ManagedBytes": 6964808,
+              "WorkingSetBytes": 150831104
+            },
+            {
+              "Operation": "footprint-file-read",
+              "Milliseconds": 40.17,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 57013376,
+              "ProcessAllocatedBytes": 57013376,
+              "ManagedBytes": 63976912,
+              "WorkingSetBytes": 207876096
+            },
+            {
+              "Operation": "footprint-json",
+              "Milliseconds": 420.459,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 67118016,
+              "ProcessAllocatedBytes": 67119144,
+              "ManagedBytes": 128737768,
+              "WorkingSetBytes": 263081984
+            },
+            {
+              "Operation": "footprints",
+              "Milliseconds": 657.1898,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 10575208,
+              "ProcessAllocatedBytes": 10575232,
+              "ManagedBytes": 139356984,
+              "WorkingSetBytes": 276922368
+            },
+            {
+              "Operation": "evidence-index",
+              "Milliseconds": 27.3485,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 5287672,
+              "ProcessAllocatedBytes": 5287672,
+              "ManagedBytes": 144657008,
+              "WorkingSetBytes": 282370048
+            },
+            {
+              "Operation": "transaction-csv",
+              "Milliseconds": 319.2718,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 219389968,
+              "ProcessAllocatedBytes": 219390976,
+              "ManagedBytes": 328113104,
+              "WorkingSetBytes": 502571008
+            },
+            {
+              "Operation": "validation-facts",
+              "Milliseconds": 486.9187,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 41860088,
+              "ProcessAllocatedBytes": 41860120,
+              "ManagedBytes": 370051128,
+              "WorkingSetBytes": 546918400
+            },
+            {
+              "Operation": "matching-resolution",
+              "Milliseconds": 581.4874,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 43207144,
+              "ProcessAllocatedBytes": 43208488,
+              "ManagedBytes": 374507336,
+              "WorkingSetBytes": 589684736
+            },
+            {
+              "Operation": "transaction-domain",
+              "Milliseconds": 31.5356,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 35499456,
+              "ProcessAllocatedBytes": 35499456,
+              "ManagedBytes": 410100920,
+              "WorkingSetBytes": 625152000
+            },
+            {
+              "Operation": "import-return",
+              "Milliseconds": 0.2046,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 976,
+              "ProcessAllocatedBytes": 976,
+              "ManagedBytes": 410100920,
+              "WorkingSetBytes": 625164288
+            },
+            {
+              "Operation": "town-labels",
+              "Milliseconds": 24.752,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 5512,
+              "ProcessAllocatedBytes": 5512,
+              "ManagedBytes": 410109144,
+              "WorkingSetBytes": 625291264
+            },
+            {
+              "Operation": "state-construction",
+              "Milliseconds": 45.7697,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 7865264,
+              "ProcessAllocatedBytes": 7865264,
+              "ManagedBytes": 417979960,
+              "WorkingSetBytes": 633061376
+            },
+            {
+              "Operation": "map-aggregation",
+              "Milliseconds": 62.3319,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 10144208,
+              "ProcessAllocatedBytes": 10144208,
+              "ManagedBytes": 428161168,
+              "WorkingSetBytes": 643387392
+            },
+            {
+              "Operation": "map-model-population",
+              "Milliseconds": 0.147,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 16280,
+              "ProcessAllocatedBytes": 16280,
+              "ManagedBytes": 428176584,
+              "WorkingSetBytes": 643403776
+            },
+            {
+              "Operation": "models-constructed",
+              "Milliseconds": 0.0177,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 840,
+              "ProcessAllocatedBytes": 840,
+              "ManagedBytes": 428176584,
+              "WorkingSetBytes": 643403776
+            },
+            {
+              "Operation": "qml-ready-qml-shell",
+              "Milliseconds": 222.7736,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 18320,
+              "ProcessAllocatedBytes": 18320,
+              "ManagedBytes": 428201256,
+              "WorkingSetBytes": 684531712
+            },
+            {
+              "Operation": "diagnostic-retained-native",
+              "Milliseconds": 265.7386,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 1128,
+              "ProcessAllocatedBytes": 1128,
+              "ManagedBytes": 134566056,
+              "WorkingSetBytes": 551759872
+            }
+          ],
+          "ready": "HDB_STARTUP_READY view=qml-shell rows=241920 markers=1921 sidebar-role-reads=0 map-role-reads=0",
+          "clean_exit": true
+        },
+        {
+          "seconds": 3.296263848998933,
+          "process_exit": 0,
+          "verified": true,
+          "view": "qml-shell",
+          "iteration": 2,
+          "stages": [
+            {
+              "Operation": "property-evidence",
+              "Milliseconds": 17.4607,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 3628320,
+              "ProcessAllocatedBytes": 3628320,
+              "ManagedBytes": 4435544,
+              "WorkingSetBytes": 144654336
+            },
+            {
+              "Operation": "postal-evidence",
+              "Milliseconds": 59.7,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 2509672,
+              "ProcessAllocatedBytes": 2509672,
+              "ManagedBytes": 6964664,
+              "WorkingSetBytes": 151851008
+            },
+            {
+              "Operation": "footprint-file-read",
+              "Milliseconds": 58.2587,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 57013360,
+              "ProcessAllocatedBytes": 57013360,
+              "ManagedBytes": 63976768,
+              "WorkingSetBytes": 208920576
+            },
+            {
+              "Operation": "footprint-json",
+              "Milliseconds": 403.4771,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 67118024,
+              "ProcessAllocatedBytes": 67119152,
+              "ManagedBytes": 128737768,
+              "WorkingSetBytes": 264122368
+            },
+            {
+              "Operation": "footprints",
+              "Milliseconds": 703.6216,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 10557904,
+              "ProcessAllocatedBytes": 10582552,
+              "ManagedBytes": 139357152,
+              "WorkingSetBytes": 278097920
+            },
+            {
+              "Operation": "evidence-index",
+              "Milliseconds": 28.0175,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 5287672,
+              "ProcessAllocatedBytes": 5287672,
+              "ManagedBytes": 144665352,
+              "WorkingSetBytes": 283471872
+            },
+            {
+              "Operation": "transaction-csv",
+              "Milliseconds": 281.7651,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 219389968,
+              "ProcessAllocatedBytes": 219390976,
+              "ManagedBytes": 328127616,
+              "WorkingSetBytes": 503554048
+            },
+            {
+              "Operation": "validation-facts",
+              "Milliseconds": 423.9222,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 41860088,
+              "ProcessAllocatedBytes": 41860120,
+              "ManagedBytes": 370065632,
+              "WorkingSetBytes": 548040704
+            },
+            {
+              "Operation": "matching-resolution",
+              "Milliseconds": 426.0674,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 43182520,
+              "ProcessAllocatedBytes": 43183864,
+              "ManagedBytes": 374493488,
+              "WorkingSetBytes": 590671872
+            },
+            {
+              "Operation": "transaction-domain",
+              "Milliseconds": 35.6065,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 35499456,
+              "ProcessAllocatedBytes": 35499456,
+              "ManagedBytes": 410087048,
+              "WorkingSetBytes": 626143232
+            },
+            {
+              "Operation": "import-return",
+              "Milliseconds": 0.236,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 976,
+              "ProcessAllocatedBytes": 976,
+              "ManagedBytes": 410087048,
+              "WorkingSetBytes": 626147328
+            },
+            {
+              "Operation": "town-labels",
+              "Milliseconds": 16.9036,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 5328,
+              "ProcessAllocatedBytes": 5328,
+              "ManagedBytes": 410095016,
+              "WorkingSetBytes": 626270208
+            },
+            {
+              "Operation": "state-construction",
+              "Milliseconds": 38.0221,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 7865456,
+              "ProcessAllocatedBytes": 7865456,
+              "ManagedBytes": 417965832,
+              "WorkingSetBytes": 634052608
+            },
+            {
+              "Operation": "map-aggregation",
+              "Milliseconds": 60.8355,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 10144208,
+              "ProcessAllocatedBytes": 10144208,
+              "ManagedBytes": 428147096,
+              "WorkingSetBytes": 644386816
+            },
+            {
+              "Operation": "map-model-population",
+              "Milliseconds": 0.1333,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 16280,
+              "ProcessAllocatedBytes": 16280,
+              "ManagedBytes": 428162512,
+              "WorkingSetBytes": 644403200
+            },
+            {
+              "Operation": "models-constructed",
+              "Milliseconds": 0.0281,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 848,
+              "ProcessAllocatedBytes": 848,
+              "ManagedBytes": 428162512,
+              "WorkingSetBytes": 644403200
+            },
+            {
+              "Operation": "qml-ready-qml-shell",
+              "Milliseconds": 104.4994,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 18320,
+              "ProcessAllocatedBytes": 18320,
+              "ManagedBytes": 428188992,
+              "WorkingSetBytes": 685191168
+            },
+            {
+              "Operation": "diagnostic-retained-native",
+              "Milliseconds": 196.0794,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 1128,
+              "ProcessAllocatedBytes": 1128,
+              "ManagedBytes": 134566056,
+              "WorkingSetBytes": 584163328
+            }
+          ],
+          "ready": "HDB_STARTUP_READY view=qml-shell rows=241920 markers=1921 sidebar-role-reads=0 map-role-reads=0",
+          "clean_exit": true
+        }
+      ],
+      "map-shell": [
+        {
+          "seconds": 3.429879155999515,
+          "process_exit": 0,
+          "verified": true,
+          "view": "map-shell",
+          "iteration": 1,
+          "stages": [
+            {
+              "Operation": "property-evidence",
+              "Milliseconds": 15.34,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 3628320,
+              "ProcessAllocatedBytes": 3628320,
+              "ManagedBytes": 4431600,
+              "WorkingSetBytes": 151990272
+            },
+            {
+              "Operation": "postal-evidence",
+              "Milliseconds": 46.3813,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 2509792,
+              "ProcessAllocatedBytes": 2509792,
+              "ManagedBytes": 6962536,
+              "WorkingSetBytes": 159485952
+            },
+            {
+              "Operation": "footprint-file-read",
+              "Milliseconds": 38.783,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 57013376,
+              "ProcessAllocatedBytes": 57013376,
+              "ManagedBytes": 63974640,
+              "WorkingSetBytes": 216539136
+            },
+            {
+              "Operation": "footprint-json",
+              "Milliseconds": 418.4957,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 67118024,
+              "ProcessAllocatedBytes": 67119152,
+              "ManagedBytes": 128737712,
+              "WorkingSetBytes": 271757312
+            },
+            {
+              "Operation": "footprints",
+              "Milliseconds": 634.2139,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 10595888,
+              "ProcessAllocatedBytes": 10595912,
+              "ManagedBytes": 139372800,
+              "WorkingSetBytes": 285626368
+            },
+            {
+              "Operation": "evidence-index",
+              "Milliseconds": 29.7609,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 5287672,
+              "ProcessAllocatedBytes": 5287672,
+              "ManagedBytes": 144681008,
+              "WorkingSetBytes": 291020800
+            },
+            {
+              "Operation": "transaction-csv",
+              "Milliseconds": 292.1225,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 219389968,
+              "ProcessAllocatedBytes": 219390976,
+              "ManagedBytes": 328112864,
+              "WorkingSetBytes": 511082496
+            },
+            {
+              "Operation": "validation-facts",
+              "Milliseconds": 377.8864,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 41860088,
+              "ProcessAllocatedBytes": 41860120,
+              "ManagedBytes": 370059048,
+              "WorkingSetBytes": 555606016
+            },
+            {
+              "Operation": "matching-resolution",
+              "Milliseconds": 428.3191,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 43182520,
+              "ProcessAllocatedBytes": 43183864,
+              "ManagedBytes": 374494680,
+              "WorkingSetBytes": 598315008
+            },
+            {
+              "Operation": "transaction-domain",
+              "Milliseconds": 31.3761,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 35499456,
+              "ProcessAllocatedBytes": 35499456,
+              "ManagedBytes": 410088280,
+              "WorkingSetBytes": 633790464
+            },
+            {
+              "Operation": "import-return",
+              "Milliseconds": 0.2772,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 976,
+              "ProcessAllocatedBytes": 976,
+              "ManagedBytes": 410088280,
+              "WorkingSetBytes": 633790464
+            },
+            {
+              "Operation": "town-labels",
+              "Milliseconds": 13.754,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 5512,
+              "ProcessAllocatedBytes": 5512,
+              "ManagedBytes": 410096504,
+              "WorkingSetBytes": 633929728
+            },
+            {
+              "Operation": "state-construction",
+              "Milliseconds": 42.5439,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 7865264,
+              "ProcessAllocatedBytes": 7865264,
+              "ManagedBytes": 417967320,
+              "WorkingSetBytes": 641699840
+            },
+            {
+              "Operation": "map-aggregation",
+              "Milliseconds": 63.1832,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 10144208,
+              "ProcessAllocatedBytes": 10144208,
+              "ManagedBytes": 428140360,
+              "WorkingSetBytes": 652029952
+            },
+            {
+              "Operation": "map-model-population",
+              "Milliseconds": 0.2134,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 16280,
+              "ProcessAllocatedBytes": 16280,
+              "ManagedBytes": 428164000,
+              "WorkingSetBytes": 652054528
+            },
+            {
+              "Operation": "models-constructed",
+              "Milliseconds": 0.0244,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 848,
+              "ProcessAllocatedBytes": 848,
+              "ManagedBytes": 428164000,
+              "WorkingSetBytes": 652054528
+            },
+            {
+              "Operation": "qml-ready-map-shell",
+              "Milliseconds": 313.2143,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 548288,
+              "ProcessAllocatedBytes": 548288,
+              "ManagedBytes": 428714664,
+              "WorkingSetBytes": 723644416
+            },
+            {
+              "Operation": "diagnostic-retained-native",
+              "Milliseconds": 197.3019,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 1136,
+              "ProcessAllocatedBytes": 1136,
+              "ManagedBytes": 134683216,
+              "WorkingSetBytes": 590454784
+            }
+          ],
+          "ready": "HDB_STARTUP_READY view=map-shell rows=241920 markers=1921 sidebar-role-reads=45 map-role-reads=0",
+          "clean_exit": true
+        },
+        {
+          "seconds": 3.5650297760003014,
+          "process_exit": 0,
+          "verified": true,
+          "view": "map-shell",
+          "iteration": 2,
+          "stages": [
+            {
+              "Operation": "property-evidence",
+              "Milliseconds": 16.7919,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 3628320,
+              "ProcessAllocatedBytes": 3628320,
+              "ManagedBytes": 4435440,
+              "WorkingSetBytes": 151646208
+            },
+            {
+              "Operation": "postal-evidence",
+              "Milliseconds": 44.2692,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 2509672,
+              "ProcessAllocatedBytes": 2509672,
+              "ManagedBytes": 6964664,
+              "WorkingSetBytes": 158879744
+            },
+            {
+              "Operation": "footprint-file-read",
+              "Milliseconds": 36.8987,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 57013376,
+              "ProcessAllocatedBytes": 57013376,
+              "ManagedBytes": 63976768,
+              "WorkingSetBytes": 215945216
+            },
+            {
+              "Operation": "footprint-json",
+              "Milliseconds": 401.6576,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 67118024,
+              "ProcessAllocatedBytes": 67119152,
+              "ManagedBytes": 128737712,
+              "WorkingSetBytes": 271171584
+            },
+            {
+              "Operation": "footprints",
+              "Milliseconds": 644.69,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 10614976,
+              "ProcessAllocatedBytes": 10615000,
+              "ManagedBytes": 139389888,
+              "WorkingSetBytes": 285134848
+            },
+            {
+              "Operation": "evidence-index",
+              "Milliseconds": 23.1875,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 5287664,
+              "ProcessAllocatedBytes": 5287664,
+              "ManagedBytes": 144698168,
+              "WorkingSetBytes": 290545664
+            },
+            {
+              "Operation": "transaction-csv",
+              "Milliseconds": 276.5171,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 219389968,
+              "ProcessAllocatedBytes": 219390976,
+              "ManagedBytes": 328122056,
+              "WorkingSetBytes": 510615552
+            },
+            {
+              "Operation": "validation-facts",
+              "Milliseconds": 556.7272,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 41860088,
+              "ProcessAllocatedBytes": 41860120,
+              "ManagedBytes": 370060072,
+              "WorkingSetBytes": 555225088
+            },
+            {
+              "Operation": "matching-resolution",
+              "Milliseconds": 405.024,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 43207144,
+              "ProcessAllocatedBytes": 43208488,
+              "ManagedBytes": 374540176,
+              "WorkingSetBytes": 597929984
+            },
+            {
+              "Operation": "transaction-domain",
+              "Milliseconds": 29.3543,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 35499456,
+              "ProcessAllocatedBytes": 35499456,
+              "ManagedBytes": 410133744,
+              "WorkingSetBytes": 633397248
+            },
+            {
+              "Operation": "import-return",
+              "Milliseconds": 0.2054,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 976,
+              "ProcessAllocatedBytes": 976,
+              "ManagedBytes": 410141968,
+              "WorkingSetBytes": 633405440
+            },
+            {
+              "Operation": "town-labels",
+              "Milliseconds": 15.6896,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 5328,
+              "ProcessAllocatedBytes": 5328,
+              "ManagedBytes": 410149936,
+              "WorkingSetBytes": 633536512
+            },
+            {
+              "Operation": "state-construction",
+              "Milliseconds": 39.2905,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 7865456,
+              "ProcessAllocatedBytes": 7865456,
+              "ManagedBytes": 418012528,
+              "WorkingSetBytes": 641318912
+            },
+            {
+              "Operation": "map-aggregation",
+              "Milliseconds": 58.0256,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 10144208,
+              "ProcessAllocatedBytes": 10144208,
+              "ManagedBytes": 428193824,
+              "WorkingSetBytes": 651636736
+            },
+            {
+              "Operation": "map-model-population",
+              "Milliseconds": 0.5889,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 16280,
+              "ProcessAllocatedBytes": 16280,
+              "ManagedBytes": 428209240,
+              "WorkingSetBytes": 651644928
+            },
+            {
+              "Operation": "models-constructed",
+              "Milliseconds": 0.0396,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 848,
+              "ProcessAllocatedBytes": 848,
+              "ManagedBytes": 428217464,
+              "WorkingSetBytes": 651653120
+            },
+            {
+              "Operation": "qml-ready-map-shell",
+              "Milliseconds": 278.9716,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 511792,
+              "ProcessAllocatedBytes": 511792,
+              "ManagedBytes": 428735488,
+              "WorkingSetBytes": 724271104
+            },
+            {
+              "Operation": "diagnostic-retained-native",
+              "Milliseconds": 228.1216,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 1136,
+              "ProcessAllocatedBytes": 1136,
+              "ManagedBytes": 134684656,
+              "WorkingSetBytes": 598179840
+            }
+          ],
+          "ready": "HDB_STARTUP_READY view=map-shell rows=241920 markers=1921 sidebar-role-reads=40 map-role-reads=0",
+          "clean_exit": true
+        }
+      ],
+      "full": [
+        {
+          "seconds": 5.35834995100231,
+          "process_exit": 0,
+          "verified": true,
+          "view": "full",
+          "iteration": 1,
+          "stages": [
+            {
+              "Operation": "property-evidence",
+              "Milliseconds": 19.0436,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 3628320,
+              "ProcessAllocatedBytes": 3628320,
+              "ManagedBytes": 4431592,
+              "WorkingSetBytes": 153202688
+            },
+            {
+              "Operation": "postal-evidence",
+              "Milliseconds": 42.3048,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 2507360,
+              "ProcessAllocatedBytes": 2507360,
+              "ManagedBytes": 6962528,
+              "WorkingSetBytes": 160616448
+            },
+            {
+              "Operation": "footprint-file-read",
+              "Milliseconds": 44.343,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 57013376,
+              "ProcessAllocatedBytes": 57013376,
+              "ManagedBytes": 63974632,
+              "WorkingSetBytes": 217653248
+            },
+            {
+              "Operation": "footprint-json",
+              "Milliseconds": 395.6092,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 67118024,
+              "ProcessAllocatedBytes": 67119152,
+              "ManagedBytes": 128736912,
+              "WorkingSetBytes": 272863232
+            },
+            {
+              "Operation": "footprints",
+              "Milliseconds": 655.4809,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 10560944,
+              "ProcessAllocatedBytes": 10560968,
+              "ManagedBytes": 139340752,
+              "WorkingSetBytes": 286883840
+            },
+            {
+              "Operation": "evidence-index",
+              "Milliseconds": 26.6124,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 5287672,
+              "ProcessAllocatedBytes": 5287672,
+              "ManagedBytes": 144640752,
+              "WorkingSetBytes": 292278272
+            },
+            {
+              "Operation": "transaction-csv",
+              "Milliseconds": 293.7275,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 219389968,
+              "ProcessAllocatedBytes": 219390976,
+              "ManagedBytes": 328115240,
+              "WorkingSetBytes": 512372736
+            },
+            {
+              "Operation": "validation-facts",
+              "Milliseconds": 378.7382,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 41860088,
+              "ProcessAllocatedBytes": 41860120,
+              "ManagedBytes": 370053192,
+              "WorkingSetBytes": 556797952
+            },
+            {
+              "Operation": "matching-resolution",
+              "Milliseconds": 449.159,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 43182520,
+              "ProcessAllocatedBytes": 43183864,
+              "ManagedBytes": 374465536,
+              "WorkingSetBytes": 599425024
+            },
+            {
+              "Operation": "transaction-domain",
+              "Milliseconds": 58.0989,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 35499456,
+              "ProcessAllocatedBytes": 35499456,
+              "ManagedBytes": 410059120,
+              "WorkingSetBytes": 634900480
+            },
+            {
+              "Operation": "import-return",
+              "Milliseconds": 14.286,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 976,
+              "ProcessAllocatedBytes": 976,
+              "ManagedBytes": 410067344,
+              "WorkingSetBytes": 634912768
+            },
+            {
+              "Operation": "town-labels",
+              "Milliseconds": 30.1084,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 5512,
+              "ProcessAllocatedBytes": 5512,
+              "ManagedBytes": 410075568,
+              "WorkingSetBytes": 635039744
+            },
+            {
+              "Operation": "state-construction",
+              "Milliseconds": 43.621,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 7865264,
+              "ProcessAllocatedBytes": 7865264,
+              "ManagedBytes": 417946384,
+              "WorkingSetBytes": 642809856
+            },
+            {
+              "Operation": "map-aggregation",
+              "Milliseconds": 72.1312,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 10144208,
+              "ProcessAllocatedBytes": 10144208,
+              "ManagedBytes": 428118920,
+              "WorkingSetBytes": 653139968
+            },
+            {
+              "Operation": "map-model-population",
+              "Milliseconds": 0.228,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 16280,
+              "ProcessAllocatedBytes": 16280,
+              "ManagedBytes": 428134336,
+              "WorkingSetBytes": 653156352
+            },
+            {
+              "Operation": "models-constructed",
+              "Milliseconds": 0.0267,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 840,
+              "ProcessAllocatedBytes": 840,
+              "ManagedBytes": 428142560,
+              "WorkingSetBytes": 653164544
+            },
+            {
+              "Operation": "qml-ready-full",
+              "Milliseconds": 2020.3073,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 36703544,
+              "ProcessAllocatedBytes": 36703568,
+              "ManagedBytes": 464966088,
+              "WorkingSetBytes": 879378432
+            },
+            {
+              "Operation": "diagnostic-retained-native",
+              "Milliseconds": 228.3713,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 1128,
+              "ProcessAllocatedBytes": 1128,
+              "ManagedBytes": 134712616,
+              "WorkingSetBytes": 719511552
+            }
+          ],
+          "ready": "HDB_STARTUP_READY view=full rows=241920 markers=1921 sidebar-role-reads=45 map-role-reads=13447",
+          "clean_exit": true
+        },
+        {
+          "seconds": 5.192353765000007,
+          "process_exit": 0,
+          "verified": true,
+          "view": "full",
+          "iteration": 2,
+          "stages": [
+            {
+              "Operation": "property-evidence",
+              "Milliseconds": 22.6549,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 3628320,
+              "ProcessAllocatedBytes": 3628320,
+              "ManagedBytes": 4435536,
+              "WorkingSetBytes": 153133056
+            },
+            {
+              "Operation": "postal-evidence",
+              "Milliseconds": 46.6205,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 2507360,
+              "ProcessAllocatedBytes": 2507360,
+              "ManagedBytes": 6964656,
+              "WorkingSetBytes": 160481280
+            },
+            {
+              "Operation": "footprint-file-read",
+              "Milliseconds": 41.2785,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 57013376,
+              "ProcessAllocatedBytes": 57013376,
+              "ManagedBytes": 63976760,
+              "WorkingSetBytes": 217546752
+            },
+            {
+              "Operation": "footprint-json",
+              "Milliseconds": 391.2829,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 67118024,
+              "ProcessAllocatedBytes": 67119152,
+              "ManagedBytes": 128736912,
+              "WorkingSetBytes": 272752640
+            },
+            {
+              "Operation": "footprints",
+              "Milliseconds": 599.3968,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 10580240,
+              "ProcessAllocatedBytes": 10580240,
+              "ManagedBytes": 139349016,
+              "WorkingSetBytes": 287182848
+            },
+            {
+              "Operation": "evidence-index",
+              "Milliseconds": 26.0623,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 5751832,
+              "ProcessAllocatedBytes": 5751832,
+              "ManagedBytes": 145124192,
+              "WorkingSetBytes": 293109760
+            },
+            {
+              "Operation": "transaction-csv",
+              "Milliseconds": 326.4842,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 219389968,
+              "ProcessAllocatedBytes": 219390976,
+              "ManagedBytes": 328235400,
+              "WorkingSetBytes": 513249280
+            },
+            {
+              "Operation": "validation-facts",
+              "Milliseconds": 388.0878,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 41884712,
+              "ProcessAllocatedBytes": 41884768,
+              "ManagedBytes": 370197816,
+              "WorkingSetBytes": 557940736
+            },
+            {
+              "Operation": "matching-resolution",
+              "Milliseconds": 384.2207,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 43182520,
+              "ProcessAllocatedBytes": 43183864,
+              "ManagedBytes": 374881304,
+              "WorkingSetBytes": 600682496
+            },
+            {
+              "Operation": "transaction-domain",
+              "Milliseconds": 33.5266,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 35499456,
+              "ProcessAllocatedBytes": 35499456,
+              "ManagedBytes": 410474896,
+              "WorkingSetBytes": 636157952
+            },
+            {
+              "Operation": "import-return",
+              "Milliseconds": 0.205,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 976,
+              "ProcessAllocatedBytes": 976,
+              "ManagedBytes": 410483120,
+              "WorkingSetBytes": 636170240
+            },
+            {
+              "Operation": "town-labels",
+              "Milliseconds": 26.3941,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 5512,
+              "ProcessAllocatedBytes": 5512,
+              "ManagedBytes": 410491344,
+              "WorkingSetBytes": 636297216
+            },
+            {
+              "Operation": "state-construction",
+              "Milliseconds": 41.6734,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 7865264,
+              "ProcessAllocatedBytes": 7865264,
+              "ManagedBytes": 418362160,
+              "WorkingSetBytes": 644071424
+            },
+            {
+              "Operation": "map-aggregation",
+              "Milliseconds": 63.5656,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 10144208,
+              "ProcessAllocatedBytes": 10144208,
+              "ManagedBytes": 428534928,
+              "WorkingSetBytes": 654397440
+            },
+            {
+              "Operation": "map-model-population",
+              "Milliseconds": 0.3018,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 16280,
+              "ProcessAllocatedBytes": 16280,
+              "ManagedBytes": 428550344,
+              "WorkingSetBytes": 654413824
+            },
+            {
+              "Operation": "models-constructed",
+              "Milliseconds": 0.0442,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 848,
+              "ProcessAllocatedBytes": 848,
+              "ManagedBytes": 428558568,
+              "WorkingSetBytes": 654422016
+            },
+            {
+              "Operation": "qml-ready-full",
+              "Milliseconds": 1962.1946,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 36655128,
+              "ProcessAllocatedBytes": 36655152,
+              "ManagedBytes": 465332904,
+              "WorkingSetBytes": 886632448
+            },
+            {
+              "Operation": "diagnostic-retained-native",
+              "Milliseconds": 250.048,
+              "ManagedThreadId": 4,
+              "ThreadAllocatedBytes": 1128,
+              "ProcessAllocatedBytes": 1128,
+              "ManagedBytes": 134711176,
+              "WorkingSetBytes": 717647872
+            }
+          ],
+          "ready": "HDB_STARTUP_READY view=full rows=241920 markers=1921 sidebar-role-reads=45 map-role-reads=13447",
+          "clean_exit": true
+        }
+      ]
+    }
+  },
+  "ordinary_gates": {
+    "Debug": {
+      "classic": {
+        "seconds": 9.12,
+        "events": [
+          "HDB_SCALE_CONSTRUCT 2415 rows=236791 mapped=1920 managed=426914624 working=647548928",
+          "HDB_SCALE_ORACLE 137",
+          "qml: HDB_SCALE_STEP loaded ms=1842 rows=236791 delegates=1920 created=1920 destroyed=0 last-create-ms=1738 last-destroy-ms=-1 observed-ms=-1",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=6.957 plan-ms=2.921 notifications-ms=9.189 before=1920 after=279 removed=1641 inserted=0 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=1 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=1 list-begin-ms=8.630 filter-ms=7.723 list-end-ms=4.170 property-notify-ms=12.157 total-ms=53.176",
+          "HDB_SCALE_RESET 41 rows=9441 mapped=279",
+          "qml: HDB_SCALE_STEP filtered ms=523 rows=9441 delegates=279 created=0 destroyed=1641 last-create-ms=-1 last-destroy-ms=510 observed-ms=56",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=10.863 plan-ms=1.034 notifications-ms=55.108 before=279 after=264 removed=15 inserted=0 changed=198",
+          "qml: HDB_MAP_OBSERVED revision=2 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=2 list-begin-ms=0.370 filter-ms=9.122 list-end-ms=4.033 property-notify-ms=3.453 total-ms=84.056",
+          "HDB_SCALE_RESET 80 rows=6469 mapped=264",
+          "qml: HDB_SCALE_STEP budget-filtered ms=436 rows=6469 delegates=264 created=0 destroyed=15 last-create-ms=-1 last-destroy-ms=406 observed-ms=85",
+          "qml: HDB_SCALE_STEP selected ms=15 rows=6469 delegates=264 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=0.079 plan-ms=0.066 notifications-ms=2.333 before=264 after=0 removed=264 inserted=0 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=3 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=3 list-begin-ms=0.377 filter-ms=7.129 list-end-ms=1.455 property-notify-ms=2.812 total-ms=14.327",
+          "HDB_SCALE_RESET 11 rows=0 mapped=0",
+          "qml: HDB_SCALE_STEP empty-cleared ms=254 rows=0 delegates=0 created=0 destroyed=264 last-create-ms=-1 last-destroy-ms=229 observed-ms=15",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=40.330 plan-ms=0.406 notifications-ms=9.557 before=0 after=1920 removed=0 inserted=1920 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=4 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=4 list-begin-ms=0.412 filter-ms=11.084 list-end-ms=3.379 property-notify-ms=12.291 total-ms=77.537",
+          "HDB_SCALE_RESET 65 rows=236791 mapped=1920",
+          "qml: HDB_SCALE_STEP reset ms=2246 rows=236791 delegates=1920 created=1920 destroyed=0 last-create-ms=2187 last-destroy-ms=-1 observed-ms=80",
+          "qml: HDB_SCALE_STEP zoomed ms=30 rows=236791 delegates=1920 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1",
+          "qml: HDB_SCALE_STEP panned ms=52 rows=236791 delegates=1920 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1",
+          "qml: HDB_SCALE_STEP recentered ms=36 rows=236791 delegates=1920 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=48.452 plan-ms=1.421 notifications-ms=38.718 before=1920 after=1921 removed=0 inserted=1 changed=149",
+          "qml: HDB_MAP_OBSERVED revision=5 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=5 list-begin-ms=0.356 filter-ms=16.540 list-end-ms=4.146 property-notify-ms=39.858 total-ms=150.613",
+          "HDB_SCALE_RESET 110 rows=241920 mapped=1921",
+          "qml: HDB_SCALE_STEP all-prices ms=216 rows=241920 delegates=1921 created=1 destroyed=0 last-create-ms=173 last-destroy-ms=-1 observed-ms=164",
+          "qml: HDB_SCALE_PASS",
+          "HDB_GATE_EXIT"
+        ]
+      },
+      "extended": {
+        "seconds": 14.18,
+        "events": [
+          "HDB_SCALE_CONSTRUCT 2786 rows=236791 mapped=1920 managed=428006024 working=647868416",
+          "HDB_SCALE_ORACLE 179",
+          "qml: HDB_SCALE_STEP loaded ms=1795 rows=236791 delegates=1920 created=1920 destroyed=0 last-create-ms=1686 last-destroy-ms=-1 observed-ms=-1",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=152.740 plan-ms=7.255 notifications-ms=68.272 before=1920 after=1921 removed=0 inserted=1 changed=149",
+          "qml: HDB_MAP_OBSERVED revision=1 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=1 list-begin-ms=9.584 filter-ms=13.000 list-end-ms=2.514 property-notify-ms=21.775 total-ms=276.517",
+          "HDB_SCALE_RESET 254 rows=241920 mapped=1921",
+          "qml: HDB_SCALE_STEP full ms=390 rows=241920 delegates=1921 created=1 destroyed=0 last-create-ms=297 last-destroy-ms=-1 observed-ms=290",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=364.881 plan-ms=0.691 notifications-ms=8.524 before=1921 after=279 removed=1642 inserted=0 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=2 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=2 list-begin-ms=0.684 filter-ms=8.493 list-end-ms=5.253 property-notify-ms=10.060 total-ms=398.673",
+          "HDB_SCALE_RESET 388 rows=9745 mapped=279",
+          "qml: HDB_SCALE_STEP subset ms=872 rows=9745 delegates=279 created=0 destroyed=1642 last-create-ms=-1 last-destroy-ms=863 observed-ms=401",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=2.087 plan-ms=0.099 notifications-ms=2.717 before=279 after=25 removed=279 inserted=25 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=3 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=3 list-begin-ms=0.483 filter-ms=6.258 list-end-ms=4.385 property-notify-ms=3.376 total-ms=19.497",
+          "HDB_SCALE_RESET 16 rows=12620 mapped=25",
+          "qml: HDB_SCALE_STEP different ms=325 rows=12620 delegates=25 created=25 destroyed=279 last-create-ms=91 last-destroy-ms=321 observed-ms=20",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=0.049 plan-ms=0.042 notifications-ms=0.903 before=25 after=0 removed=25 inserted=0 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=4 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=4 list-begin-ms=0.408 filter-ms=6.486 list-end-ms=0.913 property-notify-ms=2.166 total-ms=11.040",
+          "HDB_SCALE_RESET 8 rows=0 mapped=0",
+          "qml: HDB_SCALE_STEP empty ms=127 rows=0 delegates=0 created=0 destroyed=25 last-create-ms=-1 last-destroy-ms=111 observed-ms=12",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=45.812 plan-ms=0.376 notifications-ms=8.466 before=0 after=1920 removed=0 inserted=1920 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=5 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=5 list-begin-ms=0.251 filter-ms=8.209 list-end-ms=2.474 property-notify-ms=11.695 total-ms=77.364",
+          "HDB_SCALE_RESET 65 rows=236791 mapped=1920",
+          "qml: HDB_SCALE_STEP reset ms=1236 rows=236791 delegates=1920 created=1920 destroyed=0 last-create-ms=1198 last-destroy-ms=-1 observed-ms=78",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=38.334 plan-ms=1.082 notifications-ms=30.461 before=1920 after=1921 removed=0 inserted=1 changed=149",
+          "qml: HDB_MAP_OBSERVED revision=6 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=6 list-begin-ms=0.316 filter-ms=8.071 list-end-ms=2.922 property-notify-ms=16.574 total-ms=97.855",
+          "HDB_SCALE_RESET 81 rows=241920 mapped=1921",
+          "qml: HDB_SCALE_STEP full-restored ms=169 rows=241920 delegates=1921 created=1 destroyed=0 last-create-ms=136 last-destroy-ms=-1 observed-ms=130",
+          "qml: HDB_SCALE_STEP selected ms=50 rows=241920 delegates=1921 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=0.569 plan-ms=0.292 notifications-ms=7.290 before=1921 after=25 removed=1896 inserted=0 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=7 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=7 list-begin-ms=0.262 filter-ms=6.718 list-end-ms=2.656 property-notify-ms=6.190 total-ms=24.046",
+          "HDB_SCALE_RESET 17 rows=12620 mapped=25",
+          "qml: HDB_SCALE_STEP hidden-selection-cleared ms=497 rows=12620 delegates=25 created=0 destroyed=1896 last-create-ms=-1 last-destroy-ms=495 observed-ms=24",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=32.796 plan-ms=0.448 notifications-ms=8.073 before=25 after=1921 removed=0 inserted=1896 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=8 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=8 list-begin-ms=0.336 filter-ms=8.582 list-end-ms=2.718 property-notify-ms=12.129 total-ms=65.157",
+          "HDB_SCALE_RESET 53 rows=241920 mapped=1921",
+          "qml: HDB_SCALE_STEP full-again ms=1975 rows=241920 delegates=1921 created=1896 destroyed=0 last-create-ms=1936 last-destroy-ms=-1 observed-ms=65",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=3.423 plan-ms=0.218 notifications-ms=6.003 before=1921 after=279 removed=1642 inserted=0 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=9 after-csharp-ms=0",
+          "HDB_FILTER_STAGE revision=9 list-begin-ms=0.427 filter-ms=6.471 list-end-ms=3.080 property-notify-ms=6.072 total-ms=25.777",
+          "HDB_SCALE_RESET 19 rows=9745 mapped=279",
+          "qml: HDB_SCALE_STEP repeat-subset ms=387 rows=9745 delegates=279 created=0 destroyed=1642 last-create-ms=-1 last-destroy-ms=375 observed-ms=25",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=0.609 plan-ms=0.081 notifications-ms=1.993 before=279 after=25 removed=279 inserted=25 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=10 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=10 list-begin-ms=0.339 filter-ms=6.932 list-end-ms=2.447 property-notify-ms=2.819 total-ms=15.315",
+          "HDB_SCALE_RESET 12 rows=12620 mapped=25",
+          "qml: HDB_SCALE_STEP repeat-different ms=334 rows=12620 delegates=25 created=25 destroyed=279 last-create-ms=94 last-destroy-ms=322 observed-ms=15",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=34.175 plan-ms=0.310 notifications-ms=8.053 before=25 after=1921 removed=0 inserted=1896 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=11 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=11 list-begin-ms=0.355 filter-ms=10.363 list-end-ms=2.749 property-notify-ms=11.229 total-ms=67.324",
+          "HDB_SCALE_RESET 56 rows=241920 mapped=1921",
+          "qml: HDB_SCALE_STEP repeat-full ms=1832 rows=241920 delegates=1921 created=1896 destroyed=0 last-create-ms=1790 last-destroy-ms=-1 observed-ms=68",
+          "qml: HDB_SCALE_STEP zoomed ms=19 rows=241920 delegates=1921 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1",
+          "qml: HDB_SCALE_STEP panned ms=44 rows=241920 delegates=1921 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1",
+          "qml: HDB_SCALE_STEP recentered ms=69 rows=241920 delegates=1921 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1",
+          "qml: HDB_SCALE_PASS",
+          "HDB_GATE_EXIT"
+        ]
+      },
+      "reentrant": {
+        "seconds": 10.85,
+        "events": [
+          "HDB_SCALE_CONSTRUCT 2430 rows=236791 mapped=1920 managed=426557640 working=644808704",
+          "HDB_SCALE_ORACLE 155",
+          "qml: HDB_SCALE_STEP loaded ms=2054 rows=236791 delegates=1920 created=1920 destroyed=0 last-create-ms=1943 last-destroy-ms=-1 observed-ms=-1",
+          "qml: HDB_SCALE_STEP selected-retained-address ms=25 rows=236791 delegates=1920 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=7.558 plan-ms=3.050 notifications-ms=11.095 before=1920 after=279 removed=1641 inserted=0 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=1 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=1 list-begin-ms=3.888 filter-ms=7.421 list-end-ms=3.488 property-notify-ms=9.737 total-ms=47.862",
+          "HDB_SCALE_RESET 38 rows=9441 mapped=279",
+          "qml: HDB_SCALE_STEP selected-in-town ms=508 rows=9441 delegates=279 created=0 destroyed=1641 last-create-ms=-1 last-destroy-ms=499 observed-ms=49",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=7.084 plan-ms=0.552 notifications-ms=44.155 before=279 after=264 removed=15 inserted=0 changed=198",
+          "qml: HDB_MAP_OBSERVED revision=2 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=2 list-begin-ms=0.424 filter-ms=7.911 list-end-ms=3.894 property-notify-ms=3.944 total-ms=68.047",
+          "HDB_SCALE_RESET 64 rows=6469 mapped=264",
+          "qml: HDB_SCALE_STEP hidden-transaction-cleared ms=415 rows=6469 delegates=264 created=0 destroyed=15 last-create-ms=-1 last-destroy-ms=369 observed-ms=69",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=44.725 plan-ms=0.616 notifications-ms=404.174 before=264 after=1920 removed=0 inserted=1656 changed=198",
+          "qml: HDB_MAP_OBSERVED revision=3 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=3 list-begin-ms=0.286 filter-ms=21.491 list-end-ms=3.021 property-notify-ms=15.851 total-ms=490.242",
+          "HDB_SCALE_RESET 474 rows=236791 mapped=1920",
+          "qml: HDB_SCALE_STEP reset ms=1650 rows=236791 delegates=1920 created=1656 destroyed=0 last-create-ms=1613 last-destroy-ms=-1 observed-ms=491",
+          "qml: HDB_SCALE_STEP selected-for-burst ms=17 rows=236791 delegates=1920 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1",
+          "qml: HDB_MAP_BURST fired=1 queued=4",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=3.101 plan-ms=0.220 notifications-ms=18.815 before=1920 after=279 removed=1641 inserted=0 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=4 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=4 list-begin-ms=0.216 filter-ms=5.821 list-end-ms=3.133 property-notify-ms=8.218 total-ms=39.608",
+          "HDB_SCALE_RESET 31 rows=9441 mapped=279",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=0.046 plan-ms=0.055 notifications-ms=1.439 before=279 after=0 removed=279 inserted=0 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=5 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=5 list-begin-ms=0.117 filter-ms=6.047 list-end-ms=0.454 property-notify-ms=6.116 total-ms=14.325",
+          "HDB_SCALE_RESET 8 rows=0 mapped=0",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=28.390 plan-ms=0.391 notifications-ms=7.136 before=0 after=1920 removed=0 inserted=1920 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=6 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=6 list-begin-ms=0.097 filter-ms=8.202 list-end-ms=1.801 property-notify-ms=21.472 total-ms=67.547",
+          "HDB_SCALE_RESET 46 rows=236791 mapped=1920",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=27.820 plan-ms=0.893 notifications-ms=13.706 before=1920 after=1921 removed=0 inserted=1 changed=149",
+          "qml: HDB_MAP_OBSERVED revision=7 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=7 list-begin-ms=0.109 filter-ms=7.583 list-end-ms=1.933 property-notify-ms=15.217 total-ms=67.316",
+          "HDB_SCALE_RESET 52 rows=241920 mapped=1921",
+          "qml: HDB_SCALE_STEP reentrant-burst-drained ms=1977 rows=241920 delegates=1921 created=1921 destroyed=1920 last-create-ms=1936 last-destroy-ms=639 observed-ms=193",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=128.000 plan-ms=1.094 notifications-ms=216.393 before=1921 after=1920 removed=1 inserted=0 changed=149",
+          "qml: HDB_MAP_OBSERVED revision=8 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=8 list-begin-ms=0.330 filter-ms=19.427 list-end-ms=9.382 property-notify-ms=20.818 total-ms=395.531",
+          "HDB_SCALE_RESET 374 rows=236791 mapped=1920",
+          "qml: HDB_SCALE_STEP final-reset ms=741 rows=236791 delegates=1920 created=0 destroyed=1 last-create-ms=-1 last-destroy-ms=710 observed-ms=398",
+          "qml: HDB_SCALE_PASS",
+          "HDB_GATE_EXIT"
+        ]
+      }
+    },
+    "Release": {
+      "classic": {
+        "seconds": 11.31,
+        "events": [
+          "HDB_SCALE_CONSTRUCT 2646 rows=236791 mapped=1920 managed=425783080 working=647733248",
+          "HDB_SCALE_ORACLE 171",
+          "qml: HDB_SCALE_STEP loaded ms=3262 rows=236791 delegates=1920 created=1920 destroyed=0 last-create-ms=3134 last-destroy-ms=-1 observed-ms=-1",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=11.194 plan-ms=3.100 notifications-ms=8.656 before=1920 after=279 removed=1641 inserted=0 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=1 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=1 list-begin-ms=13.559 filter-ms=13.272 list-end-ms=4.192 property-notify-ms=11.671 total-ms=66.737",
+          "HDB_SCALE_RESET 55 rows=9441 mapped=279",
+          "qml: HDB_SCALE_STEP filtered ms=478 rows=9441 delegates=279 created=0 destroyed=1641 last-create-ms=-1 last-destroy-ms=469 observed-ms=70",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=10.533 plan-ms=1.043 notifications-ms=56.816 before=279 after=264 removed=15 inserted=0 changed=198",
+          "qml: HDB_MAP_OBSERVED revision=2 after-csharp-ms=0",
+          "HDB_FILTER_STAGE revision=2 list-begin-ms=0.577 filter-ms=10.464 list-end-ms=4.349 property-notify-ms=3.148 total-ms=87.010",
+          "HDB_SCALE_RESET 83 rows=6469 mapped=264",
+          "qml: HDB_SCALE_STEP budget-filtered ms=405 rows=6469 delegates=264 created=0 destroyed=15 last-create-ms=-1 last-destroy-ms=393 observed-ms=88",
+          "qml: HDB_SCALE_STEP selected ms=31 rows=6469 delegates=264 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=0.058 plan-ms=0.143 notifications-ms=2.432 before=264 after=0 removed=264 inserted=0 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=3 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=3 list-begin-ms=0.416 filter-ms=9.290 list-end-ms=1.216 property-notify-ms=4.478 total-ms=18.144",
+          "HDB_SCALE_RESET 13 rows=0 mapped=0",
+          "qml: HDB_SCALE_STEP empty-cleared ms=257 rows=0 delegates=0 created=0 destroyed=264 last-create-ms=-1 last-destroy-ms=242 observed-ms=18",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=91.930 plan-ms=0.776 notifications-ms=9.348 before=0 after=1920 removed=0 inserted=1920 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=4 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=4 list-begin-ms=0.485 filter-ms=8.044 list-end-ms=2.628 property-notify-ms=17.514 total-ms=130.804",
+          "HDB_SCALE_RESET 113 rows=236791 mapped=1920",
+          "qml: HDB_SCALE_STEP reset ms=2541 rows=236791 delegates=1920 created=1920 destroyed=0 last-create-ms=2454 last-destroy-ms=-1 observed-ms=131",
+          "qml: HDB_SCALE_STEP zoomed ms=21 rows=236791 delegates=1920 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1",
+          "qml: HDB_SCALE_STEP panned ms=85 rows=236791 delegates=1920 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1",
+          "qml: HDB_SCALE_STEP recentered ms=155 rows=236791 delegates=1920 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=34.760 plan-ms=1.310 notifications-ms=29.082 before=1920 after=1921 removed=0 inserted=1 changed=149",
+          "qml: HDB_MAP_OBSERVED revision=5 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=5 list-begin-ms=0.379 filter-ms=23.945 list-end-ms=3.273 property-notify-ms=20.436 total-ms=113.273",
+          "HDB_SCALE_RESET 92 rows=241920 mapped=1921",
+          "qml: HDB_SCALE_STEP all-prices ms=189 rows=241920 delegates=1921 created=1 destroyed=0 last-create-ms=155 last-destroy-ms=-1 observed-ms=126",
+          "qml: HDB_SCALE_PASS",
+          "HDB_GATE_EXIT"
+        ]
+      },
+      "extended": {
+        "seconds": 14.79,
+        "events": [
+          "HDB_SCALE_CONSTRUCT 2769 rows=236791 mapped=1920 managed=425783400 working=648486912",
+          "HDB_SCALE_ORACLE 213",
+          "qml: HDB_SCALE_STEP loaded ms=2151 rows=236791 delegates=1920 created=1920 destroyed=0 last-create-ms=2039 last-destroy-ms=-1 observed-ms=-1",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=65.836 plan-ms=6.464 notifications-ms=54.573 before=1920 after=1921 removed=0 inserted=1 changed=149",
+          "qml: HDB_MAP_OBSERVED revision=1 after-csharp-ms=2",
+          "HDB_FILTER_STAGE revision=1 list-begin-ms=7.349 filter-ms=10.954 list-end-ms=2.555 property-notify-ms=21.607 total-ms=170.548",
+          "HDB_SCALE_RESET 148 rows=241920 mapped=1921",
+          "qml: HDB_SCALE_STEP full ms=282 rows=241920 delegates=1921 created=1 destroyed=0 last-create-ms=198 last-destroy-ms=-1 observed-ms=190",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=8.441 plan-ms=0.735 notifications-ms=6.006 before=1921 after=279 removed=1642 inserted=0 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=2 after-csharp-ms=394",
+          "HDB_FILTER_STAGE revision=2 list-begin-ms=0.731 filter-ms=5.924 list-end-ms=2.563 property-notify-ms=400.550 total-ms=425.019",
+          "HDB_SCALE_RESET 24 rows=9745 mapped=279",
+          "qml: HDB_SCALE_STEP subset ms=951 rows=9745 delegates=279 created=0 destroyed=1642 last-create-ms=-1 last-destroy-ms=939 observed-ms=427",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=2.096 plan-ms=0.087 notifications-ms=3.472 before=279 after=25 removed=279 inserted=25 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=3 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=3 list-begin-ms=0.537 filter-ms=8.219 list-end-ms=3.531 property-notify-ms=4.895 total-ms=22.922",
+          "HDB_SCALE_RESET 18 rows=12620 mapped=25",
+          "qml: HDB_SCALE_STEP different ms=319 rows=12620 delegates=25 created=25 destroyed=279 last-create-ms=92 last-destroy-ms=312 observed-ms=23",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=0.046 plan-ms=0.038 notifications-ms=0.734 before=25 after=0 removed=25 inserted=0 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=4 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=4 list-begin-ms=0.608 filter-ms=7.103 list-end-ms=0.778 property-notify-ms=2.003 total-ms=11.379",
+          "HDB_SCALE_RESET 9 rows=0 mapped=0",
+          "qml: HDB_SCALE_STEP empty ms=112 rows=0 delegates=0 created=0 destroyed=25 last-create-ms=-1 last-destroy-ms=98 observed-ms=12",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=38.035 plan-ms=0.547 notifications-ms=8.842 before=0 after=1920 removed=0 inserted=1920 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=5 after-csharp-ms=0",
+          "HDB_FILTER_STAGE revision=5 list-begin-ms=0.672 filter-ms=8.505 list-end-ms=5.793 property-notify-ms=11.648 total-ms=74.122",
+          "HDB_SCALE_RESET 62 rows=236791 mapped=1920",
+          "qml: HDB_SCALE_STEP reset ms=1394 rows=236791 delegates=1920 created=1920 destroyed=0 last-create-ms=1350 last-destroy-ms=-1 observed-ms=75",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=27.301 plan-ms=1.864 notifications-ms=26.622 before=1920 after=1921 removed=0 inserted=1 changed=149",
+          "qml: HDB_MAP_OBSERVED revision=6 after-csharp-ms=0",
+          "HDB_FILTER_STAGE revision=6 list-begin-ms=0.325 filter-ms=12.368 list-end-ms=2.747 property-notify-ms=16.345 total-ms=87.653",
+          "HDB_SCALE_RESET 71 rows=241920 mapped=1921",
+          "qml: HDB_SCALE_STEP full-restored ms=148 rows=241920 delegates=1921 created=1 destroyed=0 last-create-ms=100 last-destroy-ms=-1 observed-ms=94",
+          "qml: HDB_SCALE_STEP selected ms=44 rows=241920 delegates=1921 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=0.413 plan-ms=0.568 notifications-ms=7.188 before=1921 after=25 removed=1896 inserted=0 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=7 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=7 list-begin-ms=0.238 filter-ms=5.521 list-end-ms=2.215 property-notify-ms=5.916 total-ms=22.133",
+          "HDB_SCALE_RESET 16 rows=12620 mapped=25",
+          "qml: HDB_SCALE_STEP hidden-selection-cleared ms=528 rows=12620 delegates=25 created=0 destroyed=1896 last-create-ms=-1 last-destroy-ms=525 observed-ms=22",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=41.261 plan-ms=0.765 notifications-ms=10.117 before=25 after=1921 removed=0 inserted=1896 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=8 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=8 list-begin-ms=0.970 filter-ms=24.017 list-end-ms=3.642 property-notify-ms=13.374 total-ms=94.237",
+          "HDB_SCALE_RESET 80 rows=241920 mapped=1921",
+          "qml: HDB_SCALE_STEP full-again ms=2371 rows=241920 delegates=1921 created=1896 destroyed=0 last-create-ms=2309 last-destroy-ms=-1 observed-ms=94",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=3.532 plan-ms=0.634 notifications-ms=9.632 before=1921 after=279 removed=1642 inserted=0 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=9 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=9 list-begin-ms=0.966 filter-ms=12.726 list-end-ms=4.282 property-notify-ms=11.402 total-ms=43.278",
+          "HDB_SCALE_RESET 31 rows=9745 mapped=279",
+          "qml: HDB_SCALE_STEP repeat-subset ms=445 rows=9745 delegates=279 created=0 destroyed=1642 last-create-ms=-1 last-destroy-ms=433 observed-ms=44",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=0.613 plan-ms=0.096 notifications-ms=1.849 before=279 after=25 removed=279 inserted=25 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=10 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=10 list-begin-ms=0.319 filter-ms=7.073 list-end-ms=2.593 property-notify-ms=3.250 total-ms=15.959",
+          "HDB_SCALE_RESET 12 rows=12620 mapped=25",
+          "qml: HDB_SCALE_STEP repeat-different ms=340 rows=12620 delegates=25 created=25 destroyed=279 last-create-ms=134 last-destroy-ms=325 observed-ms=16",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=30.666 plan-ms=19.940 notifications-ms=7.834 before=25 after=1921 removed=0 inserted=1896 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=11 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=11 list-begin-ms=0.401 filter-ms=10.045 list-end-ms=3.549 property-notify-ms=11.182 total-ms=83.764",
+          "HDB_SCALE_RESET 72 rows=241920 mapped=1921",
+          "qml: HDB_SCALE_STEP repeat-full ms=1670 rows=241920 delegates=1921 created=1896 destroyed=0 last-create-ms=1620 last-destroy-ms=-1 observed-ms=84",
+          "qml: HDB_SCALE_STEP zoomed ms=27 rows=241920 delegates=1921 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1",
+          "qml: HDB_SCALE_STEP panned ms=1 rows=241920 delegates=1921 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1",
+          "qml: HDB_SCALE_STEP recentered ms=79 rows=241920 delegates=1921 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1",
+          "qml: HDB_SCALE_PASS",
+          "HDB_GATE_EXIT"
+        ]
+      },
+      "reentrant": {
+        "seconds": 11.75,
+        "events": [
+          "HDB_SCALE_CONSTRUCT 2546 rows=236791 mapped=1920 managed=425828448 working=648560640",
+          "HDB_SCALE_ORACLE 154",
+          "qml: HDB_SCALE_STEP loaded ms=2489 rows=236791 delegates=1920 created=1920 destroyed=0 last-create-ms=2361 last-destroy-ms=-1 observed-ms=-1",
+          "qml: HDB_SCALE_STEP selected-retained-address ms=23 rows=236791 delegates=1920 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=7.383 plan-ms=2.461 notifications-ms=9.567 before=1920 after=279 removed=1641 inserted=0 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=1 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=1 list-begin-ms=4.465 filter-ms=20.021 list-end-ms=2.862 property-notify-ms=8.668 total-ms=56.762",
+          "HDB_SCALE_RESET 48 rows=9441 mapped=279",
+          "qml: HDB_SCALE_STEP selected-in-town ms=523 rows=9441 delegates=279 created=0 destroyed=1641 last-create-ms=-1 last-destroy-ms=508 observed-ms=58",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=7.354 plan-ms=0.846 notifications-ms=40.905 before=279 after=264 removed=15 inserted=0 changed=198",
+          "qml: HDB_MAP_OBSERVED revision=2 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=2 list-begin-ms=0.745 filter-ms=8.985 list-end-ms=2.858 property-notify-ms=5.689 total-ms=67.749",
+          "HDB_SCALE_RESET 62 rows=6469 mapped=264",
+          "qml: HDB_SCALE_STEP hidden-transaction-cleared ms=421 rows=6469 delegates=264 created=0 destroyed=15 last-create-ms=-1 last-destroy-ms=411 observed-ms=68",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=103.141 plan-ms=0.981 notifications-ms=466.247 before=264 after=1920 removed=0 inserted=1656 changed=198",
+          "qml: HDB_MAP_OBSERVED revision=3 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=3 list-begin-ms=0.585 filter-ms=11.886 list-end-ms=3.087 property-notify-ms=14.367 total-ms=600.498",
+          "HDB_SCALE_RESET 586 rows=236791 mapped=1920",
+          "qml: HDB_SCALE_STEP reset ms=2157 rows=236791 delegates=1920 created=1656 destroyed=0 last-create-ms=2120 last-destroy-ms=-1 observed-ms=601",
+          "qml: HDB_SCALE_STEP selected-for-burst ms=16 rows=236791 delegates=1920 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1",
+          "qml: HDB_MAP_BURST fired=1 queued=4",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=3.371 plan-ms=0.658 notifications-ms=19.179 before=1920 after=279 removed=1641 inserted=0 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=4 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=4 list-begin-ms=0.477 filter-ms=8.110 list-end-ms=3.666 property-notify-ms=6.870 total-ms=42.447",
+          "HDB_SCALE_RESET 35 rows=9441 mapped=279",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=0.036 plan-ms=0.068 notifications-ms=1.831 before=279 after=0 removed=279 inserted=0 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=5 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=5 list-begin-ms=0.117 filter-ms=5.883 list-end-ms=0.363 property-notify-ms=6.814 total-ms=15.201",
+          "HDB_SCALE_RESET 8 rows=0 mapped=0",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=27.806 plan-ms=0.624 notifications-ms=8.009 before=0 after=1920 removed=0 inserted=1920 changed=0",
+          "qml: HDB_MAP_OBSERVED revision=6 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=6 list-begin-ms=0.101 filter-ms=8.459 list-end-ms=1.716 property-notify-ms=13.149 total-ms=59.951",
+          "HDB_SCALE_RESET 46 rows=236791 mapped=1920",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=23.817 plan-ms=1.422 notifications-ms=13.270 before=1920 after=1921 removed=0 inserted=1 changed=149",
+          "qml: HDB_MAP_OBSERVED revision=7 after-csharp-ms=0",
+          "HDB_FILTER_STAGE revision=7 list-begin-ms=0.106 filter-ms=7.906 list-end-ms=2.109 property-notify-ms=12.759 total-ms=61.471",
+          "HDB_SCALE_RESET 48 rows=241920 mapped=1921",
+          "qml: HDB_SCALE_STEP reentrant-burst-drained ms=1952 rows=241920 delegates=1921 created=1921 destroyed=1920 last-create-ms=1916 last-destroy-ms=643 observed-ms=183",
+          "HDB_MAP_UPDATE strategy=incremental aggregate-ms=32.284 plan-ms=1.379 notifications-ms=158.182 before=1921 after=1920 removed=1 inserted=0 changed=149",
+          "qml: HDB_MAP_OBSERVED revision=8 after-csharp-ms=1",
+          "HDB_FILTER_STAGE revision=8 list-begin-ms=0.375 filter-ms=9.700 list-end-ms=3.496 property-notify-ms=20.929 total-ms=226.426",
+          "HDB_SCALE_RESET 205 rows=236791 mapped=1920",
+          "qml: HDB_SCALE_STEP final-reset ms=605 rows=236791 delegates=1920 created=0 destroyed=1 last-create-ms=-1 last-destroy-ms=562 observed-ms=227",
+          "qml: HDB_SCALE_PASS",
+          "HDB_GATE_EXIT"
+        ]
+      }
+    }
+  },
+  "rejected_diagnostic_probe": {
+    "description": "Original null-provider Map probe crashed and was removed; separate minimal QML shell replaced it. Not a successful measurement or proven upstream defect.",
+    "seconds": 7.786302346998127,
+    "process_exit": -11,
+    "verified": false,
+    "view": "qml-shell",
+    "iteration": 1
+  }
+}
