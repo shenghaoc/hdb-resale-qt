@@ -45,6 +45,7 @@
   <ItemGroup>
     <QtResource Include="assets/onemap-logo.png" Alias="hdb-resale/onemap-logo.png" />
     <None Include="Main.qml"/>
+    <None Include="StartupShell.qml"/>
     <None Include="RuntimeGate.qml"/>
     <None Include="ScaleGate.qml"/>
     <Compile Include="Program.cs" />

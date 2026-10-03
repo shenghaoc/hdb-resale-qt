@@ -42,7 +42,8 @@ internal static class Program
             WriteReport(args[2], StartupStudy.Run(args[1]));
             return;
         }
-        Qml.LoadFromRootModule("Main");
+        Qml.LoadFromRootModule(Environment.GetEnvironmentVariable("HDB_STARTUP_PROFILE") == "1" &&
+            Environment.GetEnvironmentVariable("HDB_STARTUP_VIEW") == "qml-shell" ? "StartupShell" : "Main");
         Qml.WaitForExit();
         if (Environment.GetEnvironmentVariable("HDB_RUNTIME_GATE") == "1" || Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1" || Environment.GetEnvironmentVariable("HDB_STARTUP_PROFILE") == "1") Console.WriteLine("HDB_GATE_EXIT");
     }

@@ -123,8 +123,8 @@ ApplicationWindow {
                     property double lastDelegateDestroyedMs: 0
                     property bool traceDelegates: Resales.scaleLifecycle
                     anchors.fill: parent
-                    plugin: Resales.startupProbe && Resales.startupView === "qml-shell" ? null : osm
-                    activeMapType: supportedMapTypes.length > 0 ? supportedMapTypes[supportedMapTypes.length - 1] : null
+                    plugin: osm
+                    activeMapType: supportedMapTypes[supportedMapTypes.length - 1]
                     center: QtPositioning.coordinate(1.3521, 103.8198)
                     zoomLevel: 11
                     minimumZoomLevel: 11
