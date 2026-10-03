@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/HdbResale.App/HdbResale.App.csproj" />
+    <Project Path="src/HdbResale.Domain/HdbResale.Domain.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/HdbResale.Tests/HdbResale.Tests.csproj" />
+  </Folder>
+</Solution>
