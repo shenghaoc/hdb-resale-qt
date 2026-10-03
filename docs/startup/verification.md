@@ -166,15 +166,30 @@ On the final Release binary, real desktop screenshot/mouse/keyboard input showed
   close exited 0. Logs contained only the two previously known Linux desktop
   portal notices, with no QML/runtime error signatures or AT-SPI warnings.
 
-The verified final screenshot is delivered separately. Wheel/pinch hardware
+The verified final screenshot is delivered separately, SHA-256
+`ff9c4ec3cccd2fe389dab98e63d7d7c5eb7e24a199c5e89451bf3d1791af07d6`.
+Wheel/pinch hardware
 input and macOS/Windows behavior remain unclaimed.
 
 ## Publication and limits
 
-Final history audit is recorded after the documentation checkpoint. Generic
-reachable-history exclusions are rerun; exact private display-name/coordinate
-rescanning remains unavailable because the private reference was not transferred
-or read. Earlier M6/M7 exact-reference evidence is inherited, not relabelled as a
-new exact-reference audit. The full-history bundle, fresh-restore check and Library delivery are recorded
+The all-ref reachable-history audit at documentation checkpoint
+`279ef2d39885d7823b3914ef92c847fceb1648bf` traversed **24 commits, 249 unique
+blobs and 133 paths**, reviewing all **23 new blobs** since M7, with zero issues.
+It checks the excluded raw-export hash/header, credential-shaped content,
+prohibited local/build/binary paths, large blobs, historical-projection field
+whitelist, exact M7 ancestry and excluded `843df64` unreachability. Canonical and
+frozen evidence plus SDK properties remain byte-identical. M6/M7 branches and
+remote-tracking refs are preserved; there are no new publication refs or pushes.
+
+This generic scan inherits M7's audit, which itself inherits M6/prior exact-private-
+reference evidence. Exact private display-name/full-precision-coordinate-pair
+rescanning is **not newly performed**: the private raw reference was not
+transferred or read. That limit is not represented as a fresh exact-reference
+pass. No raw export, cached private coordinates/names, credentials or local-only
+files were added. The same generic all-ref scan is rerun on the final audit-record
+commit; its machine-readable result accompanies the final handoff.
+
+The full-history bundle, fresh-restore check and Library delivery are recorded
 separately. No macOS/Windows execution, wheel/pinch hardware, cold network,
 signed distribution or isolated GPU/Bridge benchmark is claimed.
