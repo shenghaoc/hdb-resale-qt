@@ -32,5 +32,7 @@ class ModelLifetimeContractTests(unittest.TestCase):
   self.assertNotIn('gc()',main)
   self.assertIn('HDB_MODEL_LIFETIME_GC',gate)
   self.assertIn('gc()',gate)
+  self.assertIn('if (elapsed > (Resales.scaleMeasurement ? 10000 : 5000))',gate)
+  self.assertIn('if (!advance("full-again")) return;',gate)
 
 if __name__=='__main__':unittest.main()

@@ -69,22 +69,38 @@ Item {
             // Gate-only lifetime regression. Normal UI/startup never forces QML GC.
             gc()
             console.log("HDB_MODEL_LIFETIME_GC")
+            return identitiesAgree()
         }
-        return identitiesAgree()
+        return true
+    }
+    function failDeadline(elapsed) {
+        console.error("HDB_GATE_FAIL scale phase " + phase + " elapsed-ms=" + elapsed
+            + " budget-ms=" + (Resales.scaleMeasurement ? 10000 : 5000)
+            + " mapReady=" + targetMap.mapReady + " mapError=" + targetMap.error
+            + " rows=" + Resales.visibleCount + " list=" + targetList.count
+            + " delegates=" + targetMap.mapItems.length + " expected=" + Resales.mappedCount
+            + " identities=" + identitiesAgree() + " town=" + townControl.currentText + " price=" + priceControl.value)
+        targetMap.traceDelegates=false; gateTimer.stop(); Qt.quit()
     }
     function advance(name) {
-        console.log("HDB_SCALE_STEP " + name + " ms=" + (Date.now()-started)
+        const snapshot = {}
+        for (const item of targetMap.mapItems) snapshot[item.mapKey] = item
+        // Callback-entry checks alone miss synchronous work or a costly identity
+        // scan. Include completed validation/snapshot work in every phase budget.
+        const elapsed = Date.now()-started
+        if (elapsed > (Resales.scaleMeasurement ? 10000 : 5000)) { failDeadline(elapsed); return false }
+        console.log("HDB_SCALE_STEP " + name + " ms=" + elapsed
             + " rows=" + Resales.visibleCount + " delegates=" + targetMap.mapItems.length
             + " created=" + (targetMap.createdDelegates-priorCreated)
             + " destroyed=" + (targetMap.destroyedDelegates-priorDestroyed)
             + " last-create-ms=" + (targetMap.lastDelegateCreatedMs >= started ? targetMap.lastDelegateCreatedMs-started : -1)
             + " last-destroy-ms=" + (targetMap.lastDelegateDestroyedMs >= started ? targetMap.lastDelegateDestroyedMs-started : -1)
             + " observed-ms=" + (observedMs >= started ? observedMs-started : -1))
-        const snapshot = {}
-        for (const item of targetMap.mapItems) snapshot[item.mapKey] = item
+        if (Date.now()-started > (Resales.scaleMeasurement ? 10000 : 5000)) { failDeadline(Date.now()-started); return false }
         priorItems=snapshot
         priorCreated=targetMap.createdDelegates; priorDestroyed=targetMap.destroyedDelegates
         phase++; started=Date.now()
+        return true
     }
     function reentrantStep() {
         switch (phase) {
@@ -92,28 +108,28 @@ Item {
             if (!targetMap.mapReady || targetMap.error !== Map.NoError || !ready(Resales.gateInitialCount, Resales.gateInitialMapped)) return
             chosen=Resales.gateHiddenSelectionId
             if (chosen === "") return
-            advance("loaded"); Resales.selectTransaction(chosen); break
+            if (!advance("loaded")) return; Resales.selectTransaction(chosen); break
         case 1:
             if (Resales.selectedId !== chosen) return
-            advance("selected-retained-address"); Resales.setTown(Resales.gateTown); break
+            if (!advance("selected-retained-address")) return; Resales.setTown(Resales.gateTown); break
         case 2:
             if (!ready(Resales.gateTownCount, Resales.gateTownMapped) || Resales.selectedId !== chosen) return
             for (const item of targetMap.mapItems) if (item.mapKey === Resales.gateRetainedSelectionKey) { retainedSelectedItem=item; break }
             if (!retainedSelectedItem) return
-            advance("selected-in-town"); Resales.setMaximumPrice(500000); break
+            if (!advance("selected-in-town")) return; Resales.setMaximumPrice(500000); break
         case 3:
             if (!ready(Resales.gateBudgetCount, Resales.gateBudgetMapped) || Resales.selectedId !== "" || Resales.selectedMapKey !== "") return
             let retained=false
             for (const item of targetMap.mapItems) if (item.mapKey === Resales.gateRetainedSelectionKey && item === retainedSelectedItem && item.z === 0) retained=true
             if (!retained) return
-            advance("hidden-transaction-cleared"); Resales.resetFilters(); break
+            if (!advance("hidden-transaction-cleared")) return; Resales.resetFilters(); break
         case 4:
             if (!ready(Resales.gateInitialCount, Resales.gateInitialMapped)) return
             chosen=Resales.firstVisibleId
-            advance("reset"); Resales.selectTransaction(chosen); break
+            if (!advance("reset")) return; Resales.selectTransaction(chosen); break
         case 5:
             if (chosen === "" || Resales.selectedId !== chosen) return
-            advance("selected-for-burst")
+            if (!advance("selected-for-burst")) return;
             // Queued empty intentionally destroys all keys before restoring them.
             priorItems=({}); burstArmed=true; Resales.setTown(Resales.gateTown); break
         case 6:
@@ -121,10 +137,10 @@ Item {
                 || !ready(Resales.gateAllCount, Resales.gateAllMapped) || Resales.selectedId !== "") return
             if (Resales.scaleLifecycle && (targetMap.createdDelegates-priorCreated !== Resales.gateAllMapped
                 || targetMap.destroyedDelegates-priorDestroyed !== Resales.gateInitialMapped)) return
-            advance("reentrant-burst-drained"); Resales.resetFilters(); break
+            if (!advance("reentrant-burst-drained")) return; Resales.resetFilters(); break
         case 7:
             if (!ready(Resales.gateInitialCount, Resales.gateInitialMapped) || Resales.selectedId !== "") return
-            advance("final-reset"); console.log("HDB_SCALE_PASS"); targetMap.traceDelegates=false; return true
+            if (!advance("final-reset")) return; console.log("HDB_SCALE_PASS"); targetMap.traceDelegates=false; return true
         }
         return false
     }
@@ -132,105 +148,101 @@ Item {
         switch (phase) {
         case 0:
             if (!targetMap.mapReady || targetMap.error !== Map.NoError || !ready(Resales.gateInitialCount, Resales.gateInitialMapped)) return
-            advance("loaded"); Resales.setMaximumPrice(Resales.maximumAvailablePrice); break
+            if (!advance("loaded")) return; Resales.setMaximumPrice(Resales.maximumAvailablePrice); break
         case 1:
             if (!ready(Resales.gateAllCount, Resales.gateAllMapped)) return
-            advance("full"); Resales.setTown(Resales.gateTown); break
+            if (!advance("full")) return; Resales.setTown(Resales.gateTown); break
         case 2:
             if (!ready(Resales.gateAllTownCount, Resales.gateAllTownMapped)) return
-            advance("subset"); Resales.setTown(Resales.gateOtherTown); break
+            if (!advance("subset")) return; Resales.setTown(Resales.gateOtherTown); break
         case 3:
             if (!ready(Resales.gateOtherTownCount, Resales.gateOtherTownMapped)) return
-            advance("different"); if (Resales.runtimeGateFault !== "skip-empty") Resales.setMaximumPrice(0); break
+            if (!advance("different")) return; if (Resales.runtimeGateFault !== "skip-empty") Resales.setMaximumPrice(0); break
         case 4:
             if (!ready(0, 0) || Resales.selectedId !== "") return
-            advance("empty"); Resales.resetFilters(); break
+            if (!advance("empty")) return; Resales.resetFilters(); break
         case 5:
             if (!ready(Resales.gateInitialCount, Resales.gateInitialMapped)) return
-            advance("reset"); Resales.setMaximumPrice(Resales.maximumAvailablePrice); break
+            if (!advance("reset")) return; Resales.setMaximumPrice(Resales.maximumAvailablePrice); break
         case 6:
             if (!ready(Resales.gateAllCount, Resales.gateAllMapped)) return
             chosen=""
             for (const item of targetMap.mapItems) if (item.mapKey.startsWith(Resales.gateTown + "|")) { chosen=item.transactionId; break }
             if (chosen === "") return
-            advance("full-restored"); Resales.selectTransaction(chosen); break
+            if (!advance("full-restored")) return; Resales.selectTransaction(chosen); break
         case 7:
             if (Resales.selectedId !== chosen || !ready(Resales.gateAllCount, Resales.gateAllMapped)) return
             let selected=null
             for (const item of targetMap.mapItems) if (item.transactionId === chosen) { selected=item; break }
             if (!selected || !selected.visible || selected.z !== 1) return
-            advance("selected"); Resales.setTown(Resales.gateOtherTown); break
+            if (!advance("selected")) return; Resales.setTown(Resales.gateOtherTown); break
         case 8:
             if (!ready(Resales.gateOtherTownCount, Resales.gateOtherTownMapped) || Resales.selectedId !== "" || Resales.selectedMapKey !== "") return
-            advance("hidden-selection-cleared"); Resales.setTown("All towns"); break
+            if (!advance("hidden-selection-cleared")) return; Resales.setTown("All towns"); break
         case 9:
             if (!ready(Resales.gateAllCount, Resales.gateAllMapped)) return
-            advance("full-again"); Resales.setTown(Resales.gateTown); break
+            if (!advance("full-again")) return; Resales.setTown(Resales.gateTown); break
         case 10:
             if (!ready(Resales.gateAllTownCount, Resales.gateAllTownMapped)) return
-            advance("repeat-subset"); Resales.setTown(Resales.gateOtherTown); break
+            if (!advance("repeat-subset")) return; Resales.setTown(Resales.gateOtherTown); break
         case 11:
             if (!ready(Resales.gateOtherTownCount, Resales.gateOtherTownMapped)) return
-            advance("repeat-different"); Resales.setTown("All towns"); break
+            if (!advance("repeat-different")) return; Resales.setTown("All towns"); break
         case 12:
             if (!ready(Resales.gateAllCount, Resales.gateAllMapped)) return
-            advance("repeat-full"); targetMap.zoomLevel=12; break
+            if (!advance("repeat-full")) return; targetMap.zoomLevel=12; break
         case 13:
             if (Math.abs(targetMap.zoomLevel-12)>0.01) return
-            advance("zoomed"); targetMap.pan(100,100); break
+            if (!advance("zoomed")) return; targetMap.pan(100,100); break
         case 14:
             if (Math.abs(targetMap.center.latitude-1.3521)<0.0001) return
-            advance("panned"); targetMap.center=QtPositioning.coordinate(1.3521,103.8198); targetMap.zoomLevel=11; break
+            if (!advance("panned")) return; targetMap.center=QtPositioning.coordinate(1.3521,103.8198); targetMap.zoomLevel=11; break
         case 15:
             if (Math.abs(targetMap.center.latitude-1.3521)>0.0001 || Math.abs(targetMap.zoomLevel-11)>0.01 || !ready(Resales.gateAllCount, Resales.gateAllMapped)) return
-            advance("recentered"); console.log("HDB_SCALE_PASS"); targetMap.traceDelegates=false; return true
+            if (!advance("recentered")) return; console.log("HDB_SCALE_PASS"); targetMap.traceDelegates=false; return true
         }
         return false
     }
     Timer {
+        id: gateTimer
         interval: 25; repeat: true; running: true
         onTriggered: {
             if (Date.now()-started > (Resales.scaleMeasurement ? 10000 : 5000)) {
-                console.error("HDB_GATE_FAIL scale phase " + phase + " mapReady=" + targetMap.mapReady + " mapError=" + targetMap.error + " rows=" + Resales.visibleCount + " list=" + targetList.count + " delegates=" + targetMap.mapItems.length + " expected=" + Resales.mappedCount + " identities=" + identitiesAgree() + " town=" + townControl.currentText + " price=" + priceControl.value)
-                if (targetMap.mapItems.length) {
-                    const item=targetMap.mapItems[0]; const rows=JSON.parse(Resales.gateMapRowsJson)
-                    console.log("HDB_MAP_DIAGNOSTIC " + JSON.stringify({key:item.mapKey,id:item.transactionId,count:item.transactionCount,address:item.address,price:item.priceLabel,latitude:item.latitude,longitude:item.longitude,expected:rows.find(r=>r.mapKey===item.mapKey)}))
-                }
-                targetMap.traceDelegates=false; stop(); Qt.quit(); return
+                failDeadline(Date.now()-started); return
             }
             if (Resales.scaleReentrant) { if (reentrantStep()) { stop(); Qt.quit() }; return }
             if (Resales.scaleTransitions) { if (extendedStep()) { stop(); Qt.quit() }; return }
             switch (phase) {
             case 0:
                 if (!targetMap.mapReady || targetMap.error !== Map.NoError || targetMap.width <= 0 || targetMap.height <= 0 || !ready(Resales.gateInitialCount, Resales.gateInitialMapped)) return
-                advance("loaded"); Resales.setTown(Resales.gateTown); break
+                if (!advance("loaded")) return; Resales.setTown(Resales.gateTown); break
             case 1:
                 if (!ready(Resales.gateTownCount, Resales.gateTownMapped)) return
-                advance("filtered"); Resales.setMaximumPrice(500000); break
+                if (!advance("filtered")) return; Resales.setMaximumPrice(500000); break
             case 2:
                 if (!ready(Resales.gateBudgetCount, Resales.gateBudgetMapped)) return
-                advance("budget-filtered"); chosen=Resales.firstVisibleId; Resales.selectTransaction(chosen); break
+                if (!advance("budget-filtered")) return; chosen=Resales.firstVisibleId; Resales.selectTransaction(chosen); break
             case 3:
                 if (chosen === "" || Resales.selectedId !== chosen) return
-                advance("selected"); if (Resales.runtimeGateFault !== "skip-empty") Resales.setMaximumPrice(0); break
+                if (!advance("selected")) return; if (Resales.runtimeGateFault !== "skip-empty") Resales.setMaximumPrice(0); break
             case 4:
                 if (!ready(0,0) || Resales.selectedId !== "") return
-                advance("empty-cleared"); Resales.resetFilters(); break
+                if (!advance("empty-cleared")) return; Resales.resetFilters(); break
             case 5:
                 if (!ready(Resales.gateInitialCount, Resales.gateInitialMapped)) return
-                advance("reset"); targetMap.zoomLevel=12; break
+                if (!advance("reset")) return; targetMap.zoomLevel=12; break
             case 6:
                 if (Math.abs(targetMap.zoomLevel-12)>0.01) return
-                advance("zoomed"); targetMap.pan(100,100); break
+                if (!advance("zoomed")) return; targetMap.pan(100,100); break
             case 7:
                 if (Math.abs(targetMap.center.latitude-1.3521)<0.0001) return
-                advance("panned"); targetMap.center=QtPositioning.coordinate(1.3521,103.8198); targetMap.zoomLevel=11; break
+                if (!advance("panned")) return; targetMap.center=QtPositioning.coordinate(1.3521,103.8198); targetMap.zoomLevel=11; break
             case 8:
                 if (Math.abs(targetMap.center.latitude-1.3521)>0.0001 || Math.abs(targetMap.zoomLevel-11)>0.01) return
-                advance("recentered"); Resales.setMaximumPrice(Resales.maximumAvailablePrice); break
+                if (!advance("recentered")) return; Resales.setMaximumPrice(Resales.maximumAvailablePrice); break
             case 9:
                 if (!ready(Resales.gateAllCount, Resales.gateAllMapped)) return
-                advance("all-prices"); Resales.measureScaleHeap(); console.log("HDB_SCALE_PASS"); targetMap.traceDelegates=false; stop(); Qt.quit(); break
+                if (!advance("all-prices")) return; Resales.measureScaleHeap(); console.log("HDB_SCALE_PASS"); targetMap.traceDelegates=false; stop(); Qt.quit(); break
             }
         }
     }
