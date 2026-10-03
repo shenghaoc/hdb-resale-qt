@@ -65,3 +65,31 @@ separate from gains attributable to additional public postal assertions.
 The frozen M5 experiment explicitly keeps its original Polygon-only policy so
 its report and diagnostics remain byte-identical; `--address-coverage-baseline`
 similarly reproduces the original full-data inventory.
+
+## Evidence import contract
+
+The ordinary postal CSV may additionally include `source_dataset`, an exact
+`d_` plus 32 lowercase hex data.gov.sg ID. Every assertion retains this ID and
+its physical source CSV ending line, preventing row-number collisions across
+partitions. Legacy files have no added serialized field and retain their original
+validation and evidence output. No assertion is deduplicated by address/postal
+or chosen by frequency. Dataset identity is provenance, not proof of accuracy.
+
+For source-qualified rows a malformed postal is retained verbatim as unresolved
+evidence with a visible diagnostic. Any address carrying such an assertion becomes
+Ambiguous (`InvalidPostalAssertion`), separately from conflicting valid postals.
+Nothing is padded, repaired, or dropped so another valid row can win. Invalid
+source dataset identities themselves are rejected, with a diagnostic. This
+conservative extension does not change validation of legacy unqualified CSVs.
+
+An optional `historical-postal-evidence.json` in an explicit input directory may
+contain only the already approved, byte-exact M5 minimized projection. Its SHA-256,
+origin, source hash, raw-row count and frozen-sample hash are checked. An altered
+file contributes no assertions and produces a diagnostic. Matching still requires
+exact producer key, exact search string and six-digit cached postal. Only its
+378 known identities can contribute; missing corpus entries are not API no-match.
+The private 10,333-row cache is unavailable and neither reconstructed nor fetched.
+Historical first-page/first-result assertions remain weaker and separately
+attributed. Dataset-qualified source rows and historical limitations are visible
+in selection details. Historical lookup occurs once per memoized raw address,
+not per repeated transaction, without changing match semantics.

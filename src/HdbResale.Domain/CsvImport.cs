@@ -24,6 +24,13 @@ public static class CsvImport
     {
         var rejected = new List<RejectedRecord>();
         var diagnostics = new List<ImportDiagnostic>();
+        var historicalPath = Path.Combine(directory, "historical-postal-evidence.json");
+        if (historicalAssertions is null && File.Exists(historicalPath))
+        {
+            try { historicalAssertions = HistoricalOneMap.ReadApprovedProjection(historicalPath); }
+            catch (Exception e) when (e is IOException or InvalidDataException or UnauthorizedAccessException or JsonException)
+            { diagnostics.Add(new(Path.GetFileName(historicalPath), 0, e.Message)); }
+        }
         var properties = new List<PropertyAddress>();
         foreach (var row in Read(Path.Combine(directory, "address-evidence.csv"),
             ["source_row", "blk_no", "street"], rejected, diagnostics, referenceCsv))
@@ -41,9 +48,19 @@ public static class CsvImport
         {
             var f = row;
             if (!long.TryParse(f["source_row"], out var sourceRow) || sourceRow < 2 ||
-                string.IsNullOrWhiteSpace(f["block"]) || string.IsNullOrWhiteSpace(f["street_name"]) || !PostalCode(f["postal_code"]))
+                string.IsNullOrWhiteSpace(f["block"]) || string.IsNullOrWhiteSpace(f["street_name"]) ||
+                (!f.Header.ContainsKey("source_dataset") && !PostalCode(f["postal_code"])))
                 Reject("postal-address-evidence.csv", row, "Postal source row, block, street and six-digit postal code are required.", rejected, diagnostics);
-            else postalAddresses.Add(new(sourceRow, f["block"], f["street_name"], f["postal_code"]));
+            else if (f.Header.TryGetValue("source_dataset", out var datasetColumn) &&
+                !ValidDataset(f.Raw[datasetColumn]))
+                Reject("postal-address-evidence.csv", row, "Source dataset must be a data.gov.sg dataset ID.", rejected, diagnostics);
+            else
+            {
+                postalAddresses.Add(new(sourceRow, f["block"], f["street_name"], f["postal_code"])
+                { SourceDataset = f.Header.TryGetValue("source_dataset", out var column) ? f.Raw[column] : null });
+                if (!PostalCode(f["postal_code"])) diagnostics.Add(new("postal-address-evidence.csv", row.Number,
+                    "Malformed public postal assertion retained as unresolved evidence; not repaired or silently discarded."));
+            }
         }
         stage?.Invoke("postal-evidence");
         var footprints = ReadFootprints(buildingEvidencePath ?? Path.Combine(directory, "building-evidence.geojson"), rejected, diagnostics, stage, supportMultiPolygon);
@@ -84,13 +101,13 @@ public static class CsvImport
         var resolved = new List<(int SourceRow, TransactionFacts Facts, DerivedLocation Location, AddressMatch Match)>();
         foreach (var (sourceRow, facts) in parsed)
         {
-            OneMapSearch? search = null;
-            oneMapSearches?.TryGetValue(OneMapEvidence.AddressKey(facts.Block,facts.Street), out search);
-            HistoricalPostalAssertion? historical = null;
-            historicalAssertions?.TryGetValue(HistoricalOneMap.Key(facts),out historical);
             var key = (facts.Town, facts.Block, facts.Street);
             if (!indexed || !matches.TryGetValue(key, out var match))
             {
+                OneMapSearch? search = null;
+                oneMapSearches?.TryGetValue(OneMapEvidence.AddressKey(facts.Block,facts.Street), out search);
+                HistoricalPostalAssertion? historical = null;
+                historicalAssertions?.TryGetValue(HistoricalOneMap.Key(facts),out historical);
                 var addressKey = (AddressNormalizer.Block(facts.Block), AddressNormalizer.Street(facts.Street));
                 match = AddressMatcher.Match(facts,
                     indexed ? propertyIndex[addressKey].ToArray() : properties,
@@ -119,6 +136,8 @@ public static class CsvImport
             return value;
         }
     }
+    private static bool ValidDataset(string value) => value.Length == 34 && value.StartsWith("d_", StringComparison.Ordinal) &&
+        value.AsSpan(2).IndexOfAnyExcept("0123456789abcdef") < 0;
     private static bool PostalCode(string value) => value.Length == 6 && value.All(char.IsAsciiDigit);
     private static IReadOnlyList<FootprintRecord> ReadFootprints(string path,
         List<RejectedRecord> rejected, List<ImportDiagnostic> diagnostics, Action<string>? stage, bool supportMultiPolygon)

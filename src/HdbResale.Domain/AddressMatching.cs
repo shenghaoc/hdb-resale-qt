@@ -3,7 +3,13 @@ namespace HdbResale.Domain;
 
 public enum MatchQuality { ExactAddress, NormalizedAddress, Ambiguous, Unmatched }
 public sealed record PropertyAddress(long SourceRow, string Block, string Street);
-public sealed record PostalAddress(long SourceRow, string Block, string Street, string PostalCode);
+public sealed record PostalAddress(long SourceRow, string Block, string Street, string PostalCode)
+{
+    // Absent in legacy ACRA B fixtures; optional dataset identity prevents source
+    // row collisions when a full-corpus projection combines public partitions.
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? SourceDataset { get; init; }
+}
 public sealed record FootprintIdentity(int ObjectId, int EntityId, string Block, string PostalCode);
 public sealed record FootprintRecord(FootprintIdentity Identity, DerivedLocation Location);
 public sealed record AddressMatch(MatchQuality Quality, string Reason,
@@ -49,6 +55,8 @@ public static class AddressMatcher
 
         // Corporate records are assertions, not candidate buildings. Preserve every
         // source row; agreement on one postal value does not pick an entity winner.
+        if (assertions.Any(p => p.PostalCode.Length != 6 || !p.PostalCode.All(char.IsAsciiDigit)))
+            return Result(MatchQuality.Ambiguous, "Malformed postal assertion retained as unresolved evidence; no repair or valid-row winner selected.");
         var postalCodes = assertions.Select(p => p.PostalCode).Distinct(StringComparer.Ordinal).ToArray();
         if (postalCodes.Length > 1) return Result(MatchQuality.Ambiguous, $"ACRA address assertions conflict: {postalCodes.Length} postal candidates.");
         if (oneMap?.Outcome is OneMapOutcome.PostalConflict or OneMapOutcome.MultipleCandidates)

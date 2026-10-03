@@ -206,8 +206,13 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     private static string MatchSources(AddressMatch match)
     {
         var properties = string.Join(", ", match.PropertyCandidates.Select(p => p.SourceRow));
-        var postals = string.Join(", ", match.PostalAssertions.Select(p => p.SourceRow));
-        return $"HDB property CSV rows: {properties}\nACRA B CSV rows: {postals}";
+        var postals = string.Join("; ", match.PostalAssertions.GroupBy(p => p.SourceDataset)
+            .Select(g => $"{(g.Key is null ? "ACRA B" : "ACRA " + g.Key)} CSV rows: {string.Join(", ", g.Select(p => p.SourceRow))}"));
+        if (postals.Length == 0) postals = "ACRA B CSV rows: ";
+        var historical = match.HistoricalOneMap is { } h
+            ? $"\nHistorical first-page/first-result assertion: {h.Status}; postal {h.Postal}; cache write {h.UpdatedAt}. Returned identity/candidates unavailable."
+            : "";
+        return $"HDB property CSV rows: {properties}\n{postals}{historical}";
     }
     private static string Money(decimal price) => "S$" + price.ToString(price == decimal.Truncate(price) ? "N0" : "N2", CultureInfo.InvariantCulture);
 

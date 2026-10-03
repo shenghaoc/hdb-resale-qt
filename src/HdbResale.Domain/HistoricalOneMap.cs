@@ -21,6 +21,17 @@ public static class HistoricalOneMap
     public static string SearchValue(TransactionFacts facts) => $"{Normalize(facts.Block)} {Normalize(facts.Street)} SINGAPORE";
     public static bool Usable(TransactionFacts facts, HistoricalPostalAssertion assertion) => assertion.Status=="HistoricalFirstHit" &&
         assertion.CacheKey==Key(facts) && assertion.SearchValue==SearchValue(facts) && assertion.Postal is {Length:6} p && p.All(char.IsAsciiDigit);
+    public static IReadOnlyDictionary<string, HistoricalPostalAssertion> ReadApprovedProjection(string path)
+    {
+        if (Hash(path) != "7d8af54d5cae591455e5161535218b66c9f85b9718d9a00d730602f72086ccd5")
+            throw new InvalidDataException("Historical benchmark projection hash mismatch; no assertion used.");
+        var projection = JsonSerializer.Deserialize<HistoricalProjection>(File.ReadAllText(path))
+            ?? throw new InvalidDataException("Empty historical projection.");
+        if (projection.Origin != "HistoricalOneMapFirstHit" || projection.RawSha256 != RawSha256 ||
+            projection.RawRows != 10333 || projection.SampleSha256 != OneMapEvidence.FrozenSampleSha256)
+            throw new InvalidDataException("Wrong historical projection source/sample identity.");
+        return projection.Entries.ToDictionary(e => e.CacheKey, StringComparer.Ordinal);
+    }
     public static HistoricalExperimentReport Load(string sampleDirectory,string projectionPath,string originalFootprints)
     {
         if (Hash(projectionPath)!="7d8af54d5cae591455e5161535218b66c9f85b9718d9a00d730602f72086ccd5") throw new InvalidDataException("Historical benchmark projection hash mismatch.");
