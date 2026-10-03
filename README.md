@@ -68,7 +68,7 @@ Fresh-process full-corpus startup is 7.339–7.637 seconds with warm OS/cache st
 
 ## Platforms, licence and RC limits
 
-Linux x64 is the M11 verification target. Earlier milestones exercised macOS arm64, but M11 has not been built or physically checked there. Windows has not been built or UI-tested. No installer publication, signing, notarization, tag, push or official release is included.
+Linux x64 has the complete M11 verification record. Current macOS arm64 builds, unit tests and the available strict native gates pass; expanded-data and physical acceptance remain pending. See the [current Mac checkpoint and blockers](docs/product-rc/macos-verification.md). Windows has not been built or UI-tested. No installer publication, signing, notarization, tag, push or official release is included.
 
 Original application code is licensed **GPL-3.0-or-later**, as chosen by its owner. See [LICENSE](LICENSE), scoped [SPDX metadata](REUSE.toml) and [third-party notices](THIRD_PARTY_NOTICES.md). Qt Graphs and its required Qt Quick 3D libraries retain their GPL-3.0-only terms; Qt/Bridge, other bundled dependencies, public data and OneMap keep their own terms. See the [local Linux RC package and licensing checklist](docs/product-rc/licensing-packaging.md). The documented local Linux directory/tar recipe includes a fresh-state, unrelated-working-directory real-X11 launch check. It is a bounded test artifact, not a claim of general distribution readiness. The final private tar passes a fresh-state, relocated launch check including the real chart and bundled runtime mappings. [Package hashes and verified scope](docs/product-rc/package-verification.json). No AppImage, DMG or Windows installer is produced, and no remote package CI is claimed.
 
