@@ -42,12 +42,13 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
             stage: startupProfile is null ? null : MeasureStartup);
         MeasureStartup("import-return");
         Towns = new[] { "All towns" }.Concat(import.Accepted.Select(t => t.Town).Distinct().Order(StringComparer.Ordinal)).ToArray();
+        FlatTypes = new[] { "All flat types" }.Concat(import.Accepted.Select(t => t.FlatType).Distinct().Order(StringComparer.Ordinal)).ToArray();
         MeasureStartup("town-labels");
         state = new(import.Accepted);
         // The startup-only probe uses all prices to exercise every located address marker.
         if (StartupProbe) state.Filter("All towns", MaximumAvailablePrice);
         MeasureStartup("state-construction");
-        MapPoints = new(state.Visible, startupProfile is null ? null : MeasureStartup);
+        MapPoints = new(state.MappedAddresses, startupProfile is null ? null : MeasureStartup);
         MeasureStartup("models-constructed");
         if (ScaleGate) Console.WriteLine($"HDB_SCALE_CONSTRUCT {timer.ElapsedMilliseconds} rows={VisibleCount} mapped={MapPoints.Count} managed={GC.GetTotalMemory(false)} working={Environment.WorkingSet}");
         if (ScaleGate)
@@ -138,12 +139,12 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public int ClusterCount => MapPoints.ClusterCount;
     public bool MapViewportReady => MapPoints.ViewportReady;
     public string PresentationSummary => $"{InViewAddressCount:N0} mapped addresses in view · {ClusterCount:N0} groups + {PresentationCount - ClusterCount:N0} individual markers";
-    public string SelectionMapStatus => state.Selected is null ? "" : state.Selected.Location.Point is null
-        ? "Selected transaction has no mapped coordinates." : MapPoints.SelectedInView
+    public string SelectionMapStatus => state.SelectedAddress is null ? "" : !state.SelectedAddress.IsMapped
+        ? "Selected address has no mapped coordinates." : MapPoints.SelectedInView
         ? "Selected address is highlighted on this map." : "Selected address is outside this map view.";
-    public double SelectedLatitude => state.Selected?.Location.Point?.Latitude ?? 1.3521;
-    public double SelectedLongitude => state.Selected?.Location.Point?.Longitude ?? 103.8198;
-    public bool SelectedLocated => state.Selected?.Location.Point is not null;
+    public double SelectedLatitude => state.SelectedAddress is { IsMapped: true } b ? b.Latest.Location.Point!.Latitude : 1.3521;
+    public double SelectedLongitude => state.SelectedAddress is { IsMapped: true } b ? b.Latest.Location.Point!.Longitude : 103.8198;
+    public bool SelectedLocated => state.SelectedAddress?.IsMapped == true;
     public double MapViewportLatitude => MapPoints.Viewport?.Latitude ?? 0;
     public double MapViewportLongitude => MapPoints.Viewport?.Longitude ?? 0;
     public double MapViewportZoom => MapPoints.Viewport?.Zoom ?? 0;
@@ -176,6 +177,26 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public string FirstVisibleId => state.Visible.FirstOrDefault()?.Id ?? "";
     // Immutable import: compute control labels once, rather than scanning the corpus per binding read.
     private string[] Towns { get; }
+    private string[] FlatTypes { get; }
+    public string FlatTypesJson => System.Text.Json.JsonSerializer.Serialize(FlatTypes);
+    public int FlatTypeIndex => Array.IndexOf(FlatTypes, FlatType);
+    public string FlatType => state.FlatType;
+    public int MinimumPrice => (int)state.MinimumPrice;
+    public int RecencyMonths => state.RecencyMonths;
+    public string DatasetLatestMonth => state.LatestDatasetMonth?.ToString() ?? "unavailable";
+    public int AddressCount => state.Addresses.Count;
+    public int SelectedAddressIndex => state.SelectedAddress is null ? -1 : state.Addresses.ToList().FindIndex(b => b.Key == state.SelectedAddress.Key);
+    public string FirstAddressKey => state.Addresses.FirstOrDefault()?.Key ?? "";
+    public bool PackageSmoke => Environment.GetEnvironmentVariable("HDB_PACKAGE_SMOKE") == "1";
+    public bool BuyerGate => Environment.GetEnvironmentVariable("HDB_BUYER_GATE") == "1";
+    public string GateBuyerExpectedJson => BuyerGate ? File.ReadAllText(Environment.GetEnvironmentVariable("HDB_BUYER_EXPECTATION")!) : "[]";
+    public string BuyerStateJson => BuyerPresentation.StateJson(state);
+    public string RecentTransactionsJson => BuyerPresentation.RecentJson(state);
+    public string SelectedHeading => state.SelectedAddress is { } b ? b.Latest.Address : "Choose an address";
+    public string SelectedMetrics => BuyerPresentation.Metrics(state);
+    public string SelectedLease => BuyerPresentation.Lease(state);
+    public string SelectedEvidence => state.SelectedAddress is { } b ? $"Identity: {string.Join(", ", b.MatchQualities)}\nCoordinates: {string.Join(", ", b.CoordinateQualities)}\n{b.Latest.Match.Reason}\n{MatchSources(b.Latest.Match)}\n{b.Latest.Location.Source}" : "";
+    public string AboutText => "HDB Resale Explorer 0.1.0 (release candidate)\nIndependent desktop research tool. Not affiliated with HDB, SLA or the Singapore Government.\nHistorical resale registrations are not current listings, valuations, affordability advice or eligibility decisions.\nApplication source licence: pending owner decision. Qt, Bridge, data and map licences are separate; see repository notices.\nRepository: https://github.com/shenghaoc/hdb-resale-qt";
     public string TownsJson => System.Text.Json.JsonSerializer.Serialize(Towns);
     public int TownIndex => Array.IndexOf(Towns, Town);
     public bool RuntimeGate => Environment.GetEnvironmentVariable("HDB_RUNTIME_GATE") == "1";
@@ -188,54 +209,76 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public int LocatedTransactions => state.Visible.Count(t => t.Location.Point is not null);
     public string SelectedId => state.Selected?.Id ?? "";
     public string SelectionDetails => state.Selected is { } t
-        ? $"{t.Address}\n{t.Town} · {t.FlatType}\n{Money(t.Price)}\n{t.Facts.Month} registration · local ID {t.Id}\nIdentity: {t.Match.Quality}\nCoordinates: {t.Location.Quality}\n{t.Match.Reason}\n{MatchSources(t.Match)}\n{t.Location.Source}"
-        : "Select a marker (latest transaction at that address) or a transaction below.";
-    public string FilterSummary => $"{VisibleCount} of {import.Accepted.Count} transactions · {LocatedTransactions} located in {MapPoints.Count} mapped addresses · {VisibleCount - LocatedTransactions} unlocated · {Town} · up to {Money(MaximumPrice)}";
+        ? $"{SelectedHeading}\n{SelectedMetrics}\n{SelectedLease}\n{SelectedEvidence}\nRepresentative local ID {t.Id}"
+        : "Select an address in the results or an individual map marker.";
+    public string FilterSummary => $"{AddressCount:N0} addresses · {VisibleCount:N0} matching transactions · {MappedCount:N0} mapped addresses · {VisibleCount - LocatedTransactions:N0} transactions without coordinates";
     public string ImportSummary => $"Import: {import.Accepted.Count} accepted · {import.MatchedCount} matched · {import.AmbiguousCount} ambiguous · {import.UnmatchedCount} unmatched · {import.Rejected.Count} rejected · {import.Diagnostics.Count} diagnostics.";
     public string ImportDiagnostics => string.Join("\n", import.Diagnostics.Select(d => $"{d.File}:{d.Row}: {d.Message}"));
 
     public void SetTown(string town)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(town);
-        mutations.Enqueue(() => ApplyFilter(town, MaximumPrice));
+        mutations.Enqueue(() => ApplyFilter(town, FlatType, MinimumPrice, MaximumPrice, RecencyMonths));
+    }
+    public void SetFlatType(string flatType)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(flatType);
+        mutations.Enqueue(() => ApplyFilter(Town, flatType, MinimumPrice, MaximumPrice, RecencyMonths));
+    }
+    public void SetMinimumPrice(int price)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(price);
+        mutations.Enqueue(() => ApplyFilter(Town, FlatType, price, MaximumPrice, RecencyMonths));
     }
     public void SetMaximumPrice(int price)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(price);
-        mutations.Enqueue(() => ApplyFilter(Town, price));
+        mutations.Enqueue(() => ApplyFilter(Town, FlatType, MinimumPrice, price, RecencyMonths));
     }
-    public void ResetFilters() => mutations.Enqueue(() => ApplyFilter("All towns", 1_000_000));
-    public void SelectTransaction(string id) => mutations.Enqueue(() =>
+    public void SetRecencyMonths(int months) => mutations.Enqueue(() => ApplyFilter(Town, FlatType, MinimumPrice, MaximumPrice, months));
+    public void SetBuyerFilters(string town, string type, int minimum, int maximum, int months) =>
+        mutations.Enqueue(() => ApplyFilter(town, type, minimum, maximum, months));
+    public void ResetFilters() => mutations.Enqueue(() => ApplyFilter("All towns", "All flat types", 0, 1_000_000, 0));
+    public void SelectAddress(string key) => mutations.Enqueue(() => { state.SelectAddress(key); SelectionChanged(); });
+    public void SelectTransaction(string id) => mutations.Enqueue(() => { state.Select(id); SelectionChanged(); });
+    public void SelectAddressAt(int index) => mutations.Enqueue(() => {
+        if (index >= 0 && index < state.Addresses.Count) { state.SelectAddress(state.Addresses[index].Key); SelectionChanged(); }
+    });
+    private void SelectionChanged()
     {
-        state.Select(id);
         MapPoints.Select(SelectedMapKey);
         NotifyPresentation();
-        Notify(nameof(SelectedId), nameof(SelectedMapKey), nameof(SelectionDetails));
-    });
-
-    private void ApplyFilter(string town, int price)
+        NotifySelection();
+    }
+    private void NotifySelection() => Notify(nameof(SelectedId), nameof(SelectedMapKey), nameof(SelectionDetails),
+        nameof(SelectedAddressIndex), nameof(SelectedHeading), nameof(SelectedMetrics), nameof(SelectedLease), nameof(SelectedEvidence),
+        nameof(RecentTransactionsJson), nameof(BuyerStateJson));
+    private void ApplyFilter(string town, string flatType, int minimum, int maximum, int months)
     {
-        if (town == Town && price == MaximumPrice) return;
-        // Validate before opening the Qt model reset transaction.
+        if (town == Town && flatType == FlatType && minimum == MinimumPrice && maximum == MaximumPrice && months == RecencyMonths) return;
         ArgumentException.ThrowIfNullOrWhiteSpace(town);
-        ArgumentOutOfRangeException.ThrowIfNegative(price);
-        if (ScaleGate) LastFilterStartedMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        ArgumentException.ThrowIfNullOrWhiteSpace(flatType);
+        ArgumentOutOfRangeException.ThrowIfNegative(minimum);
+        ArgumentOutOfRangeException.ThrowIfNegative(maximum);
+        if (months is not (0 or 12 or 24)) throw new ArgumentOutOfRangeException(nameof(months));
+        if (ScaleGate || BuyerGate) LastFilterStartedMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         var timer = Stopwatch.StartNew();
         var stage = Stopwatch.StartNew();
         BeginResetModel();
         var listBeginMs = stage.Elapsed.TotalMilliseconds;
         stage.Restart();
         double filterMs;
-        try { state.Filter(town, price); filterMs = stage.Elapsed.TotalMilliseconds; }
+        try { state.Filter(town, flatType, minimum, maximum, months); filterMs = stage.Elapsed.TotalMilliseconds; }
         finally { stage.Restart(); EndResetModel(); }
         var listEndMs = stage.Elapsed.TotalMilliseconds;
-        MapPoints.Replace(state.Visible, SelectedMapKey);
+        MapPoints.Replace(state.MappedAddresses, SelectedMapKey);
         NotifyPresentation();
         var resetMs = timer.Elapsed.TotalMilliseconds;
         stage.Restart();
-        Notify(nameof(Town), nameof(TownIndex), nameof(MaximumPrice), nameof(VisibleCount), nameof(MappedCount), nameof(FirstVisibleId), nameof(FilterSummary),
-            nameof(SelectedId), nameof(SelectedMapKey), nameof(SelectionDetails));
-        if (ScaleGate)
+        Notify(nameof(Town), nameof(TownIndex), nameof(FlatType), nameof(FlatTypeIndex), nameof(MinimumPrice), nameof(MaximumPrice),
+            nameof(RecencyMonths), nameof(VisibleCount), nameof(AddressCount), nameof(MappedCount), nameof(FirstVisibleId), nameof(FirstAddressKey), nameof(FilterSummary));
+        NotifySelection();
+        if (ScaleGate || BuyerGate)
         {
             LastFilterCompletedMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             MapRevision++;
@@ -263,24 +306,28 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
 
     public override ModelIndex Parent(ModelIndex index) => ModelIndex.Empty;
     public override ModelIndex Index(int row, int column, ModelIndex parent) =>
-        parent?.IsValid == true || column != 0 || row < 0 || row >= VisibleCount
+        parent?.IsValid == true || column != 0 || row < 0 || row >= AddressCount
             ? ModelIndex.Empty : new(row, column);
-    public override int RowCount(ModelIndex parent) => parent?.IsValid == true ? 0 : VisibleCount;
+    public override int RowCount(ModelIndex parent) => parent?.IsValid == true ? 0 : AddressCount;
     public override int ColumnCount(ModelIndex parent) => 1;
     public override Dictionary<int, string> RoleNames() => new()
     {
         [256] = "transactionId", [257] = "latitude", [258] = "longitude",
-        [259] = "address", [260] = "priceLabel", [261] = "townName", [262] = "locationLabel"
+        [259] = "address", [260] = "priceLabel", [261] = "townName", [262] = "locationLabel",
+        [263] = "addressKey", [264] = "summaryLabel"
     };
     public override object? Data(ModelIndex index, int role)
     {
-        if (index is not { IsValid: true } || index.Row < 0 || index.Row >= VisibleCount) return null;
+        if (index is not { IsValid: true } || index.Row < 0 || index.Row >= AddressCount) return null;
         if (startupProfile is not null) startupRoleReads++;
-        var t = state.Visible[index.Row];
+        var b = state.Addresses[index.Row];
+        var t = b.Latest;
         return role switch
         {
             256 => t.Id, 257 => t.Location.Point?.Latitude, 258 => t.Location.Point?.Longitude,
-            259 => t.Address, 260 => Money(t.Price), 261 => t.Town, 262 => $"Identity: {t.Match.Quality}\nCoordinates: {t.Location.Quality}", _ => null
+            259 => t.Address, 260 => Money(b.MedianPrice), 261 => t.Town,
+            262 => $"Identity: {string.Join(", ", b.MatchQualities)} · Coordinates: {string.Join(", ", b.CoordinateQualities)}",
+            263 => b.Key, 264 => $"{b.Count:N0} sales · median {Money(b.MedianPrice)}\n{string.Join(", ", b.FlatTypes)} · latest {b.Latest.Facts.Month}", _ => null
         };
     }
 }

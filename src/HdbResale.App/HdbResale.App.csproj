@@ -2,6 +2,11 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
+    <Version>0.1.0</Version>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+    <Product>HDB Resale Explorer</Product>
+    <Description>Independent offline-first HDB resale research desktop app</Description>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -49,7 +54,9 @@
     <None Include="RuntimeGate.qml"/>
     <None Include="ScaleGate.qml"/>
     <None Include="PresentationGate.qml"/>
+    <None Include="BuyerGate.qml"/>
     <Compile Include="Program.cs" />
+    <Compile Include="BuyerPresentation.cs" />
     <Compile Include="ResaleMapModel.cs" />
     <Compile Include="LocatedMapModel.cs" />
     <Compile Include="MapRowDiff.cs" />

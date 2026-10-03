@@ -58,7 +58,7 @@ Item {
         return targetMap.mapItems.length === expected.length
     }
     function ready(rows, mapped) {
-        const complete = attributionImage.status === Image.Ready && Resales.visibleCount === rows && targetList.count === rows
+        const complete = attributionImage.status === Image.Ready && Resales.visibleCount === rows && targetList.count === Resales.addressCount
             && Resales.mappedCount === mapped && targetMap.mapItems.length === Resales.presentationCount
             && Resales.mapViewportReady && !targetMap.viewportPending
             && Math.abs(Resales.mapViewportLatitude-targetMap.center.latitude)<1e-10
@@ -125,11 +125,11 @@ Item {
             if (!retainedSelectedItem) return
             if (!advance("selected-in-town")) return; Resales.setMaximumPrice(500000); break
         case 3:
-            if (!ready(Resales.gateBudgetCount, Resales.gateBudgetMapped) || Resales.selectedId !== "" || Resales.selectedMapKey !== "") return
+            if (!ready(Resales.gateBudgetCount, Resales.gateBudgetMapped) || Resales.selectedId === "" || Resales.selectedId === chosen || Resales.selectedMapKey !== Resales.gateRetainedSelectionKey) return
             let retained=false
-            for (const item of targetMap.mapItems) if (item.mapKey === Resales.gateRetainedSelectionKey && item === retainedSelectedItem && item.z === 0) retained=true
+            for (const item of targetMap.mapItems) if (item.mapKey === Resales.gateRetainedSelectionKey && item === retainedSelectedItem && item.z === 1) retained=true
             if (!retained) return
-            if (!advance("hidden-transaction-cleared")) return;
+            if (!advance("hidden-transaction-address-retained")) return;
             Resales.resetFilters(); targetMap.center=QtPositioning.coordinate(1.3521,103.8198); targetMap.zoomLevel=11; break
         case 4:
             if (!ready(Resales.gateInitialCount, Resales.gateInitialMapped)) return

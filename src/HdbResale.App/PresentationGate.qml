@@ -84,7 +84,7 @@ Item {
     function ready(rows,mapped) {
         if (!targetMap.mapReady || targetMap.viewportPending || !Resales.mapViewportReady
             || attributionImage.status !== Image.Ready || targetMap.error !== Map.NoError
-            || Resales.visibleCount !== rows || targetList.count !== rows || Resales.mappedCount !== mapped
+            || Resales.visibleCount !== rows || targetList.count !== Resales.addressCount || Resales.mappedCount !== mapped
             || targetMap.mapItems.length !== Resales.presentationCount
             || Math.abs(Resales.mapViewportLatitude-targetMap.center.latitude)>1e-10
             || Math.abs(Resales.mapViewportLongitude-targetMap.center.longitude)>1e-10

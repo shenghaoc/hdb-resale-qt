@@ -19,9 +19,9 @@ public sealed class LocatedMapModel : Model
     internal long StartupRoleReads { get; private set; }
     private readonly bool startupProfile = Environment.GetEnvironmentVariable("HDB_STARTUP_PROFILE") == "1";
     private readonly bool trace = Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1";
-    internal LocatedMapModel(IReadOnlyList<ResaleTransaction> transactions, Action<string>? stage = null)
+    internal LocatedMapModel(IReadOnlyList<BlockSummary> addresses, Action<string>? stage = null)
     {
-        summaries = BlockSummaries.Located(transactions);
+        summaries = addresses;
         stage?.Invoke("map-aggregation");
         plan = MapPresentation.Plan(summaries, viewport, selectedKey);
         rows.AddRange(plan.Rows);
@@ -37,10 +37,10 @@ public sealed class LocatedMapModel : Model
     internal long RemovedCount { get; private set; }
     internal IReadOnlyList<BlockSummary> Summaries => summaries;
     internal MapViewport? Viewport => viewport;
-    internal void Replace(IReadOnlyList<ResaleTransaction> transactions, string selection)
+    internal void Replace(IReadOnlyList<BlockSummary> addresses, string selection)
     {
         var timer = Stopwatch.StartNew();
-        summaries = BlockSummaries.Located(transactions);
+        summaries = addresses;
         var aggregateMs = timer.Elapsed.TotalMilliseconds;
         selectedKey = selection;
         Refresh(aggregateMs, "filter");

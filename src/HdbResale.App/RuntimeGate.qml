@@ -15,7 +15,7 @@ Item {
     property double phaseStarted: Date.now()
     visible: false
     function rows(count) {
-        return Resales.visibleCount === count && targetList.count === count
+        return Resales.visibleCount === count && targetList.count === Resales.addressCount
             && Resales.mappedCount === count && targetMap.mapItems.length === Resales.presentationCount
             && Resales.mapViewportReady && !targetMap.viewportPending
             && townControl.currentIndex === Resales.townIndex

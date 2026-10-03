@@ -5,7 +5,7 @@ from pathlib import Path
 from native_gate import FORBIDDEN
 STEPS=['loaded','filtered','budget-filtered','selected','empty-cleared','reset','zoomed','panned','recentered','all-prices']
 EXTENDED_STEPS=['loaded','full','subset','different','empty','reset','full-restored','selected','hidden-selection-cleared','full-again','repeat-subset','repeat-different','repeat-full','zoomed','panned','recentered']
-REENTRANT_STEPS=['loaded','selected-retained-address','selected-in-town','hidden-transaction-cleared','reset','selected-for-burst','reentrant-burst-drained','final-reset']
+REENTRANT_STEPS=['loaded','selected-retained-address','selected-in-town','hidden-transaction-address-retained','reset','selected-for-burst','reentrant-burst-drained','final-reset']
 def verify(code, output, extended=False, reentrant=False):
  if code or FORBIDDEN.search(output):raise RuntimeError(output)
  if re.findall(r'HDB_SCALE_STEP ([a-z-]+)',output)!=(REENTRANT_STEPS if reentrant else EXTENDED_STEPS if extended else STEPS) or output.count('HDB_SCALE_PASS')!=1 or output.count('HDB_GATE_EXIT')!=1:raise RuntimeError('Incomplete scale transitions: '+output)

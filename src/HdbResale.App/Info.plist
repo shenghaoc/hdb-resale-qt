@@ -3,8 +3,9 @@
 <plist version="1.0"><dict>
 <key>CFBundleExecutable</key><string>HdbResale.App</string>
 <key>CFBundleIdentifier</key><string>io.github.shenghaoc.hdb-resale-qt</string>
-<key>CFBundleName</key><string>HDB Resale</string>
+<key>CFBundleName</key><string>HDB Resale Explorer</string>
 <key>CFBundlePackageType</key><string>APPL</string>
-<key>CFBundleVersion</key><string>1</string>
+<key>CFBundleVersion</key><string>0.1.0</string>
+<key>CFBundleShortVersionString</key><string>0.1.0</string>
 <key>NSHighResolutionCapable</key><true/>
 </dict></plist>
