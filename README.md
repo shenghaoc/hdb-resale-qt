@@ -1,7 +1,7 @@
 # HDB resale native fixture explorer
 
-Milestone 4: a runnable native slice with a reproducible bounded coverage study
-and automated native interaction gate, verified on macOS
+Milestone 5: a runnable native slice with a reproducible bounded coverage study,
+verified historical first-result postal experiment and native interaction gate on macOS
 arm64. This is the C#/Qt sibling of the
 [web HDB resale visualizer](https://github.com/shenghaoc/hdb-resale-visualizer);
 the web project is a product and behavior reference, not a translated frontend.

@@ -1,3 +1,21 @@
+# Milestone5 final history/publication check — 2026-10-03
+
+[Reachable-history audit](coverage/onemap/historical/history-audit.md) examined all
+11implementation commits/122unique blobs/72paths at1eaeca0. No raw export,cached
+coordinate pairs,cached display-name fields or live secrets found. Name-literal
+collision was legitimate frozen HDB street/search text. Historical projections
+all pass minimized field whitelist. Former843df64 is unreachable from finalHEAD
+and known origin refs;local dangling object retained per user,no cleanup/rewrite.
+
+Latest user directs publication to origin/main only after the already-passing
+revised audit/build/test/native checks. No further milestone branch push. Final
+documentation-only commit and live remote state rechecked before --ff-only main
+update; actual publication success must be confirmed by command results and
+localmain/originmain/GitHub defaultHEAD equality. Earlier rejected calls below
+are historical records,not the current requested target.
+
+---
+
 # Milestone5 revised acceptance audit — 2026-10-03
 
 Final root Debug/Release builds succeeded with0warnings/errors;40C#tests passed

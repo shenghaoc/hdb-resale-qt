@@ -4,7 +4,7 @@ A later user-supplied [historical cache experiment](historical/README.md) is ver
 
 This branch implements offline comparison and a user-run Search acquisition tool.
 **No real OneMap requests or responses have been acquired.** The task executor has
-no `ONEMAP_ACCESS_TOKEN`. No fresh-API before/after coverage or audit is claimed; historical results are separate. Main remains the completed milestone 4.
+no `ONEMAP_ACCESS_TOKEN`. No fresh-API before/after coverage or audit is claimed; historical results are separate. The historical experiment meets the revised local acceptance audit; fresh exhaustive Search remains separate.
 
 ## Frozen scope
 
