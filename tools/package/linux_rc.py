@@ -75,6 +75,19 @@ def validate_output(output: Path, root: Path = ROOT) -> None:
         raise ValueError("Output already exists; choose a new directory (nothing is deleted)")
 
 
+def configure_app_local_icu(package: Path) -> None:
+    """Configure only staged files; never alter host libraries or globalization."""
+    runtime_dir = package / "dotnet/shared/Microsoft.NETCore.App/10.0.12"
+    for name in ("libicudata.so.73", "libicuuc.so.73", "libicui18n.so.73"):
+        target = package / "qt/lib" / name
+        target.resolve(strict=True)
+        (runtime_dir / name).symlink_to(os.path.relpath(target, runtime_dir))
+    runtime_config = package / "app/HdbResale.App.runtimeconfig.json"
+    config = json.loads(runtime_config.read_text())
+    config["runtimeOptions"].setdefault("configProperties", {})["System.Globalization.AppLocalIcu"] = "73"
+    runtime_config.write_text(json.dumps(config, indent=2) + "\n")
+
+
 def stage(args: argparse.Namespace) -> Path:
     output = args.output.resolve()
     validate_output(output)
@@ -101,7 +114,8 @@ def stage(args: argparse.Namespace) -> Path:
     output.mkdir(parents=True)
     package = output / ("hdb-resale-explorer-" + args.version + "-linux-x64-private-rc")
     app = package / "app"
-    for name in ("HdbResale.App", "HdbResale.App.deps.json", "HdbResale.App.runtimeconfig.json"):
+    for name in ("HdbResale.App", "HdbResale.App.deps.json", "HdbResale.App.runtimeconfig.json",
+                 "qt_bridge_metadata.json"):
         copy(build / name, app / name)
     for source in sorted(build.glob("*.dll")):
         copy(source, app / source.name)
@@ -173,6 +187,10 @@ def stage(args: argparse.Namespace) -> Path:
         for source in sorted((dotnet / relative).rglob("*")):
             if source.is_file():
                 copy(source, package / "dotnet" / source.relative_to(dotnet))
+    # .NET otherwise chooses the newest system ICU independently of Qt's ICU.
+    # App-local mode fails closed instead of falling back to a host installation.
+    # CoreLib's native probing directory is the bundled framework directory.
+    configure_app_local_icu(package)
     licenses = package / "licenses"
     for name in ("LICENSE.txt", "ThirdPartyNotices.txt"):
         copy(dotnet / name, licenses / ("dotnet-" + name))
@@ -252,6 +270,8 @@ exec "$here/app/HdbResale.App" "$@"
         "application_license": application_license,
         "scope": "private local Linux x64 RC; system ABI/graphics/X11 dependencies remain",
         "qt": "6.12.0", "bridge": "0.4.0-beta", "dotnet_runtime": "10.0.12",
+        "packaging_runtime_overrides": {"System.Globalization.AppLocalIcu": "73",
+            "icu_source": "Unmodified ICU 73.2 runtime from the pinned official Qt archive"},
         "source_commit": run("git", "-C", str(ROOT), "rev-parse", "HEAD").strip(),
         "source_dirty": bool(run("git", "-C", str(ROOT), "status", "--porcelain").strip()),
         "source_files_sha256": {

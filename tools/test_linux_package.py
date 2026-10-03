@@ -16,6 +16,26 @@ launch = load("launch_check")
 
 
 class PackageChecks(unittest.TestCase):
+    def test_app_local_icu_uses_only_relative_internal_links(self):
+        import json
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "qt/lib").mkdir(parents=True)
+            (root / "app").mkdir()
+            runtime = root / "dotnet/shared/Microsoft.NETCore.App/10.0.12"
+            runtime.mkdir(parents=True)
+            for name in ("libicudata.so.73", "libicuuc.so.73", "libicui18n.so.73"):
+                (root / "qt/lib" / name).write_bytes(b"unchanged-runtime")
+            config = root / "app/HdbResale.App.runtimeconfig.json"
+            config.write_text('{"runtimeOptions":{"framework":{"version":"10.0.0"}}}')
+            package.configure_app_local_icu(root)
+            self.assertEqual(json.loads(config.read_text())["runtimeOptions"]["configProperties"]["System.Globalization.AppLocalIcu"], "73")
+            for link in runtime.iterdir():
+                self.assertTrue(link.is_symlink())
+                self.assertFalse(link.readlink().is_absolute())
+                self.assertTrue(link.resolve().is_relative_to(root / "qt/lib"))
+                self.assertEqual(link.read_bytes(), b"unchanged-runtime")
+
     def test_environment_excludes_developer_state(self):
         result = launch.clean_environment({"DISPLAY": ":0", "PATH": "/private/sdk", "LD_LIBRARY_PATH": "/qt",
                     "DOTNET_ROOT": "/sdk", "QML_IMPORT_PATH": "/qml", "HDB_DATA_DIRECTORY": "/private-data"}, Path("/tmp/fresh"))

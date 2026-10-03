@@ -26,7 +26,7 @@ FAILURES = re.compile(
     r"Unable to assign|Cannot assign|Cannot read property|Unhandled exception|"
     r"HDB_PACKAGE_FAIL|HDB_PACKAGE_TIMEOUT|Error calling dotnet|Error loading library|"
     r"(?:No|Only prerelease) .*\.NET runtime|No functional TLS backend|"
-    r"TLS initialization failed|ASSERT|Aborted", re.I)
+    r"TLS initialization failed|Error loading metadata file|Failed to load app-local ICU|ASSERT|Aborted", re.I)
 KEEP = ("DISPLAY", "XAUTHORITY", "XDG_RUNTIME_DIR", "DBUS_SESSION_BUS_ADDRESS",
         "XDG_SESSION_TYPE", "USER", "LOGNAME", "LANG", "LC_ALL")
 
@@ -55,8 +55,9 @@ def verify(code: int, log: str, mapped: set[str], package: Path) -> None:
     if observed != list(MARKERS):
         raise ValueError("Missing, duplicated or out-of-order readiness/exit markers: " + repr(observed))
     relevant = [p for p in mapped if re.search(r"/(?:libQt6[^/]*|libicu[^/]*|libcoreclr\.so|libhostfxr\.so|libqtgeoservices_osm\.so)$", p)]
-    if any(not Path(p).is_relative_to(package) for p in relevant):
-        raise ValueError("Qt/ICU/.NET/OSM library loaded from outside the package")
+    escaped = [p for p in relevant if not Path(p).is_relative_to(package)]
+    if escaped:
+        raise ValueError("Qt/ICU/.NET/OSM library loaded from outside the package: " + repr(escaped))
     for required in ("libQt6Core.so", "libcoreclr.so", "libqtgeoservices_osm.so", "libQt6Graphs.so"):
         if not any(required in p for p in relevant):
             raise ValueError("No mapped-library evidence for " + required)
@@ -105,7 +106,13 @@ def check(package: Path, log_path: Path, report_path: Path, timeout: float) -> d
                 if child.poll() is None:
                     child.kill()
                     child.wait()
-        verify(code, log_path.read_text(errors="replace"), mapped, package)
+        try:
+            verify(code, log_path.read_text(errors="replace"), mapped, package)
+        except ValueError as error:
+            report_path.parent.mkdir(parents=True, exist_ok=True)
+            report_path.write_text(json.dumps({"passed": False, "package": str(package),
+                "exit_code": code, "reason": str(error), "mapped_libraries": sorted(mapped)}, indent=2) + "\n")
+            raise
     report = {"passed": True, "package": str(package), "elapsed_seconds": round(time.monotonic() - started, 3),
               "exit_code": code, "markers": list(MARKERS), "fresh_home_and_xdg": True,
               "clean_loader_environment": True, "unrelated_working_directory": True,

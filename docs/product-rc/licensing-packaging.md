@@ -161,6 +161,18 @@ inside the package to satisfy that Qt build. No obsolete ICU is installed
 globally, no system package is upgraded, and no old MapLibre binary is used.
 The application uses Qt Location's OSM plugin with OneMap raster tiles.
 
+The first relocated launch reached every readiness marker and exited 0, but
+the strict library-isolation check rejected .NET's independent loading of
+system ICU 76.1. The package now configures `System.Globalization.AppLocalIcu`
+as `73` in its **staged** runtimeconfig and provides relative internal links
+from the bundled framework's native probing directory to Qt's unmodified ICU
+73.2 files. This documented app-local mode fails if its configured ICU is
+missing, rather than silently falling back. The source application's runtime
+configuration and system installation are unchanged. The staging allowlist
+also includes Bridge's `qt_bridge_metadata.json`; its missing-file warning
+is now a launch failure. See Microsoft's
+[ICU/globalization guidance](https://learn.microsoft.com/en-us/dotnet/core/extensions/globalization-icu).
+
 The runtime still needs the host's compatible glibc/libstdc++, X11/XCB,
 xkbcommon, font/fontconfig/freetype, DBus/glib, OpenGL/EGL/graphics drivers,
 OpenSSL 3 with CA certificates, compression and other transitive system
