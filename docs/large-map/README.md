@@ -73,10 +73,9 @@ the explicit QML wrapper lifetime anchor. Its viewport submissions coalesce into
 one pending event-loop callback reading the latest camera, without sleeps;
 mutations then use the existing UI-thread FIFO queue.
 
-The next comparison is an isolated, serious MapLibre Native Qt source build and
-one-source/style-layer renderer using the same 7,618 points. No renderer
-migration is preselected or claimed here. The final decision and exact-source
-acceptance will be added after those measurements and independent review.
+The subsequent comparison used an isolated, serious MapLibre Native Qt source build and
+one-source/style-layer renderer with the same 7,618 points. Its measured outcome,
+architecture decision and final exact-source verification appear below.
 
 ## Independently checked B candidate
 
@@ -145,3 +144,7 @@ has one projection path, avoiding an untested alternate mode that could call an
 offscreen selection “in view.” The existing reset diagnostic remains. The full
 final root build/test/native matrix and physical Release check run on this
 cleaned source, not on an earlier copied candidate runtime.
+
+
+[Final Linux verification](native/README.md) records the root builds/tests, unchanged
+coverage/digest, complete native matrix, startup/memory observations and limits.
