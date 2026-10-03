@@ -1,0 +1,123 @@
+{
+  "Algorithm": "hdb-m9-address-coverage-v1",
+  "BaselineCommit": "a27657099623c211bf207e1e4cc4b057ead4c953",
+  "ReportSha256": "dfbf1b409e7b42a848e3767ee583b95e4bd8fd16332deafd6041ce4342971750",
+  "FootprintsSha256": "7c987511548de3a82da403cabca02702031e02ade8703a9e401417883dfeb702",
+  "Summary": {
+    "Addresses": 9755,
+    "Transactions": 241920,
+    "MatchQuality": {
+      "Ambiguous": {
+        "Addresses": 3,
+        "Transactions": 63
+      },
+      "ExactAddress": {
+        "Addresses": 682,
+        "Transactions": 22234
+      },
+      "NormalizedAddress": {
+        "Addresses": 1239,
+        "Transactions": 30280
+      },
+      "Unmatched": {
+        "Addresses": 7831,
+        "Transactions": 189343
+      }
+    },
+    "CoordinateQuality": {
+      "BlockApproximation": {
+        "Addresses": 1921,
+        "Transactions": 52514
+      },
+      "Missing": {
+        "Addresses": 7834,
+        "Transactions": 189406
+      }
+    },
+    "StrongestReason": {
+      "ConflictingPostals": {
+        "Addresses": 3,
+        "Transactions": 63
+      },
+      "Matched": {
+        "Addresses": 1921,
+        "Transactions": 52514
+      },
+      "NoPostalAssertionUnderCurrentNormalization": {
+        "Addresses": 7828,
+        "Transactions": 189278
+      },
+      "NoPropertyUnderCurrentNormalization": {
+        "Addresses": 1,
+        "Transactions": 3
+      },
+      "SourceFootprintRejectedNonpositiveEntityId": {
+        "Addresses": 1,
+        "Transactions": 26
+      },
+      "SourceFootprintUnsupportedMultiPolygon": {
+        "Addresses": 1,
+        "Transactions": 36
+      }
+    }
+  },
+  "FailureInventorySha256": "320e052d7cb87f69d97e5569113f4acf9e535489d52eee6583080bedd7816d8c",
+  "Diagnostics": [
+    {
+      "File": "building-evidence.geojson",
+      "Row": 2659,
+      "Message": "Expected Polygon with an exterior ring of at least four positions."
+    },
+    {
+      "File": "building-evidence.geojson",
+      "Row": 2684,
+      "Message": "Expected Polygon with an exterior ring of at least four positions."
+    },
+    {
+      "File": "building-evidence.geojson",
+      "Row": 4595,
+      "Message": "Expected Polygon with an exterior ring of at least four positions."
+    },
+    {
+      "File": "building-evidence.geojson",
+      "Row": 4951,
+      "Message": "Expected Polygon with an exterior ring of at least four positions."
+    },
+    {
+      "File": "building-evidence.geojson",
+      "Row": 5349,
+      "Message": "Expected Polygon with an exterior ring of at least four positions."
+    },
+    {
+      "File": "building-evidence.geojson",
+      "Row": 5943,
+      "Message": "Expected Polygon with an exterior ring of at least four positions."
+    },
+    {
+      "File": "building-evidence.geojson",
+      "Row": 8384,
+      "Message": "Footprint OBJECTID, ENTITYID, block and six-digit postal code are required."
+    },
+    {
+      "File": "building-evidence.geojson",
+      "Row": 8427,
+      "Message": "Expected Polygon with an exterior ring of at least four positions."
+    },
+    {
+      "File": "building-evidence.geojson",
+      "Row": 10207,
+      "Message": "Expected Polygon with an exterior ring of at least four positions."
+    },
+    {
+      "File": "building-evidence.geojson",
+      "Row": 10246,
+      "Message": "Expected Polygon with an exterior ring of at least four positions."
+    },
+    {
+      "File": "building-evidence.geojson",
+      "Row": 11283,
+      "Message": "Expected Polygon with an exterior ring of at least four positions."
+    }
+  ],
+  "ReasonPrecedence": "Runtime property, postal conflict/corroboration, footprint multiplicity/geometry; failed footprint additionally classified by exact block+asserted postal in the complete source. No evidence guessed from block alone."
+}

@@ -7,6 +7,11 @@ internal static class Program
 {
     private static void Main(string[] args)
     {
+        if (args.Length == 3 && args[0] == "--address-coverage")
+        {
+            WriteReport(args[2], AddressCoverageStudy.Run(args[1]));
+            return;
+        }
         if (args.Length == 3 && args[0] == "--coverage")
         {
             var report = CoverageStudy.Summarize(CsvImport.LoadDirectory(args[1]));
