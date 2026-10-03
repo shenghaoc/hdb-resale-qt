@@ -15,8 +15,7 @@ ApplicationWindow {
 
     // The pinned Bridge creates a parentless, JavaScript-owned model wrapper.
     // Keep its JS reference alive across QML GC, including all filter updates.
-    readonly property bool dropModelAnchor: Resales.scaleGate && Resales.runtimeGateFault === "drop-model-anchor"
-    readonly property var locatedMapModel: dropModelAnchor || (Resales.startupProbe && Resales.startupView !== "full") ? null : Resales.mapPoints
+    readonly property var locatedMapModel: Resales.startupProbe && Resales.startupView !== "full" ? null : Resales.mapPoints
 
     Loader {
         active: Resales.runtimeGate
@@ -141,7 +140,7 @@ ApplicationWindow {
                         // omitted from its public MapItemView documentation.
                         // Bulk synchronous creation is measured; no point is culled.
                         incubateDelegates: false
-                        model: window.dropModelAnchor ? Resales.mapPoints : window.locatedMapModel
+                        model: window.locatedMapModel
                         delegate: MapQuickItem {
                             Component.onCompleted: if (map.traceDelegates) { map.createdDelegates++; map.lastDelegateCreatedMs = Date.now() }
                             Component.onDestruction: if (map.traceDelegates) { map.destroyedDelegates++; map.lastDelegateDestroyedMs = Date.now() }

@@ -75,7 +75,7 @@ Item {
     }
     function failDeadline(elapsed) {
         console.error("HDB_GATE_FAIL scale phase " + phase + " elapsed-ms=" + elapsed
-            + " budget-ms=" + (Resales.scaleMeasurement ? 10000 : 5000)
+            + " budget-ms=" + ((Resales.scaleMeasurement || Resales.scaleExpandedCoverage) ? 10000 : 5000)
             + " mapReady=" + targetMap.mapReady + " mapError=" + targetMap.error
             + " rows=" + Resales.visibleCount + " list=" + targetList.count
             + " delegates=" + targetMap.mapItems.length + " expected=" + Resales.mappedCount
@@ -88,7 +88,7 @@ Item {
         // Callback-entry checks alone miss synchronous work or a costly identity
         // scan. Include completed validation/snapshot work in every phase budget.
         const elapsed = Date.now()-started
-        if (elapsed > (Resales.scaleMeasurement ? 10000 : 5000)) { failDeadline(elapsed); return false }
+        if (elapsed > ((Resales.scaleMeasurement || Resales.scaleExpandedCoverage) ? 10000 : 5000)) { failDeadline(elapsed); return false }
         console.log("HDB_SCALE_STEP " + name + " ms=" + elapsed
             + " rows=" + Resales.visibleCount + " delegates=" + targetMap.mapItems.length
             + " created=" + (targetMap.createdDelegates-priorCreated)
@@ -96,7 +96,7 @@ Item {
             + " last-create-ms=" + (targetMap.lastDelegateCreatedMs >= started ? targetMap.lastDelegateCreatedMs-started : -1)
             + " last-destroy-ms=" + (targetMap.lastDelegateDestroyedMs >= started ? targetMap.lastDelegateDestroyedMs-started : -1)
             + " observed-ms=" + (observedMs >= started ? observedMs-started : -1))
-        if (Date.now()-started > (Resales.scaleMeasurement ? 10000 : 5000)) { failDeadline(Date.now()-started); return false }
+        if (Date.now()-started > ((Resales.scaleMeasurement || Resales.scaleExpandedCoverage) ? 10000 : 5000)) { failDeadline(Date.now()-started); return false }
         priorItems=snapshot
         priorCreated=targetMap.createdDelegates; priorDestroyed=targetMap.destroyedDelegates
         phase++; started=Date.now()
@@ -207,7 +207,7 @@ Item {
         id: gateTimer
         interval: 25; repeat: true; running: true
         onTriggered: {
-            if (Date.now()-started > (Resales.scaleMeasurement ? 10000 : 5000)) {
+            if (Date.now()-started > ((Resales.scaleMeasurement || Resales.scaleExpandedCoverage) ? 10000 : 5000)) {
                 failDeadline(Date.now()-started); return
             }
             if (Resales.scaleReentrant) { if (reentrantStep()) { stop(); Qt.quit() }; return }

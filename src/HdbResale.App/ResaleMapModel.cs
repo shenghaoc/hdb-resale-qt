@@ -112,6 +112,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public int GateMaximumQueuedMutations => mutations.MaximumPendingCount;
     public bool ScaleTransitions => ScaleGate && Environment.GetEnvironmentVariable("HDB_MAP_TRANSITIONS") == "1";
     public bool ScaleLifecycle => ScaleGate && Environment.GetEnvironmentVariable("HDB_MAP_LIFECYCLE") != "0";
+    public bool ScaleExpandedCoverage => ScaleGate && Environment.GetEnvironmentVariable("HDB_SCALE_EXPANDED_COVERAGE") == "1";
     public bool ScaleMeasurement => ScaleGate && Environment.GetEnvironmentVariable("HDB_MAP_MEASUREMENT") == "1";
     public bool ScaleHeap => ScaleGate && Environment.GetEnvironmentVariable("HDB_SCALE_HEAP") == "1";
     public void MeasureScaleHeap()

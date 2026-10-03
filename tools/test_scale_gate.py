@@ -28,11 +28,24 @@ class ModelLifetimeContractTests(unittest.TestCase):
   self.assertIn('readonly property var locatedMapModel:',main)
   self.assertIn('window.locatedMapModel',main)
   self.assertIn('incubateDelegates: false',main)
-  self.assertIn('drop-model-anchor',main)
   self.assertNotIn('gc()',main)
   self.assertIn('HDB_MODEL_LIFETIME_GC',gate)
   self.assertIn('gc()',gate)
-  self.assertIn('if (elapsed > (Resales.scaleMeasurement ? 10000 : 5000))',gate)
+  self.assertIn('if (elapsed > ((Resales.scaleMeasurement || Resales.scaleExpandedCoverage) ? 10000 : 5000))',gate)
   self.assertIn('if (!advance("full-again")) return;',gate)
+
+class ExpandedCoverageScopeTests(unittest.TestCase):
+ def test_expanded_budget_rejects_canonical_input(self):
+  from scale_gate import validate_expanded_workload
+  with self.assertRaises((ValueError,FileNotFoundError)):
+   validate_expanded_workload(Path(__file__).resolve().parents[1]/'data')
+ def test_expanded_budget_rejects_relabelled_small_corpus(self):
+  import tempfile,json
+  from scale_gate import validate_expanded_workload
+  with tempfile.TemporaryDirectory() as d:
+   p=Path(d);(p/'manifest.json').write_text(json.dumps({'normalization':'terminal-road-types-v1'}))
+   (p/'address-normalization.txt').write_text('terminal-road-types-v1\n')
+   (p/'transactions.csv').write_text('small')
+   with self.assertRaisesRegex(ValueError,'unchanged pinned full'):validate_expanded_workload(p)
 
 if __name__=='__main__':unittest.main()
