@@ -16,7 +16,7 @@ public sealed record ImportResult(IReadOnlyList<ResaleTransaction> Accepted,
 public static class CsvImport
 {
     private sealed record CsvRow(long Number, Dictionary<string, string> Fields, string[] Raw);
-    public static ImportResult LoadDirectory(string directory, IReadOnlyDictionary<string, OneMapSearch>? oneMapSearches = null, string? buildingEvidencePath = null)
+    public static ImportResult LoadDirectory(string directory, IReadOnlyDictionary<string, OneMapSearch>? oneMapSearches = null, string? buildingEvidencePath = null, IReadOnlyDictionary<string, HistoricalPostalAssertion>? historicalAssertions = null)
     {
         var rejected = new List<RejectedRecord>();
         var diagnostics = new List<ImportDiagnostic>();
@@ -60,7 +60,9 @@ public static class CsvImport
                 var facts = new TransactionFacts(month!, f["town"], f["block"], f["street_name"], f["flat_type"], price);
                 OneMapSearch? search = null;
                 oneMapSearches?.TryGetValue(OneMapEvidence.AddressKey(facts.Block,facts.Street), out search);
-                var match = AddressMatcher.Match(facts, properties, postalAddresses, footprints, search);
+                HistoricalPostalAssertion? historical = null;
+                historicalAssertions?.TryGetValue(HistoricalOneMap.Key(facts),out historical);
+                var match = AddressMatcher.Match(facts, properties, postalAddresses, footprints, search, historical);
                 var location = match.MatchedFootprint?.Location ?? new DerivedLocation(null, CoordinateQuality.Missing, match.Reason);
                 accepted.Add(new("HDB-" + sourceRow, facts, location, match));
             }

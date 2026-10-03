@@ -18,9 +18,7 @@ and map navigation. Changing a filter resets the bridge model, so both
 `MapItemView` markers and the transaction list update. Selection is retained
 while visible and cleared when its transaction is filtered out.
 
-Milestone 5 development branch adds an offline OneMap evidence study and a
-user-run acquisition tool. **Real acquisition is blocked by missing authentication;
-M5 is not complete.** See [scope, legal review and acquisition command](docs/coverage/onemap/README.md).
+Milestone5 local work adds a verified [historical first-hit cache experiment](docs/coverage/onemap/historical/README.md) on the unchanged benchmark. Its410experimental HDB-footprint points depend on explicitly weaker cached postal assertions, not exhaustive candidate evidence. Fresh Search tooling is separate. Only a minimized benchmark projection is included; the full export and display names remain private.
 
 ## Verified toolchain (macOS arm64)
 

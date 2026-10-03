@@ -32,7 +32,8 @@ public static class CoverageStudy
             return CoverageReason.OneMapCandidateConflict;
         if (m.OneMap?.Postal is { } postal && m.PostalAssertions.Any(p => p.PostalCode != postal))
             return CoverageReason.CrossSourcePostalConflict;
-        if (m.PostalAssertions.Count == 0 && m.OneMap?.Postal is null) return CoverageReason.MissingPostalCorroboration;
+        if (m.HistoricalOneMap is { } h && HistoricalOneMap.Usable(row.Facts,h) && m.PostalAssertions.Any(p=>p.PostalCode!=h.Postal)) return CoverageReason.CrossSourcePostalConflict;
+        if (m.PostalAssertions.Count == 0 && m.OneMap?.Postal is null && !(m.HistoricalOneMap is { } historical && HistoricalOneMap.Usable(row.Facts,historical))) return CoverageReason.MissingPostalCorroboration;
         if (m.FootprintCandidates.Count == 0) return CoverageReason.MissingFootprint;
         if (m.FootprintCandidates.Count > 1) return CoverageReason.MultipleFootprints;
         return row.Location.Point is null ? CoverageReason.MatchedWithoutGeometry : CoverageReason.Matched;
@@ -42,7 +43,7 @@ public static class CoverageStudy
         var rows = import.Accepted;
         var matches = Enum.GetValues<MatchQuality>().ToDictionary(q => q.ToString(), q => rows.Count(r => r.Match.Quality == q));
         var coordinates = Enum.GetValues<CoordinateQuality>().ToDictionary(q => q.ToString(), q => rows.Count(r => r.Location.Quality == q));
-        var reasons = Enum.GetValues<CoverageReason>().Where(q => rows.Any(r => r.Match.OneMap is not null) || q <= CoverageReason.MatchedWithoutGeometry).ToDictionary(q => q.ToString(), q => rows.Count(r => Reason(r) == q));
+        var reasons = Enum.GetValues<CoverageReason>().Where(q => rows.Any(r => r.Match.OneMap is not null || r.Match.HistoricalOneMap is not null) || q <= CoverageReason.MatchedWithoutGeometry).ToDictionary(q => q.ToString(), q => rows.Count(r => Reason(r) == q));
         var cells = rows.GroupBy(r => (r.Town, Period: Period(r.Facts.Month), Match: r.Match.Quality.ToString(), Coordinates: r.Location.Quality.ToString()))
             .OrderBy(g => g.Key.Town, StringComparer.Ordinal).ThenBy(g => g.Key.Period, StringComparer.Ordinal)
             .ThenBy(g => g.Key.Match, StringComparer.Ordinal).ThenBy(g => g.Key.Coordinates, StringComparer.Ordinal)

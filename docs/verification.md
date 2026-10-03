@@ -1,3 +1,84 @@
+# Historical milestone5 local verification — 2026-10-03
+
+Later supplied export successfully materialized/read on this Mac with preserved
+Library metadata:1,389,521bytes/10,333rows/seven exact columns/SHA-256
+8daf79156eb574be19815bbe7b6c77c98593230735e71bb192133a9585893ec4.
+Historical source semantics inspected read-only.375/378exact identity hits,
+413/416rows. Explicit weaker experimental view:22Exact/388Normalized/1Ambiguous/
+5Unmatched;410BlockApproximation/6Missing.340changed rows across310identities;
+independent full-source checks passed all340. Original74assertion conflict remains
+Ambiguous. Residual5rows/conflict/tenant-name limitations reviewed; no exhaustive
+candidate or340-address manual ground-truth claim. Raw remains private/unmodified.
+
+Final Debug/Release root builds zero warnings/errors;40C#tests pass each;
+11Python tests pass. Normal native UI and controlled ignored bundle missing-location/
+diagnostic checks below were performed, restored, and final runtime checks repeated.
+An initial public publication call was rejected for missing visible authorization.
+Subsequent transcript evidence confirms explicit authorization of public M5 branch
+publication and a terms-permitted minimized benchmark artifact. Display names were
+removed entirely from the projection/domain record; raw export and cached geometry
+remain private. Final Debug/Release builds/tests were rerun after minimization.
+The single publication retry was rejected: quoted authorization classified
+untrusted; visible do-not-push instruction retained. No further publication or
+main advancement attempted. No live API request occurred.
+Mechanical changed-row audit is not manual per-row
+ground truth; exhaustive candidate evidence is unavailable from the export.
+See [historical procedure and limits](coverage/onemap/historical/README.md).
+
+---
+
+# Milestone 5 blocked checkpoint verification — 2026-10-03
+
+Branch `milestone-5-onemap-evidence`, based on completed public main
+`ce748a6b0c47a461be491926b1596eebca8943e3`. First implementation checkpoint
+`f02c87e` committed and pushed before final native checks. Main is unchanged.
+Toolchain/dependencies unchanged: .NET SDK10.0.401/runtime10.0.12/net10.0,
+Qt6.12.0, Bridge0.4.0.22-beta, CMake4.4.3, Ninja1.13.2, macOS arm64.
+
+Executed root `dotnet build`, `dotnet test`, `dotnet build -c Release`,
+`dotnet test -c Release`: both builds zero warnings/errors, **36 C# tests pass**
+in each configuration. `python3 -m unittest discover -s tools -p 'test_*.py' -v`:
+**9 Python tests pass**. OneMap test records are synthetic UNIT cases only.
+Tests cover identity-only projection, all pages, duplicate/conflicting identity,
+empty versus HTTP200 token errors (including later-page expiry), HTTP429/401/403,
+partial failures, HDB-only coordinates, preserved ACRA contradictions, rejected
+synthetic cache origins, and all-416 empty-response conservation/accounting.
+
+Debug and Release `tools/native_gate.py` passed all ten ordered transitions and
+clean native teardown. Release `HDB_GATE_FAULT=skip-empty` failed state timeout
+phase5 and the harness rejected it. After controlled UI checks, canonical ignored
+bundle files were restored/byte-compared and final Release gate passed again.
+Debug/Release `--coverage` outputs byte-match the unchanged M4 report; regenerated
+C# `--onemap-queries` bytes match the checked-in 378-query manifest. Canonical
+six-row demo files, all frozen study inputs, report, audit and results remain
+unchanged from main.
+
+Normal `dotnet run -c Release --project src/HdbResale.App --no-build` launched a
+real desktop window. CUA screenshot showed Singapore OSM tiles/attribution and
+markers. Real list selection showed HDB/ACRA/footprint evidence; physical price
+input300000 changed6mapped to1 and cleared hidden selection. Reset restored6;
+actual drag/wheel changed center/zoom11→14.3; Singapore restored11/1.3521,103.8198.
+Physical pointer tap on Clementi marker selected461/HDB-382. Only disposable
+ignored Release bundle copies were then changed: null510geometry and one invalid
+price row. Actual UI showed6accepted/6matched,5mapped/1unlocated,1rejected/
+1diagnostic with transactions.csv:8 price error. Real list selection of510 showed
+NormalizedAddress/Missing and original footprint identity with no marker. Source
+fixtures were never changed; bundle copies were restored before final gate.
+
+No credible new Qt Bridge/Location upstream defect, workaround or external bug
+report. Bridge remains beta; Location6.12 Technology Preview deliberate. Linux,
+Windows, pinch and distribution signing/notarization were not run.
+
+**Authentication blocker:** no real OneMap API acquisition occurred. An explicit
+`env -u ONEMAP_ACCESS_TOKEN` missing-token CLI test fails before network/cache;
+offline unit test independently verifies no request/cache creation. No real
+coverage changes, outcome counts, source conflicts or manual OneMap audit can be
+claimed. See [exact user-run acquisition and legal review](coverage/onemap/README.md).
+M5 remains incomplete; main must not be advanced until real acquisition,
+all416comparison and manual audit are completed.
+
+---
+
 # Milestone 4 verification — 2026-10-03
 
 Branch `milestone-4-coverage`, based on fetched public main

@@ -1,9 +1,10 @@
-# Milestone 5 — OneMap evidence acquisition blocked
+# Milestone 5 — fresh Search tooling and historical experiment
+
+A later user-supplied [historical cache experiment](historical/README.md) is verified locally. Token absence did not block that experiment. This page describes the separate fresh Search route.
 
 This branch implements offline comparison and a user-run Search acquisition tool.
 **No real OneMap requests or responses have been acquired.** The task executor has
-no `ONEMAP_ACCESS_TOKEN`. No real before/after coverage, transitions or manual
-OneMap audit is claimed. Main remains the completed milestone 4.
+no `ONEMAP_ACCESS_TOKEN`. No fresh-API before/after coverage or audit is claimed; historical results are separate. Main remains the completed milestone 4.
 
 ## Frozen scope
 

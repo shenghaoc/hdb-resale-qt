@@ -1,0 +1,417 @@
+Id,Town,Month,Block,Street,Before,ExperimentalAfter,Coordinates,CacheKey,CacheStatus,HistoricalPostal,AcraAssertions,AcraPostals,FootprintObjectIds,ChangedMechanicalCheck
+HDB-1431,BUKIT TIMAH,2017-02,5,TOH YI DR,Unmatched,NormalizedAddress,BlockApproximation,bukit-timah-5-toh-yi-dr,HistoricalFirstHit,590005,0,,935743,True
+HDB-3162,KALLANG/WHAMPOA,2017-03,8,JLN BATU,Unmatched,NormalizedAddress,BlockApproximation,kallang-whampoa-8-jln-batu,HistoricalFirstHit,431008,0,,947472,True
+HDB-4754,CLEMENTI,2017-04,116,CLEMENTI ST 13,Unmatched,NormalizedAddress,BlockApproximation,clementi-116-clementi-st-13,HistoricalFirstHit,120116,0,,946863,True
+HDB-5141,MARINE PARADE,2017-04,16,MARINE TER,Unmatched,NormalizedAddress,BlockApproximation,marine-parade-16-marine-ter,HistoricalFirstHit,440016,0,,936459,True
+HDB-5750,TOA PAYOH,2017-04,256,KIM KEAT AVE,Unmatched,NormalizedAddress,BlockApproximation,toa-payoh-256-kim-keat-ave,HistoricalFirstHit,310256,0,,942917,True
+HDB-6769,HOUGANG,2017-05,446,HOUGANG AVE 8,Ambiguous,Ambiguous,Missing,hougang-446-hougang-ave-8,HistoricalFirstHit,530446,74,530446|530836,,False
+HDB-8406,CENTRAL AREA,2017-06,269A,QUEEN ST,Unmatched,NormalizedAddress,BlockApproximation,central-area-269a-queen-st,HistoricalFirstHit,181269,0,,939009,True
+HDB-8913,PASIR RIS,2017-06,1,CHANGI VILLAGE RD,Unmatched,NormalizedAddress,BlockApproximation,pasir-ris-1-changi-village-rd,HistoricalFirstHit,500001,0,,943675,True
+HDB-9149,SEMBAWANG,2017-06,469B,ADMIRALTY DR,Unmatched,NormalizedAddress,BlockApproximation,sembawang-469b-admiralty-dr,HistoricalFirstHit,752469,0,,938877,True
+HDB-9803,ANG MO KIO,2017-07,572,ANG MO KIO AVE 3,NormalizedAddress,NormalizedAddress,BlockApproximation,ang-mo-kio-572-ang-mo-kio-ave-3,HistoricalFirstHit,560572,1,560572,942470,False
+HDB-10022,BUKIT MERAH,2017-07,36,BEO CRES,Unmatched,NormalizedAddress,BlockApproximation,bukit-merah-36-beo-cres,HistoricalFirstHit,160036,0,,942187,True
+HDB-10439,JURONG EAST,2017-07,287C,JURONG EAST ST 21,Unmatched,NormalizedAddress,BlockApproximation,jurong-east-287c-jurong-east-st-21,HistoricalFirstHit,603287,0,,945132,True
+HDB-10544,JURONG WEST,2017-07,648C,JURONG WEST ST 61,Unmatched,NormalizedAddress,BlockApproximation,jurong-west-648c-jurong-west-st-61,HistoricalFirstHit,643648,0,,941459,True
+HDB-11722,BEDOK,2017-08,10D,BEDOK STH AVE 2,Unmatched,NormalizedAddress,BlockApproximation,bedok-10d-bedok-sth-ave-2,HistoricalFirstHit,463010,0,,945536,True
+HDB-12001,CHOA CHU KANG,2017-08,761,CHOA CHU KANG NTH 5,Unmatched,NormalizedAddress,BlockApproximation,choa-chu-kang-761-choa-chu-kang-nth-5,HistoricalFirstHit,680761,0,,937110,True
+HDB-12159,HOUGANG,2017-08,986B,BUANGKOK CRES,Unmatched,NormalizedAddress,BlockApproximation,hougang-986b-buangkok-cres,HistoricalFirstHit,532986,0,,946303,True
+HDB-12588,PUNGGOL,2017-08,602C,PUNGGOL CTRL,Unmatched,NormalizedAddress,BlockApproximation,punggol-602c-punggol-ctrl,HistoricalFirstHit,823602,0,,946674,True
+HDB-13056,TAMPINES,2017-08,270,TAMPINES ST 21,Unmatched,NormalizedAddress,BlockApproximation,tampines-270-tampines-st-21,HistoricalFirstHit,520270,0,,942873,True
+HDB-13575,BEDOK,2017-09,545,BEDOK NTH ST 3,Unmatched,NormalizedAddress,BlockApproximation,bedok-545-bedok-nth-st-3,HistoricalFirstHit,460545,0,,942105,True
+HDB-15592,BUKIT PANJANG,2017-10,607,SENJA RD,Unmatched,NormalizedAddress,BlockApproximation,bukit-panjang-607-senja-rd,HistoricalFirstHit,670607,0,,944408,True
+HDB-15893,JURONG EAST,2017-10,265,TOH GUAN RD,Unmatched,NormalizedAddress,BlockApproximation,jurong-east-265-toh-guan-rd,HistoricalFirstHit,600265,0,,942643,True
+HDB-16889,YISHUN,2017-10,312,YISHUN RING RD,Unmatched,NormalizedAddress,BlockApproximation,yishun-312-yishun-ring-rd,HistoricalFirstHit,760312,0,,944097,True
+HDB-17965,KALLANG/WHAMPOA,2017-11,48,BENDEMEER RD,Unmatched,NormalizedAddress,BlockApproximation,kallang-whampoa-48-bendemeer-rd,HistoricalFirstHit,330048,0,,946980,True
+HDB-18178,QUEENSTOWN,2017-11,83,C'WEALTH CL,Unmatched,Unmatched,Missing,queenstown-83-c-wealth-cl,MissingKey,,0,,,False
+HDB-19745,KALLANG/WHAMPOA,2017-12,106,TOWNER RD,Unmatched,NormalizedAddress,BlockApproximation,kallang-whampoa-106-towner-rd,HistoricalFirstHit,322106,0,,947405,True
+HDB-19838,PUNGGOL,2017-12,613D,PUNGGOL DR,Unmatched,NormalizedAddress,BlockApproximation,punggol-613d-punggol-dr,HistoricalFirstHit,824613,0,,946885,True
+HDB-20561,ANG MO KIO,2018-01,588D,ANG MO KIO ST 52,Unmatched,NormalizedAddress,BlockApproximation,ang-mo-kio-588d-ang-mo-kio-st-52,HistoricalFirstHit,564588,0,,948069,True
+HDB-21071,PASIR RIS,2018-01,760,PASIR RIS ST 71,Unmatched,NormalizedAddress,BlockApproximation,pasir-ris-760-pasir-ris-st-71,HistoricalFirstHit,510760,0,,946470,True
+HDB-22320,QUEENSTOWN,2018-02,50,STRATHMORE AVE,Unmatched,NormalizedAddress,BlockApproximation,queenstown-50-strathmore-ave,HistoricalFirstHit,140050,0,,936355,True
+HDB-22458,SERANGOON,2018-02,8,LOR LEW LIAN,Unmatched,NormalizedAddress,BlockApproximation,serangoon-8-lor-lew-lian,HistoricalFirstHit,531008,0,,944316,True
+HDB-22604,WOODLANDS,2018-02,2,MARSILING DR,Unmatched,NormalizedAddress,BlockApproximation,woodlands-2-marsiling-dr,HistoricalFirstHit,730002,0,,937645,True
+HDB-23235,CENTRAL AREA,2018-03,1G,CANTONMENT RD,Unmatched,NormalizedAddress,BlockApproximation,central-area-1g-cantonment-rd,HistoricalFirstHit,085701,0,,942044,True
+HDB-23706,KALLANG/WHAMPOA,2018-03,6,BEACH RD,Unmatched,NormalizedAddress,BlockApproximation,kallang-whampoa-6-beach-rd,HistoricalFirstHit,190006,0,,944835,True
+HDB-23739,MARINE PARADE,2018-03,31,MARINE CRES,Unmatched,NormalizedAddress,BlockApproximation,marine-parade-31-marine-cres,HistoricalFirstHit,440031,0,,945130,True
+HDB-23947,PUNGGOL,2018-03,181,EDGEFIELD PLAINS,ExactAddress,ExactAddress,BlockApproximation,punggol-181-edgefield-plains,HistoricalFirstHit,820181,3,820181,938118,False
+HDB-24861,BISHAN,2018-04,209,BISHAN ST 23,Unmatched,NormalizedAddress,BlockApproximation,bishan-209-bishan-st-23,HistoricalFirstHit,570209,0,,939667,True
+HDB-28327,BEDOK,2018-06,113,BEDOK NTH ST 2,Unmatched,NormalizedAddress,BlockApproximation,bedok-113-bedok-nth-st-2,HistoricalFirstHit,460113,0,,941340,True
+HDB-28499,BUKIT BATOK,2018-06,416,BT BATOK WEST AVE 4,Unmatched,NormalizedAddress,BlockApproximation,bukit-batok-416-bt-batok-west-ave-4,HistoricalFirstHit,650416,0,,938974,True
+HDB-28699,BUKIT TIMAH,2018-06,4,QUEEN'S RD,Unmatched,NormalizedAddress,BlockApproximation,bukit-timah-4-queen-s-rd,HistoricalFirstHit,260004,0,,940485,True
+HDB-28864,GEYLANG,2018-06,17,EUNOS CRES,Unmatched,NormalizedAddress,BlockApproximation,geylang-17-eunos-cres,HistoricalFirstHit,400017,0,,939207,True
+HDB-29562,SEMBAWANG,2018-06,341B,SEMBAWANG CL,Unmatched,NormalizedAddress,BlockApproximation,sembawang-341b-sembawang-cl,HistoricalFirstHit,752341,0,,942423,True
+HDB-29573,SENGKANG,2018-06,180A,RIVERVALE CRES,Unmatched,NormalizedAddress,BlockApproximation,sengkang-180a-rivervale-cres,HistoricalFirstHit,541180,0,,940628,True
+HDB-29880,TOA PAYOH,2018-06,56,LOR 4 TOA PAYOH,Unmatched,NormalizedAddress,BlockApproximation,toa-payoh-56-lor-4-toa-payoh,HistoricalFirstHit,310056,0,,935875,True
+HDB-30200,ANG MO KIO,2018-07,116,ANG MO KIO AVE 4,NormalizedAddress,NormalizedAddress,BlockApproximation,ang-mo-kio-116-ang-mo-kio-ave-4,HistoricalFirstHit,560116,2,560116,939759,False
+HDB-30584,BUKIT MERAH,2018-07,7,TELOK BLANGAH CRES,Unmatched,NormalizedAddress,BlockApproximation,bukit-merah-7-telok-blangah-cres,HistoricalFirstHit,090007,0,,949025,True
+HDB-30779,BUKIT TIMAH,2018-07,11,TOH YI DR,Unmatched,NormalizedAddress,BlockApproximation,bukit-timah-11-toh-yi-dr,HistoricalFirstHit,590011,0,,935738,True
+HDB-31564,PASIR RIS,2018-07,459,PASIR RIS DR 4,Unmatched,NormalizedAddress,BlockApproximation,pasir-ris-459-pasir-ris-dr-4,HistoricalFirstHit,510459,0,,942479,True
+HDB-31928,SENGKANG,2018-07,430C,FERNVALE LINK,Unmatched,NormalizedAddress,BlockApproximation,sengkang-430c-fernvale-link,HistoricalFirstHit,793430,0,,947040,True
+HDB-32366,TOA PAYOH,2018-07,113,POTONG PASIR AVE 1,NormalizedAddress,NormalizedAddress,BlockApproximation,toa-payoh-113-potong-pasir-ave-1,HistoricalFirstHit,350113,1,350113,941871,False
+HDB-32538,WOODLANDS,2018-07,587,WOODLANDS DR 16,Unmatched,NormalizedAddress,BlockApproximation,woodlands-587-woodlands-dr-16,HistoricalFirstHit,730587,0,,942297,True
+HDB-33206,BUKIT TIMAH,2018-08,10,TOH YI DR,Unmatched,NormalizedAddress,BlockApproximation,bukit-timah-10-toh-yi-dr,HistoricalFirstHit,590010,0,,935741,True
+HDB-34260,SENGKANG,2018-08,250B,COMPASSVALE ST,Unmatched,NormalizedAddress,BlockApproximation,sengkang-250b-compassvale-st,HistoricalFirstHit,542250,0,,936561,True
+HDB-34948,BEDOK,2018-09,44,BEDOK STH RD,Unmatched,NormalizedAddress,BlockApproximation,bedok-44-bedok-sth-rd,HistoricalFirstHit,460044,0,,943832,True
+HDB-35274,CENTRAL AREA,2018-09,8,JLN KUKOH,Unmatched,NormalizedAddress,BlockApproximation,central-area-8-jln-kukoh,HistoricalFirstHit,162008,0,,942043,True
+HDB-35460,GEYLANG,2018-09,62,DAKOTA CRES,Unmatched,NormalizedAddress,BlockApproximation,geylang-62-dakota-cres,HistoricalFirstHit,390062,0,,936655,True
+HDB-35621,JURONG WEST,2018-09,187,BOON LAY AVE,Unmatched,NormalizedAddress,BlockApproximation,jurong-west-187-boon-lay-ave,HistoricalFirstHit,640187,0,,947361,True
+HDB-35829,MARINE PARADE,2018-09,79,MARINE DR,Unmatched,NormalizedAddress,BlockApproximation,marine-parade-79-marine-dr,HistoricalFirstHit,440079,0,,936831,True
+HDB-36193,SENGKANG,2018-09,447A,JLN KAYU,Unmatched,NormalizedAddress,BlockApproximation,sengkang-447a-jln-kayu,HistoricalFirstHit,791447,0,,936936,True
+HDB-37039,BUKIT BATOK,2018-10,345,BT BATOK ST 34,Unmatched,NormalizedAddress,BlockApproximation,bukit-batok-345-bt-batok-st-34,HistoricalFirstHit,650345,0,,937554,True
+HDB-37359,CLEMENTI,2018-10,418,CLEMENTI AVE 1,NormalizedAddress,NormalizedAddress,BlockApproximation,clementi-418-clementi-ave-1,HistoricalFirstHit,120418,2,120418,947787,False
+HDB-37461,HOUGANG,2018-10,571,HOUGANG ST 51,Unmatched,NormalizedAddress,BlockApproximation,hougang-571-hougang-st-51,HistoricalFirstHit,530571,0,,945659,True
+HDB-38043,QUEENSTOWN,2018-10,147,MEI LING ST,Unmatched,NormalizedAddress,BlockApproximation,queenstown-147-mei-ling-st,HistoricalFirstHit,140147,0,,945564,True
+HDB-38284,TAMPINES,2018-10,817,TAMPINES ST 81,Unmatched,NormalizedAddress,BlockApproximation,tampines-817-tampines-st-81,HistoricalFirstHit,520817,0,,940590,True
+HDB-39639,JURONG WEST,2018-11,163,YUNG PING RD,Unmatched,NormalizedAddress,BlockApproximation,jurong-west-163-yung-ping-rd,HistoricalFirstHit,610163,0,,942329,True
+HDB-39930,SEMBAWANG,2018-11,463B,SEMBAWANG DR,Unmatched,NormalizedAddress,BlockApproximation,sembawang-463b-sembawang-dr,HistoricalFirstHit,752463,0,,944970,True
+HDB-40922,BUKIT MERAH,2018-12,119C,KIM TIAN RD,Unmatched,NormalizedAddress,BlockApproximation,bukit-merah-119c-kim-tian-rd,HistoricalFirstHit,163119,0,,947228,True
+HDB-40959,BUKIT PANJANG,2018-12,277,BANGKIT RD,Unmatched,NormalizedAddress,BlockApproximation,bukit-panjang-277-bangkit-rd,HistoricalFirstHit,670277,0,,944707,True
+HDB-41515,QUEENSTOWN,2018-12,2,GHIM MOH RD,Unmatched,NormalizedAddress,BlockApproximation,queenstown-2-ghim-moh-rd,HistoricalFirstHit,270002,0,,936691,True
+HDB-41806,TAMPINES,2018-12,148,TAMPINES AVE 5,NormalizedAddress,NormalizedAddress,BlockApproximation,tampines-148-tampines-ave-5,HistoricalFirstHit,521148,4,521148,942718,False
+HDB-41824,TOA PAYOH,2018-12,116,LOR 2 TOA PAYOH,Unmatched,NormalizedAddress,BlockApproximation,toa-payoh-116-lor-2-toa-payoh,HistoricalFirstHit,310116,0,,942279,True
+HDB-42579,CLEMENTI,2019-01,357,CLEMENTI AVE 2,Unmatched,NormalizedAddress,BlockApproximation,clementi-357-clementi-ave-2,HistoricalFirstHit,120357,0,,946479,True
+HDB-44059,CLEMENTI,2019-02,712,CLEMENTI WEST ST 2,Unmatched,NormalizedAddress,BlockApproximation,clementi-712-clementi-west-st-2,HistoricalFirstHit,120712,0,,944280,True
+HDB-44168,JURONG EAST,2019-02,266,TOH GUAN RD,Unmatched,NormalizedAddress,BlockApproximation,jurong-east-266-toh-guan-rd,HistoricalFirstHit,600266,0,,936770,True
+HDB-44374,PUNGGOL,2019-02,613B,PUNGGOL DR,Unmatched,NormalizedAddress,BlockApproximation,punggol-613b-punggol-dr,HistoricalFirstHit,822613,0,,945908,True
+HDB-45278,BUKIT MERAH,2019-03,84,TELOK BLANGAH HTS,Unmatched,NormalizedAddress,BlockApproximation,bukit-merah-84-telok-blangah-hts,HistoricalFirstHit,100084,0,,945096,True
+HDB-45372,CENTRAL AREA,2019-03,639,ROWELL RD,Unmatched,NormalizedAddress,BlockApproximation,central-area-639-rowell-rd,HistoricalFirstHit,200639,0,,943225,True
+HDB-45618,JURONG EAST,2019-03,371,JURONG EAST ST 32,Unmatched,NormalizedAddress,BlockApproximation,jurong-east-371-jurong-east-st-32,HistoricalFirstHit,600371,0,,936834,True
+HDB-47981,SERANGOON,2019-04,306,SERANGOON AVE 2,NormalizedAddress,NormalizedAddress,BlockApproximation,serangoon-306-serangoon-ave-2,HistoricalFirstHit,550306,1,550306,947579,False
+HDB-48012,SERANGOON,2019-04,424,SERANGOON CTRL,Unmatched,NormalizedAddress,BlockApproximation,serangoon-424-serangoon-ctrl,HistoricalFirstHit,550424,0,,948737,True
+HDB-48678,BISHAN,2019-05,120,BISHAN ST 12,Unmatched,NormalizedAddress,BlockApproximation,bishan-120-bishan-st-12,HistoricalFirstHit,570120,0,,943406,True
+HDB-48777,BUKIT BATOK,2019-05,389,BT BATOK WEST AVE 5,Unmatched,NormalizedAddress,BlockApproximation,bukit-batok-389-bt-batok-west-ave-5,HistoricalFirstHit,650389,0,,946394,True
+HDB-48942,BUKIT PANJANG,2019-05,612,SENJA RD,Unmatched,NormalizedAddress,BlockApproximation,bukit-panjang-612-senja-rd,HistoricalFirstHit,670612,0,,939891,True
+HDB-49002,CHOA CHU KANG,2019-05,166B,TECK WHYE CRES,Unmatched,NormalizedAddress,BlockApproximation,choa-chu-kang-166b-teck-whye-cres,HistoricalFirstHit,682166,0,,947218,True
+HDB-50048,SERANGOON,2019-05,222,SERANGOON AVE 4,NormalizedAddress,NormalizedAddress,BlockApproximation,serangoon-222-serangoon-ave-4,HistoricalFirstHit,550222,1,550222,944403,False
+HDB-50188,TAMPINES,2019-05,460,TAMPINES ST 42,Unmatched,NormalizedAddress,BlockApproximation,tampines-460-tampines-st-42,HistoricalFirstHit,520460,0,,941144,True
+HDB-50762,BISHAN,2019-06,266,BISHAN ST 24,Unmatched,NormalizedAddress,BlockApproximation,bishan-266-bishan-st-24,HistoricalFirstHit,570266,0,,938776,True
+HDB-52687,BISHAN,2019-07,137,BISHAN ST 12,Unmatched,NormalizedAddress,BlockApproximation,bishan-137-bishan-st-12,HistoricalFirstHit,570137,0,,939195,True
+HDB-52851,BUKIT PANJANG,2019-07,488,SEGAR RD,Unmatched,NormalizedAddress,BlockApproximation,bukit-panjang-488-segar-rd,HistoricalFirstHit,670488,0,,941184,True
+HDB-54378,WOODLANDS,2019-07,788E,WOODLANDS CRES,Unmatched,NormalizedAddress,BlockApproximation,woodlands-788e-woodlands-cres,HistoricalFirstHit,735788,0,,941274,True
+HDB-54395,YISHUN,2019-07,424A,YISHUN AVE 11,Unmatched,NormalizedAddress,BlockApproximation,yishun-424a-yishun-ave-11,HistoricalFirstHit,761424,0,,941907,True
+HDB-55126,GEYLANG,2019-08,70,CIRCUIT RD,Unmatched,NormalizedAddress,BlockApproximation,geylang-70-circuit-rd,HistoricalFirstHit,370070,0,,936794,True
+HDB-55285,JURONG WEST,2019-08,990C,JURONG WEST ST 93,Unmatched,NormalizedAddress,BlockApproximation,jurong-west-990c-jurong-west-st-93,HistoricalFirstHit,643990,0,,943810,True
+HDB-56501,ANG MO KIO,2019-09,456,ANG MO KIO AVE 10,Unmatched,NormalizedAddress,BlockApproximation,ang-mo-kio-456-ang-mo-kio-ave-10,HistoricalFirstHit,560456,0,,940167,True
+HDB-56980,CHOA CHU KANG,2019-09,251,CHOA CHU KANG AVE 2,NormalizedAddress,NormalizedAddress,BlockApproximation,choa-chu-kang-251-choa-chu-kang-ave-2,HistoricalFirstHit,680251,1,680251,937755,False
+HDB-58290,YISHUN,2019-09,836,YISHUN ST 81,Unmatched,NormalizedAddress,BlockApproximation,yishun-836-yishun-st-81,HistoricalFirstHit,760836,0,,938561,True
+HDB-58603,BUKIT BATOK,2019-10,287,BT BATOK EAST AVE 3,Unmatched,NormalizedAddress,BlockApproximation,bukit-batok-287-bt-batok-east-ave-3,HistoricalFirstHit,650287,0,,936881,True
+HDB-60136,WOODLANDS,2019-10,16,MARSILING LANE,ExactAddress,ExactAddress,BlockApproximation,woodlands-16-marsiling-lane,HistoricalFirstHit,730016,6,730016,946687,False
+HDB-61390,MARINE PARADE,2019-11,74,MARINE DR,Unmatched,NormalizedAddress,BlockApproximation,marine-parade-74-marine-dr,HistoricalFirstHit,440074,0,,942280,True
+HDB-62859,CHOA CHU KANG,2019-12,476B,CHOA CHU KANG AVE 5,NormalizedAddress,NormalizedAddress,BlockApproximation,choa-chu-kang-476b-choa-chu-kang-ave-5,HistoricalFirstHit,682476,1,682476,944490,False
+HDB-63001,GEYLANG,2019-12,842,SIMS AVE,Unmatched,NormalizedAddress,BlockApproximation,geylang-842-sims-ave,HistoricalFirstHit,400842,0,,939383,True
+HDB-63068,HOUGANG,2019-12,245,HOUGANG ST 22,Unmatched,NormalizedAddress,BlockApproximation,hougang-245-hougang-st-22,HistoricalFirstHit,530245,0,,939925,True
+HDB-63326,PASIR RIS,2019-12,528A,PASIR RIS ST 51,Unmatched,NormalizedAddress,BlockApproximation,pasir-ris-528a-pasir-ris-st-51,HistoricalFirstHit,511528,0,,943759,True
+HDB-63529,SEMBAWANG,2019-12,593B,MONTREAL LINK,ExactAddress,ExactAddress,BlockApproximation,sembawang-593b-montreal-link,HistoricalFirstHit,752593,2,752593,947105,False
+HDB-64095,YISHUN,2019-12,243,YISHUN RING RD,Unmatched,NormalizedAddress,BlockApproximation,yishun-243-yishun-ring-rd,HistoricalFirstHit,760243,0,,936252,True
+HDB-65432,SEMBAWANG,2020-01,463A,SEMBAWANG DR,Unmatched,NormalizedAddress,BlockApproximation,sembawang-463a-sembawang-dr,HistoricalFirstHit,751463,0,,943913,True
+HDB-65676,TAMPINES,2020-01,522A,TAMPINES CTRL 7,Unmatched,NormalizedAddress,BlockApproximation,tampines-522a-tampines-ctrl-7,HistoricalFirstHit,521522,0,,938695,True
+HDB-65692,TAMPINES,2020-01,266,TAMPINES ST 21,Unmatched,NormalizedAddress,BlockApproximation,tampines-266-tampines-st-21,HistoricalFirstHit,520266,0,,944523,True
+HDB-65856,TOA PAYOH,2020-01,20,JOO SENG RD,Unmatched,NormalizedAddress,BlockApproximation,toa-payoh-20-joo-seng-rd,HistoricalFirstHit,360020,0,,942772,True
+HDB-66479,BUKIT PANJANG,2020-02,488,SEGAR RD,Unmatched,NormalizedAddress,BlockApproximation,bukit-panjang-488-segar-rd,HistoricalFirstHit,670488,0,,941184,True
+HDB-66553,CENTRAL AREA,2020-02,10,JLN KUKOH,Unmatched,NormalizedAddress,BlockApproximation,central-area-10-jln-kukoh,HistoricalFirstHit,162010,0,,946227,True
+HDB-67205,SEMBAWANG,2020-02,478,SEMBAWANG DR,Unmatched,NormalizedAddress,BlockApproximation,sembawang-478-sembawang-dr,HistoricalFirstHit,750478,0,,938350,True
+HDB-67455,TAMPINES,2020-02,890B,TAMPINES AVE 1,Unmatched,NormalizedAddress,BlockApproximation,tampines-890b-tampines-ave-1,HistoricalFirstHit,522890,0,,942533,True
+HDB-68183,BUKIT PANJANG,2020-03,454,FAJAR RD,Unmatched,NormalizedAddress,BlockApproximation,bukit-panjang-454-fajar-rd,HistoricalFirstHit,670454,0,,942799,True
+HDB-68300,CENTRAL AREA,2020-03,4,TG PAGAR PLAZA,Unmatched,NormalizedAddress,BlockApproximation,central-area-4-tg-pagar-plaza,HistoricalFirstHit,081004,0,,947025,True
+HDB-69475,WOODLANDS,2020-03,782D,WOODLANDS CRES,Unmatched,NormalizedAddress,BlockApproximation,woodlands-782d-woodlands-cres,HistoricalFirstHit,734782,0,,940247,True
+HDB-70783,BEDOK,2020-06,91,BEDOK NTH ST 4,Unmatched,NormalizedAddress,BlockApproximation,bedok-91-bedok-nth-st-4,HistoricalFirstHit,460091,0,,945940,True
+HDB-71130,BUKIT TIMAH,2020-06,5,TOH YI DR,Unmatched,NormalizedAddress,BlockApproximation,bukit-timah-5-toh-yi-dr,HistoricalFirstHit,590005,0,,935743,True
+HDB-71534,JURONG EAST,2020-06,231,JURONG EAST ST 21,Unmatched,NormalizedAddress,BlockApproximation,jurong-east-231-jurong-east-st-21,HistoricalFirstHit,600231,0,,943768,True
+HDB-71836,PASIR RIS,2020-06,527B,PASIR RIS ST 51,Unmatched,NormalizedAddress,BlockApproximation,pasir-ris-527b-pasir-ris-st-51,HistoricalFirstHit,512527,0,,946792,True
+HDB-73576,CENTRAL AREA,2020-07,672B,KLANG LANE,Unmatched,NormalizedAddress,BlockApproximation,central-area-672b-klang-lane,HistoricalFirstHit,212672,0,,943060,True
+HDB-74210,PASIR RIS,2020-07,527C,PASIR RIS ST 51,Unmatched,NormalizedAddress,BlockApproximation,pasir-ris-527c-pasir-ris-st-51,HistoricalFirstHit,513527,0,,943164,True
+HDB-76218,GEYLANG,2020-08,846,SIMS AVE,Unmatched,NormalizedAddress,BlockApproximation,geylang-846-sims-ave,HistoricalFirstHit,400846,0,,948451,True
+HDB-76553,JURONG WEST,2020-08,669C,JURONG WEST ST 64,Unmatched,NormalizedAddress,BlockApproximation,jurong-west-669c-jurong-west-st-64,HistoricalFirstHit,643669,0,,940004,True
+HDB-77974,ANG MO KIO,2020-09,614,ANG MO KIO AVE 4,NormalizedAddress,NormalizedAddress,BlockApproximation,ang-mo-kio-614-ang-mo-kio-ave-4,HistoricalFirstHit,560614,3,560614,944697,False
+HDB-78370,BUKIT PANJANG,2020-09,202,PETIR RD,Unmatched,NormalizedAddress,BlockApproximation,bukit-panjang-202-petir-rd,HistoricalFirstHit,670202,0,,937054,True
+HDB-79096,PASIR RIS,2020-09,150,PASIR RIS ST 13,Unmatched,NormalizedAddress,BlockApproximation,pasir-ris-150-pasir-ris-st-13,HistoricalFirstHit,510150,0,,938476,True
+HDB-79288,PUNGGOL,2020-09,308A,PUNGGOL WALK,ExactAddress,ExactAddress,BlockApproximation,punggol-308a-punggol-walk,HistoricalFirstHit,821308,3,821308,948192,False
+HDB-79741,SERANGOON,2020-09,8,LOR LEW LIAN,Unmatched,NormalizedAddress,BlockApproximation,serangoon-8-lor-lew-lian,HistoricalFirstHit,531008,0,,944316,True
+HDB-79980,TAMPINES,2020-09,460,TAMPINES ST 42,Unmatched,NormalizedAddress,BlockApproximation,tampines-460-tampines-st-42,HistoricalFirstHit,520460,0,,941144,True
+HDB-80053,TOA PAYOH,2020-09,256,KIM KEAT AVE,Unmatched,NormalizedAddress,BlockApproximation,toa-payoh-256-kim-keat-ave,HistoricalFirstHit,310256,0,,942917,True
+HDB-80621,BISHAN,2020-10,222,BISHAN ST 23,Unmatched,NormalizedAddress,BlockApproximation,bishan-222-bishan-st-23,HistoricalFirstHit,570222,0,,937660,True
+HDB-80624,BISHAN,2020-10,148,BISHAN ST 11,Unmatched,NormalizedAddress,BlockApproximation,bishan-148-bishan-st-11,HistoricalFirstHit,570148,0,,937703,True
+HDB-80901,BUKIT PANJANG,2020-10,532,JELAPANG RD,Unmatched,NormalizedAddress,BlockApproximation,bukit-panjang-532-jelapang-rd,HistoricalFirstHit,670532,0,,944538,True
+HDB-81026,CLEMENTI,2020-10,432,CLEMENTI AVE 3,NormalizedAddress,NormalizedAddress,BlockApproximation,clementi-432-clementi-ave-3,HistoricalFirstHit,120432,6,120432,937866,False
+HDB-82197,SENGKANG,2020-10,189A,RIVERVALE DR,Unmatched,NormalizedAddress,BlockApproximation,sengkang-189a-rivervale-dr,HistoricalFirstHit,541189,0,,936118,True
+HDB-82516,WOODLANDS,2020-10,780A,WOODLANDS CRES,Unmatched,NormalizedAddress,BlockApproximation,woodlands-780a-woodlands-cres,HistoricalFirstHit,731780,0,,936359,True
+HDB-82898,BEDOK,2020-11,620,BEDOK RESERVOIR RD,Unmatched,NormalizedAddress,BlockApproximation,bedok-620-bedok-reservoir-rd,HistoricalFirstHit,470620,0,,943485,True
+HDB-83460,CLEMENTI,2020-11,349,CLEMENTI AVE 2,NormalizedAddress,NormalizedAddress,BlockApproximation,clementi-349-clementi-ave-2,HistoricalFirstHit,120349,2,120349,942893,False
+HDB-83690,JURONG EAST,2020-11,372,JURONG EAST ST 32,Unmatched,NormalizedAddress,BlockApproximation,jurong-east-372-jurong-east-st-32,HistoricalFirstHit,600372,0,,941125,True
+HDB-86067,HOUGANG,2020-12,698C,HOUGANG ST 52,Unmatched,NormalizedAddress,BlockApproximation,hougang-698c-hougang-st-52,HistoricalFirstHit,533698,0,,937242,True
+HDB-87258,TOA PAYOH,2020-12,98,LOR 1 TOA PAYOH,Unmatched,NormalizedAddress,BlockApproximation,toa-payoh-98-lor-1-toa-payoh,HistoricalFirstHit,310098,0,,941367,True
+HDB-87794,BEDOK,2021-01,763,BEDOK RESERVOIR VIEW,ExactAddress,ExactAddress,BlockApproximation,bedok-763-bedok-reservoir-view,HistoricalFirstHit,470763,1,470763,936186,False
+HDB-88990,PUNGGOL,2021-01,106D,PUNGGOL FIELD,ExactAddress,ExactAddress,BlockApproximation,punggol-106d-punggol-field,HistoricalFirstHit,824106,2,824106,938457,False
+HDB-90606,CHOA CHU KANG,2021-02,683A,CHOA CHU KANG CRES,Unmatched,NormalizedAddress,BlockApproximation,choa-chu-kang-683a-choa-chu-kang-cres,HistoricalFirstHit,681683,0,,944952,True
+HDB-90790,GEYLANG,2021-02,18D,CIRCUIT RD,Unmatched,NormalizedAddress,BlockApproximation,geylang-18d-circuit-rd,HistoricalFirstHit,374018,0,,946446,True
+HDB-91140,MARINE PARADE,2021-02,64,MARINE DR,Unmatched,NormalizedAddress,BlockApproximation,marine-parade-64-marine-dr,HistoricalFirstHit,440064,0,,940671,True
+HDB-93099,HOUGANG,2021-03,939,HOUGANG ST 92,Unmatched,NormalizedAddress,BlockApproximation,hougang-939-hougang-st-92,HistoricalFirstHit,530939,0,,944935,True
+HDB-93519,PUNGGOL,2021-03,256B,SUMANG WALK,Unmatched,NormalizedAddress,BlockApproximation,punggol-256b-sumang-walk,HistoricalFirstHit,822256,0,,937598,True
+HDB-94921,BISHAN,2021-04,111,BISHAN ST 12,Unmatched,NormalizedAddress,BlockApproximation,bishan-111-bishan-st-12,HistoricalFirstHit,570111,0,,945820,True
+HDB-95812,MARINE PARADE,2021-04,16,MARINE TER,Unmatched,NormalizedAddress,BlockApproximation,marine-parade-16-marine-ter,HistoricalFirstHit,440016,0,,936459,True
+HDB-97951,KALLANG/WHAMPOA,2021-05,8,BOON KENG RD,Unmatched,NormalizedAddress,BlockApproximation,kallang-whampoa-8-boon-keng-rd,HistoricalFirstHit,330008,0,,936373,True
+HDB-98333,SEMBAWANG,2021-05,466C,SEMBAWANG DR,Unmatched,NormalizedAddress,BlockApproximation,sembawang-466c-sembawang-dr,HistoricalFirstHit,753466,0,,939518,True
+HDB-99354,BUKIT MERAH,2021-06,148,SILAT AVE,Unmatched,NormalizedAddress,BlockApproximation,bukit-merah-148-silat-ave,HistoricalFirstHit,160148,0,,940112,True
+HDB-99630,CLEMENTI,2021-06,418,CLEMENTI AVE 1,NormalizedAddress,NormalizedAddress,BlockApproximation,clementi-418-clementi-ave-1,HistoricalFirstHit,120418,2,120418,947787,False
+HDB-99891,JURONG EAST,2021-06,288C,JURONG EAST ST 21,Unmatched,NormalizedAddress,BlockApproximation,jurong-east-288c-jurong-east-st-21,HistoricalFirstHit,603288,0,,939370,True
+HDB-100012,KALLANG/WHAMPOA,2021-06,7,JLN BATU,Unmatched,NormalizedAddress,BlockApproximation,kallang-whampoa-7-jln-batu,HistoricalFirstHit,431007,0,,944162,True
+HDB-100494,QUEENSTOWN,2021-06,150,MEI LING ST,Unmatched,NormalizedAddress,BlockApproximation,queenstown-150-mei-ling-st,HistoricalFirstHit,141150,0,,943288,True
+HDB-100785,SERANGOON,2021-06,322,SERANGOON AVE 3,NormalizedAddress,NormalizedAddress,BlockApproximation,serangoon-322-serangoon-ave-3,HistoricalFirstHit,550322,1,550322,943332,False
+HDB-102286,HOUGANG,2021-07,306,HOUGANG AVE 5,Unmatched,NormalizedAddress,BlockApproximation,hougang-306-hougang-ave-5,HistoricalFirstHit,530306,0,,946636,True
+HDB-102694,PUNGGOL,2021-07,208A,PUNGGOL PL,Unmatched,NormalizedAddress,BlockApproximation,punggol-208a-punggol-pl,HistoricalFirstHit,821208,0,,946935,True
+HDB-103003,QUEENSTOWN,2021-07,86,DAWSON RD,Unmatched,NormalizedAddress,BlockApproximation,queenstown-86-dawson-rd,HistoricalFirstHit,141086,0,,945743,True
+HDB-103062,SENGKANG,2021-07,210C,COMPASSVALE LANE,Unmatched,NormalizedAddress,BlockApproximation,sengkang-210c-compassvale-lane,HistoricalFirstHit,543210,0,,947451,True
+HDB-103878,YISHUN,2021-07,829,YISHUN ST 81,Unmatched,NormalizedAddress,BlockApproximation,yishun-829-yishun-st-81,HistoricalFirstHit,760829,0,,946728,True
+HDB-103968,ANG MO KIO,2021-08,112,ANG MO KIO AVE 4,NormalizedAddress,NormalizedAddress,BlockApproximation,ang-mo-kio-112-ang-mo-kio-ave-4,HistoricalFirstHit,560112,2,560112,939877,False
+HDB-104798,GEYLANG,2021-08,45,JLN TIGA,Unmatched,NormalizedAddress,BlockApproximation,geylang-45-jln-tiga,HistoricalFirstHit,390045,0,,939010,True
+HDB-105634,QUEENSTOWN,2021-08,164,STIRLING RD,Unmatched,NormalizedAddress,BlockApproximation,queenstown-164-stirling-rd,HistoricalFirstHit,140164,0,,944292,True
+HDB-108597,SERANGOON,2021-09,229,SERANGOON AVE 4,NormalizedAddress,NormalizedAddress,BlockApproximation,serangoon-229-serangoon-ave-4,HistoricalFirstHit,550229,2,550229,939000,False
+HDB-108981,WOODLANDS,2021-09,685B,WOODLANDS DR 73,Unmatched,NormalizedAddress,BlockApproximation,woodlands-685b-woodlands-dr-73,HistoricalFirstHit,732685,0,,944351,True
+HDB-109472,BUKIT BATOK,2021-10,244,BT BATOK EAST AVE 5,Unmatched,NormalizedAddress,BlockApproximation,bukit-batok-244-bt-batok-east-ave-5,HistoricalFirstHit,650244,0,,946282,True
+HDB-109774,CHOA CHU KANG,2021-10,166B,TECK WHYE CRES,Unmatched,NormalizedAddress,BlockApproximation,choa-chu-kang-166b-teck-whye-cres,HistoricalFirstHit,682166,0,,947218,True
+HDB-112283,CHOA CHU KANG,2021-11,13,TECK WHYE LANE,ExactAddress,ExactAddress,BlockApproximation,choa-chu-kang-13-teck-whye-lane,HistoricalFirstHit,680013,4,680013,939107,False
+HDB-112813,JURONG WEST,2021-11,696,JURONG WEST CTRL 1,NormalizedAddress,NormalizedAddress,BlockApproximation,jurong-west-696-jurong-west-ctrl-1,HistoricalFirstHit,640696,1,640696,937838,False
+HDB-114052,WOODLANDS,2021-11,636,WOODLANDS RING RD,Unmatched,NormalizedAddress,BlockApproximation,woodlands-636-woodlands-ring-rd,HistoricalFirstHit,730636,0,,947481,True
+HDB-114563,BUKIT BATOK,2021-12,120,BT BATOK CTRL,Unmatched,NormalizedAddress,BlockApproximation,bukit-batok-120-bt-batok-ctrl,HistoricalFirstHit,650120,0,,938333,True
+HDB-114751,BUKIT TIMAH,2021-12,1,TOH YI DR,Unmatched,NormalizedAddress,BlockApproximation,bukit-timah-1-toh-yi-dr,HistoricalFirstHit,591501,0,,935733,True
+HDB-114770,CENTRAL AREA,2021-12,1G,CANTONMENT RD,Unmatched,NormalizedAddress,BlockApproximation,central-area-1g-cantonment-rd,HistoricalFirstHit,085701,0,,942044,True
+HDB-117383,ANG MO KIO,2022-08,176,ANG MO KIO AVE 4,NormalizedAddress,NormalizedAddress,BlockApproximation,ang-mo-kio-176-ang-mo-kio-ave-4,HistoricalFirstHit,560176,2,560176,945590,False
+HDB-117532,ANG MO KIO,2022-10,302,ANG MO KIO AVE 3,Unmatched,NormalizedAddress,BlockApproximation,ang-mo-kio-302-ang-mo-kio-ave-3,HistoricalFirstHit,560302,0,,944019,True
+HDB-117955,BEDOK,2022-03,22,BEDOK STH AVE 1,Unmatched,NormalizedAddress,BlockApproximation,bedok-22-bedok-sth-ave-1,HistoricalFirstHit,460022,0,,937304,True
+HDB-119244,BISHAN,2022-05,103,BISHAN ST 12,Unmatched,NormalizedAddress,BlockApproximation,bishan-103-bishan-st-12,HistoricalFirstHit,570103,0,,942836,True
+HDB-120124,BUKIT BATOK,2022-09,445B,BT BATOK WEST AVE 8,Unmatched,NormalizedAddress,BlockApproximation,bukit-batok-445b-bt-batok-west-ave-8,HistoricalFirstHit,652445,0,,939561,True
+HDB-120187,BUKIT BATOK,2022-09,296A,BT BATOK ST 22,Unmatched,NormalizedAddress,BlockApproximation,bukit-batok-296a-bt-batok-st-22,HistoricalFirstHit,651296,0,,938840,True
+HDB-120642,BUKIT MERAH,2022-03,110A,DEPOT RD,Unmatched,NormalizedAddress,BlockApproximation,bukit-merah-110a-depot-rd,HistoricalFirstHit,101110,0,,940627,True
+HDB-120930,BUKIT MERAH,2022-07,7,TELOK BLANGAH CRES,Unmatched,NormalizedAddress,BlockApproximation,bukit-merah-7-telok-blangah-cres,HistoricalFirstHit,090007,0,,949025,True
+HDB-121235,BUKIT MERAH,2022-10,1,EVERTON PK,Unmatched,Unmatched,Missing,bukit-merah-1-everton-pk,MissingKey,,0,,,False
+HDB-122341,BUKIT TIMAH,2022-01,2,TOH YI DR,Unmatched,NormalizedAddress,BlockApproximation,bukit-timah-2-toh-yi-dr,HistoricalFirstHit,590002,0,,935735,True
+HDB-122374,BUKIT TIMAH,2022-09,6,FARRER RD,Unmatched,NormalizedAddress,BlockApproximation,bukit-timah-6-farrer-rd,HistoricalFirstHit,260006,0,,943530,True
+HDB-123130,CHOA CHU KANG,2022-04,605,CHOA CHU KANG ST 62,Unmatched,NormalizedAddress,BlockApproximation,choa-chu-kang-605-choa-chu-kang-st-62,HistoricalFirstHit,680605,0,,939112,True
+HDB-124176,CLEMENTI,2022-03,201,CLEMENTI AVE 6,NormalizedAddress,NormalizedAddress,BlockApproximation,clementi-201-clementi-ave-6,HistoricalFirstHit,120201,1,120201,938190,False
+HDB-125044,GEYLANG,2022-08,109,ALJUNIED CRES,Unmatched,NormalizedAddress,BlockApproximation,geylang-109-aljunied-cres,HistoricalFirstHit,380109,0,,937869,True
+HDB-125466,HOUGANG,2022-02,619,HOUGANG AVE 8,NormalizedAddress,NormalizedAddress,BlockApproximation,hougang-619-hougang-ave-8,HistoricalFirstHit,530619,2,530619,943848,False
+HDB-127011,JURONG EAST,2022-09,340,JURONG EAST AVE 1,NormalizedAddress,NormalizedAddress,BlockApproximation,jurong-east-340-jurong-east-ave-1,HistoricalFirstHit,600340,4,600340,949078,False
+HDB-127665,JURONG WEST,2022-05,560A,JURONG WEST ST 42,Unmatched,NormalizedAddress,BlockApproximation,jurong-west-560a-jurong-west-st-42,HistoricalFirstHit,641560,0,,946291,True
+HDB-128538,JURONG WEST,2022-11,722,JURONG WEST AVE 5,NormalizedAddress,NormalizedAddress,BlockApproximation,jurong-west-722-jurong-west-ave-5,HistoricalFirstHit,640722,2,640722,945923,False
+HDB-129299,KALLANG/WHAMPOA,2022-07,3D,UPP BOON KENG RD,Unmatched,NormalizedAddress,BlockApproximation,kallang-whampoa-3d-upp-boon-keng-rd,HistoricalFirstHit,384003,0,,937149,True
+HDB-129506,KALLANG/WHAMPOA,2022-10,75,WHAMPOA DR,Unmatched,NormalizedAddress,BlockApproximation,kallang-whampoa-75-whampoa-dr,HistoricalFirstHit,320075,0,,941987,True
+HDB-129832,MARINE PARADE,2022-09,34,MARINE CRES,Unmatched,NormalizedAddress,BlockApproximation,marine-parade-34-marine-cres,HistoricalFirstHit,440034,0,,936706,True
+HDB-129890,MARINE PARADE,2022-12,1,MARINE TER,Unmatched,NormalizedAddress,BlockApproximation,marine-parade-1-marine-ter,HistoricalFirstHit,440001,0,,949024,True
+HDB-130499,PASIR RIS,2022-09,227,PASIR RIS ST 21,Unmatched,NormalizedAddress,BlockApproximation,pasir-ris-227-pasir-ris-st-21,HistoricalFirstHit,510227,0,,942541,True
+HDB-132851,QUEENSTOWN,2022-03,81,C'WEALTH CL,Unmatched,Unmatched,Missing,queenstown-81-c-wealth-cl,MissingKey,,0,,,False
+HDB-133642,SEMBAWANG,2022-04,130A,CANBERRA CRES,Unmatched,NormalizedAddress,BlockApproximation,sembawang-130a-canberra-cres,HistoricalFirstHit,751130,0,,936492,True
+HDB-136071,SENGKANG,2022-10,433A,SENGKANG WEST WAY,ExactAddress,ExactAddress,BlockApproximation,sengkang-433a-sengkang-west-way,HistoricalFirstHit,791433,1,791433,938962,False
+HDB-136277,SENGKANG,2022-11,467A,FERNVALE LINK,ExactAddress,ExactAddress,BlockApproximation,sengkang-467a-fernvale-link,HistoricalFirstHit,791467,3,791467,939767,False
+HDB-136799,SERANGOON,2022-07,205,SERANGOON CTRL,Unmatched,NormalizedAddress,BlockApproximation,serangoon-205-serangoon-ctrl,HistoricalFirstHit,550205,0,,940893,True
+HDB-138953,TOA PAYOH,2022-05,120,LOR 2 TOA PAYOH,Unmatched,NormalizedAddress,BlockApproximation,toa-payoh-120-lor-2-toa-payoh,HistoricalFirstHit,310120,0,,938497,True
+HDB-142543,YISHUN,2022-08,233,YISHUN ST 21,Unmatched,NormalizedAddress,BlockApproximation,yishun-233-yishun-st-21,HistoricalFirstHit,760233,0,,937640,True
+HDB-142934,YISHUN,2022-09,633,YISHUN ST 61,Unmatched,NormalizedAddress,BlockApproximation,yishun-633-yishun-st-61,HistoricalFirstHit,760633,0,,938243,True
+HDB-143244,YISHUN,2022-12,677A,YISHUN RING RD,Unmatched,NormalizedAddress,BlockApproximation,yishun-677a-yishun-ring-rd,HistoricalFirstHit,761677,0,,943151,True
+HDB-143400,ANG MO KIO,2023-01,314,ANG MO KIO AVE 3,NormalizedAddress,NormalizedAddress,BlockApproximation,ang-mo-kio-314-ang-mo-kio-ave-3,HistoricalFirstHit,560314,1,560314,948758,False
+HDB-143977,ANG MO KIO,2023-08,151,ANG MO KIO AVE 5,NormalizedAddress,NormalizedAddress,BlockApproximation,ang-mo-kio-151-ang-mo-kio-ave-5,HistoricalFirstHit,560151,2,560151,940839,False
+HDB-144579,BEDOK,2023-02,620,BEDOK RESERVOIR RD,Unmatched,NormalizedAddress,BlockApproximation,bedok-620-bedok-reservoir-rd,HistoricalFirstHit,470620,0,,943485,True
+HDB-145185,BEDOK,2023-07,170,BEDOK STH RD,Unmatched,NormalizedAddress,BlockApproximation,bedok-170-bedok-sth-rd,HistoricalFirstHit,460170,0,,945064,True
+HDB-145396,BEDOK,2023-09,93,BEDOK NTH AVE 4,Unmatched,NormalizedAddress,BlockApproximation,bedok-93-bedok-nth-ave-4,HistoricalFirstHit,460093,0,,939760,True
+HDB-145544,BEDOK,2023-10,94C,BEDOK NTH AVE 4,Unmatched,NormalizedAddress,BlockApproximation,bedok-94c-bedok-nth-ave-4,HistoricalFirstHit,462094,0,,938503,True
+HDB-146039,BISHAN,2023-10,311,SHUNFU RD,Unmatched,NormalizedAddress,BlockApproximation,bishan-311-shunfu-rd,HistoricalFirstHit,570311,0,,941127,True
+HDB-147866,BUKIT MERAH,2023-05,7,TELOK BLANGAH CRES,Unmatched,NormalizedAddress,BlockApproximation,bukit-merah-7-telok-blangah-cres,HistoricalFirstHit,090007,0,,949025,True
+HDB-149295,BUKIT TIMAH,2023-03,17,TOH YI DR,Unmatched,NormalizedAddress,BlockApproximation,bukit-timah-17-toh-yi-dr,HistoricalFirstHit,590017,0,,935728,True
+HDB-149304,BUKIT TIMAH,2023-05,7,TOH YI DR,Unmatched,NormalizedAddress,BlockApproximation,bukit-timah-7-toh-yi-dr,HistoricalFirstHit,590007,0,,935745,True
+HDB-149310,BUKIT TIMAH,2023-08,8,EMPRESS RD,Unmatched,NormalizedAddress,BlockApproximation,bukit-timah-8-empress-rd,HistoricalFirstHit,260008,0,,939654,True
+HDB-149326,BUKIT TIMAH,2023-10,13,TOH YI DR,Unmatched,NormalizedAddress,BlockApproximation,bukit-timah-13-toh-yi-dr,HistoricalFirstHit,590013,0,,935729,True
+HDB-149454,CENTRAL AREA,2023-08,9,JLN KUKOH,Unmatched,NormalizedAddress,BlockApproximation,central-area-9-jln-kukoh,HistoricalFirstHit,160009,0,,947946,True
+HDB-149464,CENTRAL AREA,2023-08,1C,CANTONMENT RD,Unmatched,NormalizedAddress,BlockApproximation,central-area-1c-cantonment-rd,HistoricalFirstHit,085301,0,,944018,True
+HDB-150164,CHOA CHU KANG,2023-07,476C,CHOA CHU KANG AVE 5,NormalizedAddress,NormalizedAddress,BlockApproximation,choa-chu-kang-476c-choa-chu-kang-ave-5,HistoricalFirstHit,683476,1,683476,943514,False
+HDB-150668,CLEMENTI,2023-01,715,CLEMENTI WEST ST 2,Unmatched,NormalizedAddress,BlockApproximation,clementi-715-clementi-west-st-2,HistoricalFirstHit,120715,0,,945065,True
+HDB-150724,CLEMENTI,2023-01,335,CLEMENTI AVE 2,NormalizedAddress,NormalizedAddress,BlockApproximation,clementi-335-clementi-ave-2,HistoricalFirstHit,120335,2,120335,940865,False
+HDB-151191,CLEMENTI,2023-11,311B,CLEMENTI AVE 4,NormalizedAddress,NormalizedAddress,BlockApproximation,clementi-311b-clementi-ave-4,HistoricalFirstHit,122311,2,122311,936195,False
+HDB-151408,GEYLANG,2023-03,53,PIPIT RD,Unmatched,NormalizedAddress,BlockApproximation,geylang-53-pipit-rd,HistoricalFirstHit,370053,0,,944242,True
+HDB-151443,GEYLANG,2023-04,110,ALJUNIED CRES,Unmatched,NormalizedAddress,BlockApproximation,geylang-110-aljunied-cres,HistoricalFirstHit,380110,0,,935891,True
+HDB-151507,GEYLANG,2023-06,32,BALAM RD,Unmatched,NormalizedAddress,BlockApproximation,geylang-32-balam-rd,HistoricalFirstHit,370032,0,,943192,True
+HDB-151791,GEYLANG,2023-11,346,UBI AVE 1,NormalizedAddress,NormalizedAddress,BlockApproximation,geylang-346-ubi-ave-1,HistoricalFirstHit,400346,1,400346,945915,False
+HDB-152004,HOUGANG,2023-02,644,HOUGANG AVE 8,NormalizedAddress,NormalizedAddress,BlockApproximation,hougang-644-hougang-ave-8,HistoricalFirstHit,530644,5,530644,942340,False
+HDB-152175,HOUGANG,2023-03,653,HOUGANG AVE 8,NormalizedAddress,NormalizedAddress,BlockApproximation,hougang-653-hougang-ave-8,HistoricalFirstHit,530653,3,530653,940140,False
+HDB-152284,HOUGANG,2023-04,365A,UPP SERANGOON RD,Unmatched,NormalizedAddress,BlockApproximation,hougang-365a-upp-serangoon-rd,HistoricalFirstHit,531365,0,,948830,True
+HDB-153305,JURONG EAST,2023-01,24,TEBAN GDNS RD,Unmatched,NormalizedAddress,BlockApproximation,jurong-east-24-teban-gdns-rd,HistoricalFirstHit,600024,0,,945269,True
+HDB-153847,JURONG WEST,2023-01,654B,JURONG WEST ST 61,Unmatched,NormalizedAddress,BlockApproximation,jurong-west-654b-jurong-west-st-61,HistoricalFirstHit,642654,0,,945195,True
+HDB-154210,JURONG WEST,2023-04,274A,JURONG WEST AVE 3,Unmatched,NormalizedAddress,BlockApproximation,jurong-west-274a-jurong-west-ave-3,HistoricalFirstHit,641274,0,,944820,True
+HDB-155498,KALLANG/WHAMPOA,2023-03,38D,BENDEMEER RD,Unmatched,NormalizedAddress,BlockApproximation,kallang-whampoa-38d-bendemeer-rd,HistoricalFirstHit,334038,0,,946046,True
+HDB-155510,KALLANG/WHAMPOA,2023-04,9,JLN BATU,Unmatched,NormalizedAddress,BlockApproximation,kallang-whampoa-9-jln-batu,HistoricalFirstHit,431009,0,,945405,True
+HDB-155586,KALLANG/WHAMPOA,2023-04,110,MCNAIR RD,Unmatched,NormalizedAddress,BlockApproximation,kallang-whampoa-110-mcnair-rd,HistoricalFirstHit,320110,0,,936266,True
+HDB-156087,MARINE PARADE,2023-01,31,MARINE CRES,Unmatched,NormalizedAddress,BlockApproximation,marine-parade-31-marine-cres,HistoricalFirstHit,440031,0,,945130,True
+HDB-156507,PASIR RIS,2023-05,535,PASIR RIS DR 1,Unmatched,NormalizedAddress,BlockApproximation,pasir-ris-535-pasir-ris-dr-1,HistoricalFirstHit,510535,0,,945309,True
+HDB-156527,PASIR RIS,2023-06,107,PASIR RIS ST 12,Unmatched,NormalizedAddress,BlockApproximation,pasir-ris-107-pasir-ris-st-12,HistoricalFirstHit,510107,0,,938733,True
+HDB-158125,PUNGGOL,2023-08,326C,SUMANG WALK,Unmatched,NormalizedAddress,BlockApproximation,punggol-326c-sumang-walk,HistoricalFirstHit,823326,0,,947661,True
+HDB-158958,QUEENSTOWN,2023-01,27,GHIM MOH LINK,ExactAddress,ExactAddress,BlockApproximation,queenstown-27-ghim-moh-link,HistoricalFirstHit,270027,2,270027,939230,False
+HDB-159143,QUEENSTOWN,2023-04,51,STRATHMORE AVE,Unmatched,NormalizedAddress,BlockApproximation,queenstown-51-strathmore-ave,HistoricalFirstHit,140051,0,,942110,True
+HDB-159181,QUEENSTOWN,2023-05,93,DAWSON RD,Unmatched,NormalizedAddress,BlockApproximation,queenstown-93-dawson-rd,HistoricalFirstHit,142093,0,,942931,True
+HDB-160384,SEMBAWANG,2023-11,130A,CANBERRA CRES,Unmatched,NormalizedAddress,BlockApproximation,sembawang-130a-canberra-cres,HistoricalFirstHit,751130,0,,936492,True
+HDB-162734,SERANGOON,2023-08,8,LOR LEW LIAN,Unmatched,NormalizedAddress,BlockApproximation,serangoon-8-lor-lew-lian,HistoricalFirstHit,531008,0,,944316,True
+HDB-163772,TAMPINES,2023-07,810,TAMPINES AVE 4,NormalizedAddress,NormalizedAddress,BlockApproximation,tampines-810-tampines-ave-4,HistoricalFirstHit,520810,3,520810,947478,False
+HDB-166652,WOODLANDS,2023-08,735,WOODLANDS CIRCLE,ExactAddress,ExactAddress,BlockApproximation,woodlands-735-woodlands-circle,HistoricalFirstHit,730735,1,730735,943393,False
+HDB-166865,WOODLANDS,2023-09,650,WOODLANDS RING RD,Unmatched,NormalizedAddress,BlockApproximation,woodlands-650-woodlands-ring-rd,HistoricalFirstHit,730650,0,,946816,True
+HDB-168438,YISHUN,2023-07,674B,YISHUN AVE 4,Unmatched,NormalizedAddress,BlockApproximation,yishun-674b-yishun-ave-4,HistoricalFirstHit,762674,0,,939022,True
+HDB-170068,ANG MO KIO,2024-10,310A,ANG MO KIO AVE 1,NormalizedAddress,NormalizedAddress,BlockApproximation,ang-mo-kio-310a-ang-mo-kio-ave-1,HistoricalFirstHit,561310,3,561310,940795,False
+HDB-170130,ANG MO KIO,2024-11,310C,ANG MO KIO AVE 1,Unmatched,NormalizedAddress,BlockApproximation,ang-mo-kio-310c-ang-mo-kio-ave-1,HistoricalFirstHit,563310,0,,936579,True
+HDB-171600,BISHAN,2024-03,102,BISHAN ST 12,Unmatched,NormalizedAddress,BlockApproximation,bishan-102-bishan-st-12,HistoricalFirstHit,570102,0,,942838,True
+HDB-172486,BUKIT BATOK,2024-05,448C,BT BATOK WEST AVE 9,Unmatched,NormalizedAddress,BlockApproximation,bukit-batok-448c-bt-batok-west-ave-9,HistoricalFirstHit,653448,0,,938525,True
+HDB-173153,BUKIT BATOK,2024-09,360,BT BATOK ST 31,Unmatched,NormalizedAddress,BlockApproximation,bukit-batok-360-bt-batok-st-31,HistoricalFirstHit,650360,0,,938716,True
+HDB-174438,BUKIT MERAH,2024-09,134,JLN BT MERAH,Unmatched,NormalizedAddress,BlockApproximation,bukit-merah-134-jln-bt-merah,HistoricalFirstHit,160134,0,,944963,True
+HDB-174441,BUKIT MERAH,2024-09,95A,HENDERSON RD,Unmatched,NormalizedAddress,BlockApproximation,bukit-merah-95a-henderson-rd,HistoricalFirstHit,151095,0,,944862,True
+HDB-174995,BUKIT PANJANG,2024-05,616,SENJA RD,Unmatched,NormalizedAddress,BlockApproximation,bukit-panjang-616-senja-rd,HistoricalFirstHit,670616,0,,941885,True
+HDB-175028,BUKIT PANJANG,2024-05,452,FAJAR RD,Unmatched,NormalizedAddress,BlockApproximation,bukit-panjang-452-fajar-rd,HistoricalFirstHit,670452,0,,946266,True
+HDB-175635,CENTRAL AREA,2024-03,34,UPP CROSS ST,Unmatched,NormalizedAddress,BlockApproximation,central-area-34-upp-cross-st,HistoricalFirstHit,050034,0,,940060,True
+HDB-176663,CHOA CHU KANG,2024-08,673A,CHOA CHU KANG CRES,Unmatched,NormalizedAddress,BlockApproximation,choa-chu-kang-673a-choa-chu-kang-cres,HistoricalFirstHit,681673,0,,946915,True
+HDB-177005,CHOA CHU KANG,2024-12,818A,CHOA CHU KANG AVE 1,NormalizedAddress,NormalizedAddress,BlockApproximation,choa-chu-kang-818a-choa-chu-kang-ave-1,HistoricalFirstHit,681818,1,681818,945443,False
+HDB-179868,JURONG EAST,2024-03,104,JURONG EAST ST 13,Unmatched,NormalizedAddress,BlockApproximation,jurong-east-104-jurong-east-st-13,HistoricalFirstHit,600104,0,,947920,True
+HDB-180102,JURONG EAST,2024-08,372,JURONG EAST ST 32,Unmatched,NormalizedAddress,BlockApproximation,jurong-east-372-jurong-east-st-32,HistoricalFirstHit,600372,0,,941125,True
+HDB-180163,JURONG EAST,2024-08,336,JURONG EAST AVE 1,Unmatched,NormalizedAddress,BlockApproximation,jurong-east-336-jurong-east-ave-1,HistoricalFirstHit,600336,0,,942676,True
+HDB-180959,JURONG WEST,2024-04,347,KANG CHING RD,Unmatched,NormalizedAddress,BlockApproximation,jurong-west-347-kang-ching-rd,HistoricalFirstHit,610347,0,,948819,True
+HDB-183242,MARINE PARADE,2024-04,45,MARINE CRES,Unmatched,NormalizedAddress,BlockApproximation,marine-parade-45-marine-cres,HistoricalFirstHit,440045,0,,937192,True
+HDB-183579,PASIR RIS,2024-05,527C,PASIR RIS ST 51,Unmatched,NormalizedAddress,BlockApproximation,pasir-ris-527c-pasir-ris-st-51,HistoricalFirstHit,513527,0,,943164,True
+HDB-183961,PASIR RIS,2024-11,767,PASIR RIS ST 71,Unmatched,NormalizedAddress,BlockApproximation,pasir-ris-767-pasir-ris-st-71,HistoricalFirstHit,510767,0,,944183,True
+HDB-186051,PUNGGOL,2024-12,182,EDGEFIELD PLAINS,Unmatched,NormalizedAddress,BlockApproximation,punggol-182-edgefield-plains,HistoricalFirstHit,820182,0,,937586,True
+HDB-186565,QUEENSTOWN,2024-09,1,DOVER RD,Unmatched,NormalizedAddress,BlockApproximation,queenstown-1-dover-rd,HistoricalFirstHit,130001,0,,939763,True
+HDB-187522,SEMBAWANG,2024-10,128B,CANBERRA ST,Unmatched,NormalizedAddress,BlockApproximation,sembawang-128b-canberra-st,HistoricalFirstHit,752128,0,,937858,True
+HDB-187583,SEMBAWANG,2024-10,303,CANBERRA RD,Unmatched,NormalizedAddress,BlockApproximation,sembawang-303-canberra-rd,HistoricalFirstHit,750303,0,,936473,True
+HDB-187640,SEMBAWANG,2024-11,362C,SEMBAWANG CRES,Unmatched,NormalizedAddress,BlockApproximation,sembawang-362c-sembawang-cres,HistoricalFirstHit,753362,0,,939819,True
+HDB-187933,SENGKANG,2024-01,408A,FERNVALE RD,Unmatched,NormalizedAddress,BlockApproximation,sengkang-408a-fernvale-rd,HistoricalFirstHit,791408,0,,937736,True
+HDB-188119,SENGKANG,2024-02,282A,SENGKANG EAST AVE,Unmatched,NormalizedAddress,BlockApproximation,sengkang-282a-sengkang-east-ave,HistoricalFirstHit,541282,0,,940319,True
+HDB-189037,SENGKANG,2024-08,334B,ANCHORVALE CRES,Unmatched,NormalizedAddress,BlockApproximation,sengkang-334b-anchorvale-cres,HistoricalFirstHit,542334,0,,941074,True
+HDB-189971,SERANGOON,2024-03,323,SERANGOON AVE 3,Unmatched,NormalizedAddress,BlockApproximation,serangoon-323-serangoon-ave-3,HistoricalFirstHit,550323,0,,938578,True
+HDB-190028,SERANGOON,2024-04,114,SERANGOON NTH AVE 1,Unmatched,NormalizedAddress,BlockApproximation,serangoon-114-serangoon-nth-ave-1,HistoricalFirstHit,550114,0,,938622,True
+HDB-191884,TAMPINES,2024-10,109,TAMPINES ST 11,Unmatched,NormalizedAddress,BlockApproximation,tampines-109-tampines-st-11,HistoricalFirstHit,521109,0,,946739,True
+HDB-192423,TOA PAYOH,2024-02,139B,LOR 1A TOA PAYOH,Unmatched,NormalizedAddress,BlockApproximation,toa-payoh-139b-lor-1a-toa-payoh,HistoricalFirstHit,312139,0,,941305,True
+HDB-192947,TOA PAYOH,2024-10,79C,TOA PAYOH CTRL,Unmatched,NormalizedAddress,BlockApproximation,toa-payoh-79c-toa-payoh-ctrl,HistoricalFirstHit,313079,0,,948081,True
+HDB-193024,TOA PAYOH,2024-11,21,JOO SENG RD,Unmatched,NormalizedAddress,BlockApproximation,toa-payoh-21-joo-seng-rd,HistoricalFirstHit,360021,0,,940210,True
+HDB-193981,WOODLANDS,2024-06,785B,WOODLANDS RISE,ExactAddress,ExactAddress,BlockApproximation,woodlands-785b-woodlands-rise,HistoricalFirstHit,732785,2,732785,942805,False
+HDB-199535,BISHAN,2025-04,452,SIN MING AVE,Unmatched,NormalizedAddress,BlockApproximation,bishan-452-sin-ming-ave,HistoricalFirstHit,570452,0,,939021,True
+HDB-199537,BISHAN,2025-05,137,BISHAN ST 12,Unmatched,NormalizedAddress,BlockApproximation,bishan-137-bishan-st-12,HistoricalFirstHit,570137,0,,939195,True
+HDB-200026,BUKIT BATOK,2025-05,145,BT BATOK ST 11,Unmatched,NormalizedAddress,BlockApproximation,bukit-batok-145-bt-batok-st-11,HistoricalFirstHit,650145,0,,943058,True
+HDB-200607,BUKIT BATOK,2025-08,463B,BT BATOK ST 41,Unmatched,NormalizedAddress,BlockApproximation,bukit-batok-463b-bt-batok-st-41,HistoricalFirstHit,652463,0,,939458,True
+HDB-200957,BUKIT MERAH,2025-03,55,HAVELOCK RD,Unmatched,NormalizedAddress,BlockApproximation,bukit-merah-55-havelock-rd,HistoricalFirstHit,161055,0,,944745,True
+HDB-201853,BUKIT PANJANG,2025-07,149,PETIR RD,Unmatched,NormalizedAddress,BlockApproximation,bukit-panjang-149-petir-rd,HistoricalFirstHit,670149,0,,940580,True
+HDB-202415,BUKIT PANJANG,2025-02,474,SEGAR RD,Unmatched,NormalizedAddress,BlockApproximation,bukit-panjang-474-segar-rd,HistoricalFirstHit,670474,0,,943971,True
+HDB-202789,CENTRAL AREA,2025-10,1B,CANTONMENT RD,Unmatched,NormalizedAddress,BlockApproximation,central-area-1b-cantonment-rd,HistoricalFirstHit,085201,0,,941419,True
+HDB-203742,CHOA CHU KANG,2025-12,271,CHOA CHU KANG AVE 2,NormalizedAddress,NormalizedAddress,BlockApproximation,choa-chu-kang-271-choa-chu-kang-ave-2,HistoricalFirstHit,680271,5,680271,938109,False
+HDB-204122,CLEMENTI,2025-12,349,CLEMENTI AVE 2,NormalizedAddress,NormalizedAddress,BlockApproximation,clementi-349-clementi-ave-2,HistoricalFirstHit,120349,2,120349,942893,False
+HDB-205053,HOUGANG,2025-05,994B,BUANGKOK LINK,ExactAddress,ExactAddress,BlockApproximation,hougang-994b-buangkok-link,HistoricalFirstHit,532994,1,532994,935961,False
+HDB-206831,JURONG WEST,2025-11,698A,JURONG WEST CTRL 3,NormalizedAddress,NormalizedAddress,BlockApproximation,jurong-west-698a-jurong-west-ctrl-3,HistoricalFirstHit,641698,1,641698,940927,False
+HDB-209143,KALLANG/WHAMPOA,2025-02,122,MCNAIR RD,Unmatched,NormalizedAddress,BlockApproximation,kallang-whampoa-122-mcnair-rd,HistoricalFirstHit,320122,0,,941455,True
+HDB-209197,MARINE PARADE,2025-07,15,MARINE TER,Unmatched,NormalizedAddress,BlockApproximation,marine-parade-15-marine-ter,HistoricalFirstHit,440015,0,,939512,True
+HDB-209352,MARINE PARADE,2025-07,2,MARINE TER,Unmatched,NormalizedAddress,BlockApproximation,marine-parade-2-marine-ter,HistoricalFirstHit,440002,0,,945293,True
+HDB-210004,PUNGGOL,2025-08,408A,NORTHSHORE DR,Unmatched,NormalizedAddress,BlockApproximation,punggol-408a-northshore-dr,HistoricalFirstHit,821408,0,,943977,True
+HDB-211137,PUNGGOL,2025-12,134,EDGEDALE PLAINS,ExactAddress,ExactAddress,BlockApproximation,punggol-134-edgedale-plains,HistoricalFirstHit,820134,3,820134,938081,False
+HDB-213364,SENGKANG,2025-01,443B,FERNVALE RD,Unmatched,NormalizedAddress,BlockApproximation,sengkang-443b-fernvale-rd,HistoricalFirstHit,792443,0,,948780,True
+HDB-215442,SERANGOON,2025-10,420,SERANGOON CTRL,Unmatched,NormalizedAddress,BlockApproximation,serangoon-420-serangoon-ctrl,HistoricalFirstHit,550420,0,,946929,True
+HDB-217431,TAMPINES,2025-04,892,TAMPINES AVE 8,NormalizedAddress,NormalizedAddress,BlockApproximation,tampines-892-tampines-ave-8,HistoricalFirstHit,520892,1,520892,944437,False
+HDB-217554,TAMPINES,2025-04,460,TAMPINES ST 42,Unmatched,NormalizedAddress,BlockApproximation,tampines-460-tampines-st-42,HistoricalFirstHit,520460,0,,941144,True
+HDB-217560,TOA PAYOH,2025-02,120,LOR 2 TOA PAYOH,Unmatched,NormalizedAddress,BlockApproximation,toa-payoh-120-lor-2-toa-payoh,HistoricalFirstHit,310120,0,,938497,True
+HDB-219685,WOODLANDS,2025-02,853,WOODLANDS ST 83,Unmatched,NormalizedAddress,BlockApproximation,woodlands-853-woodlands-st-83,HistoricalFirstHit,730853,0,,947818,True
+HDB-220393,YISHUN,2025-07,672A,YISHUN AVE 4,Unmatched,NormalizedAddress,BlockApproximation,yishun-672a-yishun-ave-4,HistoricalFirstHit,761672,0,,947834,True
+HDB-220805,YISHUN,2025-11,223,YISHUN ST 21,Unmatched,NormalizedAddress,BlockApproximation,yishun-223-yishun-st-21,HistoricalFirstHit,760223,0,,943658,True
+HDB-221289,YISHUN,2025-03,449,YISHUN RING RD,Unmatched,NormalizedAddress,BlockApproximation,yishun-449-yishun-ring-rd,HistoricalFirstHit,760449,0,,942311,True
+HDB-222072,ANG MO KIO,2026-02,314,ANG MO KIO AVE 3,NormalizedAddress,NormalizedAddress,BlockApproximation,ang-mo-kio-314-ang-mo-kio-ave-3,HistoricalFirstHit,560314,1,560314,948758,False
+HDB-222103,ANG MO KIO,2026-05,320,ANG MO KIO AVE 1,NormalizedAddress,NormalizedAddress,BlockApproximation,ang-mo-kio-320-ang-mo-kio-ave-1,HistoricalFirstHit,560320,3,560320,940342,False
+HDB-222433,ANG MO KIO,2026-03,543,ANG MO KIO AVE 10,Unmatched,NormalizedAddress,BlockApproximation,ang-mo-kio-543-ang-mo-kio-ave-10,HistoricalFirstHit,560543,0,,937501,True
+HDB-222672,ANG MO KIO,2026-04,501,ANG MO KIO AVE 5,Unmatched,NormalizedAddress,BlockApproximation,ang-mo-kio-501-ang-mo-kio-ave-5,HistoricalFirstHit,560501,0,,940593,True
+HDB-223040,BEDOK,2026-08,620,BEDOK RESERVOIR RD,Unmatched,NormalizedAddress,BlockApproximation,bedok-620-bedok-reservoir-rd,HistoricalFirstHit,470620,0,,943485,True
+HDB-223305,BEDOK,2026-04,188B,BEDOK NTH ST 4,Unmatched,NormalizedAddress,BlockApproximation,bedok-188b-bedok-nth-st-4,HistoricalFirstHit,462188,0,,942680,True
+HDB-223610,BEDOK,2026-03,97,BEDOK NTH AVE 4,Unmatched,NormalizedAddress,BlockApproximation,bedok-97-bedok-nth-ave-4,HistoricalFirstHit,460097,0,,947596,True
+HDB-223768,BEDOK,2026-03,635,BEDOK RESERVOIR RD,Unmatched,NormalizedAddress,BlockApproximation,bedok-635-bedok-reservoir-rd,HistoricalFirstHit,410635,0,,938106,True
+HDB-223850,BISHAN,2026-07,22,SIN MING RD,Unmatched,NormalizedAddress,BlockApproximation,bishan-22-sin-ming-rd,HistoricalFirstHit,570022,0,,945122,True
+HDB-223905,BISHAN,2026-02,178,BISHAN ST 13,Unmatched,NormalizedAddress,BlockApproximation,bishan-178-bishan-st-13,HistoricalFirstHit,570178,0,,939894,True
+HDB-224070,BISHAN,2026-09,190,BISHAN ST 13,Unmatched,NormalizedAddress,BlockApproximation,bishan-190-bishan-st-13,HistoricalFirstHit,570190,0,,936122,True
+HDB-224125,BISHAN,2026-04,261,BISHAN ST 22,Unmatched,NormalizedAddress,BlockApproximation,bishan-261-bishan-st-22,HistoricalFirstHit,570261,0,,939248,True
+HDB-224166,BUKIT BATOK,2026-03,438C,BT BATOK WEST AVE 8,Unmatched,NormalizedAddress,BlockApproximation,bukit-batok-438c-bt-batok-west-ave-8,HistoricalFirstHit,653438,0,,937185,True
+HDB-224759,BUKIT BATOK,2026-04,451B,BT BATOK WEST AVE 6,Unmatched,NormalizedAddress,BlockApproximation,bukit-batok-451b-bt-batok-west-ave-6,HistoricalFirstHit,652451,0,,938142,True
+HDB-225067,BUKIT BATOK,2026-05,437A,BT BATOK WEST AVE 5,Unmatched,NormalizedAddress,BlockApproximation,bukit-batok-437a-bt-batok-west-ave-5,HistoricalFirstHit,651437,0,,946241,True
+HDB-225241,BUKIT BATOK,2026-06,223,BT BATOK EAST AVE 3,Unmatched,NormalizedAddress,BlockApproximation,bukit-batok-223-bt-batok-east-ave-3,HistoricalFirstHit,650223,0,,946432,True
+HDB-225282,BUKIT MERAH,2026-04,7,TELOK BLANGAH CRES,Unmatched,NormalizedAddress,BlockApproximation,bukit-merah-7-telok-blangah-cres,HistoricalFirstHit,090007,0,,949025,True
+HDB-225297,BUKIT MERAH,2026-03,30,JLN KLINIK,Unmatched,NormalizedAddress,BlockApproximation,bukit-merah-30-jln-klinik,HistoricalFirstHit,160030,0,,943906,True
+HDB-225455,BUKIT MERAH,2026-01,12,TAMAN HO SWEE,Unmatched,NormalizedAddress,BlockApproximation,bukit-merah-12-taman-ho-swee,HistoricalFirstHit,162012,0,,936708,True
+HDB-225562,BUKIT MERAH,2026-07,6B,BOON TIONG RD,Unmatched,NormalizedAddress,BlockApproximation,bukit-merah-6b-boon-tiong-rd,HistoricalFirstHit,165006,0,,946026,True
+HDB-226013,BUKIT PANJANG,2026-01,636A,SENJA RD,Unmatched,NormalizedAddress,BlockApproximation,bukit-panjang-636a-senja-rd,HistoricalFirstHit,671636,0,,941678,True
+HDB-226220,BUKIT PANJANG,2026-04,232,PENDING RD,Unmatched,NormalizedAddress,BlockApproximation,bukit-panjang-232-pending-rd,HistoricalFirstHit,670232,0,,939406,True
+HDB-226474,BUKIT PANJANG,2026-03,178,LOMPANG RD,Unmatched,NormalizedAddress,BlockApproximation,bukit-panjang-178-lompang-rd,HistoricalFirstHit,670178,0,,937796,True
+HDB-226597,BUKIT PANJANG,2026-08,543,JELAPANG RD,Unmatched,NormalizedAddress,BlockApproximation,bukit-panjang-543-jelapang-rd,HistoricalFirstHit,670543,0,,944967,True
+HDB-226640,BUKIT TIMAH,2026-04,3,QUEEN'S RD,Unmatched,Unmatched,Missing,bukit-timah-3-queen-s-rd,HistoricalFirstHit,266734,0,,,False
+HDB-226648,BUKIT TIMAH,2026-04,14,TOH YI DR,Unmatched,NormalizedAddress,BlockApproximation,bukit-timah-14-toh-yi-dr,HistoricalFirstHit,590014,0,,935730,True
+HDB-226669,BUKIT TIMAH,2026-07,5,TOH YI DR,Unmatched,NormalizedAddress,BlockApproximation,bukit-timah-5-toh-yi-dr,HistoricalFirstHit,590005,0,,935743,True
+HDB-226677,BUKIT TIMAH,2026-06,3,TOH YI DR,Unmatched,NormalizedAddress,BlockApproximation,bukit-timah-3-toh-yi-dr,HistoricalFirstHit,590003,0,,935736,True
+HDB-226683,CENTRAL AREA,2026-08,8,JLN KUKOH,Unmatched,NormalizedAddress,BlockApproximation,central-area-8-jln-kukoh,HistoricalFirstHit,162008,0,,942043,True
+HDB-226730,CENTRAL AREA,2026-08,637,VEERASAMY RD,Unmatched,NormalizedAddress,BlockApproximation,central-area-637-veerasamy-rd,HistoricalFirstHit,200637,0,,947600,True
+HDB-226775,CENTRAL AREA,2026-09,26,JLN BERSEH,Unmatched,NormalizedAddress,BlockApproximation,central-area-26-jln-berseh,HistoricalFirstHit,200026,0,,943709,True
+HDB-226819,CENTRAL AREA,2026-08,671B,KLANG LANE,ExactAddress,ExactAddress,BlockApproximation,central-area-671b-klang-lane,HistoricalFirstHit,212671,8,212671,947679,False
+HDB-226870,CHOA CHU KANG,2026-04,10,TECK WHYE AVE,Unmatched,NormalizedAddress,BlockApproximation,choa-chu-kang-10-teck-whye-ave,HistoricalFirstHit,680010,0,,941430,True
+HDB-227097,CHOA CHU KANG,2026-03,680,CHOA CHU KANG CRES,Unmatched,NormalizedAddress,BlockApproximation,choa-chu-kang-680-choa-chu-kang-cres,HistoricalFirstHit,680680,0,,937864,True
+HDB-227576,CHOA CHU KANG,2026-02,144,TECK WHYE LANE,ExactAddress,ExactAddress,BlockApproximation,choa-chu-kang-144-teck-whye-lane,HistoricalFirstHit,680144,2,680144,941611,False
+HDB-227599,CHOA CHU KANG,2026-03,458,CHOA CHU KANG AVE 4,NormalizedAddress,NormalizedAddress,BlockApproximation,choa-chu-kang-458-choa-chu-kang-ave-4,HistoricalFirstHit,680458,2,680458,936025,False
+HDB-227655,CLEMENTI,2026-07,418,CLEMENTI AVE 1,NormalizedAddress,NormalizedAddress,BlockApproximation,clementi-418-clementi-ave-1,HistoricalFirstHit,120418,2,120418,947787,False
+HDB-227777,CLEMENTI,2026-04,607,CLEMENTI WEST ST 1,Unmatched,NormalizedAddress,BlockApproximation,clementi-607-clementi-west-st-1,HistoricalFirstHit,120607,0,,944081,True
+HDB-228023,CLEMENTI,2026-06,311B,CLEMENTI AVE 4,NormalizedAddress,NormalizedAddress,BlockApproximation,clementi-311b-clementi-ave-4,HistoricalFirstHit,122311,2,122311,936195,False
+HDB-228042,CLEMENTI,2026-03,116,CLEMENTI ST 13,Unmatched,NormalizedAddress,BlockApproximation,clementi-116-clementi-st-13,HistoricalFirstHit,120116,0,,946863,True
+HDB-228049,GEYLANG,2026-03,109,ALJUNIED CRES,Unmatched,NormalizedAddress,BlockApproximation,geylang-109-aljunied-cres,HistoricalFirstHit,380109,0,,937869,True
+HDB-228073,GEYLANG,2026-06,98,ALJUNIED CRES,Unmatched,NormalizedAddress,BlockApproximation,geylang-98-aljunied-cres,HistoricalFirstHit,380098,0,,939967,True
+HDB-228538,GEYLANG,2026-08,7,PINE CL,Unmatched,NormalizedAddress,BlockApproximation,geylang-7-pine-cl,HistoricalFirstHit,391007,0,,938266,True
+HDB-228561,GEYLANG,2026-09,326,UBI AVE 1,NormalizedAddress,NormalizedAddress,BlockApproximation,geylang-326-ubi-ave-1,HistoricalFirstHit,400326,2,400326,936584,False
+HDB-228759,HOUGANG,2026-09,244,HOUGANG ST 22,Unmatched,NormalizedAddress,BlockApproximation,hougang-244-hougang-st-22,HistoricalFirstHit,530244,0,,944119,True
+HDB-229200,HOUGANG,2026-02,473D,UPP SERANGOON CRES,Unmatched,NormalizedAddress,BlockApproximation,hougang-473d-upp-serangoon-cres,HistoricalFirstHit,538473,0,,944992,True
+HDB-229330,HOUGANG,2026-08,527,HOUGANG AVE 6,NormalizedAddress,NormalizedAddress,BlockApproximation,hougang-527-hougang-ave-6,HistoricalFirstHit,530527,2,530527,946677,False
+HDB-229528,HOUGANG,2026-04,563,HOUGANG ST 51,Unmatched,NormalizedAddress,BlockApproximation,hougang-563-hougang-st-51,HistoricalFirstHit,530563,0,,943783,True
+HDB-229601,JURONG EAST,2026-03,210,JURONG EAST ST 21,Unmatched,NormalizedAddress,BlockApproximation,jurong-east-210-jurong-east-st-21,HistoricalFirstHit,600210,0,,937440,True
+HDB-229787,JURONG EAST,2026-07,22,TEBAN GDNS RD,Unmatched,NormalizedAddress,BlockApproximation,jurong-east-22-teban-gdns-rd,HistoricalFirstHit,600022,0,,937812,True
+HDB-229845,JURONG EAST,2026-02,220,JURONG EAST ST 21,Unmatched,NormalizedAddress,BlockApproximation,jurong-east-220-jurong-east-st-21,HistoricalFirstHit,600220,0,,937285,True
+HDB-229945,JURONG EAST,2026-05,285D,TOH GUAN RD,Unmatched,NormalizedAddress,BlockApproximation,jurong-east-285d-toh-guan-rd,HistoricalFirstHit,604285,0,,948173,True
+HDB-229960,JURONG WEST,2026-01,150A,CORPORATION DR,Unmatched,NormalizedAddress,BlockApproximation,jurong-west-150a-corporation-dr,HistoricalFirstHit,611150,0,,943908,True
+HDB-230066,JURONG WEST,2026-03,112,HO CHING RD,Unmatched,NormalizedAddress,BlockApproximation,jurong-west-112-ho-ching-rd,HistoricalFirstHit,610112,0,,936370,True
+HDB-231017,JURONG WEST,2026-09,164A,YUNG KUANG RD,Unmatched,NormalizedAddress,BlockApproximation,jurong-west-164a-yung-kuang-rd,HistoricalFirstHit,611164,0,,942208,True
+HDB-231115,JURONG WEST,2026-01,332,TAH CHING RD,Unmatched,NormalizedAddress,BlockApproximation,jurong-west-332-tah-ching-rd,HistoricalFirstHit,610332,0,,936490,True
+HDB-231136,KALLANG/WHAMPOA,2026-03,805,KING GEORGE'S AVE,Unmatched,NormalizedAddress,BlockApproximation,kallang-whampoa-805-king-george-s-ave,HistoricalFirstHit,200805,0,,947351,True
+HDB-231339,KALLANG/WHAMPOA,2026-07,16,UPP BOON KENG RD,Unmatched,NormalizedAddress,BlockApproximation,kallang-whampoa-16-upp-boon-keng-rd,HistoricalFirstHit,380016,0,,946017,True
+HDB-231464,KALLANG/WHAMPOA,2026-03,116B,JLN TENTERAM,Unmatched,NormalizedAddress,BlockApproximation,kallang-whampoa-116b-jln-tenteram,HistoricalFirstHit,322116,0,,941032,True
+HDB-231710,KALLANG/WHAMPOA,2026-02,105,JLN RAJAH,Unmatched,NormalizedAddress,BlockApproximation,kallang-whampoa-105-jln-rajah,HistoricalFirstHit,320105,0,,940338,True
+HDB-231724,MARINE PARADE,2026-04,33,MARINE CRES,Unmatched,NormalizedAddress,BlockApproximation,marine-parade-33-marine-cres,HistoricalFirstHit,440033,0,,941601,True
+HDB-231771,MARINE PARADE,2026-09,35,MARINE CRES,Unmatched,NormalizedAddress,BlockApproximation,marine-parade-35-marine-cres,HistoricalFirstHit,440035,0,,938429,True
+HDB-231795,MARINE PARADE,2026-10,20,MARINE TER,Unmatched,NormalizedAddress,BlockApproximation,marine-parade-20-marine-ter,HistoricalFirstHit,440020,0,,945860,True
+HDB-231807,MARINE PARADE,2026-05,79,MARINE DR,Unmatched,NormalizedAddress,BlockApproximation,marine-parade-79-marine-dr,HistoricalFirstHit,440079,0,,936831,True
+HDB-231824,PASIR RIS,2026-06,528A,PASIR RIS ST 51,Unmatched,NormalizedAddress,BlockApproximation,pasir-ris-528a-pasir-ris-st-51,HistoricalFirstHit,511528,0,,943759,True
+HDB-232014,PASIR RIS,2026-05,526D,PASIR RIS ST 51,Unmatched,NormalizedAddress,BlockApproximation,pasir-ris-526d-pasir-ris-st-51,HistoricalFirstHit,514526,0,,935985,True
+HDB-232175,PASIR RIS,2026-05,102,PASIR RIS ST 12,Unmatched,NormalizedAddress,BlockApproximation,pasir-ris-102-pasir-ris-st-12,HistoricalFirstHit,510102,0,,938807,True
+HDB-232287,PASIR RIS,2026-09,601,ELIAS RD,Unmatched,NormalizedAddress,BlockApproximation,pasir-ris-601-elias-rd,HistoricalFirstHit,510601,0,,940768,True
+HDB-232582,PUNGGOL,2026-08,421C,NORTHSHORE DR,Unmatched,NormalizedAddress,BlockApproximation,punggol-421c-northshore-dr,HistoricalFirstHit,823421,0,,945518,True
+HDB-233365,PUNGGOL,2026-04,217A,SUMANG WALK,ExactAddress,ExactAddress,BlockApproximation,punggol-217a-sumang-walk,HistoricalFirstHit,821217,1,821217,947789,False
+HDB-233409,PUNGGOL,2026-05,134,EDGEDALE PLAINS,ExactAddress,ExactAddress,BlockApproximation,punggol-134-edgedale-plains,HistoricalFirstHit,820134,3,820134,938081,False
+HDB-233770,PUNGGOL,2026-07,114,EDGEFIELD PLAINS,ExactAddress,ExactAddress,BlockApproximation,punggol-114-edgefield-plains,HistoricalFirstHit,820114,2,820114,938556,False
+HDB-233792,QUEENSTOWN,2026-05,27,GHIM MOH LINK,ExactAddress,ExactAddress,BlockApproximation,queenstown-27-ghim-moh-link,HistoricalFirstHit,270027,2,270027,939230,False
+HDB-234011,QUEENSTOWN,2026-05,11,HOLLAND DR,Unmatched,Unmatched,Missing,queenstown-11-holland-dr,HistoricalFirstHit,278859,0,,,False
+HDB-234389,QUEENSTOWN,2026-05,48,STRATHMORE AVE,Unmatched,NormalizedAddress,BlockApproximation,queenstown-48-strathmore-ave,HistoricalFirstHit,140048,0,,937220,True
+HDB-234401,QUEENSTOWN,2026-09,148,MEI LING ST,Unmatched,NormalizedAddress,BlockApproximation,queenstown-148-mei-ling-st,HistoricalFirstHit,140148,0,,941497,True
+HDB-234452,SEMBAWANG,2026-09,593B,MONTREAL LINK,ExactAddress,ExactAddress,BlockApproximation,sembawang-593b-montreal-link,HistoricalFirstHit,752593,2,752593,947105,False
+HDB-234511,SEMBAWANG,2026-04,132B,CANBERRA VIEW,ExactAddress,ExactAddress,BlockApproximation,sembawang-132b-canberra-view,HistoricalFirstHit,752132,1,752132,944261,False
+HDB-234805,SEMBAWANG,2026-01,412,SEMBAWANG DR,Unmatched,NormalizedAddress,BlockApproximation,sembawang-412-sembawang-dr,HistoricalFirstHit,750412,0,,948404,True
+HDB-234869,SEMBAWANG,2026-08,354A,ADMIRALTY DR,Unmatched,NormalizedAddress,BlockApproximation,sembawang-354a-admiralty-dr,HistoricalFirstHit,751354,0,,944668,True
+HDB-235121,SENGKANG,2026-06,457B,SENGKANG WEST RD,Unmatched,NormalizedAddress,BlockApproximation,sengkang-457b-sengkang-west-rd,HistoricalFirstHit,792457,0,,945945,True
+HDB-235320,SENGKANG,2026-02,313A,ANCHORVALE RD,Unmatched,NormalizedAddress,BlockApproximation,sengkang-313a-anchorvale-rd,HistoricalFirstHit,541313,0,,940382,True
+HDB-236278,SENGKANG,2026-07,123D,RIVERVALE DR,Unmatched,NormalizedAddress,BlockApproximation,sengkang-123d-rivervale-dr,HistoricalFirstHit,544123,0,,944933,True
+HDB-236398,SENGKANG,2026-09,307B,ANCHORVALE RD,Unmatched,NormalizedAddress,BlockApproximation,sengkang-307b-anchorvale-rd,HistoricalFirstHit,542307,0,,936495,True
+HDB-236503,SERANGOON,2026-09,302,SERANGOON AVE 2,NormalizedAddress,NormalizedAddress,BlockApproximation,serangoon-302-serangoon-ave-2,HistoricalFirstHit,550302,1,550302,937813,False
+HDB-236630,SERANGOON,2026-05,258,SERANGOON CTRL DR,Unmatched,NormalizedAddress,BlockApproximation,serangoon-258-serangoon-ctrl-dr,HistoricalFirstHit,550258,0,,942752,True
+HDB-236706,SERANGOON,2026-08,114,SERANGOON NTH AVE 1,Unmatched,NormalizedAddress,BlockApproximation,serangoon-114-serangoon-nth-ave-1,HistoricalFirstHit,550114,0,,938622,True
+HDB-236741,SERANGOON,2026-08,234A,SERANGOON AVE 2,NormalizedAddress,NormalizedAddress,BlockApproximation,serangoon-234a-serangoon-ave-2,HistoricalFirstHit,551234,4,551234,942195,False
+HDB-237041,TAMPINES,2026-02,828,TAMPINES ST 81,Unmatched,NormalizedAddress,BlockApproximation,tampines-828-tampines-st-81,HistoricalFirstHit,520828,0,,937759,True
+HDB-237091,TAMPINES,2026-01,159,SIMEI RD,Unmatched,NormalizedAddress,BlockApproximation,tampines-159-simei-rd,HistoricalFirstHit,520159,0,,940313,True
+HDB-237972,TAMPINES,2026-02,612B,TAMPINES NTH DR 1,Unmatched,NormalizedAddress,BlockApproximation,tampines-612b-tampines-nth-dr-1,HistoricalFirstHit,522612,0,,942990,True
+HDB-238416,TAMPINES,2026-10,867A,TAMPINES ST 83,Unmatched,NormalizedAddress,BlockApproximation,tampines-867a-tampines-st-83,HistoricalFirstHit,521867,0,,941955,True
+HDB-238426,TOA PAYOH,2026-02,120,LOR 2 TOA PAYOH,Unmatched,NormalizedAddress,BlockApproximation,toa-payoh-120-lor-2-toa-payoh,HistoricalFirstHit,310120,0,,938497,True
+HDB-238450,TOA PAYOH,2026-07,115C,ALKAFF CRES,Unmatched,NormalizedAddress,BlockApproximation,toa-payoh-115c-alkaff-cres,HistoricalFirstHit,343115,0,,939537,True
+HDB-238976,TOA PAYOH,2026-09,145,LOR 2 TOA PAYOH,Unmatched,NormalizedAddress,BlockApproximation,toa-payoh-145-lor-2-toa-payoh,HistoricalFirstHit,310145,0,,948128,True
+HDB-239131,TOA PAYOH,2026-09,138C,LOR 1A TOA PAYOH,Unmatched,NormalizedAddress,BlockApproximation,toa-payoh-138c-lor-1a-toa-payoh,HistoricalFirstHit,313138,0,,947092,True
+HDB-239217,WOODLANDS,2026-02,182A,WOODLANDS ST 13,Unmatched,NormalizedAddress,BlockApproximation,woodlands-182a-woodlands-st-13,HistoricalFirstHit,731182,0,,940739,True
+HDB-239344,WOODLANDS,2026-03,145,WOODLANDS ST 13,Unmatched,NormalizedAddress,BlockApproximation,woodlands-145-woodlands-st-13,HistoricalFirstHit,730145,0,,936447,True
+HDB-240502,WOODLANDS,2026-05,861,WOODLANDS ST 83,Unmatched,NormalizedAddress,BlockApproximation,woodlands-861-woodlands-st-83,HistoricalFirstHit,730861,0,,947875,True
+HDB-240622,WOODLANDS,2026-05,325,WOODLANDS ST 32,Unmatched,NormalizedAddress,BlockApproximation,woodlands-325-woodlands-st-32,HistoricalFirstHit,730325,0,,936615,True
+HDB-240666,YISHUN,2026-01,438,YISHUN AVE 11,NormalizedAddress,NormalizedAddress,BlockApproximation,yishun-438-yishun-ave-11,HistoricalFirstHit,760438,4,760438,943663,False
+HDB-240911,YISHUN,2026-07,160,YISHUN ST 11,Unmatched,NormalizedAddress,BlockApproximation,yishun-160-yishun-st-11,HistoricalFirstHit,760160,0,,947613,True
+HDB-241124,YISHUN,2026-04,674B,YISHUN AVE 4,Unmatched,NormalizedAddress,BlockApproximation,yishun-674b-yishun-ave-4,HistoricalFirstHit,762674,0,,939022,True
+HDB-241919,YISHUN,2026-05,666,YISHUN AVE 4,NormalizedAddress,NormalizedAddress,BlockApproximation,yishun-666-yishun-ave-4,HistoricalFirstHit,760666,1,760666,944158,False

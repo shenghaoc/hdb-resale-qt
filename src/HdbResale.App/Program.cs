@@ -27,6 +27,11 @@ internal static class Program
             if (!report.AcquisitionComplete) Environment.ExitCode = 1;
             return;
         }
+        if (args.Length == 5 && args[0] == "--historical-onemap")
+        {
+            WriteReport(args[4],HistoricalOneMap.Load(args[1],args[2],args[3]));
+            return;
+        }
         Qml.LoadFromRootModule("Main");
         Qml.WaitForExit();
         if (Environment.GetEnvironmentVariable("HDB_RUNTIME_GATE") == "1") Console.WriteLine("HDB_GATE_EXIT");
