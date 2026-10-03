@@ -1,8 +1,8 @@
 # HDB resale native fixture explorer
 
 Milestone 6: a runnable native slice with a measured full-corpus scale path, a reproducible bounded coverage study,
-verified historical first-result postal experiment and native interaction gate on macOS
-arm64. This is the C#/Qt sibling of the
+verified historical first-result postal experiment and native interaction gates on macOS
+arm64 and Linux x64. This is the C#/Qt sibling of the
 [web HDB resale visualizer](https://github.com/shenghaoc/hdb-resale-visualizer);
 the web project is a product and behavior reference, not a translated frontend.
 
@@ -143,7 +143,8 @@ so a single-move automation gesture can pan as well as normal pointer movement.
 See [docs/verification.md](docs/verification.md) for executed checks and limits.
 Supported RID package selection from the template remains for Windows x64/arm64,
 Linux x64, and macOS x64/arm64. Other desktop targets require their matching Qt
-installation and toolchain; Linux/Windows have not been built or UI-tested here.
+installation and toolchain; Linux x64 is additionally verified; see [Linux setup and results](docs/linux.md).
+Windows has not been built or UI-tested here.
 Keep build/run on the same Qt installation: the bridge uses Qt private headers
 and fresh native configuration warns about coupling to that Qt build.
 
@@ -216,8 +217,8 @@ matching and a C# address-marker projection. See [scale results and reproduction
 for cardinalities, stage timings, memory, native gates, the explicit offline data-directory
 override and limitations. Default startup remains the six-row fixture. M7 should profile
 transient loading memory and the measured map-ready workload before architecture
-or renderer changes. Linux/Windows GUI validation and packaged distribution remain
-separate work.
+or renderer changes. Windows GUI validation and packaged distribution remain separate work.
+[Linux verification](docs/linux.md) records the additional platform-specific Bridge pin.
 
 ## Native runtime gate
 
@@ -257,7 +258,7 @@ or successful network tile rendering. The gate does not certify tile pixels.
 Real Cocoa desktop inputs and screenshots were separately exercised, including
 rendered OSM, selected orange pin, wheel/drag, unlocated selection and visible
 startup diagnostics; details and limits are in [verification](docs/verification.md).
-The gate is currently verified on macOS arm64 only, inspired by the sibling
+The gate is verified on macOS arm64 and Linux x64, inspired by the sibling
 rowplay-qt runtime gate but implemented with the C# bridge and no sibling edits.
 
 ## Development workflow

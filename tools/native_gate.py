@@ -12,7 +12,8 @@ def verify(code,log):
  if log.count('HDB_GATE_PASS')!=1 or log.count('HDB_GATE_EXIT')!=1:raise RuntimeError('Missing pass/clean C# teardown:\n'+log)
 def run(executable,output):
  env={**os.environ,'HDB_RUNTIME_GATE':'1','QT_MESSAGE_PATTERN':'%{type}: %{message}'}
- # Cocoa by default: this is a real native gate. No offscreen provider or tile-render assertion.
+ # Use the desktop's native platform (Cocoa on macOS, xcb/Wayland on Linux).
+ # No offscreen provider or tile-render assertion.
  with subprocess.Popen([str(executable.resolve())],cwd=executable.resolve().parent,env=env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True) as child:
   try:log,_=child.communicate(timeout=25)
   except subprocess.TimeoutExpired:

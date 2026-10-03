@@ -109,3 +109,12 @@ verify exact-head CI, then fetch and fast-forward main only if origin/main is
 still an ancestor. Audit again before main push and verify local main,
 origin/main and GitHub default HEAD match the final commit. No force push,
 tags, release, PR or unrelated history rewrite is part of this milestone.
+
+## Linux continuation
+
+The user redirected the remaining native verification to the cloud Linux desktop.
+[Linux verification](../linux.md) records the successful Debug/Release builds,
+canonical/full gates, negative gates and final physical wrapping/above-S$1m
+checks. The final macOS pixels remain unverified. The historical publication
+status above describes the original Mac checkpoint; subsequent publication is
+recorded separately and must not be inferred from these local checks.

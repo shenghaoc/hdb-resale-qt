@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Bounded Cocoa scale gate; logs C# construction/reset and QML readiness separately."""
+"""Bounded native desktop scale gate; logs C# construction/reset and QML readiness separately."""
 import argparse,os,re,subprocess,time,json
 from pathlib import Path
 from native_gate import FORBIDDEN

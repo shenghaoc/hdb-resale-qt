@@ -1,0 +1,53 @@
+{
+  "platform": "Debian 13.6 x86_64 / XFCE X11",
+  "dotnet_sdk": "10.0.401",
+  "qt": "6.12.0",
+  "bridge": "0.4.0-beta",
+  "notes": "Native desktop gates, existing deadlines. Timings include observer cadence and transitions; not isolated GPU/bridge or cold tile timing.",
+  "configurations": {
+    "Debug": {
+      "gate_exit": 0,
+      "measurements": [
+        "HDB_SCALE_CONSTRUCT 6930 rows=236791 mapped=1920 managed=637901688 working=779612160",
+        "HDB_SCALE_ORACLE 419",
+        "qml: HDB_SCALE_STEP loaded ms=2084 rows=236791 delegates=1920",
+        "HDB_SCALE_RESET 46 rows=9441 mapped=279",
+        "qml: HDB_SCALE_STEP filtered ms=807 rows=9441 delegates=279",
+        "HDB_SCALE_RESET 44 rows=6469 mapped=264",
+        "qml: HDB_SCALE_STEP budget-filtered ms=429 rows=6469 delegates=264",
+        "qml: HDB_SCALE_STEP selected ms=35 rows=6469 delegates=264",
+        "HDB_SCALE_RESET 23 rows=0 mapped=0",
+        "qml: HDB_SCALE_STEP empty-cleared ms=338 rows=0 delegates=0",
+        "HDB_SCALE_RESET 66 rows=236791 mapped=1920",
+        "qml: HDB_SCALE_STEP reset ms=3779 rows=236791 delegates=1920",
+        "qml: HDB_SCALE_STEP zoomed ms=3 rows=236791 delegates=1920",
+        "qml: HDB_SCALE_STEP panned ms=160 rows=236791 delegates=1920",
+        "qml: HDB_SCALE_STEP recentered ms=4 rows=236791 delegates=1920",
+        "qml: HDB_SCALE_PASS"
+      ],
+      "clean_teardown": true
+    },
+    "Release": {
+      "gate_exit": 0,
+      "measurements": [
+        "HDB_SCALE_CONSTRUCT 6458 rows=236791 mapped=1920 managed=637842120 working=777904128",
+        "HDB_SCALE_ORACLE 415",
+        "qml: HDB_SCALE_STEP loaded ms=2709 rows=236791 delegates=1920",
+        "HDB_SCALE_RESET 78 rows=9441 mapped=279",
+        "qml: HDB_SCALE_STEP filtered ms=889 rows=9441 delegates=279",
+        "HDB_SCALE_RESET 45 rows=6469 mapped=264",
+        "qml: HDB_SCALE_STEP budget-filtered ms=458 rows=6469 delegates=264",
+        "qml: HDB_SCALE_STEP selected ms=25 rows=6469 delegates=264",
+        "HDB_SCALE_RESET 32 rows=0 mapped=0",
+        "qml: HDB_SCALE_STEP empty-cleared ms=347 rows=0 delegates=0",
+        "HDB_SCALE_RESET 59 rows=236791 mapped=1920",
+        "qml: HDB_SCALE_STEP reset ms=3501 rows=236791 delegates=1920",
+        "qml: HDB_SCALE_STEP zoomed ms=172 rows=236791 delegates=1920",
+        "qml: HDB_SCALE_STEP panned ms=112 rows=236791 delegates=1920",
+        "qml: HDB_SCALE_STEP recentered ms=67 rows=236791 delegates=1920",
+        "qml: HDB_SCALE_PASS"
+      ],
+      "clean_teardown": true
+    }
+  }
+}

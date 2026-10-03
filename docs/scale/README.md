@@ -224,3 +224,10 @@ requested, should compare identical map-ready data and controls against this
 baseline; full-corpus size alone does not prove a renderer problem. Address
 coverage remains an independent evidence task. Linux/Windows GUI validation,
 pinch, signed distribution and cold tile timing remain unrun.
+
+## Additional Linux x64 verification
+
+The user subsequently requested Linux portability and native verification. See
+[Linux setup and evidence](../linux.md) for the approved Linux-only Bridge pin,
+full-data gates, physical final-layout/above-S$1m checks and remaining limits.
+The Mac measurements above are preserved as Mac measurements.

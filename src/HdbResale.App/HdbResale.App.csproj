@@ -20,6 +20,9 @@
     <QtBridgeTemplateRid Condition="'$(QtBridgeTemplateRid)' == '' and $([MSBuild]::IsOSPlatform('OSX'))"
       >osx-$(QtBridgeTemplateArch)</QtBridgeTemplateRid>
     <QtBridgePackageId>$(QtBridgePackagePrefix).$(QtBridgeTemplateRid)</QtBridgePackageId>
+    <!-- Linux uses its published release; macOS retains its separately verified pin. -->
+    <QtBridgePackageVersion>0.4.0.22-beta</QtBridgePackageVersion>
+    <QtBridgePackageVersion Condition="'$(QtBridgeTemplateRid)' == 'linux-x64'">0.4.0-beta</QtBridgePackageVersion>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(QtBridgeTemplateRid)' == 'win-x64'
@@ -27,7 +30,7 @@
                     or '$(QtBridgeTemplateRid)' == 'linux-x64'
                     or '$(QtBridgeTemplateRid)' == 'osx-x64'
                     or '$(QtBridgeTemplateRid)' == 'osx-arm64'">
-    <PackageReference Include="$(QtBridgePackageId)" Version="0.4.0.22-beta" />
+    <PackageReference Include="$(QtBridgePackageId)" Version="$(QtBridgePackageVersion)" />
   </ItemGroup>
 
   <Target Name="EnsureSupportedQtBridgePlatform" BeforeTargets="Restore;Build"
