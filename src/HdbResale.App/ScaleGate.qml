@@ -3,6 +3,8 @@ import QtLocation
 import QtPositioning
 Item {
     required property var targetMap
+    required property var townControl
+    required property var priceControl
     required property var targetList
     property int phase: 0
     property double started: Date.now()
@@ -11,6 +13,10 @@ Item {
     function ready(rows, mapped) {
         return Resales.visibleCount === rows && targetList.count === rows
             && targetMap.mapItems.length === mapped
+            && townControl.currentIndex === Resales.townIndex
+            && townControl.currentText === Resales.town
+            && JSON.parse(Resales.townsJson)[Resales.townIndex] === Resales.town
+            && priceControl.value === Resales.maximumPrice
     }
     function advance(name) {
         console.log("HDB_SCALE_STEP " + name + " ms=" + (Date.now()-started)
@@ -50,7 +56,10 @@ Item {
                 advance("panned"); targetMap.center=QtPositioning.coordinate(1.3521,103.8198); targetMap.zoomLevel=11; break
             case 8:
                 if (Math.abs(targetMap.center.latitude-1.3521)>0.0001 || Math.abs(targetMap.zoomLevel-11)>0.01) return
-                advance("recentered"); Resales.measureScaleHeap(); console.log("HDB_SCALE_PASS"); stop(); Qt.quit(); break
+                advance("recentered"); Resales.setMaximumPrice(Resales.maximumAvailablePrice); break
+            case 9:
+                if (!ready(Resales.gateAllCount, Resales.gateAllMapped)) return
+                advance("all-prices"); Resales.measureScaleHeap(); console.log("HDB_SCALE_PASS"); stop(); Qt.quit(); break
             }
         }
     }

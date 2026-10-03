@@ -75,7 +75,10 @@ session with ordinary process IPC; **no offscreen platform was used**.
   explicitly skipped when no .NET SDK is on PATH; it ran here.
 - Canonical Debug/Release native gates passed all ten ordered transitions and
   clean native/C# teardown. Full-corpus Debug/Release scale gates passed all
-  nine transitions and exact sidebar/address-marker cardinalities.
+  ten transitions and exact sidebar/address-marker cardinalities, including
+  the maximum-budget 241,920-row / 1,921-marker phase. Both native scenarios
+  additionally assert the ComboBox index/current text agrees with C# TownIndex
+  and JSON town labels, guarding the earlier presentation-transport workaround.
 - Both deliberate `skip-empty` Release faults were rejected: canonical phase 5,
   scale phase 4, harness exit 1 and no pass marker. Deadlines were unchanged.
 - All four public source snapshots matched the existing full-corpus hashes.
@@ -84,7 +87,10 @@ session with ordinary process IPC; **no offscreen platform was used**.
   [linux-full.json](scale/linux-full.json); every nonmeasurement field in all
   three iterations matches [final-full.json](scale/final-full.json).
 - Canonical six-row data, frozen 416-row inputs, historical projection/reports,
-  matching rules and renderer/provider were unchanged. Existing differential
+  matching rules and renderer/provider were unchanged. Final native-host
+  regeneration byte-matched the frozen 416 report and reproduced historical M5
+  SHA-256 `d76614762c351eb121d3dd11ed03658e53daae1a5feeae36809a029b7e62d4be`.
+  Existing differential
   and aggregation tests passed.
 
 ```sh
@@ -100,8 +106,11 @@ HDB_GATE_FAULT=skip-empty python3 tools/scale_gate.py --executable "$exe" \
 ```
 
 Full-corpus native observations are in
-[linux-native.json](scale/linux-native.json). Release construction took 6,458 ms;
-initial QML readiness 2,709 ms; reset 59 ms in C# and 3,501 ms in QML. These are
+[linux-native.json](scale/linux-native.json). The final Release run took 6,864 ms construction;
+initial QML readiness 2,488 ms; reset 45 ms in C# and 2,834 ms in QML.
+Increasing to the corpus maximum took 87 ms inclusive C# reset and 3,743 ms
+QML readiness for all 241,920 rows / 1,921 markers. The complete process took
+19.41 seconds. These are
 single observations on this cloud desktop, not direct controlled comparisons
 with the Mac, isolated bridge/GPU timing or cold-tile measurements. The existing
 5-second state and 25-second process bounds were met.
@@ -140,10 +149,78 @@ package successfully compiled the existing model API and passed the gates.
 The missing `org.freedesktop.portal.Desktop` service produced two host-theme
 warnings; controls, tiles and teardown still worked. No error check was weakened.
 
-Injected wheel attempts had no observable effect on either the map or the
+The final run had `QT_QPA_PLATFORM` unset, `DISPLAY=:0`, no `WAYLAND_DISPLAY`,
+`XDG_SESSION_TYPE=x11` and `XDG_CURRENT_DESKTOP=XFCE`. Qt plugin logging
+confirmed `libqxcb.so` and xcb GLX integration loaded. Actual human wheel input
+was not tested. Injected wheel attempts had no observable effect on either the map or the
 text panels in this automation session. **Wheel behavior is not verified**;
 this does not establish a Qt defect. Button zoom and drag scrolling were usable
 workarounds, so this did not block the validated workflow. Physical pinch,
 Wayland, Linux arm64, Windows, packaged distribution and cold tile/network
 performance remain unverified. The final macOS pixel recheck is still unrun;
 Linux verification does not retroactively certify those Mac pixels.
+
+## Quantitative load and state results
+
+Milliseconds from the actual Release native-host `--scale` run, same pinned
+241,920 rows, three iterations in one process. Iteration 0 includes first-run/JIT
+cost; later iterations can reuse OS caches and retain prior garbage. These are
+observations, not statistical guarantees or cold-start comparisons.
+
+| Operation | First | Later 1 | Later 2 |
+| --- | ---: | ---: | ---: |
+| property-evidence | 99.1 | 72 | 28.6 |
+| postal-evidence | 79.8 | 23.8 | 17.9 |
+| footprints | 1359.6 | 1016 | 1009.1 |
+| evidence-index | 24.9 | 15.9 | 14.2 |
+| transaction-csv | 5054.7 | 7844.5 | 4565.5 |
+| validation-facts | 383.7 | 175.9 | 166.1 |
+| matching-resolution | 288.8 | 119.7 | 125.5 |
+| transaction-domain | 22.6 | 19.1 | 20.5 |
+| state-construction | 20 | 14.5 | 12.4 |
+| town-filter | 17 | 16.8 | 13.6 |
+| budget-filter | 16.8 | 12.1 | 10.9 |
+| combined-filter | 13.9 | 15.9 | 10.8 |
+| selection | 0.6 | 0 | 0 |
+| empty-hidden-selection | 8.6 | 9.5 | 6.1 |
+| reset | 15.7 | 11.6 | 5.9 |
+| map-aggregation | 77.5 | 433.7 | 345 |
+
+The sum of the eight instrumented import stages was **7,313.2 / 9,286.9 /
+5,947.4 ms**; it excludes measurement-snapshot overhead, so it is not claimed as
+an independent wall-clock startup stopwatch. CSV parsing dominates the measured
+load. All accepted transaction rows survive; aggregation is over the real
+52,514 located transactions / 1,921 addresses, not a synthetic all-row map.
+
+Maximum **sampled** managed memory by iteration was **611.0 / 826.0 / 715.5 MiB**;
+maximum sampled working set **687.6 / 974.7 / 1,064.1 MiB**. End-of-iteration
+managed snapshots were **611.0 / 638.8 / 641.0 MiB** and working sets
+**687.6 / 794.4 / 796.2 MiB**. These are GC.GetTotalMemory(false) and
+Environment.WorkingSet snapshots, not allocated bytes, continuously measured
+peaks or proven retained heap. No forced collection was used in this Linux run.
+
+Native C# reset timings include filtering, address aggregation and synchronous
+Bridge begin/end-reset notifications. QML timings include its observer cadence,
+control bindings and map delegates. **Bridge-only marshalling cost is not
+isolated**, and these inclusive timings must not be attributed wholly to Bridge
+or the GPU. The JSON retains each observed transition and cardinality.
+
+For this measured desktop workload, keep the in-memory model: filters were
+about 6–17 ms and there is no demonstrated storage/query bottleneck that a
+SQLite migration would fix. Transient load memory and CSV work remain sensible
+next profiling targets. Qt Location handled the validated marker workload;
+it is **not a demonstrated blocker requiring a renderer change**. Some full map
+resets took several seconds, so this is usable completion evidence rather than
+a claim of universally instant interaction. Renderer/provider/database changes
+remain outside M6.
+
+## All footprint diagnostics classified
+
+[The per-feature audit](scale/footprint-diagnostics.md) identifies all 11 source
+features and exact rejection predicates. Ten are topologically valid MultiPolygon
+features outside the current Polygon-only scope. The remaining valid Polygon
+has a present numeric ENTITYID of zero, which violates the app's positive-ID
+contract. No member is missing, no malformed geometry or duplicate source key
+explains these diagnostics, and no accepted-type importer mishandling was found.
+Therefore no behavior-changing parser fix, identity relaxation, geometry repair
+or expanded geometry support was introduced. All diagnostics remain visible.

@@ -20,6 +20,8 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public int GateBudgetMapped { get; }
     public int GateInitialCount { get; }
     public int GateInitialMapped { get; }
+    public int GateAllCount { get; }
+    public int GateAllMapped { get; }
     public ResaleMapModel()
     {
         var timer = Stopwatch.StartNew();
@@ -32,6 +34,8 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
             timer.Restart();
             var expectedInitial = import.Accepted.Where(t => t.Price <= 1_000_000).ToArray();
             var expectedTown = expectedInitial.Where(t => t.Town == GateTown).ToArray();
+            GateAllCount = import.Accepted.Count;
+            GateAllMapped = BlockSummaries.Located(import.Accepted).Count;
             GateInitialCount = expectedInitial.Length;
             GateInitialMapped = BlockSummaries.Located(expectedInitial).Count;
             GateTownCount = expectedTown.Length;

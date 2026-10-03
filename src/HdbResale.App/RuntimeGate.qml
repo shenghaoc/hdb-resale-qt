@@ -16,6 +16,9 @@ Item {
     function rows(count) {
         return Resales.visibleCount === count && targetList.count === count
             && targetMap.mapItems.length === count
+            && townControl.currentIndex === Resales.townIndex
+            && townControl.currentText === Resales.town
+            && JSON.parse(Resales.townsJson)[Resales.townIndex] === Resales.town
     }
     function advance(name) {
         console.log("HDB_GATE_STEP " + name)

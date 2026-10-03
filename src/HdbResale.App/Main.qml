@@ -26,7 +26,7 @@ ApplicationWindow {
 
     Loader {
         active: Resales.scaleGate
-        sourceComponent: Component { ScaleGate { targetMap: map; targetList: transactionsList } }
+        sourceComponent: Component { ScaleGate { targetMap: map; targetList: transactionsList; townControl: townPicker; priceControl: pricePicker } }
     }
 
     Plugin {

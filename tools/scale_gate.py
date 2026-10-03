@@ -3,7 +3,7 @@
 import argparse,os,re,subprocess,time,json
 from pathlib import Path
 from native_gate import FORBIDDEN
-STEPS=['loaded','filtered','budget-filtered','selected','empty-cleared','reset','zoomed','panned','recentered']
+STEPS=['loaded','filtered','budget-filtered','selected','empty-cleared','reset','zoomed','panned','recentered','all-prices']
 def run(executable,data,log):
  start=time.monotonic()
  env={**os.environ,'HDB_DATA_DIRECTORY':str(data.resolve()),'HDB_SCALE_GATE':'1'}

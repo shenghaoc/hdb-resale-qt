@@ -73,8 +73,12 @@ This is conservative ACRA B-only linkage, not address accuracy or authoritative
 historical identity. No assertion majority resolves a conflict.
 
 Eleven full-footprint features are explicitly rejected: ten unsupported
-MultiPolygon geometries and one invalid/missing required identity field. All
-transactions survive. These are importer/source-format limits, not Qt issues.
+MultiPolygon geometries and one Polygon whose present numeric `ENTITYID` is 0,
+rejected by the importer's positive-ID rule. All
+transactions survive. These are importer scope/identity-contract limits, not Qt issues.
+[All 11 features were individually inspected](footprint-diagnostics.md): their
+geometries are valid, no required members are absent, and no duplicate-source
+explanation or accepted-type importer bug was found.
 The footprint parser remains deliberately Polygon-only. This milestone does
 not silently convert geometry, alter matching, or replace missing locations.
 
