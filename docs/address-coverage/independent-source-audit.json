@@ -1,0 +1,203 @@
+{
+  "projection_sha256": "2408032fbbcdad12783c8c03a30a20728357cd2a41dfae23b7ff8f39344635e6",
+  "projected_rows": 108882,
+  "raw_source_rows": 2117243,
+  "datasets": 27,
+  "addresses": 2579,
+  "conflicting_addresses": 65,
+  "malformed_addresses": 1,
+  "malformed_assertions": 1,
+  "all_projection_rows_equal_source": true,
+  "all_eligible_source_rows_retained": true,
+  "source_counts": [
+    {
+      "letter": "A",
+      "dataset": "d_8575e84912df3c28995b8e6e0e05205a",
+      "rows": 175111,
+      "projected": 8588,
+      "sha256": "867034cc4c656cd58f81ac8b7824b162a0be41ca470b3f9894c2f0191764ad65"
+    },
+    {
+      "letter": "B",
+      "dataset": "d_3a3807c023c61ddfba947dc069eb53f2",
+      "rows": 94785,
+      "projected": 4754,
+      "sha256": "a790f1a5082afcd6b5bad133f3949e3977e59cc8e33552897206b1e5f90cdab7"
+    },
+    {
+      "letter": "C",
+      "dataset": "d_c0650f23e94c42e7a20921f4c5b75c24",
+      "rows": 140602,
+      "projected": 6713,
+      "sha256": "4da29014e51c72890386b4dad319dcf5b13560372af6f2d1d9c5e4c47f713ec9"
+    },
+    {
+      "letter": "D",
+      "dataset": "d_acbc938ec77af18f94cecc4a7c9ec720",
+      "rows": 73399,
+      "projected": 4021,
+      "sha256": "3fa46a4e488b00f7b9711dd3fe3aa5d0a3b203f7ddd27248b1ef275fd154c14c"
+    },
+    {
+      "letter": "E",
+      "dataset": "d_124a9bd407c7a25f8335b93b86e50fdd",
+      "rows": 86390,
+      "projected": 4278,
+      "sha256": "278f60d83cb8a30bf73d91bbcbb14ffda762250627556aafb01195917a285348"
+    },
+    {
+      "letter": "F",
+      "dataset": "d_4526d47d6714d3b052eed4a30b8b1ed6",
+      "rows": 69819,
+      "projected": 3568,
+      "sha256": "1bfd86ea5ce84b39286f25cd6a41a1293269737931d0fc5d6d4bcc2d0b354e9c"
+    },
+    {
+      "letter": "G",
+      "dataset": "d_b58303c68e9cf0d2ae93b73ffdbfbfa1",
+      "rows": 85118,
+      "projected": 3719,
+      "sha256": "93e1e2e09c9f2ddebb535c931d51b3db13bf8521322ba4f11b3717e0091a0f7b"
+    },
+    {
+      "letter": "H",
+      "dataset": "d_fa2ed456cf2b8597bb7e064b08fc3c7c",
+      "rows": 94703,
+      "projected": 5143,
+      "sha256": "a6acb483a472f721b404002390de62dbe8a8fd8175eed1bc88bb212e8bd023cf"
+    },
+    {
+      "letter": "I",
+      "dataset": "d_85518d970b8178975850457f60f1e738",
+      "rows": 60666,
+      "projected": 2679,
+      "sha256": "59c1db6baef9d860c09ff97be3fe0e9cf073be53960b70a38702611d0245dbf3"
+    },
+    {
+      "letter": "J",
+      "dataset": "d_478f45a9c541cbe679ca55d1cd2b970b",
+      "rows": 67922,
+      "projected": 4606,
+      "sha256": "bde467046f91b648e53e8860c9e5ef9b4d9f2ff547aea30ec3722eb100d0a843"
+    },
+    {
+      "letter": "K",
+      "dataset": "d_5573b0db0575db32190a2ad27919a7aa",
+      "rows": 76857,
+      "projected": 4136,
+      "sha256": "16f5beb953f671d696aeab34e20c7a5e5257fab576176e8f15f62c41a547d3b0"
+    },
+    {
+      "letter": "L",
+      "dataset": "d_a2141adf93ec2a3c2ec2837b78d6d46e",
+      "rows": 93059,
+      "projected": 5383,
+      "sha256": "4dedd3b7cb5ab018e5741cfbdc4bae3fdb4862023a8192efb5eb5f2625990d40"
+    },
+    {
+      "letter": "M",
+      "dataset": "d_9af9317c646a1c881bb5591c91817cc6",
+      "rows": 124199,
+      "projected": 6348,
+      "sha256": "338fb73fa76cdd80b80a5d3d072f6494204e4ce31f31dc1516971e0fa5857df4"
+    },
+    {
+      "letter": "N",
+      "dataset": "d_67e99e6eabc4aad9b5d48663b579746a",
+      "rows": 61048,
+      "projected": 3035,
+      "sha256": "6dbd02cbb5f2d858ccd89e32329be22c7cefadaeec395908c45e4d757d8b95c6"
+    },
+    {
+      "letter": "O",
+      "dataset": "d_5c4ef48b025fdfbc80056401f06e3df9",
+      "rows": 41488,
+      "projected": 1921,
+      "sha256": "021e7323988d7ab3dd86d5d70944eb82d0c425bfcc9782cde004aaf86e9acd87"
+    },
+    {
+      "letter": "Others",
+      "dataset": "d_300ddc8da4e8f7bdc1bfc62d0d99e2e7",
+      "rows": 22266,
+      "projected": 1712,
+      "sha256": "9ae667fd09dfd040a754dd3cf54cd10465214746e72926ee48516b6c42cdbd96"
+    },
+    {
+      "letter": "P",
+      "dataset": "d_181005ca270b45408b4cdfc954980ca2",
+      "rows": 99677,
+      "projected": 4582,
+      "sha256": "d94c404b4c1abc32445aebafd1ee3fc412af4469da109ab65efa9b72c1e3ef0b"
+    },
+    {
+      "letter": "Q",
+      "dataset": "d_4130f1d9d365d9f1633536e959f62bb7",
+      "rows": 12491,
+      "projected": 696,
+      "sha256": "094fc70d93b5146967e1afc2c8cb58a3cbe817bb23ff7d7d122ec47061777a78"
+    },
+    {
+      "letter": "R",
+      "dataset": "d_2b8c54b2a490d2fa36b925289e5d9572",
+      "rows": 71056,
+      "projected": 3674,
+      "sha256": "c617c3e7b96517976dc6791917ac335aaff8efc30b2bf26ee32daa6353d1eaf3"
+    },
+    {
+      "letter": "S",
+      "dataset": "d_df7d2d661c0c11a7c367c9ee4bf896c1",
+      "rows": 234035,
+      "projected": 11504,
+      "sha256": "75cd5c5f44828bebc3f27c76a37fb1679004d8fa13843b333ef3fb9203cb7442"
+    },
+    {
+      "letter": "T",
+      "dataset": "d_72f37e5c5d192951ddc5513c2b134482",
+      "rows": 142312,
+      "projected": 7376,
+      "sha256": "2bfc366a16f0acce60a09dea933c4a1be3792dd1ec82eea62a48ac76f25ed183"
+    },
+    {
+      "letter": "U",
+      "dataset": "d_0cc5f52a1f298b916f317800251057f3",
+      "rows": 24469,
+      "projected": 1147,
+      "sha256": "10ab2045179167a65beaa152bb6a8f81d143f076637dc773a5019d3eb7d34b80"
+    },
+    {
+      "letter": "V",
+      "dataset": "d_e97e8e7fc55b85a38babf66b0fa46b73",
+      "rows": 38337,
+      "projected": 1924,
+      "sha256": "4debb4f2d27b019cacebb62604e17bc6299a1a8341aea8cfae5163fdee29d912"
+    },
+    {
+      "letter": "W",
+      "dataset": "d_af2042c77ffaf0db5d75561ce9ef5688",
+      "rows": 57861,
+      "projected": 3013,
+      "sha256": "7742899ca14c66c955035098875b2538bdc42763f78cd97c442ba29ca933b161"
+    },
+    {
+      "letter": "X",
+      "dataset": "d_1cd970d8351b42be4a308d628a6dd9d3",
+      "rows": 13201,
+      "projected": 904,
+      "sha256": "98e798331ee383321aee9325b2786fe62fd8673fa6a438d70f78b2b235551fe8"
+    },
+    {
+      "letter": "Y",
+      "dataset": "d_31af23fdb79119ed185c256f03cb5773",
+      "rows": 37979,
+      "projected": 2370,
+      "sha256": "12231288c204a9ea9b09875c434bad5f6bc8516b50852fa0ac88051f40931666"
+    },
+    {
+      "letter": "Z",
+      "dataset": "d_4e3db8955fdcda6f9944097bef3d2724",
+      "rows": 18393,
+      "projected": 1088,
+      "sha256": "9692b8ce7557e7a7542434f247155e0e857fb63a9db95f36f3b810e260827d5b"
+    }
+  ]
+}

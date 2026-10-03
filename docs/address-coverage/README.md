@@ -93,3 +93,109 @@ Historical first-page/first-result assertions remain weaker and separately
 attributed. Dataset-qualified source rows and historical limitations are visible
 in selection details. Historical lookup occurs once per memoized raw address,
 not per repeated transaction, without changing match semantics.
+
+## Measured current-rule results
+
+All 241,920 transactions / 9,755 addresses remain accepted. These counts use the
+same corpus and unchanged AVE/CTRL normalization. [Complete comparison](comparison.json),
+[all changed addresses](changed-addresses.csv), [remaining failures](remaining-failures.csv),
+and [source investigation/provenance](sources.md) are retained.
+
+| Evidence stage | Located addresses | Located transactions |
+| --- | ---: | ---: |
+| Original M8: ACRA B, Polygon-only | 1,921 | 52,514 |
+| Geometry support only | 1,922 | 52,550 |
+| All 27 public ACRA partitions + geometry | 2,513 | 66,256 |
+| Public evidence + bounded historical M5 assertions | 2,801 | 75,737 |
+
+Net gain is **880 addresses / 23,223 transactions**, comprising 940 newly located
+addresses / 24,345 transactions and **60 previously located addresses / 1,122
+transactions now withheld** because additional source rows conflict or contain
+malformed postal evidence. This is a conservative evidence correction, not a
+conflict to erase. The 1,861 preserved matches retain exactly their points and
+footprints. No Exact-to-Normalized or point-movement change occurred.
+
+The historical marginal gain is separately **288 addresses / 9,481 transactions**,
+all Unmatched-to-Normalized, using no public postal assertion at those addresses.
+These are explicitly weaker first-hit matches, not new exhaustive Search evidence.
+The bounded projection has entries for 378 corpus addresses / 12,665 transactions:
+375 first-hit records and 3 absent keys. It also exposes 2 postal-without-footprint
+addresses / 128 transactions, which remain unlocated. Repeated transactions at
+an address do not make an assertion more certain.
+
+| Quality | Baseline addresses / transactions | Final addresses / transactions |
+| --- | ---: | ---: |
+| ExactAddress | 682 / 22,234 | 897 / 28,396 |
+| NormalizedAddress | 1,239 / 30,280 | 1,904 / 47,341 |
+| Ambiguous | 3 / 63 | 64 / 1,196 |
+| Unmatched | 7,831 / 189,343 | 6,890 / 164,987 |
+| BlockApproximation | 1,921 / 52,514 | 2,801 / 75,737 |
+| Missing | 7,834 / 189,406 | 6,954 / 166,183 |
+
+Remaining causes: 6,886 addresses / 164,830 transactions without postal
+corroboration under these rules; 63 / 1,105 with conflicting valid postals;
+1 / 91 with malformed postal evidence (34 WHAMPOA WEST, literal `1233` from ACRA S
+row 126378, not padded); 1 / 26 with rejected ENTITYID 0; 2 / 128 with no original
+HDB block/postal footprint; and 1 / 3 missing the HDB property record. The last
+address, 82 MACPHERSON LANE, also has contradictory postal assertions; the primary
+runtime reason is missing property, but the independent conflict audit includes it.
+
+## Mechanical and manual audit
+
+The [independent outcome audit](independent-outcome-audit.json) and generated
+[comparison](comparison.json) verify every one of 9,755 address evidence sets,
+all 241,920 unchanged transaction IDs, every property/public/historical assertion,
+all candidate sets and every resulting coordinate independently from original
+HDB geometry. Exact midpoint rounding follows .NET's scaled ties-to-even policy;
+Python's built-in decimal-place rounding differed at one binary halfway value,
+which the checker corrected rather than tolerating a changed app point.
+
+There are 2,872 changed evidence chains: 1,001 changed outcomes and 1,871
+provenance-only additions. Merely adding agreeing source rows is not labelled a
+weakened identity. The complete changed-address ledger preserves both classes.
+
+[Manual review summary](review-summary.json), [mandatory review ledger](manual-required-reviewed.csv)
+and [ordinary sample ledger](manual-sample-reviewed.csv) record actual review:
+
+- All **65** conflicting/malformed address sets, including the missing-property
+  address, every new ambiguity and all 60 formerly matched changes. Distinct
+  postal variants were checked against original source rows, property evidence
+  and full original footprint candidates. Contrary minority rows remain.
+- All **238** deterministic ordinary addresses: 71 newly public-located,
+  90 historical-only and 77 agreeing provenance additions, across 26 towns and
+  all four source periods. Selection is SHA-ranked by town/period/change-class,
+  then deduplicated; it is independent of desired success.
+- The separately introduced real MultiPolygon address, with both original
+  component exterior rings and the resulting union-bounds point.
+
+No evidence-chain inconsistency was found. This is **manual record-chain review**,
+not ground truth, independent postal validation or 100% manual review of all
+ordinary gains. Every changed address was mechanically checked; only the stated
+mandatory set and sample were manually inspected. Historical returned identity,
+candidate uniqueness and historical validity remain unverified.
+
+## Regenerating full data
+
+Full source exports/projections/reports stay local rather than entering Git.
+The checked-in provenance and tools reproduce them from exact snapshot bytes:
+
+```sh
+# Optional, explicit public acquisition. Future monthly bytes may fail hashes.
+python3 tools/acquire_address_sources.py --manifest docs/address-coverage/source-provenance.json --output /absolute/acra-snapshots
+# Reuse the original pinned B.csv rather than downloading a replacement.
+python3 tools/prepare_address_coverage.py --base /absolute/hdb-scale-full --source-directory /absolute/acra-snapshots --source-manifest docs/address-coverage/source-provenance.json --output /absolute/hdb-m9-public
+python3 tools/prepare_address_coverage.py --base /absolute/hdb-scale-full --source-directory /absolute/acra-snapshots --source-manifest docs/address-coverage/source-provenance.json --historical docs/coverage/onemap/historical/benchmark.json --output /absolute/hdb-m9-full
+# Run via the pinned native host in an actual desktop session on Linux.
+HdbResale.App --address-coverage-baseline /absolute/hdb-scale-full /tmp/baseline.json
+HdbResale.App --address-coverage /absolute/hdb-m9-public /tmp/public.json
+HdbResale.App --address-coverage /absolute/hdb-m9-full /tmp/final.json
+python3 tools/audit_address_coverage.py --baseline /tmp/baseline.json --public /tmp/public.json --final /tmp/final.json --directory /absolute/hdb-m9-full --footprints /absolute/buildings.geojson --output /tmp/m9-audit
+HDB_DATA_DIRECTORY=/absolute/hdb-m9-full HdbResale.App
+```
+
+`source_row` is an ending physical CSV line, including the header. Projection
+order is manifest partition order and original row order. Every full-source and
+base-file hash is checked before generation; fresh hashes do not silently replace
+pins. No new runtime network acquisition, renderer, database or dependency is
+introduced. Canonical six-row startup remains the default without the explicit
+input-directory override.

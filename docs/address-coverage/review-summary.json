@@ -1,0 +1,23 @@
+{
+  "scope": "unchanged AVE/CTRL before numeric final suffix; no new aliases",
+  "manual_required_addresses": 65,
+  "manual_sample_addresses": 238,
+  "sample_classes": {
+    "AgreeingProvenanceAddition": 77,
+    "NewLocatedPublic": 71,
+    "NewLocatedHistorical": 90
+  },
+  "manual_geometry_addition": "PUNGGOL / 226A / SUMANG LANE",
+  "review_complete": true,
+  "not_claimed": "Exhaustive manual inspection of all changed ordinary address/assertion rows; residential returned identity; current exhaustive search; historical validity; statistical accuracy",
+  "input_hashes": {
+    "manual-required.csv": "e1fe47b3937b3d61d5d4323939d9b261f5209bc112ee34a2fd2bc1847485af00",
+    "manual-sample.csv": "4a10d86e9cb1cb4873ef9748b400551eb71f0b0d4923faec76eb84daff5db630",
+    "m9-full.json": "407c9e2683c2ab798334da6edb2aed381f486577896211958dc9ad58216a59e2",
+    "m9-public.json": "1faf6bab16f9f09f86371ffeab466ef69c05867a56c75c8544e8b64d8133c031"
+  },
+  "output_hashes": {
+    "manual-required-reviewed.csv": "74e8b7b737213fefb30a036e82660e4937cdf4878e8640876c44a24d62ccb5fc",
+    "manual-sample-reviewed.csv": "479709a632958556607c6633a8399b232f452a0d12ef955491a4d9c698b69520"
+  }
+}

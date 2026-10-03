@@ -1,0 +1,753 @@
+{
+  "baseline_sha256": "dfbf1b409e7b42a848e3767ee583b95e4bd8fd16332deafd6041ce4342971750",
+  "full_sha256": "407c9e2683c2ab798334da6edb2aed381f486577896211958dc9ad58216a59e2",
+  "public_sha256": "1faf6bab16f9f09f86371ffeab466ef69c05867a56c75c8544e8b64d8133c031",
+  "addresses": 9755,
+  "transactions": 241920,
+  "all_ids_and_source_membership_preserved": true,
+  "all_property_sets_equal_full_source": true,
+  "all_postal_sets_equal_full_projection": true,
+  "all_final_matched_raw_geometry_midpoints_independently_verified": 2801,
+  "historical_projection_rows_applied": 378,
+  "historical_projection_entries": 378,
+  "unchanged_previous_matches": 1861,
+  "changed_previous_matches": 60,
+  "changed_previous_transactions": 1122,
+  "previous_matches_which_changed_to_other_footprint_or_moved_point": 0,
+  "previous_match_changes": [
+    {
+      "town": "ANG MO KIO",
+      "block": "151",
+      "street": "ANG MO KIO AVE 5",
+      "transactions": 32,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "560151",
+        "560152",
+        "648886"
+      ]
+    },
+    {
+      "town": "ANG MO KIO",
+      "block": "157",
+      "street": "ANG MO KIO AVE 4",
+      "transactions": 12,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "560156",
+        "560157",
+        "576157"
+      ]
+    },
+    {
+      "town": "ANG MO KIO",
+      "block": "159",
+      "street": "ANG MO KIO AVE 4",
+      "transactions": 4,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "560159",
+        "569626"
+      ]
+    },
+    {
+      "town": "ANG MO KIO",
+      "block": "163",
+      "street": "ANG MO KIO AVE 4",
+      "transactions": 14,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "458220",
+        "560103",
+        "560163"
+      ]
+    },
+    {
+      "town": "ANG MO KIO",
+      "block": "215",
+      "street": "ANG MO KIO AVE 1",
+      "transactions": 26,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "560215",
+        "560218",
+        "560512"
+      ]
+    },
+    {
+      "town": "ANG MO KIO",
+      "block": "226",
+      "street": "ANG MO KIO AVE 1",
+      "transactions": 19,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "560226",
+        "567226"
+      ]
+    },
+    {
+      "town": "ANG MO KIO",
+      "block": "233",
+      "street": "ANG MO KIO AVE 3",
+      "transactions": 24,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "560223",
+        "560233"
+      ]
+    },
+    {
+      "town": "ANG MO KIO",
+      "block": "330",
+      "street": "ANG MO KIO AVE 1",
+      "transactions": 47,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "560303",
+        "560330"
+      ]
+    },
+    {
+      "town": "ANG MO KIO",
+      "block": "332",
+      "street": "ANG MO KIO AVE 1",
+      "transactions": 31,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "560322",
+        "560332"
+      ]
+    },
+    {
+      "town": "ANG MO KIO",
+      "block": "407",
+      "street": "ANG MO KIO AVE 10",
+      "transactions": 1,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "550107",
+        "560407"
+      ]
+    },
+    {
+      "town": "ANG MO KIO",
+      "block": "408",
+      "street": "ANG MO KIO AVE 10",
+      "transactions": 1,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "549188",
+        "560408",
+        "560409"
+      ]
+    },
+    {
+      "town": "ANG MO KIO",
+      "block": "443",
+      "street": "ANG MO KIO AVE 10",
+      "transactions": 36,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "560403",
+        "560433",
+        "560443"
+      ]
+    },
+    {
+      "town": "ANG MO KIO",
+      "block": "448",
+      "street": "ANG MO KIO AVE 10",
+      "transactions": 5,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "557408",
+        "560448"
+      ]
+    },
+    {
+      "town": "ANG MO KIO",
+      "block": "449",
+      "street": "ANG MO KIO AVE 10",
+      "transactions": 6,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "560130",
+        "560449"
+      ]
+    },
+    {
+      "town": "ANG MO KIO",
+      "block": "453",
+      "street": "ANG MO KIO AVE 10",
+      "transactions": 1,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "560453",
+        "561453"
+      ]
+    },
+    {
+      "town": "ANG MO KIO",
+      "block": "503",
+      "street": "ANG MO KIO AVE 5",
+      "transactions": 45,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "560503",
+        "560603"
+      ]
+    },
+    {
+      "town": "ANG MO KIO",
+      "block": "529",
+      "street": "ANG MO KIO AVE 10",
+      "transactions": 1,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "560527",
+        "560529"
+      ]
+    },
+    {
+      "town": "ANG MO KIO",
+      "block": "608",
+      "street": "ANG MO KIO AVE 5",
+      "transactions": 29,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "560177",
+        "560608"
+      ]
+    },
+    {
+      "town": "ANG MO KIO",
+      "block": "635",
+      "street": "ANG MO KIO AVE 6",
+      "transactions": 28,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "560535",
+        "560635"
+      ]
+    },
+    {
+      "town": "ANG MO KIO",
+      "block": "704",
+      "street": "ANG MO KIO AVE 8",
+      "transactions": 4,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "560233",
+        "560704"
+      ]
+    },
+    {
+      "town": "ANG MO KIO",
+      "block": "710",
+      "street": "ANG MO KIO AVE 8",
+      "transactions": 14,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "560710",
+        "561710"
+      ]
+    },
+    {
+      "town": "ANG MO KIO",
+      "block": "727",
+      "street": "ANG MO KIO AVE 6",
+      "transactions": 1,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "560716",
+        "560727"
+      ]
+    },
+    {
+      "town": "BEDOK",
+      "block": "104",
+      "street": "LENGKONG TIGA",
+      "transactions": 14,
+      "before": "ExactAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "410104",
+        "417414"
+      ]
+    },
+    {
+      "town": "BUKIT MERAH",
+      "block": "38",
+      "street": "TELOK BLANGAH RISE",
+      "transactions": 3,
+      "before": "ExactAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "090033",
+        "090038"
+      ]
+    },
+    {
+      "town": "CHOA CHU KANG",
+      "block": "141",
+      "street": "TECK WHYE LANE",
+      "transactions": 17,
+      "before": "ExactAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "680141",
+        "680144"
+      ]
+    },
+    {
+      "town": "CHOA CHU KANG",
+      "block": "307",
+      "street": "CHOA CHU KANG AVE 4",
+      "transactions": 22,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "560427",
+        "680307"
+      ]
+    },
+    {
+      "town": "CLEMENTI",
+      "block": "302",
+      "street": "CLEMENTI AVE 4",
+      "transactions": 15,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "120302",
+        "120320"
+      ]
+    },
+    {
+      "town": "CLEMENTI",
+      "block": "320",
+      "street": "CLEMENTI AVE 4",
+      "transactions": 20,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "120313",
+        "120320"
+      ]
+    },
+    {
+      "town": "CLEMENTI",
+      "block": "354",
+      "street": "CLEMENTI AVE 2",
+      "transactions": 10,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "120354",
+        "120355"
+      ]
+    },
+    {
+      "town": "CLEMENTI",
+      "block": "433",
+      "street": "CLEMENTI AVE 3",
+      "transactions": 15,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "118752",
+        "120433",
+        "120453"
+      ]
+    },
+    {
+      "town": "GEYLANG",
+      "block": "115",
+      "street": "ALJUNIED AVE 2",
+      "transactions": 1,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "380015",
+        "380115"
+      ]
+    },
+    {
+      "town": "GEYLANG",
+      "block": "301",
+      "street": "UBI AVE 1",
+      "transactions": 32,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "400301",
+        "400306"
+      ]
+    },
+    {
+      "town": "GEYLANG",
+      "block": "302",
+      "street": "UBI AVE 1",
+      "transactions": 34,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "400302",
+        "659003"
+      ]
+    },
+    {
+      "town": "GEYLANG",
+      "block": "304",
+      "street": "UBI AVE 1",
+      "transactions": 16,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "400301",
+        "400304",
+        "400306"
+      ]
+    },
+    {
+      "town": "GEYLANG",
+      "block": "83",
+      "street": "MACPHERSON LANE",
+      "transactions": 3,
+      "before": "ExactAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "321105",
+        "360083"
+      ]
+    },
+    {
+      "town": "HOUGANG",
+      "block": "106",
+      "street": "HOUGANG AVE 1",
+      "transactions": 13,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "530103",
+        "530106"
+      ]
+    },
+    {
+      "town": "HOUGANG",
+      "block": "247",
+      "street": "HOUGANG AVE 3",
+      "transactions": 22,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "530246",
+        "530247"
+      ]
+    },
+    {
+      "town": "HOUGANG",
+      "block": "435",
+      "street": "HOUGANG AVE 8",
+      "transactions": 16,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "530435",
+        "538435"
+      ]
+    },
+    {
+      "town": "HOUGANG",
+      "block": "511",
+      "street": "HOUGANG AVE 10",
+      "transactions": 27,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "530511",
+        "530517"
+      ]
+    },
+    {
+      "town": "HOUGANG",
+      "block": "528",
+      "street": "HOUGANG AVE 6",
+      "transactions": 22,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "530528",
+        "530539"
+      ]
+    },
+    {
+      "town": "HOUGANG",
+      "block": "529",
+      "street": "HOUGANG AVE 6",
+      "transactions": 24,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "530529",
+        "538529"
+      ]
+    },
+    {
+      "town": "HOUGANG",
+      "block": "620",
+      "street": "HOUGANG AVE 8",
+      "transactions": 27,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "530620",
+        "530629"
+      ]
+    },
+    {
+      "town": "HOUGANG",
+      "block": "642",
+      "street": "HOUGANG AVE 8",
+      "transactions": 28,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "530642",
+        "530644"
+      ]
+    },
+    {
+      "town": "HOUGANG",
+      "block": "644",
+      "street": "HOUGANG AVE 8",
+      "transactions": 26,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "530544",
+        "530644",
+        "530651"
+      ]
+    },
+    {
+      "town": "HOUGANG",
+      "block": "682",
+      "street": "HOUGANG AVE 4",
+      "transactions": 18,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "510456",
+        "530682",
+        "530683"
+      ]
+    },
+    {
+      "town": "HOUGANG",
+      "block": "683",
+      "street": "HOUGANG AVE 8",
+      "transactions": 7,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "530249",
+        "530683",
+        "538683"
+      ]
+    },
+    {
+      "town": "KALLANG/WHAMPOA",
+      "block": "34",
+      "street": "WHAMPOA WEST",
+      "transactions": 91,
+      "before": "ExactAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "1233",
+        "330034"
+      ]
+    },
+    {
+      "town": "KALLANG/WHAMPOA",
+      "block": "462",
+      "street": "CRAWFORD LANE",
+      "transactions": 25,
+      "before": "ExactAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "190462",
+        "488077"
+      ]
+    },
+    {
+      "town": "KALLANG/WHAMPOA",
+      "block": "57",
+      "street": "GEYLANG BAHRU",
+      "transactions": 89,
+      "before": "ExactAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "330055",
+        "330057"
+      ]
+    },
+    {
+      "town": "KALLANG/WHAMPOA",
+      "block": "67",
+      "street": "KALLANG BAHRU",
+      "transactions": 7,
+      "before": "ExactAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "330060",
+        "330066",
+        "330067"
+      ]
+    },
+    {
+      "town": "SERANGOON",
+      "block": "214",
+      "street": "SERANGOON AVE 4",
+      "transactions": 11,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "550124",
+        "550214"
+      ]
+    },
+    {
+      "town": "TAMPINES",
+      "block": "503",
+      "street": "TAMPINES CTRL 1",
+      "transactions": 20,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "520503",
+        "520819"
+      ]
+    },
+    {
+      "town": "TAMPINES",
+      "block": "802",
+      "street": "TAMPINES AVE 4",
+      "transactions": 8,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "520802",
+        "521496"
+      ]
+    },
+    {
+      "town": "TOA PAYOH",
+      "block": "146",
+      "street": "POTONG PASIR AVE 1",
+      "transactions": 21,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "350146",
+        "449033",
+        "530146"
+      ]
+    },
+    {
+      "town": "TOA PAYOH",
+      "block": "148",
+      "street": "POTONG PASIR AVE 1",
+      "transactions": 9,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "310159",
+        "350146",
+        "350148"
+      ]
+    },
+    {
+      "town": "WOODLANDS",
+      "block": "132",
+      "street": "MARSILING RISE",
+      "transactions": 8,
+      "before": "ExactAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "730132",
+        "730136"
+      ]
+    },
+    {
+      "town": "YISHUN",
+      "block": "285",
+      "street": "YISHUN AVE 6",
+      "transactions": 2,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "760222",
+        "760285"
+      ]
+    },
+    {
+      "town": "YISHUN",
+      "block": "732",
+      "street": "YISHUN AVE 5",
+      "transactions": 6,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "576732",
+        "760732"
+      ]
+    },
+    {
+      "town": "YISHUN",
+      "block": "927",
+      "street": "YISHUN CTRL 1",
+      "transactions": 7,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "760636",
+        "760927"
+      ]
+    },
+    {
+      "town": "YISHUN",
+      "block": "928",
+      "street": "YISHUN CTRL 1",
+      "transactions": 5,
+      "before": "NormalizedAddress",
+      "after": "Ambiguous",
+      "postals": [
+        "760728",
+        "760928"
+      ]
+    }
+  ]
+}

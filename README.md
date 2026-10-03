@@ -1,6 +1,12 @@
 # HDB resale native fixture explorer
 
-Milestone 7: OneMap raster basemap, visible official attribution, compact zoom-aware
+Milestone 9 adds a complete full-corpus failure inventory, dataset-qualified
+public ACRA address evidence, bounded historical first-hit assertions and narrowly
+validated MultiPolygon support. [Coverage, source provenance and audit](docs/address-coverage/README.md)
+separate public gains, weaker historical gains and new conflicts. The original
+six-row default and frozen studies remain unchanged.
+
+Milestone 7 introduced the retained OneMap raster basemap, visible official attribution, compact zoom-aware
 markers and stable-address incremental map updates. The full-corpus Linux x64
 measurements and verification are in [M7 map results](docs/map/verification.md).
 Earlier milestones provide the reproducible coverage study, historical postal
@@ -313,3 +319,27 @@ full source/evidence contracts and in-memory domain model. Opt-in allocated-byte
 profiling separates CSV, footprints, domain work and native readiness; no startup
 artifact, database or production forced collection is introduced. See the
 [M8 verification record](docs/startup/verification.md) for measured results.
+
+
+## M9: explicit full-corpus address coverage
+
+The [M9 report](docs/address-coverage/README.md) inventories all 9,755 addresses /
+241,920 transactions before changing evidence. With unchanged conservative
+normalization, full public ACRA A–Z/Others plus HDB geometry locate 2,513 addresses /
+66,256 transactions; the bounded, explicitly weaker M5 first-hit projection adds
+288 / 9,481. Final experimental coverage is 2,801 / 75,737, while all 166,183
+unlocated transactions remain filterable/selectable.
+
+Additional contrary evidence withholds 60 previously located addresses / 1,122
+transactions; it never selects a majority, first candidate or nearest footprint.
+Every changed address is mechanically audited, with all conflicts/former-match
+changes and a deterministic ordinary sample manually reviewed. New sources retain
+dataset IDs and every source row; malformed public postals are retained as
+unresolved evidence. Full raw exports and generated full inputs stay local.
+
+MultiPolygon support spans all validated component exterior-ring bounds, adding
+one currently evidenced ACRA-B address without relaxing positive ENTITYID checks.
+M5's frozen experiment explicitly retains its original geometry policy. The
+[reproduction commands](docs/address-coverage/README.md#regenerating-full-data)
+produce separate public-only and public-plus-historical inputs; use an explicit
+HDB_DATA_DIRECTORY to open them. No source/evidence fetching occurs at startup.
