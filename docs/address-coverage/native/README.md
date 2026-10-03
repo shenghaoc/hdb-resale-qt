@@ -236,3 +236,25 @@ new warnings were accepted. The separately delivered final screenshot is
 295,337 bytes, SHA-256
 `ece79c8163a48bfa69e6abd0c0917ce32e9bb1112dda2eaaa98e5bbcc6170dfb`.
 No human wheel/pinch hardware interaction or additional OS validation is claimed.
+
+## Reachable-history and publication audit
+
+The all-ref audit at documentation checkpoint
+`af1537e958f58fb963d7ae8a7a5c9adf76bf675a` traversed **36 commits, 351 unique
+blobs and 193 paths**, including all **101 new blobs** since exact M8
+`a27657099623c211bf207e1e4cc4b057ead4c953`, with zero issues. Its
+[machine-readable record](history-audit.json) checks raw-export hash/header,
+credential-shaped content, prohibited private/build/binary paths, oversized
+blobs, minimized historical-field whitelist, exact ancestry, and excluded
+`843df64` unreachability. Canonical/frozen inputs and SDK properties remain
+byte-identical. Prior milestone branches/remote-tracking refs are preserved.
+No push, authentication retry, new remote publication or next milestone occurred.
+
+This generic scan inherits M8's audit and its inherited M7/M6/prior exact-private-
+reference checks. A new exact private display-name/coordinate-pair rescan is
+**unavailable and not claimed**: the private 10,333-row cache was never transferred,
+read, fetched or reconstructed in M9. Only approved minimized historical fields,
+public address assertions, original HDB-derived points and evidence reports were
+added. The all-ref scan is rerun on the final audit-record commit; that final
+machine-readable result accompanies the handoff. Full-history bundle creation,
+fresh restoration/fsck and Library delivery are separately recorded.

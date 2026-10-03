@@ -1,0 +1,331 @@
+{
+  "head": "af1537e958f58fb963d7ae8a7a5c9adf76bf675a",
+  "tree": "279615e37b101fa95b5e9f6afc4af50ee35093f3",
+  "base": "a27657099623c211bf207e1e4cc4b057ead4c953",
+  "new_commits": [
+    "2d3cdecc45b6643a9ef3d50cd5b986c4a83728b3",
+    "5b759c3dc97120d1d553798cbb676f6fd10c158c",
+    "88807a18dea7a5fd51c005ed82ec44d15faeaff3",
+    "fe2d01d20872e40425e7b00d80061e04dbf88e4c",
+    "40914141d01aea17deb4e8c0ad3c0b4419cf5ad1",
+    "5a95066ef06755d7e0b13b0cfac04e62757cb0b7",
+    "cb08e68634a15d55811e338f095d713f1d9f4c8e",
+    "7bfe405e9a8c1030511b372aab9117c7a5bab223",
+    "2d04ac11da8b91f0d150baded94c6cde84f68234",
+    "06d84af4d5e411ef7d6ff187a2b3fca4f085fa0e",
+    "af1537e958f58fb963d7ae8a7a5c9adf76bf675a"
+  ],
+  "reachable_commits": 36,
+  "reachable_unique_blobs": 351,
+  "reachable_paths": 193,
+  "new_unique_blobs_reviewed": 101,
+  "new_blobs": {
+    "3999f9b5e9f1d201378e2cc9afa2fa45222a636a": [
+      "README.md"
+    ],
+    "694a4fc6a84b12296f112cbdbb58281878d8a1b7": [
+      "docs/address-coverage/README.md"
+    ],
+    "6f437874cd3978c6368eabb228890c9160060a9c": [
+      "docs/address-coverage/baseline-failures.csv"
+    ],
+    "3e8f7b0bdf0c166e4ca2863a9cd49734f58f03ec": [
+      "docs/address-coverage/baseline.json"
+    ],
+    "28aee60d52da67616bec68939d5a74f418653e4c": [
+      "docs/address-coverage/changed-addresses.csv"
+    ],
+    "a06305a5ab5979641d831848ab3da26a177d6356": [
+      "docs/address-coverage/comparison.json"
+    ],
+    "a2265d3442f1934f186593c9e215954ca8524374": [
+      "docs/address-coverage/historical-marginal.csv"
+    ],
+    "7cb492b615673c1c3648dceda412eb04b19202a4": [
+      "docs/address-coverage/independent-outcome-audit.json"
+    ],
+    "c78d099f7963e800504c7bb6ae1c16cc312a74cc": [
+      "docs/address-coverage/independent-source-audit.json"
+    ],
+    "3c0c8b3a38dfc1ceddc0f6b1a48c775e67fb89fc": [
+      "docs/address-coverage/manifest.json"
+    ],
+    "fb75846e00b216eb46bae9511992d3f2cac19e3a": [
+      "docs/address-coverage/manual-required-reviewed.csv"
+    ],
+    "6c5dee2580035f71eebbbdc732820704ea97b114": [
+      "docs/address-coverage/manual-required.csv"
+    ],
+    "56bf38ea047ecfa7b625e926385e314705b065e1": [
+      "docs/address-coverage/manual-review.md"
+    ],
+    "16084a5d3ad6adcea50880b614624344512e3350": [
+      "docs/address-coverage/manual-sample-reviewed.csv"
+    ],
+    "a93c7de7a5e92d935903ea3891362a55786d6abe": [
+      "docs/address-coverage/manual-sample.csv"
+    ],
+    "5688340bc21a3cecb1da596f54d3e329f3782b6a": [
+      "docs/address-coverage/native/README.md"
+    ],
+    "a061fe6684e10e1359aeacdb398761bf1ce2a43b": [
+      "docs/address-coverage/native/linux-results.json"
+    ],
+    "99647e371476883c50e943763788847f65f15dd4": [
+      "docs/address-coverage/native/m9-actual-anchor-classic.log"
+    ],
+    "85b48849cf602ef3ce915eb3477241c7ccb56df6": [
+      "docs/address-coverage/native/m9-anchor-sync-classic.log"
+    ],
+    "f86934ae47d4c7a266b4218827302d69a3987a53": [
+      "docs/address-coverage/native/m9-expanded-final-classic-Debug.log"
+    ],
+    "9c32b93e74118cec480e2dc5bf26840164c6115a": [
+      "docs/address-coverage/native/m9-expanded-measurement.log"
+    ],
+    "45ad4e66c60f8c094ca6a9b4d46e15903a5f3c9b": [
+      "docs/address-coverage/native/m9-lifetime-unanchored-startup-full.log"
+    ],
+    "91613836e1367c4c0699194a633031ee8f54da75": [
+      "docs/address-coverage/native/m9-sync-incubation-classic.log"
+    ],
+    "5c4904b2b4c303e724a419d03e5f5aa4b75d7436": [
+      "docs/address-coverage/native/m9-verified-final-extended-Debug.log"
+    ],
+    "194b8926e36b8a9f43115476fba193fbeef9d547": [
+      "docs/address-coverage/native/managed-profile.json"
+    ],
+    "e16a33a4a86ebf1acfc8b708b00a85e4cb7e49a5": [
+      "docs/address-coverage/native/scale-profile.json"
+    ],
+    "b223c87f90bd1eb88d7a8df36a03ea2f3c94b608": [
+      "docs/address-coverage/normalization/README.md"
+    ],
+    "af24ace7a82299cae634d1d51b66a2beaca44a2e": [
+      "docs/address-coverage/normalization/boundary-results.txt"
+    ],
+    "596e4ed0258c113a1f41f4b65e52335ee25e948f": [
+      "docs/address-coverage/normalization/changed-addresses.csv"
+    ],
+    "2a909a31ca199727c68820e3c36a107d5a180df1": [
+      "docs/address-coverage/normalization/comparison.json"
+    ],
+    "d7dbf184621d4067bd6ea44d708444e99f4ff439": [
+      "docs/address-coverage/normalization/historical-marginal.csv"
+    ],
+    "d232ff4a7ea6bd2174785531caca29f3112e599a": [
+      "docs/address-coverage/normalization/independent-outcome-audit.json"
+    ],
+    "f8e3bf1d32ee4235c85ff69fd845632144b56d72": [
+      "docs/address-coverage/normalization/independent-source-audit.json"
+    ],
+    "735fd90b75ca6ba12d8294791f845a1920c336a4": [
+      "docs/address-coverage/normalization/manifest.json"
+    ],
+    "6ce5b9d951e7b7fd8bdd220faa651c71ead440dc": [
+      "docs/address-coverage/normalization/manual-required-reviewed.csv"
+    ],
+    "042405d11000ddbb385d413fe7eccf477c236806": [
+      "docs/address-coverage/normalization/manual-required.csv"
+    ],
+    "0843a8e5a1f4a48af2d4395c97f2978270c4fc5c": [
+      "docs/address-coverage/normalization/manual-sample-reviewed.csv"
+    ],
+    "580150da7ecc8e21a1ce71e14448b5d92485334e": [
+      "docs/address-coverage/normalization/manual-sample.csv"
+    ],
+    "ff19e9075c666685936dc967091abba0de4270c4": [
+      "docs/address-coverage/normalization/manual-street-semantics-summary.json"
+    ],
+    "ff37c01d12f4acc42d6349a461c6031f06dd7ecd": [
+      "docs/address-coverage/normalization/manual-street-semantics.json"
+    ],
+    "54716ef3590b094d3b8c5596b20611573d17f88d": [
+      "docs/address-coverage/normalization/negative-vectors.json"
+    ],
+    "8a33a1c0761670f3dd9c57b8194372f1d57e38f1": [
+      "docs/address-coverage/normalization/normalization-changes.csv"
+    ],
+    "5783d1d544dbb7db8b6d043a42e25131bc054666": [
+      "docs/address-coverage/normalization/normalization-impact.json"
+    ],
+    "9ae933ca6af75846eb84b9cb9c818355c078fc73": [
+      "docs/address-coverage/normalization/remaining-failures.csv"
+    ],
+    "f07134dc43dc586eae46b18d9d8353c1c77bc143": [
+      "docs/address-coverage/normalization/review-summary.json"
+    ],
+    "e8ea10c7e1ab00bddfd2cbceea975e56d489852c": [
+      "docs/address-coverage/normalization/review.md"
+    ],
+    "d8058c12b1ea1cdbfa6f0defd4d559bda8ccd20b": [
+      "docs/address-coverage/normalization/sample-verification.json"
+    ],
+    "195d959f32196dc527092af01aac45251a23c917": [
+      "docs/address-coverage/normalization/source-projection.json"
+    ],
+    "fb01a179c63c6417cb506bfe55e96d588343be66": [
+      "docs/address-coverage/normalization/street-pair-review.csv"
+    ],
+    "b227f6664cea129b87dd3ce5c9072502afa1e00d": [
+      "docs/address-coverage/remaining-failures.csv"
+    ],
+    "4534c0153eb9abcafafa60e387b4ad59df0aa7ee": [
+      "docs/address-coverage/review-summary.json"
+    ],
+    "e8601320b304a19e60afb5914b8b82211e2a545e": [
+      "docs/address-coverage/source-provenance.json"
+    ],
+    "4e6394ffd526e4130d00e3475abdd932539ce1d4": [
+      "docs/address-coverage/sources.md"
+    ],
+    "e0b4f68c2711e4213ee1f3e8e19939252589eb19": [
+      "src/HdbResale.App/Main.qml"
+    ],
+    "f25f74976c06fad74f12a04e95978d24a2db65a4": [
+      "src/HdbResale.App/Program.cs"
+    ],
+    "80fa7d5a3dbf35fee7fd2ee83ec3f9aa86d258dc": [
+      "src/HdbResale.App/ResaleMapModel.cs"
+    ],
+    "e21a34c35deaefd3e00cb5ed72695f4ee2dd75bc": [
+      "src/HdbResale.App/ScaleGate.qml"
+    ],
+    "3c9ca665e59b88f01044f5373449522f6aec34c6": [
+      "src/HdbResale.Domain/AddressCoverageStudy.cs"
+    ],
+    "59d037f5fe020fa66dbeb4925b824e579a5c98c3": [
+      "src/HdbResale.Domain/AddressMatching.cs"
+    ],
+    "d47cb7f9be298f14d3926b6c4620f9bff36f1de3": [
+      "src/HdbResale.Domain/CoverageStudy.cs"
+    ],
+    "c2336a35a249600498473af2b6439aaa32cd9129": [
+      "src/HdbResale.Domain/CsvImport.cs"
+    ],
+    "98c8d58bae644b294b91c9b426df936c999f4182": [
+      "src/HdbResale.Domain/HistoricalOneMap.cs"
+    ],
+    "82a71ba3ffa03f6a0fc7080bd6aae51e54c843cb": [
+      "tests/HdbResale.Tests/AddressCoverageTests.cs"
+    ],
+    "2709cd864f5d527aa533699dc63771004e63f2f9": [
+      "tests/HdbResale.Tests/AddressMatchingTests.cs"
+    ],
+    "49c294d279c5583ed4592090a96af55acd4d1c57": [
+      "tests/HdbResale.Tests/CoverageStudyTests.cs"
+    ],
+    "8d13b0f940c7577360af358ef12696b098002345": [
+      "tests/HdbResale.Tests/CsvImportTests.cs"
+    ],
+    "d96b7d6d40a804c64af88fdf2b6740ae0b0881e5": [
+      "tools/acquire_address_sources.py"
+    ],
+    "ece60be01ba79d75240d7c30350fe1c94403b36a": [
+      "tools/address_coverage.py"
+    ],
+    "774b6868f6c4c86cbdcd8ad308b7871ddaa780c9": [
+      "tools/audit_address_coverage.py"
+    ],
+    "f94721cb857a70a7d6d7fc9eaf1c769f1da4f11c": [
+      "tools/audit_normalization.py"
+    ],
+    "355b3ff0a5fd54e7d8640cd68c99d11802061a99": [
+      "tools/prepare_address_coverage.py"
+    ],
+    "d849fd9e2c615b9b785ae4c921c92cbb2135db6c": [
+      "tools/scale_gate.py"
+    ],
+    "304b24014cbffea280a7639ebd4204b359245c53": [
+      "tools/test_address_coverage.py"
+    ],
+    "a271db87f43985481e178757f92e713f40c0356f": [
+      "tools/test_scale_gate.py"
+    ],
+    "85691106128d3601ab3ccf2161b63b68c1a5b955": [
+      "README.md"
+    ],
+    "9876cfefcef52811be4535bd59c3894d7bfb0dc4": [
+      "docs/address-coverage/normalization/README.md"
+    ],
+    "052935d89cc5e7f85cb6e4d2a57c12562a450a97": [
+      "src/HdbResale.App/Main.qml"
+    ],
+    "b0030a7b742b0e2b5d52099623f33d13f1037b75": [
+      "src/HdbResale.App/ResaleMapModel.cs"
+    ],
+    "774c1717b67a23c2e7a1600938337162ecf04613": [
+      "src/HdbResale.App/ScaleGate.qml"
+    ],
+    "53bc2fea97b18504f83be7eb6a247b206046ae20": [
+      "tools/test_scale_gate.py"
+    ],
+    "0894ed399f90bd9bd5562481b487b1262c5ddc99": [
+      "src/HdbResale.App/ScaleGate.qml"
+    ],
+    "980cd1dce79c66168d074ebd4fd3964cc25d45c4": [
+      "tools/test_scale_gate.py"
+    ],
+    "9eeec6fa06ede77b27e438277310cc9500a4e7d6": [
+      "tools/test_scale_gate.py"
+    ],
+    "d7b5a9c568f69ae4332cdc0c7fa702af52702b2f": [
+      "docs/address-coverage/normalization/review-summary.json"
+    ],
+    "bb4ebf12664de647d69cc6f726671fb03a0c02f7": [
+      "src/HdbResale.App/ResaleMapModel.cs"
+    ],
+    "0ef01148bd71a400fc856cf3f34b254157e433fc": [
+      "README.md"
+    ],
+    "01e1345dd71c1c59da8a6e5f95aa0489d2125cf0": [
+      "docs/address-coverage/README.md"
+    ],
+    "351947cab8c1d47c183f3007f0f1e909bbb3ab28": [
+      "tools/audit_address_coverage.py"
+    ],
+    "853b9be7940f929f98539e77012f642e5ddea0d4": [
+      "tools/prepare_address_coverage.py"
+    ],
+    "5c93bf44ea1ea4c8426b4381f0fadb61b7f5cfe4": [
+      "tools/test_address_coverage.py"
+    ],
+    "896150d1ab87e319d4d3434f2ae365d50c73bfc2": [
+      "src/HdbResale.Domain/AddressMatching.cs"
+    ],
+    "d7fd714f8e58d1dce25a26180459ac6d72f26c92": [
+      "src/HdbResale.Domain/CoverageStudy.cs"
+    ],
+    "9fcc2e37f86380fce7e5dcba4078b6e7f7b49c91": [
+      "src/HdbResale.Domain/CsvImport.cs"
+    ],
+    "70b395ed3fe62e52b9f0dcfae0795947b511e4f3": [
+      "tests/HdbResale.Tests/AddressCoverageTests.cs"
+    ],
+    "0772f7b1da7d38dbcffe4cc8820966513d242ecc": [
+      "docs/address-coverage/README.md"
+    ],
+    "0e2aa63754221f36284c8d667bd78afb8dc466a2": [
+      "docs/address-coverage/README.md"
+    ],
+    "b47f47a72a96064208bf66db664a3d83a7dcb236": [
+      "src/HdbResale.Domain/CsvImport.cs"
+    ],
+    "f197e3382d6d1c2580a9980a896a8326815cbec8": [
+      "src/HdbResale.Domain/HistoricalOneMap.cs"
+    ],
+    "8720f2a2dbc25ce18f87f1f39f70a28d27745d25": [
+      "docs/address-coverage/README.md"
+    ],
+    "80e75ea94debce857088a2823ec0ecd724a94024": [
+      "src/HdbResale.App/Program.cs"
+    ],
+    "2e1d791f0fae4e413b402836d641698835337f69": [
+      "src/HdbResale.Domain/AddressCoverageStudy.cs"
+    ]
+  },
+  "issues": [],
+  "excluded_843df64_reachable": false,
+  "protected_baseline_content_unchanged": true,
+  "scope": "Full all-ref reachable-history generic exclusion scan plus review of every new source/test/document/measurement/address-audit blob. Inherits M8 audit and its inherited M7/M6/prior exact-private-reference evidence. Exact private display-name/coordinate-pair rescan unavailable: private raw reference was not transferred or read. M9 changes are intentional; public ACRA projections contain only address/source-row facts. No private export was acquired. canonical/frozen inputs and SDK properties protected."
+}
