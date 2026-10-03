@@ -1,0 +1,18 @@
+{
+  "failed": {
+    "url": "https://www.onemap.gov.sg/maps/tiles/Default/11/1612/1017.png",
+    "status": 200,
+    "contentType": "image/png",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pngSignature": false
+  },
+  "center": {
+    "url": "https://www.onemap.gov.sg/maps/tiles/Default/11/1614/1016.png",
+    "status": 200,
+    "contentType": "image/png",
+    "bytes": 24253,
+    "sha256": "ac2d6fee86ddd8179e6403ac61cbb4c54afcc8b9634960d8346d563676048f53",
+    "pngSignature": true
+  }
+}

@@ -1,0 +1,23 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 46f5cd3..e705ad8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -62,6 +62,8 @@ if(NOT MLN_QT_WITH_INTERNAL_SQLITE)
+ endif()
+ if(MLN_QT_WITH_LOCATION)
+     find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Location REQUIRED) # location
++    # M10 compatibility: Qt 6.9+ separates private package imports.
++    find_package(Qt${QT_VERSION_MAJOR} COMPONENTS LocationPrivate REQUIRED)
+ endif()
+ if(MLN_QT_WITH_WIDGETS)
+     if(Qt6_FOUND)
+@@ -125,6 +127,9 @@ target_link_libraries(
+         $<$<BOOL:${MLN_QT_WITH_COVERAGE}>:--coverage>
+ )
+ 
++# Stable core tests use OpenGLWidgets even with the widget wrapper disabled.
++find_package(Qt${QT_VERSION_MAJOR} COMPONENTS OpenGLWidgets REQUIRED)
++
+ # Enable testing
+ enable_testing()
+ 

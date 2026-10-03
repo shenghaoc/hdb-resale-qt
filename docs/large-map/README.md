@@ -125,9 +125,9 @@ matching semantics to make a timing number look better.
 A failed the responsiveness/memory goal. C is now a credible working MapLibre
 Native Qt source-layer option, rather than the old M7 binary-loader blocker:
 a source-built plugin renders the same 7,618 points at the matched 871×529 map
-viewport. Its measured subsequent complete-source calls were 42.7–46.7 ms,
-with a narrower submission-to-settled-observer interval of 60.9–382.1 ms;
-selection-only was 332 ms, zoom 16 was 971 ms and pan was 632 ms in that run.
+viewport. Its measured subsequent complete-source calls were 42.7–85.8 ms across the two matched runs,
+with a narrower submission-to-settled-observer interval of 60.9–554.9 ms;
+selection-only was about 332 ms, zoom 16 was 959–971 ms and pan was 632–639 ms.
 These narrower renderer observations cannot be compared as if they included
 B's complete filtering/aggregation/Bridge/assertion sequence. They do not prove
 B is a faster renderer, nor establish whole-app superiority for MapLibre.
@@ -138,7 +138,7 @@ The isolated MapLibre host still needs in-process C#→Bridge/source integration
 native feature hit-testing and equivalent accessibility/labels. Three edge-tile
 image warnings also require qualification. Its source build, matching data,
 viewport verification, licensing/dependency details and limitations are retained
-as separate experiment evidence; it is not added as a production dependency.
+as [separate experiment evidence](../../experiments/maplibre-m10/README.md); it is not added as a production dependency.
 
 The unused all-address experimental bypass was removed after review. Production
 has one projection path, avoiding an untested alternate mode that could call an

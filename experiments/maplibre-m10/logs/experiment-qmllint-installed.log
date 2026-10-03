@@ -1,0 +1,45 @@
+Warning: /workspace/shared/m10-maplibre/experiment/Main.qml:9:12: Unqualified access [unqualified]
+    width: viewportWidth; height: viewportHeight; visible: true
+           ^^^^^^^^^^^^^
+Warning: /workspace/shared/m10-maplibre/experiment/Main.qml:9:35: Unqualified access [unqualified]
+    width: viewportWidth; height: viewportHeight; visible: true
+                                  ^^^^^^^^^^^^^^
+Info: Did you mean "setHeight"?
+Suggested change:
+    width: viewportWidth; height: setHeight; visible: true
+                                  ^^^^^^^^^
+Warning: /workspace/shared/m10-maplibre/experiment/Main.qml:14:63: Unqualified access [unqualified]
+        PluginParameter { name: "maplibre.map.styles"; value: styleUrl }
+                                                              ^^^^^^^^
+Warning: /workspace/shared/m10-maplibre/experiment/Main.qml:29:39: Unqualified access [unqualified]
+                property string data: probe.sourceJson
+                                      ^^^^^
+Warning: /workspace/shared/m10-maplibre/experiment/Main.qml:35:24: Cannot assign binding of type QVariantMap to QJsonObject [incompatible-type]
+                paint: ({
+                    "circle-radius": ["interpolate",["linear"],["zoom"],10,3,12,5,15,7],
+                    "circle-color": ["interpolate",["linear"],["get","medianPrice"],300000,"#189a90",700000,"#dda34c",1100000,"#ce4c62"],
+                    "circle-stroke-color": "#ffffff",
+                    "circle-stroke-width": 1,
+                    "circle-opacity": 0.88
+                })
+Warning: /workspace/shared/m10-maplibre/experiment/Main.qml:47:24: Cannot assign binding of type QVariantMap to QJsonObject [incompatible-type]
+                paint: ({"circle-radius": 11,"circle-color":"#ffffff","circle-opacity":0.2,"circle-stroke-color":"#172d9a","circle-stroke-width":3})
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning: /workspace/shared/m10-maplibre/experiment/Main.qml:51:43: Unqualified access [unqualified]
+                expression: ["==", "key", probe.selectedKey]
+                                          ^^^^^
+Warning: /workspace/shared/m10-maplibre/experiment/Main.qml:57:17: Unqualified access [unqualified]
+                probe.pick(coordinate.latitude, coordinate.longitude, map.zoomLevel)
+                ^^^^^
+Warning: /workspace/shared/m10-maplibre/experiment/Main.qml:64:17: Unqualified access [unqualified]
+        target: probe
+                ^^^^^
+Warning: /workspace/shared/m10-maplibre/experiment/Main.qml:77:26: Unqualified access [unqualified]
+            Text { text: probe.status; wrapMode: Text.Wrap; width: 600 }
+                         ^^^^^
+Warning: /workspace/shared/m10-maplibre/experiment/Main.qml:78:41: Unqualified access [unqualified]
+            Text { text: "Selected: " + probe.selectedId + "  " + probe.selectedKey; width: 600; elide: Text.ElideRight }
+                                        ^^^^^
+Warning: /workspace/shared/m10-maplibre/experiment/Main.qml:78:67: Unqualified access [unqualified]
+            Text { text: "Selected: " + probe.selectedId + "  " + probe.selectedKey; width: 600; elide: Text.ElideRight }
+                                                                  ^^^^^

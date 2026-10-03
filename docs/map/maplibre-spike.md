@@ -1,3 +1,5 @@
+> Historical M7 spike. M10 later completed a pinned Qt 6.12 source build and real 7,618-address layer comparison. See the [M10 results and limits](../../experiments/maplibre-m10/README.md). The earlier binary failure below remains valid historical evidence.
+
 # MapLibre Qt Location spike
 
 Date: 2026-10-03. Isolated from the HDB application. Pinned application stack remains .NET 10.0.401, Qt 6.12.0 Linux gcc_64 and Qt Bridge 0.4.0-beta.

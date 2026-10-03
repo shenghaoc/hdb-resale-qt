@@ -1,0 +1,75 @@
+[1/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-vendor-parsedate.dir/vendor/parsedate/parsedate.cpp.o
+[2/513] Building C object src/core/MapLibreCore/CMakeFiles/mbgl-vendor-nunicode.dir/vendor/nunicode/src/libnu/ducet.c.o
+[3/513] Building C object src/core/MapLibreCore/CMakeFiles/mbgl-vendor-nunicode.dir/vendor/nunicode/src/libnu/strcoll.c.o
+[4/513] Building C object src/core/MapLibreCore/CMakeFiles/mbgl-vendor-nunicode.dir/vendor/nunicode/src/libnu/strings.c.o
+[5/513] Building C object src/core/MapLibreCore/CMakeFiles/mbgl-vendor-nunicode.dir/vendor/nunicode/src/libnu/tolower.c.o
+[6/513] Building C object src/core/MapLibreCore/CMakeFiles/mbgl-vendor-nunicode.dir/vendor/nunicode/src/libnu/tounaccent.c.o
+[7/513] Building C object src/core/MapLibreCore/CMakeFiles/mbgl-vendor-nunicode.dir/vendor/nunicode/src/libnu/toupper.c.o
+[8/513] Building C object src/core/MapLibreCore/CMakeFiles/mbgl-vendor-nunicode.dir/vendor/nunicode/src/libnu/utf8.c.o
+[9/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-vendor-csscolorparser.dir/vendor/csscolorparser/csscolorparser.cpp.o
+[10/513] Building CXX object src/core/MapLibreCore/vendor/maplibre-tile-spec/cpp/CMakeFiles/mlt-cpp.dir/src/mlt/decode/int.cpp.o
+[11/513] Building CXX object src/core/MapLibreCore/vendor/maplibre-tile-spec/cpp/CMakeFiles/mlt-cpp.dir/src/mlt/feature.cpp.o
+[12/513] Building CXX object src/core/MapLibreCore/vendor/maplibre-tile-spec/cpp/CMakeFiles/mlt-cpp.dir/src/mlt/decoder.cpp.o
+[13/513] Building CXX object src/core/MapLibreCore/vendor/maplibre-tile-spec/cpp/CMakeFiles/mlt-cpp.dir/src/mlt/layer.cpp.o
+[14/513] Building CXX object src/core/MapLibreCore/vendor/maplibre-tile-spec/cpp/CMakeFiles/mlt-cpp.dir/src/mlt/geometry_vector.cpp.o
+[15/513] Building CXX object src/core/MapLibreCore/vendor/maplibre-tile-spec/cpp/CMakeFiles/mlt-cpp.dir/src/mlt/metadata/stream.cpp.o
+[16/513] Building CXX object src/core/MapLibreCore/vendor/maplibre-tile-spec/cpp/CMakeFiles/mlt-cpp.dir/src/mlt/metadata/tileset.cpp.o
+[17/513] Building CXX object src/core/MapLibreCore/vendor/maplibre-tile-spec/cpp/CMakeFiles/mlt-cpp.dir/src/mlt/properties.cpp.o
+[18/513] Building CXX object src/core/MapLibreCore/vendor/maplibre-tile-spec/cpp/CMakeFiles/mlt-cpp.dir/src/mlt/util/rle.cpp.o
+[19/513] Populating .qmlls.build.ini file at /workspace/shared/m10-maplibre/build-current/.qt/.qmlls.build.ini
+[20/513] Copying declarative_maplibre qml sources into build dir
+[21/513] Copying declarative_maplibre qml resources into build dir
+[22/513] Copying declarative_maplibre_locationplugin qml sources into build dir
+[23/513] Copying declarative_maplibre_locationplugin qml resources into build dir
+[24/513] Building CXX object src/core/MapLibreCore/vendor/maplibre-tile-spec/cpp/CMakeFiles/fastpfor-lib.dir/vendor/fastpfor/fastpfor/bitpacking.cpp.o
+[25/513] Automatic MOC for target mbgl-core
+[26/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/gfx/drawable.cpp.o
+[27/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/mbgl-core_autogen/mocs_compilation.cpp.o
+[28/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/gfx/drawable_builder.cpp.o
+[29/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/gfx/drawable_builder_impl.cpp.o
+[30/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/gfx/drawable_custom_layer_host_tweaker.cpp.o
+[31/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/gfx/drawable_atlases_tweaker.cpp.o
+[32/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/gfx/dynamic_texture.cpp.o
+[33/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/gfx/dynamic_texture_atlas.cpp.o
+[34/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/gfx/uniform_buffer.cpp.o
+[35/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/gfx/gpu_expression.cpp.o
+[36/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/gfx/vertex_attribute.cpp.o
+[37/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/renderer/render_target.cpp.o
+[38/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/renderer/change_request.cpp.o
+[39/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/renderer/layer_group.cpp.o
+[40/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/renderer/tile_layer_group.cpp.o
+[41/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/renderer/layer_tweaker.cpp.o
+[42/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/renderer/layers/background_layer_tweaker.cpp.o
+[43/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/renderer/layers/circle_layer_tweaker.cpp.o
+[44/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/renderer/layers/fill_layer_tweaker.cpp.o
+[45/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/renderer/layers/fill_extrusion_layer_tweaker.cpp.o
+[46/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/renderer/layers/heatmap_layer_tweaker.cpp.o
+[47/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/renderer/layers/heatmap_texture_layer_tweaker.cpp.o
+[48/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/renderer/layers/hillshade_layer_tweaker.cpp.o
+[49/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/renderer/layers/hillshade_prepare_layer_tweaker.cpp.o
+[50/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/renderer/layers/line_layer_tweaker.cpp.o
+[51/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/renderer/layers/location_indicator_layer_tweaker.cpp.o
+[52/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/renderer/layers/raster_layer_tweaker.cpp.o
+[53/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/renderer/layers/symbol_layer_tweaker.cpp.o
+[54/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/renderer/layers/collision_layer_tweaker.cpp.o
+[55/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/shaders/shader_program_base.cpp.o
+[56/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/actor/mailbox.cpp.o
+[57/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/actor/scheduler.cpp.o
+[58/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/annotation/annotation_source.cpp.o
+[59/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/annotation/annotation_manager.cpp.o
+[60/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/annotation/annotation_tile.cpp.o
+[61/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/annotation/fill_annotation_impl.cpp.o
+[62/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/annotation/render_annotation_source.cpp.o
+[63/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/annotation/line_annotation_impl.cpp.o
+[64/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/annotation/symbol_annotation_impl.cpp.o
+[65/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/geometry/dem_data.cpp.o
+[66/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/annotation/shape_annotation_impl.cpp.o
+[67/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/geometry/line_atlas.cpp.o
+[68/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/gfx/attribute.cpp.o
+[69/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/geometry/feature_index.cpp.o
+[70/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/gfx/polyline_generator.cpp.o
+[71/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/gfx/renderer_backend.cpp.o
+[72/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/gfx/fill_generator.cpp.o
+[73/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/gfx/shader_group.cpp.o
+[74/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/gfx/shader_registry.cpp.o
+[75/513] Building CXX object src/core/MapLibreCore/CMakeFiles/mbgl-core.dir/src/mbgl/gfx/rendering_stats.cpp.o

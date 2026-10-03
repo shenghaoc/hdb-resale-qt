@@ -1,0 +1,94 @@
+{
+  "scopeWarning": "Same input summaries, viewport and cameras for paired stages; clocks and workload endpoints are different. B includes live C# domain/projection/model/oracle work and 25ms polling; MapLibre host uses prevalidated serialized snapshots and native observer callbacks. No renderer speed ratio or production advantage can be inferred.",
+  "maplibreProcessScope": "standalone native renderer/measurement process retaining prevalidated snapshots; excludes .NET/Bridge and C# producer; not equivalent to full baseline app memory/startup",
+  "pairs": [
+    {
+      "maplibreStage": "2-town",
+      "bStage": "town",
+      "inputAddressCount": 340,
+      "bMappedCount": 340,
+      "bLiveStateOracleMs": 166,
+      "maplibreNativeSourceCallMs": 2.53125,
+      "maplibreSubmissionToSettledObserverMs": 26.69503,
+      "maplibreSourceUpdateCount": 1,
+      "maplibreRssMiB": 449.59765625
+    },
+    {
+      "maplibreStage": "3-different",
+      "bStage": "different",
+      "inputAddressCount": 197,
+      "bMappedCount": 197,
+      "bLiveStateOracleMs": 128,
+      "maplibreNativeSourceCallMs": 1.807983,
+      "maplibreSubmissionToSettledObserverMs": 328.381285,
+      "maplibreSourceUpdateCount": 1,
+      "maplibreRssMiB": 449.6015625
+    },
+    {
+      "maplibreStage": "4-budget",
+      "bStage": "budget",
+      "inputAddressCount": 145,
+      "bMappedCount": 145,
+      "bLiveStateOracleMs": 35,
+      "maplibreNativeSourceCallMs": 1.043987,
+      "maplibreSubmissionToSettledObserverMs": 13.360633,
+      "maplibreSourceUpdateCount": 1,
+      "maplibreRssMiB": 449.6015625
+    },
+    {
+      "maplibreStage": "5-full",
+      "bStage": "small-to-full",
+      "inputAddressCount": 7618,
+      "bMappedCount": 7618,
+      "bLiveStateOracleMs": 499,
+      "maplibreNativeSourceCallMs": 46.695872,
+      "maplibreSubmissionToSettledObserverMs": 382.110114,
+      "maplibreSourceUpdateCount": 1,
+      "maplibreRssMiB": 455.12890625
+    },
+    {
+      "maplibreStage": "6-empty",
+      "bStage": "empty",
+      "inputAddressCount": 0,
+      "bMappedCount": 0,
+      "bLiveStateOracleMs": 329,
+      "maplibreNativeSourceCallMs": 0.078931,
+      "maplibreSubmissionToSettledObserverMs": 487.165116,
+      "maplibreSourceUpdateCount": 1,
+      "maplibreRssMiB": 455.1328125
+    },
+    {
+      "maplibreStage": "7-full",
+      "bStage": "empty-to-full",
+      "inputAddressCount": 7618,
+      "bMappedCount": 7618,
+      "bLiveStateOracleMs": 365,
+      "maplibreNativeSourceCallMs": 42.67743,
+      "maplibreSubmissionToSettledObserverMs": 363.024356,
+      "maplibreSourceUpdateCount": 1,
+      "maplibreRssMiB": 456.828125
+    },
+    {
+      "maplibreStage": "10-selection-only",
+      "bStage": "selection-only",
+      "inputAddressCount": 7618,
+      "bMappedCount": 7618,
+      "bLiveStateOracleMs": 153,
+      "maplibreNativeSourceCallMs": null,
+      "maplibreSubmissionToSettledObserverMs": 332.070897,
+      "maplibreSourceUpdateCount": 0,
+      "maplibreRssMiB": 464.03125
+    },
+    {
+      "maplibreStage": "11-zoom",
+      "bStage": "individuals",
+      "inputAddressCount": 7618,
+      "bMappedCount": 7618,
+      "bLiveStateOracleMs": 485,
+      "maplibreNativeSourceCallMs": null,
+      "maplibreSubmissionToSettledObserverMs": 970.525157,
+      "maplibreSourceUpdateCount": 0,
+      "maplibreRssMiB": 467.9765625
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "status": "passed",
+  "method": "independent Python data check, not C++/QML runtime",
+  "snapshots": [
+    {
+      "name": "full",
+      "count": 7618,
+      "sha256": "1ca71c7f307a906c60228af48dd611673671e325fecc784ddc110b026123e82a",
+      "expectedHashPresent": false,
+      "checks": "passed"
+    },
+    {
+      "name": "town",
+      "count": 340,
+      "sha256": "dade7a33b16af276a447a35ac3b5ebf5573e8bef59e40efa40d04cb5c1120653",
+      "expectedHashPresent": false,
+      "checks": "passed"
+    },
+    {
+      "name": "different",
+      "count": 197,
+      "sha256": "215bf0c66268b6899a4a3637aa4b74417fe2a6343d4f4f52acf605ce59e77670",
+      "expectedHashPresent": false,
+      "checks": "passed"
+    },
+    {
+      "name": "budget",
+      "count": 145,
+      "sha256": "892767332936dbf662ed4010c9295bcba4215d59f981d291f78df3128e7b5a6c",
+      "expectedHashPresent": false,
+      "checks": "passed"
+    },
+    {
+      "name": "empty",
+      "count": 0,
+      "sha256": "ed778c73ea51338d6576fb5992b189f2b94d9f3d5e199f46c1af520d6b0b3e6c",
+      "expectedHashPresent": false,
+      "checks": "passed"
+    }
+  ]
+}

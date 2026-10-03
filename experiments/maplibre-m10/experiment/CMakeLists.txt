@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.21)
+project(m10_maplibre LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_AUTOMOC ON)
+find_package(Qt6 6.12.0 EXACT COMPONENTS Core Gui Qml Quick Location Positioning REQUIRED)
+qt_add_executable(m10-maplibre main.cpp)
+target_link_libraries(m10-maplibre PRIVATE Qt6::Core Qt6::Gui Qt6::Qml Qt6::Quick Qt6::Location Qt6::Positioning)

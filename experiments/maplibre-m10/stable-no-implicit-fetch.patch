@@ -1,0 +1,32 @@
+diff --git a/deps/CMakeLists.txt b/deps/CMakeLists.txt
+index 092e535..972ff79 100644
+--- a/deps/CMakeLists.txt
++++ b/deps/CMakeLists.txt
+@@ -13,10 +13,7 @@ function(mapbox_base_add_library name include_path)
+     target_link_libraries(mapbox-base INTERFACE mapbox-base-${name})
+ endfunction()
+ 
+-execute_process(
+-    COMMAND git submodule update --init .
+-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/deps
+-)
++# M10: dependency preparation is explicit; never fetch during CMake configuration.
+ 
+ mapbox_base_add_library(geojson-vt-cpp ${PROJECT_SOURCE_DIR}/deps/geojson-vt-cpp/include)
+ mapbox_base_add_library(geojson.hpp ${PROJECT_SOURCE_DIR}/deps/geojson.hpp/include)
+diff --git a/extras/CMakeLists.txt b/extras/CMakeLists.txt
+index 84d6022..1689bf6 100644
+--- a/extras/CMakeLists.txt
++++ b/extras/CMakeLists.txt
+@@ -20,10 +20,7 @@ endfunction()
+ add_library(mapbox-base-extras INTERFACE)
+ add_library(Mapbox::Base::Extras ALIAS mapbox-base-extras)
+ 
+-execute_process(
+-    COMMAND git submodule update --init .
+-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/extras
+-)
++# M10: dependency preparation is explicit; never fetch during CMake configuration.
+ 
+ mapbox_base_extras_add_library(args ${PROJECT_SOURCE_DIR}/extras/args)
+ mapbox_base_extras_add_library(expected-lite ${PROJECT_SOURCE_DIR}/extras/expected-lite/include)

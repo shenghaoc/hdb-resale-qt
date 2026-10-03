@@ -1,0 +1,26 @@
+[
+  {
+    "file": "build-current-part1.log",
+    "completedSteps": 75,
+    "plannedSteps": 513,
+    "purpose": "interrupted to adjust concurrency or protect native B timings; completed objects retained"
+  },
+  {
+    "file": "build-current-part2.log",
+    "completedSteps": 116,
+    "plannedSteps": 438,
+    "purpose": "interrupted to adjust concurrency or protect native B timings; completed objects retained"
+  },
+  {
+    "file": "build-current-part3.log",
+    "completedSteps": 145,
+    "plannedSteps": 322,
+    "purpose": "interrupted to adjust concurrency or protect native B timings; completed objects retained"
+  },
+  {
+    "file": "build-current.log",
+    "completedSteps": 177,
+    "plannedSteps": 177,
+    "purpose": "compile final segment to completion"
+  }
+]

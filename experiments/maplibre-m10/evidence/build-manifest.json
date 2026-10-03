@@ -1,0 +1,274 @@
+{
+  "qtVersion": "6.12.0",
+  "dotnetVersion": "10.0.401",
+  "compiler": "GCC 14.2.0",
+  "cmake": "4.4.3",
+  "sources": {
+    "current": {
+      "qtBindingRevision": "c3485f3a9590081c7be8edbc542341e688f6663d",
+      "upstream": "https://github.com/maplibre/maplibre-native-qt.git",
+      "submoduleStatus": [
+        "-40e9b25b6174dd3b472d8868f63323a870dfeeb8 docs/doxygen-awesome-css",
+        " 702ebc6114ad864d86f86dd23b469183014fd548 vendor/maplibre-native (702ebc6)",
+        "-a3c119b4797be2039761ec1fa0731f038e3026f6 vendor/maplibre-native/docs/doxygen/doxygen-awesome-css",
+        "-ce613c41372b23b1f51333815feb3edd87ef8a8b vendor/maplibre-native/platform/windows/vendor/vcpkg",
+        " e232df55745642b39f0cc1edfc85df2633bce29c vendor/maplibre-native/vendor/PMTiles (e232df5)",
+        "-015e25c3c91b70eb1a754d36fb14c4ba6ad9b0b9 vendor/maplibre-native/vendor/Vulkan-Headers",
+        "-7942b798289f752dc23b0a79516fd8545febd718 vendor/maplibre-native/vendor/VulkanMemoryAllocator",
+        " 016aa8a054dd88b8e1d2a020466ce38f310444cc vendor/maplibre-native/vendor/args (016aa8a)",
+        " 344117638c8ff7e239044fd0fa7085839fc03021 vendor/maplibre-native/vendor/benchmark (3441176)",
+        " c6eb4cbc932c74c1d341d6eece8eda2da018d1e0 vendor/maplibre-native/vendor/boost (heads/main)",
+        " 30b7732565c4630263b43c34267a605a1511f794 vendor/maplibre-native/vendor/cpp-httplib (30b7732)",
+        " 0d0897a9dc462edf6396aedb335ddeb4aa302b78 vendor/maplibre-native/vendor/earcut.hpp (0d0897a)",
+        "-90e22947c60b0c1fa47cf1496790ce1942e4a5d8 vendor/maplibre-native/vendor/earcut.hpp/glfw",
+        " dd2f5b9ff38fcd36b59efd9d289127fa73efc6cb vendor/maplibre-native/vendor/eternal (heads/master)",
+        "-bb15a4e3bf4c5941ee7124d284ed9ef96e9a1c68 vendor/maplibre-native/vendor/eternal/vendor/benchmark",
+        " 95b9cb015fa17baa749c2b396b335906e1596a9e vendor/maplibre-native/vendor/expected-lite (95b9cb0)",
+        " 9fda7b0afbd0640f482f4aea8720a8c0afd18740 vendor/maplibre-native/vendor/filesystem (9fda7b0)",
+        "-42608f77f20749dd6ddc9e0536788eaad70ea4b5 vendor/maplibre-native/vendor/freetype",
+        "-a92c61f8456fa9731c0b000a2c6fc52a740c2be7 vendor/maplibre-native/vendor/glslang",
+        " b514bdc898e2951020cbdca1304b75f5950d1f59 vendor/maplibre-native/vendor/googletest (b514bdc)",
+        "-c1eb66d4159fec311334aee5c0a59384491d3989 vendor/maplibre-native/vendor/harfbuzz",
+        " e1e847bfe97c8cdc09edbe87a4e74babc512d18d vendor/maplibre-native/vendor/kdbush.hpp (heads/master)",
+        "-1f9a7bb04855ad9ce673e0e27084eddd690b2752 vendor/maplibre-native/vendor/kdbush.hpp/.mason",
+        " 2778eb89cb3b078d31ce225c7592360d6d9bb0a0 vendor/maplibre-native/vendor/maplibre-native-base/deps/cheap-ruler-cpp (heads/master)",
+        " b0f25fec9eb068cdf6fb9556b3cd11fd3694abf0 vendor/maplibre-native/vendor/maplibre-native-base/deps/geojson-vt-cpp (b0f25fe)",
+        "-9e7f1d8d54ac6c60d09b9c4744d20dbfbc7bc860 vendor/maplibre-native/vendor/maplibre-native-base/deps/geojson-vt-cpp/.mason",
+        " ca4638c545183d9c138464d93f2c20975c8c4808 vendor/maplibre-native/vendor/maplibre-native-base/deps/geojson.hpp (v0.5.1)",
+        "-b1582f56531830b7e7015d291f8f0158e88c2246 vendor/maplibre-native/vendor/maplibre-native-base/deps/geojson.hpp/.mason",
+        " a5571a3ace5853e0d1e8d5fbdc87163c824ebeb7 vendor/maplibre-native/vendor/maplibre-native-base/deps/geometry.hpp (a5571a3)",
+        " 57ca9ed4bbeb22ed8d20a55063dcaa217ba47f42 vendor/maplibre-native/vendor/maplibre-native-base/deps/jni.hpp (heads/master)",
+        "+3bc0604f748c005e6bab0e588c2024c2ddc9dd50 vendor/maplibre-native/vendor/maplibre-native-base/deps/pixelmatch-cpp (heads/master)",
+        " 450f25f710c346f9c1583eab2749e011081ed20e vendor/maplibre-native/vendor/maplibre-native-base/deps/shelf-pack-cpp (450f25f)",
+        " a2a4858345423a760eca300ec42acad1ad123aa3 vendor/maplibre-native/vendor/maplibre-native-base/deps/variant (a2a4858)",
+        "-6adb140160cb549400f73ea35c1d9eb5782210e0 vendor/maplibre-native/vendor/maplibre-native-base/deps/variant/.mason",
+        " 751ebb1837e4fd03c9074b91fce24727013c1868 vendor/maplibre-native/vendor/maplibre-tile-spec (751ebb1)",
+        " f36ced7e50254738c4e5af1a239f5fb7b1094007 vendor/maplibre-native/vendor/maplibre-tile-spec/cpp/vendor/earcut (f36ced7)",
+        "-2948b6a2e61ccabecc952c24794c6960d86c9ed6 vendor/maplibre-native/vendor/maplibre-tile-spec/cpp/vendor/earcut/vendor/benchmark",
+        "-7d5a16ce714f0b5f4efa3262de22e4d948851525 vendor/maplibre-native/vendor/maplibre-tile-spec/cpp/vendor/earcut/vendor/glfw",
+        "-0934b7e112354d609133d2c5f973c402c9efc9b9 vendor/maplibre-native/vendor/maplibre-tile-spec/cpp/vendor/earcut/vendor/googletest",
+        " 75b2e7535392d5ca5eaec937259388d89e38ba4d vendor/maplibre-native/vendor/maplibre-tile-spec/cpp/vendor/fsst (75b2e75)",
+        "-c00fd25b71a17e645e4567fcb465c3fa532827d2 vendor/maplibre-native/vendor/maplibre-tile-spec/cpp/vendor/googletest",
+        "-9cca280a4d0ccf0c08f47a99aa71d1b0e52f8d03 vendor/maplibre-native/vendor/maplibre-tile-spec/cpp/vendor/json",
+        "-4b329c12f6ceb8bb442f09726cb1957b0add0c3a vendor/maplibre-native/vendor/maplibre-tile-spec/test/mvt-fixtures",
+        "-27c4382b7151d55a51692cdcb27aaa98752240de vendor/maplibre-native/vendor/metal-cpp",
+        " 6ed5f1aef3510a6c43d7d9348078948a7e074868 vendor/maplibre-native/vendor/polylabel (6ed5f1a)",
+        "-1f9a7bb04855ad9ce673e0e27084eddd690b2752 vendor/maplibre-native/vendor/polylabel/.mason",
+        " f379578a3f7c8162aac0ac31c2696de09a5b5f93 vendor/maplibre-native/vendor/protozero (f379578)",
+        " 27c3a8dc0e2c9218fe94986d249a12b5ed838f1d vendor/maplibre-native/vendor/rapidjson (27c3a8d)",
+        "-ba96d0b1161f540656efdaed035b3c062b60e006 vendor/maplibre-native/vendor/rapidjson/thirdparty/gtest",
+        " e5ba492754f865b475577fd85eecc3be70e050ce vendor/maplibre-native/vendor/supercluster (v0.5.0)",
+        "-e78d6d7c729f05e53a77f6156056974d13b8c32f vendor/maplibre-native/vendor/supercluster/.mason",
+        " cba309e92ec79a95be2aa5a324a688a06af8d40a vendor/maplibre-native/vendor/unique_resource (cba309e)",
+        " 729896c7ba8bbd9da5573679270133086d05b5dd vendor/maplibre-native/vendor/unordered_dense (729896c)",
+        " 8ad3bf0b78bf9cb0dba0abaccec0c180e1c27ab3 vendor/maplibre-native/vendor/vector-tile (heads/main)",
+        "-77758e86720801c5fb7db7a2c578bfe137eb8872 vendor/maplibre-native/vendor/vector-tile/bench/mvt-bench-fixtures",
+        "-2bf95cf80be810e1b20b92f178b26a739151a929 vendor/maplibre-native/vendor/vector-tile/test/mvt-fixtures",
+        " 9c87e553a51170e4ce85fd2ef3160bc3434eb751 vendor/maplibre-native/vendor/wagyu (9c87e55)",
+        "-a623c19a91947a9d29f9ec5625ce620ab42325dc vendor/maplibre-native/vendor/wagyu/tests/geometry-test-data",
+        "-b9507d9753960e6ca0adabd7e91c97d8c8f6e2de vendor/maplibre-native/vendor/webgpu-cpp",
+        "-d2e3330ade4ae1bb238d76b485926f067e7ee64c vendor/maplibre-native/vendor/wgpu-native",
+        "-b145c6f3619619fb48715c479643e2f2e0e42d2d vendor/maplibre-native/vendor/zip-archive"
+      ]
+    },
+    "stable": {
+      "qtBindingRevision": "d929c783737120787b43417d9ef05da88da75dfd",
+      "upstream": "https://github.com/maplibre/maplibre-native-qt.git",
+      "submoduleStatus": [
+        "-40e9b25b6174dd3b472d8868f63323a870dfeeb8 docs/doxygen-awesome-css",
+        " 0a4e5a4474b54a36ffbe331a0f058124b5a4783a vendor/maplibre-native (0a4e5a44)",
+        "-a3c119b4797be2039761ec1fa0731f038e3026f6 vendor/maplibre-native/docs/doxygen/doxygen-awesome-css",
+        "-6fc34d91fc8d8758c51830127c49223624d446aa vendor/maplibre-native/platform/android/vendor/mapbox-gestures-android",
+        "-b39bdb72621dae4d7864d557c732131a30341e04 vendor/maplibre-native/platform/android/vendor/maplibre-java",
+        "-5d0788647d72cf275c356ca7ace555338ef25449 vendor/maplibre-native/platform/windows/vendor/vcpkg",
+        " 090faecb454fbd6e6e17a75ef8146acb037118d4 vendor/maplibre-native/vendor/benchmark (090faec)",
+        " 805bc2ee74cc06d7159ec9ac9bf56072c16a2389 vendor/maplibre-native/vendor/boost (805bc2e)",
+        "-30b7732565c4630263b43c34267a605a1511f794 vendor/maplibre-native/vendor/cpp-httplib",
+        " 0d0897a9dc462edf6396aedb335ddeb4aa302b78 vendor/maplibre-native/vendor/earcut.hpp (0d0897a)",
+        "-90e22947c60b0c1fa47cf1496790ce1942e4a5d8 vendor/maplibre-native/vendor/earcut.hpp/glfw",
+        " dd2f5b9ff38fcd36b59efd9d289127fa73efc6cb vendor/maplibre-native/vendor/eternal (heads/master)",
+        "-bb15a4e3bf4c5941ee7124d284ed9ef96e9a1c68 vendor/maplibre-native/vendor/eternal/vendor/benchmark",
+        " 58d77fa8070e8cec2dc1ed015d66b454c8d78850 vendor/maplibre-native/vendor/googletest (58d77fa)",
+        " 3094c1eff0a9631db6e07770dfc135683bbcc9c3 vendor/maplibre-native/vendor/mapbox-base (3094c1e)",
+        " 2778eb89cb3b078d31ce225c7592360d6d9bb0a0 vendor/maplibre-native/vendor/mapbox-base/deps/cheap-ruler-cpp (heads/master)",
+        " b0f25fec9eb068cdf6fb9556b3cd11fd3694abf0 vendor/maplibre-native/vendor/mapbox-base/deps/geojson-vt-cpp (b0f25fe)",
+        "-9e7f1d8d54ac6c60d09b9c4744d20dbfbc7bc860 vendor/maplibre-native/vendor/mapbox-base/deps/geojson-vt-cpp/.mason",
+        " ca4638c545183d9c138464d93f2c20975c8c4808 vendor/maplibre-native/vendor/mapbox-base/deps/geojson.hpp (v0.5.1)",
+        "-b1582f56531830b7e7015d291f8f0158e88c2246 vendor/maplibre-native/vendor/mapbox-base/deps/geojson.hpp/.mason",
+        " a5571a3ace5853e0d1e8d5fbdc87163c824ebeb7 vendor/maplibre-native/vendor/mapbox-base/deps/geometry.hpp (a5571a3)",
+        " 57ca9ed4bbeb22ed8d20a55063dcaa217ba47f42 vendor/maplibre-native/vendor/mapbox-base/deps/jni.hpp (heads/master)",
+        " f6249e7fdcb80131c390a083f1621d96023e72e9 vendor/maplibre-native/vendor/mapbox-base/deps/optional (heads/master)",
+        "+3bc0604f748c005e6bab0e588c2024c2ddc9dd50 vendor/maplibre-native/vendor/mapbox-base/deps/pixelmatch-cpp (heads/master)",
+        " 450f25f710c346f9c1583eab2749e011081ed20e vendor/maplibre-native/vendor/mapbox-base/deps/shelf-pack-cpp (450f25f)",
+        " e5ba492754f865b475577fd85eecc3be70e050ce vendor/maplibre-native/vendor/mapbox-base/deps/supercluster.hpp (v0.5.0)",
+        "-e78d6d7c729f05e53a77f6156056974d13b8c32f vendor/maplibre-native/vendor/mapbox-base/deps/supercluster.hpp/.mason",
+        " a2a4858345423a760eca300ec42acad1ad123aa3 vendor/maplibre-native/vendor/mapbox-base/deps/variant (a2a4858)",
+        "-6adb140160cb549400f73ea35c1d9eb5782210e0 vendor/maplibre-native/vendor/mapbox-base/deps/variant/.mason",
+        " 016aa8a054dd88b8e1d2a020466ce38f310444cc vendor/maplibre-native/vendor/mapbox-base/extras/args (016aa8a)",
+        " 95b9cb015fa17baa749c2b396b335906e1596a9e vendor/maplibre-native/vendor/mapbox-base/extras/expected-lite (95b9cb0)",
+        "+3812f8a6f31ed67d32272ac33fe2b85c6b2c947e vendor/maplibre-native/vendor/mapbox-base/extras/filesystem (heads/master)",
+        "+988ea2c1798de7779f656df2281dd36d6039a17a vendor/maplibre-native/vendor/mapbox-base/extras/googletest (heads/main)",
+        " e1e847bfe97c8cdc09edbe87a4e74babc512d18d vendor/maplibre-native/vendor/mapbox-base/extras/kdbush.hpp (heads/master)",
+        "-1f9a7bb04855ad9ce673e0e27084eddd690b2752 vendor/maplibre-native/vendor/mapbox-base/extras/kdbush.hpp/.mason",
+        " 27c3a8dc0e2c9218fe94986d249a12b5ed838f1d vendor/maplibre-native/vendor/mapbox-base/extras/rapidjson (27c3a8d)",
+        "-ba96d0b1161f540656efdaed035b3c062b60e006 vendor/maplibre-native/vendor/mapbox-base/extras/rapidjson/thirdparty/gtest",
+        "-674a741b1bfa6f7c6e8bb694ba0295365c8e2096 vendor/maplibre-native/vendor/mapbox-gl-native-curl",
+        " 6ed5f1aef3510a6c43d7d9348078948a7e074868 vendor/maplibre-native/vendor/polylabel (6ed5f1a)",
+        "-1f9a7bb04855ad9ce673e0e27084eddd690b2752 vendor/maplibre-native/vendor/polylabel/.mason",
+        " f379578a3f7c8162aac0ac31c2696de09a5b5f93 vendor/maplibre-native/vendor/protozero (f379578)",
+        " cba309e92ec79a95be2aa5a324a688a06af8d40a vendor/maplibre-native/vendor/unique_resource (cba309e)",
+        " bc2f7f44cdb0d9af2b282ea4a755f85a13ba713a vendor/maplibre-native/vendor/vector-tile (bc2f7f4)",
+        "-77758e86720801c5fb7db7a2c578bfe137eb8872 vendor/maplibre-native/vendor/vector-tile/bench/mvt-bench-fixtures",
+        "-2bf95cf80be810e1b20b92f178b26a739151a929 vendor/maplibre-native/vendor/vector-tile/test/mvt-fixtures",
+        " 9c87e553a51170e4ce85fd2ef3160bc3434eb751 vendor/maplibre-native/vendor/wagyu (9c87e55)",
+        "-a623c19a91947a9d29f9ec5625ce620ab42325dc vendor/maplibre-native/vendor/wagyu/tests/geometry-test-data",
+        "-b145c6f3619619fb48715c479643e2f2e0e42d2d vendor/maplibre-native/vendor/zip-archive"
+      ]
+    }
+  },
+  "packages": [
+    {
+      "filename": "libicu-dev_76.1-4_amd64.deb",
+      "sha256": "856ea1b86a008d71d3ffaf6a4a465ff38edf3a257ebab3f0222ce05fe94a5c1a",
+      "bytes": 10780064,
+      "source": "https://deb.debian.org/debian/dists/trixie/main/binary-amd64/"
+    },
+    {
+      "filename": "libicu76_76.1-4_amd64.deb",
+      "sha256": "c1bf762996de9ecba9b9d871e4928a8090f023a3e9e7fa3240b3d90f892a01dc",
+      "bytes": 9722072,
+      "source": "https://deb.debian.org/debian/dists/trixie/main/binary-amd64/"
+    },
+    {
+      "filename": "zlib1g-dev_1%3a1.3.dfsg+really1.3.1-1+b1_amd64.deb",
+      "sha256": "76ed5c858e1aef38b7be93acce5910e457e77bd6271471b9d05fb42e78826224",
+      "bytes": 919744,
+      "source": "https://deb.debian.org/debian/dists/trixie/main/binary-amd64/"
+    },
+    {
+      "filename": "zlib1g_1%3a1.3.dfsg+really1.3.1-1+b1_amd64.deb",
+      "sha256": "015be740d6236ad114582dea500c1d907f29e16d6db00566ca32fb68d71ac90d",
+      "bytes": 88892,
+      "source": "https://deb.debian.org/debian/dists/trixie/main/binary-amd64/"
+    }
+  ],
+  "data": [
+    {
+      "name": "default.geojson",
+      "sha256": "5f508e1f62878f67029b7ab81c3c433d62b04fbb2a04525e76b1f90fa0e79096",
+      "bytes": 2732005,
+      "features": 7615
+    },
+    {
+      "name": "town.geojson",
+      "sha256": "dade7a33b16af276a447a35ac3b5ebf5573e8bef59e40efa40d04cb5c1120653",
+      "bytes": 125081,
+      "features": 340
+    },
+    {
+      "name": "different.geojson",
+      "sha256": "215bf0c66268b6899a4a3637aa4b74417fe2a6343d4f4f52acf605ce59e77670",
+      "bytes": 70586,
+      "features": 197
+    },
+    {
+      "name": "empty.geojson",
+      "sha256": "ed778c73ea51338d6576fb5992b189f2b94d9f3d5e199f46c1af520d6b0b3e6c",
+      "bytes": 42,
+      "features": 0
+    },
+    {
+      "name": "budget.geojson",
+      "sha256": "892767332936dbf662ed4010c9295bcba4215d59f981d291f78df3128e7b5a6c",
+      "bytes": 51947,
+      "features": 145
+    },
+    {
+      "name": "full.geojson",
+      "sha256": "1ca71c7f307a906c60228af48dd611673671e325fecc784ddc110b026123e82a",
+      "bytes": 2733353,
+      "features": 7618
+    }
+  ],
+  "experimentSource": [
+    {
+      "name": "configure.sh",
+      "bytes": 1448,
+      "sha256": "4ab25959225cb46c6e138884342f5ce605f33bd02cddb646bb77495a8ec2b9ce"
+    },
+    {
+      "name": "build.sh",
+      "bytes": 633,
+      "sha256": "cc9c0b9cea550df96a3b49e4216571b2acabd8ac3dc5d3744c0ed19e6853e1ad"
+    },
+    {
+      "name": "measure_command.py",
+      "bytes": 423,
+      "sha256": "befde16688162c43efdfa8ad168ab42b537db4f01f10958f02f1655fcc18e39a"
+    },
+    {
+      "name": "fetch-current-source.sh",
+      "bytes": 1994,
+      "sha256": "92452f935a362d12b44b347a8e8969f16f3ca09ccf842e7a70b2c90067f0b9e7"
+    },
+    {
+      "name": "prepare-local-dependencies.sh",
+      "bytes": 616,
+      "sha256": "f72e4a0637b345d7fc39ad089e6df2ad4ece548ce0986d0aae2296d45fa481f0"
+    },
+    {
+      "name": "native-library-only.patch",
+      "bytes": 2037,
+      "sha256": "66f1318bb9174f27576792cb78fe47062de8389b826d7ea4cd3286699759f3ec"
+    },
+    {
+      "name": "stable-qt612-cmake.patch",
+      "bytes": 778,
+      "sha256": "53fc3c0b8cf1b753fb39db77157ca899b470b9ae4aadd0da998a5a758355d0e6"
+    },
+    {
+      "name": "stable-no-implicit-fetch.patch",
+      "bytes": 1326,
+      "sha256": "6de08263242f3bc52b1d070cfc1cd078bf9fb93a8c949414832014120268fb5d"
+    },
+    {
+      "name": "instrumentation.patch",
+      "bytes": 5999,
+      "sha256": "6683768702c454ef6f37783603456f8c4cfe701b6fddbbf277e3e27e9eb2cb60"
+    },
+    {
+      "name": "experiment/CMakeLists.txt",
+      "bytes": 368,
+      "sha256": "2360026742a6579bea6083cdb7c37b930c4505795588b702713278345b7ad41b"
+    },
+    {
+      "name": "experiment/main.cpp",
+      "bytes": 37882,
+      "sha256": "3c9f11629b38f60ef7b0b0afa8bb4ebf699ec71bb88754bbdb1224b44fe02f4a"
+    },
+    {
+      "name": "experiment/Main.qml",
+      "bytes": 4056,
+      "sha256": "af3c7eeeaee65f5b83ce1ca575fdcee16b1aa6b1888d2d3e9a00ddcdfae2a642"
+    },
+    {
+      "name": "experiment/onemap-style.json",
+      "bytes": 431,
+      "sha256": "dd10c33d1487964dc418af0df97cb739ae93f83695e929fd2a27055fb6f718ed"
+    },
+    {
+      "name": "experiment/onemap-logo.png",
+      "bytes": 1514,
+      "sha256": "657db347017b13e71bc4942afbe985566052446b13433f2dd5492e92fce34f16"
+    },
+    {
+      "name": "run-native.sh",
+      "bytes": 1189,
+      "sha256": "54435a0fb013d829e3cd2ea6de66b774a008b8c53625eddca68f9855deeb195e"
+    }
+  ],
+  "comparisonReference": {
+    "path": "docs/large-map/candidate-verification.json",
+    "sha256": "78e5b29c53c07657a4e42924f77a2567669f5e3e4d184a6329a48630a58eb623"
+  }
+}

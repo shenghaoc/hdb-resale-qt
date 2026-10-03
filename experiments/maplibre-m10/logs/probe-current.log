@@ -1,0 +1,4 @@
+Qt version: 6.12.0
+Metadata: {"IID":"org.qt-project.qt.geoservice.serviceproviderfactory/6.0","MetaData":{"Experimental":false,"Features":["OnlineMappingFeature","OfflineMappingFeature","LocalizedMappingFeature"],"Keys":["maplibre","maplibre"],"Provider":"maplibre","Version":100},"archlevel":1,"className":"QGeoServiceProviderFactoryMapLibre","debug":false,"version":396288}
+Plugin loaded: true
+Available providers: QList("itemsoverlay", "maplibre", "osm")

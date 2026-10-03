@@ -1,0 +1,575 @@
+{
+  "decision": "Keep B for M10; MapLibre is a verified working future option, not proven full-app superiority.",
+  "scope": "Equivalent C# exported7618 summary input and871x529 geographic camera; isolated serialized-data\u2192Qt native renderer, not live production .NET/Bridge/full app.",
+  "completion": "Submission, native updateSource return and settled native observer callback are distinct. Observer callbacks are not GPU fences or guaranteed source-generation/presentation proof.",
+  "sourceBuild": "Current pinned source with explicit library-only test exclusion and opt-in instrumentation built/installed/loaded onQt6.12; stable CMake fixes +twoLocation syntax units passed, fullstable binary not built.",
+  "runs": [
+    {
+      "name": "matched",
+      "sha256": "0dc435fee3c7f5777c8e5cd7412937410ee2a2c474725b78c85a7f989b4cf644",
+      "startup": {
+        "afterValidationSteadyNs": "42849041696885",
+        "beforeQmlLoadSteadyNs": "42849041880778",
+        "firstEligibleFullObserverSteadyNs": "42851148643239",
+        "firstSettledFullObserverSteadyNs": "42851165595768",
+        "mainEntrySteadyNs": "42848782345709",
+        "mainToFirstEligibleFullObserverMs": 2366.29753,
+        "mainToFirstSettledFullObserverMs": 2383.250059,
+        "mainToQmlEngineLoadReturnedMs": 497.344535,
+        "qmlEngineLoadReturnedSteadyNs": "42849279690244"
+      },
+      "stages": [
+        {
+          "label": "1-full",
+          "kind": "source",
+          "submittedFeatureCount": 7618,
+          "hostSubmitToSettledObserverMs": 1853.291813,
+          "matchingSourceUpdateCount": 1,
+          "camera": {
+            "devicePixelRatio": 1,
+            "height": 529,
+            "latitude": 1.3521,
+            "longitude": 103.8198,
+            "qtLocationZoom": 11,
+            "width": 871
+          },
+          "selectedTransactionId": "HDB-222666",
+          "selectionIdentityInCurrentExport": true,
+          "nativeSourceCallMs": 91.490925,
+          "rssMiB": 445.84375,
+          "peakRssMiB": 445.84375
+        },
+        {
+          "label": "2-town",
+          "kind": "source",
+          "submittedFeatureCount": 340,
+          "hostSubmitToSettledObserverMs": 26.69503,
+          "matchingSourceUpdateCount": 1,
+          "camera": {
+            "devicePixelRatio": 1,
+            "height": 529,
+            "latitude": 1.3521,
+            "longitude": 103.8198,
+            "qtLocationZoom": 11,
+            "width": 871
+          },
+          "selectedTransactionId": "HDB-222666",
+          "selectionIdentityInCurrentExport": true,
+          "nativeSourceCallMs": 2.53125,
+          "rssMiB": 449.59765625,
+          "peakRssMiB": 451.859375
+        },
+        {
+          "label": "3-different",
+          "kind": "source",
+          "submittedFeatureCount": 197,
+          "hostSubmitToSettledObserverMs": 328.381285,
+          "matchingSourceUpdateCount": 1,
+          "camera": {
+            "devicePixelRatio": 1,
+            "height": 529,
+            "latitude": 1.3521,
+            "longitude": 103.8198,
+            "qtLocationZoom": 11,
+            "width": 871
+          },
+          "selectedTransactionId": "HDB-198975",
+          "selectionIdentityInCurrentExport": true,
+          "nativeSourceCallMs": 1.807983,
+          "rssMiB": 449.6015625,
+          "peakRssMiB": 451.859375
+        },
+        {
+          "label": "4-budget",
+          "kind": "source",
+          "submittedFeatureCount": 145,
+          "hostSubmitToSettledObserverMs": 13.360633,
+          "matchingSourceUpdateCount": 1,
+          "camera": {
+            "devicePixelRatio": 1,
+            "height": 529,
+            "latitude": 1.3521,
+            "longitude": 103.8198,
+            "qtLocationZoom": 11,
+            "width": 871
+          },
+          "selectedTransactionId": "HDB-144537",
+          "selectionIdentityInCurrentExport": true,
+          "nativeSourceCallMs": 1.043987,
+          "rssMiB": 449.6015625,
+          "peakRssMiB": 451.859375
+        },
+        {
+          "label": "5-full",
+          "kind": "source",
+          "submittedFeatureCount": 7618,
+          "hostSubmitToSettledObserverMs": 382.110114,
+          "matchingSourceUpdateCount": 1,
+          "camera": {
+            "devicePixelRatio": 1,
+            "height": 529,
+            "latitude": 1.3521,
+            "longitude": 103.8198,
+            "qtLocationZoom": 11,
+            "width": 871
+          },
+          "selectedTransactionId": "HDB-222666",
+          "selectionIdentityInCurrentExport": true,
+          "nativeSourceCallMs": 46.695872,
+          "rssMiB": 455.12890625,
+          "peakRssMiB": 455.12890625
+        },
+        {
+          "label": "6-empty",
+          "kind": "source",
+          "submittedFeatureCount": 0,
+          "hostSubmitToSettledObserverMs": 487.165116,
+          "matchingSourceUpdateCount": 1,
+          "camera": {
+            "devicePixelRatio": 1,
+            "height": 529,
+            "latitude": 1.3521,
+            "longitude": 103.8198,
+            "qtLocationZoom": 11,
+            "width": 871
+          },
+          "selectedTransactionId": "",
+          "selectionIdentityInCurrentExport": true,
+          "nativeSourceCallMs": 0.078931,
+          "rssMiB": 455.1328125,
+          "peakRssMiB": 455.1328125
+        },
+        {
+          "label": "7-full",
+          "kind": "source",
+          "submittedFeatureCount": 7618,
+          "hostSubmitToSettledObserverMs": 363.024356,
+          "matchingSourceUpdateCount": 1,
+          "camera": {
+            "devicePixelRatio": 1,
+            "height": 529,
+            "latitude": 1.3521,
+            "longitude": 103.8198,
+            "qtLocationZoom": 11,
+            "width": 871
+          },
+          "selectedTransactionId": "HDB-222666",
+          "selectionIdentityInCurrentExport": true,
+          "nativeSourceCallMs": 42.67743,
+          "rssMiB": 456.828125,
+          "peakRssMiB": 456.828125
+        },
+        {
+          "label": "8-town",
+          "kind": "source",
+          "submittedFeatureCount": 340,
+          "hostSubmitToSettledObserverMs": 19.68238,
+          "matchingSourceUpdateCount": 1,
+          "camera": {
+            "devicePixelRatio": 1,
+            "height": 529,
+            "latitude": 1.3521,
+            "longitude": 103.8198,
+            "qtLocationZoom": 11,
+            "width": 871
+          },
+          "selectedTransactionId": "HDB-222666",
+          "selectionIdentityInCurrentExport": true,
+          "nativeSourceCallMs": 1.968537,
+          "rssMiB": 456.828125,
+          "peakRssMiB": 456.828125
+        },
+        {
+          "label": "9-full",
+          "kind": "source",
+          "submittedFeatureCount": 7618,
+          "hostSubmitToSettledObserverMs": 60.87272,
+          "matchingSourceUpdateCount": 1,
+          "camera": {
+            "devicePixelRatio": 1,
+            "height": 529,
+            "latitude": 1.3521,
+            "longitude": 103.8198,
+            "qtLocationZoom": 11,
+            "width": 871
+          },
+          "selectedTransactionId": "HDB-222666",
+          "selectionIdentityInCurrentExport": true,
+          "nativeSourceCallMs": 44.315375,
+          "rssMiB": 456.828125,
+          "peakRssMiB": 456.828125
+        },
+        {
+          "label": "10-selection-only",
+          "kind": "selection",
+          "submittedFeatureCount": 7618,
+          "hostSubmitToSettledObserverMs": 332.070897,
+          "matchingSourceUpdateCount": 0,
+          "camera": {
+            "devicePixelRatio": 1,
+            "height": 529,
+            "latitude": 1.3521,
+            "longitude": 103.8198,
+            "qtLocationZoom": 11,
+            "width": 871
+          },
+          "selectedTransactionId": "HDB-197663",
+          "selectionIdentityInCurrentExport": true,
+          "nativeSourceCallMs": null,
+          "rssMiB": 464.03125,
+          "peakRssMiB": 464.03125
+        },
+        {
+          "label": "11-zoom",
+          "kind": "zoom",
+          "submittedFeatureCount": 7618,
+          "hostSubmitToSettledObserverMs": 970.525157,
+          "matchingSourceUpdateCount": 0,
+          "camera": {
+            "devicePixelRatio": 1,
+            "height": 529,
+            "latitude": 1.3702454096,
+            "longitude": 103.8394651188,
+            "qtLocationZoom": 16,
+            "width": 871
+          },
+          "selectedTransactionId": "HDB-197663",
+          "selectionIdentityInCurrentExport": true,
+          "nativeSourceCallMs": null,
+          "rssMiB": 467.9765625,
+          "peakRssMiB": 467.9765625
+        },
+        {
+          "label": "12-pan",
+          "kind": "pan",
+          "submittedFeatureCount": 7618,
+          "hostSubmitToSettledObserverMs": 632.156499,
+          "matchingSourceUpdateCount": 0,
+          "camera": {
+            "devicePixelRatio": 1,
+            "height": 529,
+            "latitude": 1.3792454096,
+            "longitude": 103.85746511880001,
+            "qtLocationZoom": 16,
+            "width": 871
+          },
+          "selectedTransactionId": "HDB-197663",
+          "selectionIdentityInCurrentExport": true,
+          "nativeSourceCallMs": null,
+          "rssMiB": 472.734375,
+          "peakRssMiB": 472.734375
+        }
+      ],
+      "picks": [
+        {
+          "elapsedMs": 2.141356,
+          "kind": "application_screen_space_nearest_center_not_renderer_hit_test",
+          "latitude": 1.3706663522,
+          "longitude": 103.839413877,
+          "radiusLogicalPixels": 12,
+          "selectedId": "HDB-197663",
+          "selectedKey": "ANG MO KIO|102|ANG MO KIO AVE 3",
+          "snapshot": "full",
+          "zoom": 11
+        }
+      ],
+      "emptyTileWarnings": 3
+    },
+    {
+      "name": "matched-final",
+      "sha256": "fdc99fc187540c13a871e17cd630df02fd9307061108b24464702ca786586e01",
+      "startup": {
+        "afterValidationSteadyNs": "42934274562720",
+        "beforeQmlLoadSteadyNs": "42934274747944",
+        "firstEligibleFullObserverSteadyNs": "42936060109169",
+        "firstSettledFullObserverSteadyNs": "42936325372190",
+        "mainEntrySteadyNs": "42934094085049",
+        "mainToFirstEligibleFullObserverMs": 1966.02412,
+        "mainToFirstSettledFullObserverMs": 2231.287141,
+        "mainToQmlEngineLoadReturnedMs": 323.193253,
+        "qmlEngineLoadReturnedSteadyNs": "42934417278302"
+      },
+      "stages": [
+        {
+          "label": "1-full",
+          "kind": "source",
+          "submittedFeatureCount": 7618,
+          "hostSubmitToSettledObserverMs": 1880.159616,
+          "matchingSourceUpdateCount": 1,
+          "camera": {
+            "devicePixelRatio": 1,
+            "height": 529,
+            "latitude": 1.3521,
+            "longitude": 103.8198,
+            "qtLocationZoom": 11,
+            "width": 871
+          },
+          "selectedTransactionId": "HDB-222666",
+          "selectionIdentityInCurrentExport": true,
+          "nativeSourceCallMs": 78.022465,
+          "rssMiB": 445.66796875,
+          "peakRssMiB": 445.66796875
+        },
+        {
+          "label": "2-town",
+          "kind": "source",
+          "submittedFeatureCount": 340,
+          "hostSubmitToSettledObserverMs": 20.860608,
+          "matchingSourceUpdateCount": 1,
+          "camera": {
+            "devicePixelRatio": 1,
+            "height": 529,
+            "latitude": 1.3521,
+            "longitude": 103.8198,
+            "qtLocationZoom": 11,
+            "width": 871
+          },
+          "selectedTransactionId": "HDB-222666",
+          "selectionIdentityInCurrentExport": true,
+          "nativeSourceCallMs": 2.023812,
+          "rssMiB": 448.19921875,
+          "peakRssMiB": 453.078125
+        },
+        {
+          "label": "3-different",
+          "kind": "source",
+          "submittedFeatureCount": 197,
+          "hostSubmitToSettledObserverMs": 333.225186,
+          "matchingSourceUpdateCount": 1,
+          "camera": {
+            "devicePixelRatio": 1,
+            "height": 529,
+            "latitude": 1.3521,
+            "longitude": 103.8198,
+            "qtLocationZoom": 11,
+            "width": 871
+          },
+          "selectedTransactionId": "HDB-198975",
+          "selectionIdentityInCurrentExport": true,
+          "nativeSourceCallMs": 2.12566,
+          "rssMiB": 448.19921875,
+          "peakRssMiB": 453.078125
+        },
+        {
+          "label": "4-budget",
+          "kind": "source",
+          "submittedFeatureCount": 145,
+          "hostSubmitToSettledObserverMs": 12.678254,
+          "matchingSourceUpdateCount": 1,
+          "camera": {
+            "devicePixelRatio": 1,
+            "height": 529,
+            "latitude": 1.3521,
+            "longitude": 103.8198,
+            "qtLocationZoom": 11,
+            "width": 871
+          },
+          "selectedTransactionId": "HDB-144537",
+          "selectionIdentityInCurrentExport": true,
+          "nativeSourceCallMs": 0.924656,
+          "rssMiB": 448.19921875,
+          "peakRssMiB": 453.078125
+        },
+        {
+          "label": "5-full",
+          "kind": "source",
+          "submittedFeatureCount": 7618,
+          "hostSubmitToSettledObserverMs": 388.392781,
+          "matchingSourceUpdateCount": 1,
+          "camera": {
+            "devicePixelRatio": 1,
+            "height": 529,
+            "latitude": 1.3521,
+            "longitude": 103.8198,
+            "qtLocationZoom": 11,
+            "width": 871
+          },
+          "selectedTransactionId": "HDB-222666",
+          "selectionIdentityInCurrentExport": true,
+          "nativeSourceCallMs": 57.819596,
+          "rssMiB": 452.15625,
+          "peakRssMiB": 453.078125
+        },
+        {
+          "label": "6-empty",
+          "kind": "source",
+          "submittedFeatureCount": 0,
+          "hostSubmitToSettledObserverMs": 488.506174,
+          "matchingSourceUpdateCount": 1,
+          "camera": {
+            "devicePixelRatio": 1,
+            "height": 529,
+            "latitude": 1.3521,
+            "longitude": 103.8198,
+            "qtLocationZoom": 11,
+            "width": 871
+          },
+          "selectedTransactionId": "",
+          "selectionIdentityInCurrentExport": true,
+          "nativeSourceCallMs": 0.087648,
+          "rssMiB": 452.15625,
+          "peakRssMiB": 453.078125
+        },
+        {
+          "label": "7-full",
+          "kind": "source",
+          "submittedFeatureCount": 7618,
+          "hostSubmitToSettledObserverMs": 388.838798,
+          "matchingSourceUpdateCount": 1,
+          "camera": {
+            "devicePixelRatio": 1,
+            "height": 529,
+            "latitude": 1.3521,
+            "longitude": 103.8198,
+            "qtLocationZoom": 11,
+            "width": 871
+          },
+          "selectedTransactionId": "HDB-222666",
+          "selectionIdentityInCurrentExport": true,
+          "nativeSourceCallMs": 57.345086,
+          "rssMiB": 455.28125,
+          "peakRssMiB": 455.28125
+        },
+        {
+          "label": "8-town",
+          "kind": "source",
+          "submittedFeatureCount": 340,
+          "hostSubmitToSettledObserverMs": 20.781007,
+          "matchingSourceUpdateCount": 1,
+          "camera": {
+            "devicePixelRatio": 1,
+            "height": 529,
+            "latitude": 1.3521,
+            "longitude": 103.8198,
+            "qtLocationZoom": 11,
+            "width": 871
+          },
+          "selectedTransactionId": "HDB-222666",
+          "selectionIdentityInCurrentExport": true,
+          "nativeSourceCallMs": 2.44692,
+          "rssMiB": 455.28125,
+          "peakRssMiB": 455.28125
+        },
+        {
+          "label": "9-full",
+          "kind": "source",
+          "submittedFeatureCount": 7618,
+          "hostSubmitToSettledObserverMs": 554.864497,
+          "matchingSourceUpdateCount": 1,
+          "camera": {
+            "devicePixelRatio": 1,
+            "height": 529,
+            "latitude": 1.3521,
+            "longitude": 103.8198,
+            "qtLocationZoom": 11,
+            "width": 871
+          },
+          "selectedTransactionId": "HDB-222666",
+          "selectionIdentityInCurrentExport": true,
+          "nativeSourceCallMs": 85.815779,
+          "rssMiB": 512.8125,
+          "peakRssMiB": 512.8125
+        },
+        {
+          "label": "10-selection-only",
+          "kind": "selection",
+          "submittedFeatureCount": 7618,
+          "hostSubmitToSettledObserverMs": 332.453982,
+          "matchingSourceUpdateCount": 0,
+          "camera": {
+            "devicePixelRatio": 1,
+            "height": 529,
+            "latitude": 1.3521,
+            "longitude": 103.8198,
+            "qtLocationZoom": 11,
+            "width": 871
+          },
+          "selectedTransactionId": "HDB-197663",
+          "selectionIdentityInCurrentExport": true,
+          "nativeSourceCallMs": null,
+          "rssMiB": 513.54296875,
+          "peakRssMiB": 513.54296875
+        },
+        {
+          "label": "11-zoom",
+          "kind": "zoom",
+          "submittedFeatureCount": 7618,
+          "hostSubmitToSettledObserverMs": 959.23133,
+          "matchingSourceUpdateCount": 0,
+          "camera": {
+            "devicePixelRatio": 1,
+            "height": 529,
+            "latitude": 1.3702454096,
+            "longitude": 103.8394651188,
+            "qtLocationZoom": 16,
+            "width": 871
+          },
+          "selectedTransactionId": "HDB-197663",
+          "selectionIdentityInCurrentExport": true,
+          "nativeSourceCallMs": null,
+          "rssMiB": 515.44140625,
+          "peakRssMiB": 515.44140625
+        },
+        {
+          "label": "12-pan",
+          "kind": "pan",
+          "submittedFeatureCount": 7618,
+          "hostSubmitToSettledObserverMs": 639.1469,
+          "matchingSourceUpdateCount": 0,
+          "camera": {
+            "devicePixelRatio": 1,
+            "height": 529,
+            "latitude": 1.3792454096,
+            "longitude": 103.85746511880001,
+            "qtLocationZoom": 16,
+            "width": 871
+          },
+          "selectedTransactionId": "HDB-197663",
+          "selectionIdentityInCurrentExport": true,
+          "nativeSourceCallMs": null,
+          "rssMiB": 517.53125,
+          "peakRssMiB": 517.53125
+        }
+      ],
+      "picks": [
+        {
+          "elapsedMs": 7.930192,
+          "kind": "application_screen_space_nearest_center_not_renderer_hit_test",
+          "latitude": 1.3706663522,
+          "longitude": 103.839413877,
+          "radiusLogicalPixels": 12,
+          "selectedId": "HDB-197663",
+          "selectedKey": "ANG MO KIO|102|ANG MO KIO AVE 3",
+          "snapshot": "full",
+          "zoom": 11
+        }
+      ],
+      "emptyTileWarnings": 3
+    }
+  ],
+  "physicalClick": {
+    "status": "manual_closed",
+    "pick": {
+      "elapsedMs": 2.286558,
+      "kind": "application_screen_space_nearest_center_not_renderer_hit_test",
+      "latitude": 1.3442057624870927,
+      "longitude": 103.70204029540622,
+      "radiusLogicalPixels": 12,
+      "selectedId": "HDB-231089",
+      "selectedKey": "JURONG WEST|671B|JURONG WEST ST 65",
+      "snapshot": "full",
+      "zoom": 11
+    },
+    "addressSourceSubmissions": 1,
+    "visualConfirmation": "Native verifier observed selected ring/text move from ANG MO KIO101/HDB-222666 to JURONG WEST671B/HDB-231089; titlebar close exited0."
+  },
+  "remainingGaps": [
+    "No public Qt native rendered-feature hit testing; nearest-center host picking only",
+    "No production C# QtBridge integration or live source-generation acknowledgements",
+    "No per-feature keyboard/accessibility parity",
+    "Circle presentation has no equivalent price labels/grouping workflow",
+    "Pan trajectory differs from B offscreen-pan oracle; zoom16 matched, no pan speed ratio",
+    "Three observed empty-response OneMapedge tiles per matched run; baseline raster completeness not fully qualified",
+    "Standalone memory/startup excludes .NET and fulltransaction model; do not compare as whole-app totals"
+  ]
+}

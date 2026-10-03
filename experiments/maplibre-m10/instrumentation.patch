@@ -1,0 +1,152 @@
+--- /dev/null
++++ b/src/core/m10_trace_p.hpp
+@@ -0,0 +1,72 @@
++// Isolated M10 measurement only. No synthetic completion or renderer changes.
++// SPDX-License-Identifier: BSD-2-Clause
++#pragma once
++
++#include <QtCore/QDebug>
++#include <QtCore/QObject>
++#include <QtCore/QThread>
++#include <QtCore/QVariantMap>
++
++#include <atomic>
++#include <chrono>
++
++namespace QMapLibre::M10Trace {
++inline bool enabled() {
++    static const bool value = qEnvironmentVariableIntValue("M10_MAPLIBRE_TRACE") != 0;
++    return value;
++}
++inline qint64 steadyNs() {
++    return static_cast<qint64>(std::chrono::duration_cast<std::chrono::nanoseconds>(
++        std::chrono::steady_clock::now().time_since_epoch()).count());
++}
++inline void event(const QObject *map, const char *name, quint64 sequence = 0,
++                  const QString &source = {}, qint64 submittedBytes = -1,
++                  qint64 submittedFeatures = -1, int needsRepaint = -1,
++                  int placementChanged = -1) {
++    if (!enabled()) return;
++    const qint64 ns = steadyNs();
++    qInfo().noquote().nospace()
++        << "M10_MAPLIBRE event=" << name << " ns=" << ns
++        << " map=" << static_cast<const void *>(map)
++        << " thread=" << QThread::currentThreadId()
++        << " seq=" << sequence
++        << " source=" << source.toUtf8().toPercentEncoding()
++        << " submittedBytes=" << submittedBytes
++        << " submittedFeatures=" << submittedFeatures
++        << " needsRepaint=" << needsRepaint
++        << " placementChanged=" << placementChanged;
++}
++class SourceUpdateScope final {
++public:
++    SourceUpdateScope(const QObject *map, const QString &source, const QVariantMap &params)
++        : m_map(map), m_source(source), m_enabled(enabled()) {
++        if (!m_enabled) return;
++        static std::atomic<quint64> nextSequence{0};
++        m_sequence = nextSequence.fetch_add(1, std::memory_order_relaxed) + 1;
++        const QVariant data = params.value(QStringLiteral("data"));
++        // Do not parse serialized GeoJSON a second time for instrumentation.
++        // -1 means unknown, not zero. The host owns authoritative input counts.
++        if (data.metaType().id() == QMetaType::QByteArray) {
++            m_bytes = static_cast<qint64>(data.toByteArray().size());
++        } else if (data.metaType().id() == QMetaType::QVariantMap) {
++            const QVariant features = data.toMap().value(QStringLiteral("features"));
++            if (features.metaType().id() == QMetaType::QVariantList)
++                m_features = static_cast<qint64>(features.toList().size());
++        }
++        event(m_map, "source-update-enter", m_sequence, m_source, m_bytes, m_features);
++    }
++    ~SourceUpdateScope() {
++        if (m_enabled)
++            event(m_map, "source-update-return", m_sequence, m_source, m_bytes, m_features);
++    }
++    SourceUpdateScope(const SourceUpdateScope &) = delete;
++    SourceUpdateScope &operator=(const SourceUpdateScope &) = delete;
++private:
++    const QObject *m_map;
++    const QString &m_source;
++    bool m_enabled;
++    quint64 m_sequence{};
++    qint64 m_bytes{-1};
++    qint64 m_features{-1};
++};
++} // namespace QMapLibre::M10Trace
+--- a/src/core/map.cpp
++++ b/src/core/map.cpp
+@@ -9,6 +9,7 @@
+ #include "conversion_p.hpp"
+ #include "geojson_p.hpp"
+ #include "map_observer_p.hpp"
++#include "m10_trace_p.hpp"
+ 
+ #include "rendering/renderer_observer_p.hpp"
+ 
+@@ -1295,6 +1296,7 @@
+     image and GeoJSON sources can be updated.
+ */
+ void Map::updateSource(const QString &id, const QVariantMap &params) {
++    const M10Trace::SourceUpdateScope m10Trace(this, id, params);
+     mbgl::style::Source *source = d_ptr->mapObj->getStyle().getSource(id.toStdString());
+     if (source == nullptr) {
+         addSource(id, params);
+--- a/src/core/map_observer.cpp
++++ b/src/core/map_observer.cpp
+@@ -6,6 +6,7 @@
+ #include "map_observer_p.hpp"
+ 
+ #include "map_p.hpp"
++#include "m10_trace_p.hpp"
+ 
+ #include <mbgl/util/exception.hpp>
+ 
+@@ -41,14 +42,17 @@
+ }
+ 
+ void MapObserver::onWillStartLoadingMap() {
++    M10Trace::event(d_ptrRef->parent(), "style-loading");
+     emit mapChanged(Map::MapChangeWillStartLoadingMap);
+ }
+ 
+ void MapObserver::onDidFinishLoadingMap() {
++    M10Trace::event(d_ptrRef->parent(), "map-loaded");
+     emit mapChanged(Map::MapChangeDidFinishLoadingMap);
+ }
+ 
+ void MapObserver::onDidFailLoadingMap(mbgl::MapLoadError error, const std::string &what) {
++    M10Trace::event(d_ptrRef->parent(), "map-load-fail");
+     emit mapChanged(Map::MapChangeDidFailLoadingMap);
+ 
+     Map::MapLoadingFailure type = Map::MapLoadingFailure::UnknownFailure;
+@@ -72,10 +76,15 @@
+ }
+ 
+ void MapObserver::onWillStartRenderingFrame() {
++    M10Trace::event(d_ptrRef->parent(), "frame-start");
+     emit mapChanged(Map::MapChangeWillStartRenderingFrame);
+ }
+ 
+ void MapObserver::onDidFinishRenderingFrame(const mbgl::MapObserver::RenderFrameStatus &status) {
++    M10Trace::event(d_ptrRef->parent(),
++                    status.mode == mbgl::MapObserver::RenderMode::Partial ? "frame-partial" : "frame-full",
++                    0, {}, -1, -1, static_cast<int>(status.needsRepaint),
++                    static_cast<int>(status.placementChanged));
+     if (status.mode == mbgl::MapObserver::RenderMode::Partial) {
+         emit mapChanged(Map::MapChangeDidFinishRenderingFrame);
+     } else {
+@@ -96,10 +105,13 @@
+ }
+ 
+ void MapObserver::onDidFinishLoadingStyle() {
++    M10Trace::event(d_ptrRef->parent(), "style-loaded");
+     emit mapChanged(Map::MapChangeDidFinishLoadingStyle);
+ }
+ 
+-void MapObserver::onSourceChanged(mbgl::style::Source & /* source */) {
++void MapObserver::onSourceChanged(mbgl::style::Source &changedSource) {
++    M10Trace::event(d_ptrRef->parent(), "source-change", 0,
++                    QString::fromStdString(changedSource.getID()));
+     std::string attribution;
+     for (const auto &source : d_ptrRef->mapObj->getStyle().getSources()) {
+         // Avoid duplicates by using the most complete attribution HTML snippet.

@@ -1,0 +1,65 @@
+-- Version 4.0.0
+-- Could NOT find Qt6TaskTree (missing: Qt6TaskTree_DIR)
+CMake Warning at /workspace/shared/hdb-toolchain/python/lib/python3.12/site-packages/cmake/data/share/cmake-4.4/Modules/CMakeFindDependencyMacro.cmake:93 (find_package):
+  Found package configuration file:
+
+    /workspace/shared/hdb-toolchain/Qt/6.12.0/gcc_64/lib/cmake/Qt6QmlAssetDownloaderPrivate/Qt6QmlAssetDownloaderPrivateConfig.cmake
+
+  but it set Qt6QmlAssetDownloaderPrivate_FOUND to FALSE so package
+  "Qt6QmlAssetDownloaderPrivate" is considered to be NOT FOUND.  Reason given
+  by package:
+
+  Qt6QmlAssetDownloaderPrivate could not be found because dependency
+  Qt6TaskTree could not be found.
+
+  Configuring with --debug-find-pkg=Qt6TaskTree might reveal details why the
+  package was not found.
+
+  Configuring with -DQT_DEBUG_FIND_PACKAGE=ON will print the values of some
+  of the path variables that find_package uses to try and find the package.
+
+Call Stack (most recent call first):
+  /workspace/shared/hdb-toolchain/python/lib/python3.12/site-packages/cmake/data/share/cmake-4.4/Modules/CMakeFindDependencyMacro.cmake:125 (__find_dependency_common)
+  /workspace/shared/hdb-toolchain/Qt/6.12.0/gcc_64/lib/cmake/Qt6/QtPublicDependencyHelpers.cmake:142 (find_dependency)
+  /workspace/shared/hdb-toolchain/Qt/6.12.0/gcc_64/lib/cmake/Qt6Qml/QmlPlugins/Qt6QmlAssetDownloaderPrivatepluginDependencies.cmake:22 (_qt_internal_find_qt_dependencies)
+  /workspace/shared/hdb-toolchain/Qt/6.12.0/gcc_64/lib/cmake/Qt6Qml/QmlPlugins/Qt6QmlAssetDownloaderPrivatepluginConfig.cmake:40 (include)
+  /workspace/shared/hdb-toolchain/Qt/6.12.0/gcc_64/lib/cmake/Qt6/QtPublicPluginHelpers.cmake:638 (include)
+  /workspace/shared/hdb-toolchain/Qt/6.12.0/gcc_64/lib/cmake/Qt6Qml/Qt6QmlPlugins.cmake:6 (__qt_internal_include_qml_plugin_packages)
+  /workspace/shared/hdb-toolchain/Qt/6.12.0/gcc_64/lib/cmake/Qt6Qml/Qt6QmlConfig.cmake:199 (include)
+  /workspace/shared/hdb-toolchain/python/lib/python3.12/site-packages/cmake/data/share/cmake-4.4/Modules/CMakeFindDependencyMacro.cmake:93 (find_package)
+  /workspace/shared/hdb-toolchain/python/lib/python3.12/site-packages/cmake/data/share/cmake-4.4/Modules/CMakeFindDependencyMacro.cmake:125 (__find_dependency_common)
+  /workspace/shared/hdb-toolchain/Qt/6.12.0/gcc_64/lib/cmake/Qt6/QtPublicDependencyHelpers.cmake:142 (find_dependency)
+  /workspace/shared/hdb-toolchain/Qt/6.12.0/gcc_64/lib/cmake/Qt6Quick/Qt6QuickDependencies.cmake:51 (_qt_internal_find_qt_dependencies)
+  /workspace/shared/hdb-toolchain/Qt/6.12.0/gcc_64/lib/cmake/Qt6Quick/Qt6QuickConfig.cmake:40 (include)
+  /workspace/shared/hdb-toolchain/Qt/6.12.0/gcc_64/lib/cmake/Qt6/Qt6Config.cmake:257 (find_package)
+  CMakeLists.txt:67 (find_package)
+
+
+CMake Warning at /workspace/shared/hdb-toolchain/Qt/6.12.0/gcc_64/lib/cmake/Qt6/QtPublicDependencyHelpers.cmake:339 (message):
+  This project is using headers of the LocationPrivate module and will
+  therefore be tied to this specific Qt module build version.  Running this
+  project against other versions of the Qt modules may crash at any arbitrary
+  point.  This is not a bug, but a result of using Qt internals.  You have
+  been warned!
+
+  You can disable this warning by setting QT_NO_PRIVATE_MODULE_WARNING to ON.
+Call Stack (most recent call first):
+  /workspace/shared/hdb-toolchain/Qt/6.12.0/gcc_64/lib/cmake/Qt6LocationPrivate/Qt6LocationPrivateConfig.cmake:48 (_qt_internal_show_private_module_warning)
+  /workspace/shared/hdb-toolchain/Qt/6.12.0/gcc_64/lib/cmake/Qt6/Qt6Config.cmake:257 (find_package)
+  CMakeLists.txt:72 (find_package)
+
+
+-- Using Qt6 (6.12.0)
+-- Configuring OpenGL ES backend
+-- [MLT] No JSON support
+-- Configuring MapLibre Native with Qt platform
+-- Building location module
+-- Configuring done (0.9s)
+-- Generating done (0.3s)
+CMake Warning (unused-cli):
+  Manually-specified variables were not used by the project:
+
+    ICU_ROOT
+
+
+-- Build files have been written to: /workspace/shared/m10-maplibre/build-current
