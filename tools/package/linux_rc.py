@@ -18,6 +18,7 @@ import shutil
 import subprocess
 import sys
 import tarfile
+import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA_FILES = ("transactions.csv", "address-evidence.csv", "postal-address-evidence.csv",
@@ -30,7 +31,8 @@ PLUGIN_FILES = (
     "imageformats/libqico.so", "iconengines/libqsvgicon.so",
     "platforminputcontexts/libcomposeplatforminputcontextplugin.so",
 )
-QT_SBOMS = ("qtbase", "qtdeclarative", "qtlocation", "qtpositioning", "qtsvg")
+QT_SBOMS = ("qtbase", "qtdeclarative", "qtlocation", "qtpositioning", "qtsvg",
+            "qtgraphs", "qtquick3d", "qtquicktimeline", "qtshadertools")
 
 
 def run(*args: str, env: dict | None = None) -> str:
@@ -82,6 +84,10 @@ def stage(args: argparse.Namespace) -> Path:
     dotnet = args.dotnet.resolve(strict=True)
     build = args.build.resolve(strict=True)
     bridge = args.bridge.resolve(strict=True)
+    project = ET.parse(ROOT / "src/HdbResale.App/HdbResale.App.csproj")
+    application_license = project.findtext(".//PackageLicenseExpression")
+    if application_license != "GPL-3.0-or-later" or not (ROOT / "LICENSE").is_file():
+        raise ValueError("The approved GPL-3.0-or-later application metadata/LICENSE is required")
     if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9.-]+)?", args.version):
         raise ValueError("Version must be a plain semantic version")
     if run(str(qt / "bin/qmake"), "-query", "QT_VERSION").strip() != "6.12.0":
@@ -124,7 +130,7 @@ def stage(args: argparse.Namespace) -> Path:
         path = Path(module.get("path", "")).resolve()
         if not path.is_relative_to(qt / "qml"):
             raise ValueError("QML module missing or outside pinned Qt: " + module.get("name", "?"))
-        if module["name"].startswith(("QtGraphs", "QtCharts", "QtQuick3D", "QMapLibre")):
+        if module["name"].startswith(("QtCharts", "QMapLibre")):
             raise ValueError("Unapproved module: " + module["name"])
         relative = path.relative_to(qt / "qml")
         copy_qml_module(path, package / "qt/qml" / relative)
@@ -187,16 +193,18 @@ def stage(args: argparse.Namespace) -> Path:
             name = library.removeprefix("libQt6").split(".so")[0]
             spdx_name = "XcbQpaPrivate" if name == "XcbQpa" else name
             expression = qt_license_records.get(spdx_name, "NOASSERTION")
-            if "LGPL-3.0-only" not in expression:
+            if "LGPL-3.0-only" not in expression and "GPL-3.0-only" not in expression:
                 raise ValueError("Qt library licensing needs an explicit decision: " + library + ": " + expression)
             selected_qt_licenses[library] = expression
     copy(ROOT / "src/HdbResale.App/assets/README.md", licenses / "OneMap-logo-provenance.md")
     copy(ROOT / "docs/product-rc/licensing-packaging.md", licenses / "licensing-packaging.md")
     if (ROOT / "LICENSE").exists():
         copy(ROOT / "LICENSE", licenses / "APPLICATION-LICENSE")
+    for name in ("REUSE.toml", "THIRD_PARTY_NOTICES.md"):
+        copy(ROOT / name, licenses / name)
     (licenses / "DISTRIBUTION-BLOCKERS.txt").write_text(
         "PRIVATE LOCAL RC. NOT A DISTRIBUTION CLEARANCE.\n"
-        "Confirm application licensing, complete exact Qt/Bridge corresponding-source provision,\n"
+        "Original application is GPL-3.0-or-later. Complete exact application/Qt/Bridge corresponding-source provision,\n"
         "relinking/rebuild instructions (including compiled Bridge headers), and all third-party\n"
         "copyright/license notices before distributing. SBOM files are inventory, not a substitute\n"
         "for the license texts or corresponding source. OneMap logo/data keep their own terms.\n")
@@ -241,6 +249,7 @@ exec "$here/app/HdbResale.App" "$@"
                 dependencies.add(name)
     manifest = {
         "product": "HDB Resale Explorer", "version": args.version,
+        "application_license": application_license,
         "scope": "private local Linux x64 RC; system ABI/graphics/X11 dependencies remain",
         "qt": "6.12.0", "bridge": "0.4.0-beta", "dotnet_runtime": "10.0.12",
         "source_commit": run("git", "-C", str(ROOT), "rev-parse", "HEAD").strip(),

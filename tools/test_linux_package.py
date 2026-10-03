@@ -27,7 +27,7 @@ class PackageChecks(unittest.TestCase):
     def test_marker_and_runtime_failures_cannot_pass(self):
         root = Path("/tmp/bundle")
         mapped = {str(root / "qt/lib/libQt6Core.so.6"), str(root / "dotnet/libcoreclr.so"),
-                  str(root / "qt/plugins/geoservices/libqtgeoservices_osm.so")}
+                  str(root / "qt/plugins/geoservices/libqtgeoservices_osm.so"), str(root / "qt/lib/libQt6Graphs.so.6")}
         good = "\n".join(launch.MARKERS)
         launch.verify(0, good, mapped, root)
         for log in (good.replace("HDB_PACKAGE_DATA", ""), good + "\nTypeError: invalid", good + "\nHDB_PACKAGE_EXIT"):
@@ -37,6 +37,18 @@ class PackageChecks(unittest.TestCase):
             launch.verify(1, good, mapped, root)
         with self.assertRaises(ValueError):
             launch.verify(0, good, mapped | {"/build/Qt/lib/libQt6Qml.so.6"}, root)
+        with self.assertRaises(ValueError):
+            launch.verify(0, good, mapped - {str(root / "qt/lib/libQt6Graphs.so.6")}, root)
+
+    def test_original_code_license_excludes_data_and_imported_experiments(self):
+        import tomllib
+        metadata = tomllib.loads((Path(__file__).parents[1] / "REUSE.toml").read_text())
+        annotation = metadata["annotations"][0]
+        self.assertEqual(annotation["SPDX-License-Identifier"], "GPL-3.0-or-later")
+        self.assertEqual(annotation["precedence"], "closest")
+        for scope in annotation["path"]:
+            self.assertFalse(scope.startswith(("data/", "experiments/", "docs/")))
+            self.assertNotIn("assets", scope)
 
     def test_output_never_overwrites_or_enters_repo(self):
         with tempfile.TemporaryDirectory() as temp:

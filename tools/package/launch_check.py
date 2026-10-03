@@ -17,7 +17,8 @@ import sys
 import tempfile
 import time
 
-MARKERS = ("HDB_PACKAGE_SHELL", "HDB_PACKAGE_DATA", "HDB_PACKAGE_MAP_READY", "HDB_PACKAGE_EXIT")
+MARKERS = ("HDB_PACKAGE_SHELL", "HDB_PACKAGE_DATA", "HDB_PACKAGE_MAP_READY",
+           "HDB_PACKAGE_CHART_READY", "HDB_PACKAGE_EXIT")
 FAILURES = re.compile(
     r"error while loading shared libraries|is not installed|is not a type|"
     r"QQmlApplicationEngine failed|Could not find the Qt platform plugin|"
@@ -50,13 +51,13 @@ def verify(code: int, log: str, mapped: set[str], package: Path) -> None:
         raise ValueError("Packaged process exit was " + str(code))
     if FAILURES.search(log):
         raise ValueError("Loader/QML/runtime failure signature in launch log")
-    observed = re.findall(r"HDB_PACKAGE_(?:SHELL|DATA|MAP_READY|EXIT)\b", log)
+    observed = re.findall(r"HDB_PACKAGE_(?:SHELL|DATA|MAP_READY|CHART_READY|EXIT)\b", log)
     if observed != list(MARKERS):
         raise ValueError("Missing, duplicated or out-of-order readiness/exit markers: " + repr(observed))
     relevant = [p for p in mapped if re.search(r"/(?:libQt6[^/]*|libicu[^/]*|libcoreclr\.so|libhostfxr\.so|libqtgeoservices_osm\.so)$", p)]
     if any(not Path(p).is_relative_to(package) for p in relevant):
         raise ValueError("Qt/ICU/.NET/OSM library loaded from outside the package")
-    for required in ("libQt6Core.so", "libcoreclr.so", "libqtgeoservices_osm.so"):
+    for required in ("libQt6Core.so", "libcoreclr.so", "libqtgeoservices_osm.so", "libQt6Graphs.so"):
         if not any(required in p for p in relevant):
             raise ValueError("No mapped-library evidence for " + required)
 
@@ -124,7 +125,7 @@ def main() -> int:
     args = parser.parse_args()
     try:
         report = check(args.package, args.log, args.report, args.timeout)
-        print("Package launch passed: shell/data/map engine ready, native/.NET exit 0; "
+        print("Package launch passed: shell/data/map engine/chart ready, native/.NET exit 0; "
               + str(report["elapsed_seconds"]) + " seconds. Tile pixels were not tested.")
     except (OSError, ValueError, subprocess.SubprocessError) as error:
         print("Package launch FAILED: " + str(error), file=sys.stderr)

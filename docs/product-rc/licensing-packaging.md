@@ -5,18 +5,21 @@ not a legal opinion or a declaration that redistribution is cleared.
 
 ## Release decisions
 
-- At the start of M11 the repository had **no application LICENSE**. The owner
-  must choose the terms for their original application code before a public
-  release. A third-party LGPL notice does not license the application. An
-  eventual application licence must exclude third-party data, logos and code
-  that retain their own terms.
-- **Qt Graphs is deferred.** The official Qt 6.12 documentation offers commercial
-  or GPLv3 licensing, not LGPL. The official archive and aqt list both contain
-  `qtgraphs` for Linux `6.12.0 linux_gcc_64`; availability is not the obstacle.
-  Introducing it would require a deliberate compatible application/distribution
-  licensing decision or a suitable commercial licence. No Graphs, Charts or
-  Quick 3D module is added to this RC. Qt Charts is not an assumed permissive
-  alternative. [Qt Graphs](https://doc.qt.io/qt-6/qtgraphs-index.html),
+- At the start of M11 the repository had no application licence. The owner
+  subsequently explicitly chose **GPL-3.0-or-later for the original application
+  code**. [LICENSE](../../LICENSE), [scoped REUSE metadata](../../REUSE.toml),
+  the app project metadata and [notices](../../THIRD_PARTY_NOTICES.md) record that
+  choice. Third-party data, logos, libraries and imported experimental code keep
+  their own terms. No blanket annotation is applied to those files.
+- **Qt Graphs is now permitted by that decision.** The initial licensing-based
+  deferral was superseded by the owner's explicit instruction to evaluate and
+  include the selected-address trend if technically worthwhile. The chosen
+  scope is one 2D GraphsView/LineSeries showing C#-aggregated monthly median
+  prices. Qt Graphs and its Quick 3D runtime dependencies remain
+  **GPL-3.0-only** under their open-source choice, not GPL-3.0-or-later. The
+  official archive and aqt list contain `qtgraphs` for Linux
+  `6.12.0 linux_gcc_64`. Qt Charts is neither required nor introduced.
+  [Qt Graphs](https://doc.qt.io/qt-6/qtgraphs-index.html),
   [Qt licensing](https://doc.qt.io/qt-6/licensing.html),
   [official 6.12 archive](https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_6120/qt6_6120/).
 - A private local RC package may be used for technical validation. It is not a
@@ -26,9 +29,10 @@ not a legal opinion or a declaration that redistribution is cleared.
 ## Actual dependencies and evidence
 
 The production QML imports QtQuick, QtQuick.Controls, QtQuick.Layouts,
-QtLocation and QtPositioning. Their dependencies include Qt Core, Gui, Network,
+QtLocation, QtPositioning and QtGraphs. Their dependencies include Qt Core, Gui, Network,
 Qml, QmlModels, WorkerScript, Templates, Controls style plugins, OpenGL, DBus,
-XcbQpa and Svg. The package script records the exact transitive library/QML
+XcbQpa, Svg, Graphs/Graphs2DImpl, Quick3D/RuntimeRender/Utils, Concurrent and
+ShaderTools. The package script records the exact transitive library/QML
 inventory, rather than treating this paragraph as a complete bill of materials.
 
 The installed **6.12.0** SPDX JSON documents for qtbase, qtdeclarative,
@@ -38,6 +42,33 @@ Positioning page that still reports 6.11.2. Official documentation agrees for
 [Qt Quick](https://doc.qt.io/qt-6/qtquick-index.html),
 [Controls](https://doc.qt.io/qt-6/qtquickcontrols-index.html) and
 [Location](https://doc.qt.io/qt-6/qtlocation-index.html).
+
+The separate qtgraphs/qtquick3d SPDX inventories state commercial or
+GPL-3.0-only licensing for Graphs, Graphs2DImpl, Quick3D, Quick3DRuntimeRender
+and Quick3DUtils. ShaderTools' runtime library offers an LGPLv3 alternative.
+These choices are recorded per shipped Qt library in the package manifest;
+the script rejects unknown licence expressions rather than treating every Qt
+module as LGPL. [Quick 3D](https://doc.qt.io/qt-6/qtquick3d-index.html),
+[Shader Tools](https://doc.qt.io/qt-6/qtshadertools-index.html).
+
+Official Linux module provisioning used aqtinstall 3.3.0 with checksum
+verification and `--noarchives`, adding `qtgraphs`, `qtquick3d` and the small
+recommended `qtquicktimeline` development support archive to the existing
+isolated Qt prefix. All are version `6.12.0-0-202609280346`. Graphs was 1,040,039
+compressed bytes; Quick 3D was 20,880,309 bytes. The Graphs QML module declares
+QtQuick3D as a dependency, and its binary needs Quick 3D even for the 2D chart.
+Only the scanner/ELF-needed subset is packaged; installing a development
+module does not mean every one of its libraries is shipped. No system packages
+or global paths were changed. Aqt's unchanged archive worker was invoked
+sequentially because this shell cannot create its multiprocessing socket.
+
+Official archive SHA-256 sidecars for that build:
+
+| Module | SHA-256 |
+| --- | --- |
+| qtgraphs | da2eff3843c5108a8932da42b93a4130f0b94b280a9e48f1b4e0542dd5b92c3e |
+| qtquick3d | 6f9a0c4ab4f6b02754fc06690f45745ab47e5a7e397f85cf536e5095e8c75eed |
+| qtquicktimeline | d5ab3cc84e081d893e83b2dc084b278dd8afc35a0184f4f5a7666065bf26c4b1 |
 
 Exact NuGet package evidence (LICENSE.txt and .nuspec read from package bytes):
 
@@ -65,8 +96,8 @@ Before distributing under the open-source alternatives:
 
 1. Include prominent Qt/Bridge notices, full LGPLv3 and GPLv3 texts, relevant
    copyright/third-party texts and the application's chosen licence.
-2. Arrange complete corresponding source for the **exact shipped** Qt and
-   Bridge revisions, including changes, with the appropriate delivery or valid
+2. Arrange complete corresponding source for the **exact shipped** application,
+   Qt and Bridge revisions, including changes, with the appropriate delivery or valid
    offer mechanism. A generic upstream URL or SBOM alone is not that mechanism.
 3. Preserve recipients' ability to replace/relink the LGPL portions and run
    the result. Provide build/relink instructions and materials for the compiled
@@ -116,7 +147,8 @@ depended on the developer's installation. `tools/package/linux_rc.py` stages
 an explicit independent directory and tar.gz from a previously built Release:
 
 - Native host and managed application/Bridge assemblies; canonical fixture
-- Scanner-selected QML modules, including Controls styles and Layouts
+- Scanner-selected QML modules, including Controls styles, Layouts, Graphs and
+  their actual Quick 3D dependencies
 - X11 xcb platform, GLX/EGL integration, PNG support in QtGui, image plugins,
   SVG icon/image support, OSM geoservice and OpenSSL/certificate TLS plugins
 - Only required Qt-origin shared libraries, including Qt's own ICU 73.2
@@ -150,6 +182,9 @@ diagnostic mechanism.
 Example (build first using the documented pinned environment):
 
 ```sh
+# On a newly provisioned prefix, in addition to Location/Positioning/ShaderTools:
+aqt install-qt linux desktop 6.12.0 linux_gcc_64 -O /path/to/Qt \
+  --noarchives -m qtgraphs qtquick3d qtquicktimeline
 dotnet build -c Release -m:1
 python3 tools/package/linux_rc.py \
   --qt "$QtDir" --dotnet "$DOTNET_ROOT" \
@@ -177,8 +212,10 @@ python3 tools/package/launch_check.py \
 The 30-second bounded check verifies file hashes, starts from an unrelated
 working directory with fresh HOME/XDG directories, removes inherited
 Qt/.NET/loader/data overrides, preserves the legitimate X11 session, and
-requires ordered shell/data/map-engine readiness and managed/native clean-exit
-markers. `/proc` library observations must show Qt, ICU, .NET and the OSM
+requires ordered shell/data/map-engine/chart readiness and managed/native clean-exit
+markers. The smoke selects a canonical address and checks the instantiated
+LineSeries against its C# points, including missing-month gaps. `/proc` library
+observations must show Graphs, Qt, ICU, .NET and the OSM
 plugin inside the relocated package. Loader/QML errors, timeout, nonzero exit
 or missing markers fail the check. **Map readiness is not tile-pixel evidence.**
 Visual inspection of the packaged UI remains a separate check.
