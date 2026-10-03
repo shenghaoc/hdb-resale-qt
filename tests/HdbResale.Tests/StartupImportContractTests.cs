@@ -24,7 +24,15 @@ public sealed class StartupImportContractTests : IDisposable
         File.WriteAllText(Path.Combine(directory, "postal-address-evidence.csv"), postals);
         File.WriteAllText(Path.Combine(directory, "building-evidence.geojson"),
             "{\"type\":\"FeatureCollection\",\"features\":" + features + "}");
-        return CsvImport.LoadDirectory(directory);
+        return LoadAndCompareReference();
+    }
+
+    private ImportResult LoadAndCompareReference()
+    {
+        var result = CsvImport.LoadDirectory(directory);
+        var reference = CsvImport.LoadDirectory(directory, referenceCsv: true);
+        Assert.Equal(JsonSerializer.Serialize(reference), JsonSerializer.Serialize(result));
+        return result;
     }
 
     [Theory]
@@ -115,7 +123,7 @@ public sealed class StartupImportContractTests : IDisposable
             : Encoding.GetEncoding(encodingName);
         File.WriteAllText(Path.Combine(directory, "transactions.csv"),
             Header + "200,2024-02,TÖWN,3 ROOM,1,RUE ÉCOLE,123.45\n", encoding);
-        var result = CsvImport.LoadDirectory(directory);
+        var result = LoadAndCompareReference();
         var transaction = Assert.Single(result.Accepted);
         Assert.Equal("TÖWN", transaction.Town);
         Assert.Equal("RUE ÉCOLE", transaction.Facts.Street);
@@ -177,6 +185,24 @@ public sealed class StartupImportContractTests : IDisposable
         Assert.Contains(result.Rejected, r => r.Row == 4 && r.Reason == "Field count differs from header." && r.Fields[^1] == "extra");
         foreach (var rejection in result.Rejected)
             Assert.Contains(new ImportDiagnostic(rejection.File, rejection.Row, rejection.Reason), result.Diagnostics);
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void LaterQuotedOrLongRecordDoesNotDuplicateEarlierProvisionalRowsOrDiagnostics(bool longPlainRecord)
+    {
+        var street = longPlainRecord ? new string('S', 65_537) : "\"QUOTED, STREET\"";
+        var result = Load(Header + "200,2024-01,T,3 ROOM,1,ST,100\n" +
+            "201,2024-01,T,3 ROOM,1,ST,100,extra\n" +
+            "202,2024-01,T,3 ROOM,1,ST,0\n" +
+            "203,2024-01,T,3 ROOM,1," + street + ",200\n");
+        Assert.Equal(new[] { "HDB-200", "HDB-203" }, result.Accepted.Select(t => t.Id));
+        Assert.Equal(2, result.Rejected.Count);
+        Assert.Equal(2, result.Diagnostics.Count);
+        Assert.Contains(result.Rejected, r => r.Row == 3 && r.Reason == "Field count differs from header.");
+        Assert.Contains(result.Rejected, r => r.Row == 4 && r.Reason == "Price must be a positive decimal.");
+        Assert.Equal(longPlainRecord ? street : "QUOTED, STREET", result.Accepted[1].Facts.Street);
     }
 
     [Fact]

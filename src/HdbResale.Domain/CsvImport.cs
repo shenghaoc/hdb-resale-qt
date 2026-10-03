@@ -15,16 +15,20 @@ public sealed record ImportResult(IReadOnlyList<ResaleTransaction> Accepted,
 
 public static class CsvImport
 {
-    private sealed record CsvRow(long Number, Dictionary<string, string> Fields, string[] Raw);
-    public static ImportResult LoadDirectory(string directory, IReadOnlyDictionary<string, OneMapSearch>? oneMapSearches = null, string? buildingEvidencePath = null, IReadOnlyDictionary<string, HistoricalPostalAssertion>? historicalAssertions = null, Action<string>? stage = null, bool indexed = true)
+    // All rows from one file share its ordinal header map.
+    private sealed record CsvRow(long Number, Dictionary<string, int> Header, string[] Raw)
+    {
+        public string this[string name] => Raw[Header[name]];
+    }
+    public static ImportResult LoadDirectory(string directory, IReadOnlyDictionary<string, OneMapSearch>? oneMapSearches = null, string? buildingEvidencePath = null, IReadOnlyDictionary<string, HistoricalPostalAssertion>? historicalAssertions = null, Action<string>? stage = null, bool indexed = true, bool referenceCsv = false)
     {
         var rejected = new List<RejectedRecord>();
         var diagnostics = new List<ImportDiagnostic>();
         var properties = new List<PropertyAddress>();
         foreach (var row in Read(Path.Combine(directory, "address-evidence.csv"),
-            ["source_row", "blk_no", "street"], rejected, diagnostics))
+            ["source_row", "blk_no", "street"], rejected, diagnostics, referenceCsv))
         {
-            var f = row.Fields;
+            var f = row;
             if (!long.TryParse(f["source_row"], out var sourceRow) || sourceRow < 2 ||
                 string.IsNullOrWhiteSpace(f["blk_no"]) || string.IsNullOrWhiteSpace(f["street"]))
                 Reject("address-evidence.csv", row, "Property source row, block and street are required.", rejected, diagnostics);
@@ -33,9 +37,9 @@ public static class CsvImport
         stage?.Invoke("property-evidence");
         var postalAddresses = new List<PostalAddress>();
         foreach (var row in Read(Path.Combine(directory, "postal-address-evidence.csv"),
-            ["source_row", "block", "street_name", "postal_code"], rejected, diagnostics))
+            ["source_row", "block", "street_name", "postal_code"], rejected, diagnostics, referenceCsv))
         {
-            var f = row.Fields;
+            var f = row;
             if (!long.TryParse(f["source_row"], out var sourceRow) || sourceRow < 2 ||
                 string.IsNullOrWhiteSpace(f["block"]) || string.IsNullOrWhiteSpace(f["street_name"]) || !PostalCode(f["postal_code"]))
                 Reject("postal-address-evidence.csv", row, "Postal source row, block, street and six-digit postal code are required.", rejected, diagnostics);
@@ -50,25 +54,28 @@ public static class CsvImport
         var matches = new Dictionary<(string Town, string Block, string Street), AddressMatch>();
         stage?.Invoke("evidence-index");
         var accepted = new List<ResaleTransaction>();
+        var strings = new ExactStrings();
         var ids = new HashSet<int>();
         var transactionRows = Read(Path.Combine(directory, "transactions.csv"),
-            ["source_row", "month", "town", "flat_type", "block", "street_name", "resale_price"], rejected, diagnostics);
+            ["source_row", "month", "town", "flat_type", "block", "street_name", "resale_price"], rejected, diagnostics, referenceCsv);
         stage?.Invoke("transaction-csv");
         var parsed = new List<(int SourceRow, TransactionFacts Facts)>();
         foreach (var row in transactionRows)
         {
-            var f = row.Fields;
+            var f = row;
             string? error = null;
             if (!YearMonth.TryParse(f["month"], out var month)) error = "Month must be a valid yyyy-MM.";
             else if (!decimal.TryParse(f["resale_price"], NumberStyles.AllowDecimalPoint,
                 CultureInfo.InvariantCulture, out var price) || price <= 0) error = "Price must be a positive decimal.";
-            else if (new[] { "town", "flat_type", "block", "street_name" }.Any(k => string.IsNullOrWhiteSpace(f[k])))
+            else if (string.IsNullOrWhiteSpace(f["town"]) || string.IsNullOrWhiteSpace(f["flat_type"]) ||
+                string.IsNullOrWhiteSpace(f["block"]) || string.IsNullOrWhiteSpace(f["street_name"]))
                 error = "Town, flat type, block and street are required.";
             else if (!int.TryParse(f["source_row"], out var sourceRow) || sourceRow < 2 || !ids.Add(sourceRow))
                 error = "Source row must be unique and at least 2.";
             else
             {
-                var facts = new TransactionFacts(month!, f["town"], f["block"], f["street_name"], f["flat_type"], price);
+                var facts = new TransactionFacts(month!, strings.Share(f["town"]), strings.Share(f["block"]),
+                    strings.Share(f["street_name"]), strings.Share(f["flat_type"]), price);
                 parsed.Add((sourceRow, facts));
             }
             if (error is not null) Reject("transactions.csv", row, error, rejected, diagnostics);
@@ -99,6 +106,19 @@ public static class CsvImport
         stage?.Invoke("transaction-domain");
         return new(accepted.AsReadOnly(), rejected.AsReadOnly(), diagnostics.AsReadOnly());
     }
+    // Per-import, ordinal and bounded: facts keep the exact source text, with
+    // no normalized spellings and no process-global string.Intern lifetime.
+    private sealed class ExactStrings
+    {
+        private readonly Dictionary<string, string> values = new(StringComparer.Ordinal);
+        public string Share(string value)
+        {
+            if (value.Length > 128) return value;
+            if (values.TryGetValue(value, out var existing)) return existing;
+            if (values.Count < 8192) values.Add(value, value);
+            return value;
+        }
+    }
     private static bool PostalCode(string value) => value.Length == 6 && value.All(char.IsAsciiDigit);
     private static IReadOnlyList<FootprintRecord> ReadFootprints(string path,
         List<RejectedRecord> rejected, List<ImportDiagnostic> diagnostics, Action<string>? stage)
@@ -107,9 +127,27 @@ public static class CsvImport
         var file = Path.GetFileName(path);
         try
         {
-            var text = File.ReadAllText(path);
+            var bytes = File.ReadAllBytes(path);
+            // JsonDocument can borrow UTF-8 bytes without the former pair of
+            // full-size UTF-16 strings or a pooled UTF-8 copy. Retain the original
+            // StreamReader decoding semantics for other BOMs/invalid UTF-8.
+            var textFallback = bytes.AsSpan().StartsWith(new byte[] { 0xff, 0xfe }) ||
+                bytes.AsSpan().StartsWith(new byte[] { 0xfe, 0xff }) ||
+                bytes.AsSpan().StartsWith(new byte[] { 0, 0, 0xfe, 0xff });
+            if (!textFallback)
+            {
+                try { _ = new System.Text.UTF8Encoding(false, true).GetCharCount(bytes); }
+                catch (System.Text.DecoderFallbackException) { textFallback = true; }
+            }
+            string? text = null;
+            if (textFallback)
+            {
+                using var reader = new StreamReader(new MemoryStream(bytes), System.Text.Encoding.UTF8, detectEncodingFromByteOrderMarks: true);
+                text = reader.ReadToEnd();
+            }
             stage?.Invoke("footprint-file-read");
-            using var document = JsonDocument.Parse(text);
+            var utf8 = bytes.AsMemory(bytes.AsSpan().StartsWith(new byte[] { 0xef, 0xbb, 0xbf }) ? 3 : 0);
+            using var document = text is null ? JsonDocument.Parse(utf8) : JsonDocument.Parse(text);
             stage?.Invoke("footprint-json");
             var root = document.RootElement;
             if (root.ValueKind != JsonValueKind.Object || !root.TryGetProperty("type", out var type) ||
@@ -174,7 +212,9 @@ public static class CsvImport
             !geometry.TryGetProperty("coordinates", out var rings) || rings.ValueKind != JsonValueKind.Array ||
             rings.GetArrayLength() == 0 || rings[0].ValueKind != JsonValueKind.Array || rings[0].GetArrayLength() < 4)
             return "Expected Polygon with an exterior ring of at least four positions.";
-        var positions = new List<(double Longitude, double Latitude)>();
+        (double Longitude, double Latitude) first = default, last = default;
+        double minLongitude = 0, maxLongitude = 0, minLatitude = 0, maxLatitude = 0;
+        var index = 0;
         foreach (var position in rings[0].EnumerateArray())
         {
             if (position.ValueKind != JsonValueKind.Array || position.GetArrayLength() < 2 ||
@@ -182,11 +222,24 @@ public static class CsvImport
                 !position[0].TryGetDouble(out var lon) || !position[1].TryGetDouble(out var lat) ||
                 !double.IsFinite(lon) || !double.IsFinite(lat) || lon is < -180 or > 180 || lat is < -90 or > 90)
                 return "Polygon positions must contain finite longitude [-180,180] / latitude [-90,90].";
-            positions.Add((lon, lat));
+            if (index++ == 0)
+            {
+                first = (lon, lat);
+                minLongitude = maxLongitude = lon;
+                minLatitude = maxLatitude = lat;
+            }
+            else
+            {
+                if (lon < minLongitude) minLongitude = lon;
+                if (lon > maxLongitude) maxLongitude = lon;
+                if (lat < minLatitude) minLatitude = lat;
+                if (lat > maxLatitude) maxLatitude = lat;
+            }
+            last = (lon, lat);
         }
-        if (positions[0] != positions[^1]) return "Polygon exterior ring must be closed.";
-        point = new(Math.Round((positions.Min(p => p.Latitude) + positions.Max(p => p.Latitude)) / 2, 10),
-            Math.Round((positions.Min(p => p.Longitude) + positions.Max(p => p.Longitude)) / 2, 10));
+        if (first != last) return "Polygon exterior ring must be closed.";
+        point = new(Math.Round((minLatitude + maxLatitude) / 2, 10),
+            Math.Round((minLongitude + maxLongitude) / 2, 10));
         return null;
     }
     private static void Reject(string file, CsvRow row, string error, List<RejectedRecord> rejected,
@@ -196,22 +249,34 @@ public static class CsvImport
         diagnostics.Add(new(file, row.Number, error));
     }
     private static IReadOnlyList<CsvRow> Read(string path, string[] required,
-        List<RejectedRecord> rejected, List<ImportDiagnostic> diagnostics)
+        List<RejectedRecord> rejected, List<ImportDiagnostic> diagnostics, bool referenceCsv)
     {
         var rows = new List<CsvRow>();
         var file = Path.GetFileName(path);
         try
         {
-            using var parser = new TextFieldParser(path) { TextFieldType = FieldType.Delimited,
-                HasFieldsEnclosedInQuotes = true, TrimWhiteSpace = false };
+            // Hold one stream throughout detection and fallback. Every line is
+            // checked before fast-path acceptance, so a quote can never slip
+            // through a stale pre-scan decision. Fallback discards provisional
+            // parse results; an I/O failure still preserves preceding readable rows.
+            using var input = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            var rejectedStart = rejected.Count;
+            var diagnosticsStart = diagnostics.Count;
+            if (!referenceCsv && TryReadPlain(input, file, required, rejected, diagnostics, out rows)) return rows;
+            rows.Clear();
+            rejected.RemoveRange(rejectedStart, rejected.Count - rejectedStart);
+            diagnostics.RemoveRange(diagnosticsStart, diagnostics.Count - diagnosticsStart);
+            input.Position = 0;
+            using var parser = new TextFieldParser(input, System.Text.Encoding.UTF8, detectEncoding: true, leaveOpen: true)
+                { TextFieldType = FieldType.Delimited, HasFieldsEnclosedInQuotes = true, TrimWhiteSpace = false };
             parser.SetDelimiters(",");
             var header = parser.ReadFields();
-            if (header is null || header.Distinct(StringComparer.Ordinal).Count() != header.Length ||
-                required.Any(k => !header.Contains(k, StringComparer.Ordinal)))
+            if (!ValidHeader(header, required))
             {
                 diagnostics.Add(new(file, 1, "Missing or duplicate required CSV header."));
                 return rows;
             }
+            var columns = Columns(header!);
             while (!parser.EndOfData)
             {
                 var number = parser.LineNumber;
@@ -219,13 +284,12 @@ public static class CsvImport
                 {
                     var values = parser.ReadFields();
                     if (values is null) break;
-                    if (values.Length != header.Length)
+                    if (values.Length != header!.Length)
                     {
-                        Reject(file, new(number, [], values), "Field count differs from header.", rejected, diagnostics);
+                        Reject(file, new(number, columns, values), "Field count differs from header.", rejected, diagnostics);
                         continue;
                     }
-                    rows.Add(new(number, header.Zip(values).ToDictionary(x => x.First, x => x.Second,
-                        StringComparer.Ordinal), values));
+                    rows.Add(new(number, columns, values));
                 }
                 catch (MalformedLineException e)
                 {
@@ -238,5 +302,46 @@ public static class CsvImport
         catch (UnauthorizedAccessException e) { diagnostics.Add(new(file, 0, e.Message)); }
         catch (MalformedLineException e) { diagnostics.Add(new(file, e.LineNumber, "Malformed CSV header.")); }
         return rows;
+    }
+    private static bool ValidHeader(string[]? header, string[] required) => header is not null &&
+        header.Distinct(StringComparer.Ordinal).Count() == header.Length && required.All(k => header.Contains(k, StringComparer.Ordinal));
+    private static Dictionary<string, int> Columns(string[] header) => header.Select((name, index) => (name, index))
+        .ToDictionary(x => x.name, x => x.index, StringComparer.Ordinal);
+    private static bool TryReadPlain(Stream input, string file, string[] required,
+        List<RejectedRecord> rejected, List<ImportDiagnostic> diagnostics, out List<CsvRow> rows)
+    {
+        rows = [];
+        using var reader = new StreamReader(input, System.Text.Encoding.UTF8, detectEncodingFromByteOrderMarks: true,
+            bufferSize: 4096, leaveOpen: true);
+        Dictionary<string, int>? columns = null;
+        var width = 0;
+        long nextLine = 1, number = 1;
+        while (reader.ReadLine() is { } line)
+        {
+            nextLine++;
+            // Quoted fields, multiline quoting, malformed recovery and other
+            // BOM encodings retain the existing TextFieldParser implementation.
+            if (reader.CurrentEncoding.CodePage != System.Text.Encoding.UTF8.CodePage || line.Length > 65_536 || line.Contains('"')) return false;
+            if (string.IsNullOrWhiteSpace(line)) continue;
+            var values = line.Split(',');
+            if (columns is null)
+            {
+                if (!ValidHeader(values, required))
+                {
+                    diagnostics.Add(new(file, 1, "Missing or duplicate required CSV header."));
+                    return true;
+                }
+                columns = Columns(values);
+                width = values.Length;
+            }
+            else if (values.Length != width)
+                Reject(file, new(number, columns, values), "Field count differs from header.", rejected, diagnostics);
+            else rows.Add(new(number, columns, values));
+            // Like TextFieldParser, capture the next record's diagnostic line
+            // before skipping blanks. Source identity remains source_row.
+            number = nextLine;
+        }
+        if (columns is null) diagnostics.Add(new(file, 1, "Missing or duplicate required CSV header."));
+        return true;
     }
 }

@@ -37,6 +37,16 @@ internal static class Program
             WriteReport(args[2], ScaleStudy.Run(args[1]));
             return;
         }
+        if (args.Length == 3 && args[0] == "--import-digest")
+        {
+            using var hash = System.Security.Cryptography.SHA256.Create();
+            using var sink = new System.Security.Cryptography.CryptoStream(Stream.Null, hash,
+                System.Security.Cryptography.CryptoStreamMode.Write);
+            JsonSerializer.Serialize(sink, CsvImport.LoadDirectory(args[1]));
+            sink.FlushFinalBlock();
+            File.WriteAllText(args[2], Convert.ToHexString(hash.Hash!).ToLowerInvariant() + "\n");
+            return;
+        }
         if (args.Length == 3 && args[0] == "--startup-profile")
         {
             WriteReport(args[2], StartupStudy.Run(args[1]));

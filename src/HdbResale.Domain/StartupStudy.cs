@@ -6,11 +6,12 @@ namespace HdbResale.Domain;
 // Opt-in diagnostics. ThreadAllocatedBytes is only the calling managed thread;
 // ProcessAllocatedBytes includes all managed threads, not native Qt allocations.
 public sealed record StartupMeasurement(string Operation, double Milliseconds, int ManagedThreadId,
-    long ThreadAllocatedBytes, long ProcessAllocatedBytes, long ManagedBytes, long WorkingSetBytes);
+    long? ThreadAllocatedBytes, long ProcessAllocatedBytes, long ManagedBytes, long WorkingSetBytes);
 public sealed class StartupProfiler
 {
     private readonly Stopwatch timer = Stopwatch.StartNew();
     private long threadAllocated = GC.GetAllocatedBytesForCurrentThread();
+    private int threadId = Environment.CurrentManagedThreadId;
     private long processAllocated = GC.GetTotalAllocatedBytes(true);
     public List<StartupMeasurement> Measurements { get; } = [];
     public StartupMeasurement Measure(string operation)
@@ -19,8 +20,9 @@ public sealed class StartupProfiler
         var thread = GC.GetAllocatedBytesForCurrentThread();
         var process = GC.GetTotalAllocatedBytes(true);
         var result = new StartupMeasurement(operation, milliseconds, Environment.CurrentManagedThreadId,
-            thread - threadAllocated, process - processAllocated, GC.GetTotalMemory(false), Environment.WorkingSet);
+            threadId == Environment.CurrentManagedThreadId ? thread - threadAllocated : null, process - processAllocated, GC.GetTotalMemory(false), Environment.WorkingSet);
         Measurements.Add(result);
+        threadId = Environment.CurrentManagedThreadId;
         threadAllocated = GC.GetAllocatedBytesForCurrentThread();
         processAllocated = GC.GetTotalAllocatedBytes(true);
         timer.Restart();
@@ -37,7 +39,8 @@ public static class StartupStudy
     private static StartupRun RunOnce(string directory, int iteration)
     {
         var profile = new StartupProfiler();
-        var imported = CsvImport.LoadDirectory(directory, stage: name => profile.Measure(name));
+        var imported = CsvImport.LoadDirectory(directory, stage: name => profile.Measure(name),
+            referenceCsv: Environment.GetEnvironmentVariable("HDB_CSV_REFERENCE") == "1");
         profile.Measure("import-return");
         var rows = imported.Accepted;
         if (rows.Count == 0) throw new InvalidDataException("No accepted transactions.");
