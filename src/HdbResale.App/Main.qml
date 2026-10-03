@@ -123,19 +123,23 @@ ApplicationWindow {
                             required property string address
                             required property string mapKey
                             required property int transactionCount
-                            z: Resales.selectedMapKey === mapKey ? 1 : 0
+                            property bool selected: Resales.selectedMapKey === mapKey
+                            z: selected ? 1 : 0
                             coordinate: QtPositioning.coordinate(latitude, longitude)
                             anchorPoint.x: pin.width / 2
                             anchorPoint.y: pin.height / 2
                             sourceItem: Rectangle {
                                 id: pin
-                                width: 24; height: 24; radius: 12
-                                color: Resales.selectedMapKey === mapKey ? "#e35b19" : "#1565c0"
+                                // Keep every address marker. Compact low-zoom pins reduce
+                                // overlap; selection is always larger, labelled and raised.
+                                width: selected ? 28 : map.zoomLevel < 13 ? 14 : 24
+                                height: width; radius: width / 2
+                                color: selected ? "#e35b19" : "#1565c0"
                                 border.color: "white"; border.width: 2
                                 Accessible.role: Accessible.Button
                                 Accessible.name: address + ", " + priceLabel
                                 Accessible.onPressAction: Resales.selectTransaction(transactionId)
-                                Text { anchors.centerIn: parent; text: transactionCount > 1 ? transactionCount : ""; color: "white"; font.pixelSize: 10 }
+                                Text { anchors.centerIn: parent; visible: selected || map.zoomLevel >= 13; text: transactionCount > 1 ? transactionCount : ""; color: "white"; font.pixelSize: 10 }
                                 TapHandler { onTapped: Resales.selectTransaction(transactionId) }
                             }
                         }

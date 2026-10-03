@@ -22,10 +22,16 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public int GateInitialMapped { get; }
     public int GateAllCount { get; }
     public int GateAllMapped { get; }
+    public int GateAllTownCount { get; }
+    public int GateAllTownMapped { get; }
+    public int GateOtherTownCount { get; }
+    public int GateOtherTownMapped { get; }
+    public string GateOtherTown => Towns.First(t => t != "All towns" && t != GateTown);
     public ResaleMapModel()
     {
         var timer = Stopwatch.StartNew();
         import = CsvImport.LoadDirectory(Environment.GetEnvironmentVariable("HDB_DATA_DIRECTORY") ?? Path.Combine(AppContext.BaseDirectory, "data"));
+        Towns = new[] { "All towns" }.Concat(import.Accepted.Select(t => t.Town).Distinct().Order(StringComparer.Ordinal)).ToArray();
         state = new(import.Accepted);
         MapPoints = new(state.Visible);
         if (ScaleGate) Console.WriteLine($"HDB_SCALE_CONSTRUCT {timer.ElapsedMilliseconds} rows={VisibleCount} mapped={MapPoints.Count} managed={GC.GetTotalMemory(false)} working={Environment.WorkingSet}");
@@ -43,6 +49,16 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
             var budget = expectedTown.Where(t => t.Price <= 500_000).ToArray();
             GateBudgetCount = budget.Length;
             GateBudgetMapped = BlockSummaries.Located(budget).Count;
+            if (ScaleTransitions)
+            {
+                var allTown = import.Accepted.Where(t => t.Town == GateTown).ToArray();
+                var otherTownName = GateOtherTown;
+                var otherTown = import.Accepted.Where(t => t.Town == otherTownName).ToArray();
+                GateAllTownCount = allTown.Length;
+                GateAllTownMapped = BlockSummaries.Located(allTown).Count;
+                GateOtherTownCount = otherTown.Length;
+                GateOtherTownMapped = BlockSummaries.Located(otherTown).Count;
+            }
             Console.WriteLine($"HDB_SCALE_ORACLE {timer.ElapsedMilliseconds}");
         }
     }
@@ -50,6 +66,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
 
     // Explicit test opt-in; normal application state and fixture are unchanged.
     public bool ScaleGate => Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1";
+    public bool ScaleTransitions => ScaleGate && Environment.GetEnvironmentVariable("HDB_MAP_TRANSITIONS") == "1";
     public bool ScaleLifecycle => ScaleGate && Environment.GetEnvironmentVariable("HDB_MAP_LIFECYCLE") != "0";
     public bool ScaleMeasurement => ScaleGate && Environment.GetEnvironmentVariable("HDB_MAP_MEASUREMENT") == "1";
     public bool ScaleHeap => ScaleGate && Environment.GetEnvironmentVariable("HDB_SCALE_HEAP") == "1";
@@ -63,6 +80,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
         Console.WriteLine($"HDB_SCALE_HEAP after managed={GC.GetTotalMemory(false)} working={Environment.WorkingSet} collection-ms={timer.ElapsedMilliseconds}");
     }
     public string BasemapCacheDirectory => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "HdbResaleQt", "onemap-default-v1");
+    public string MapUpdateStrategy => MapPoints.UseReset ? "reset" : "incremental";
     public int MappedCount => MapPoints.Count;
     public int MapRevision { get; private set; }
     public double LastFilterStartedMs { get; private set; }
@@ -70,7 +88,8 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public string GateMapRowsJson => ScaleGate ? MapPoints.GateRowsJson : "[]";
     public string GateTown => import.Accepted.FirstOrDefault()?.Town ?? "All towns";
     public string FirstVisibleId => state.Visible.FirstOrDefault()?.Id ?? "";
-    private string[] Towns => new[] { "All towns" }.Concat(import.Accepted.Select(t => t.Town).Distinct().Order(StringComparer.Ordinal)).ToArray();
+    // Immutable import: compute control labels once, rather than scanning the corpus per binding read.
+    private string[] Towns { get; }
     public string TownsJson => System.Text.Json.JsonSerializer.Serialize(Towns);
     public int TownIndex => Array.IndexOf(Towns, Town);
     public bool RuntimeGate => Environment.GetEnvironmentVariable("HDB_RUNTIME_GATE") == "1";
@@ -104,26 +123,27 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
         // Validate before opening the Qt model reset transaction.
         ArgumentException.ThrowIfNullOrWhiteSpace(town);
         ArgumentOutOfRangeException.ThrowIfNegative(price);
-        LastFilterStartedMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        if (ScaleGate) LastFilterStartedMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         var timer = Stopwatch.StartNew();
         var stage = Stopwatch.StartNew();
         BeginResetModel();
         var listBeginMs = stage.Elapsed.TotalMilliseconds;
         stage.Restart();
-        try { state.Filter(town, price); }
-        finally { EndResetModel(); }
-        var filterAndListEndMs = stage.Elapsed.TotalMilliseconds;
+        double filterMs;
+        try { state.Filter(town, price); filterMs = stage.Elapsed.TotalMilliseconds; }
+        finally { stage.Restart(); EndResetModel(); }
+        var listEndMs = stage.Elapsed.TotalMilliseconds;
         MapPoints.Replace(state.Visible);
         var resetMs = timer.Elapsed.TotalMilliseconds;
         stage.Restart();
         Notify(nameof(Town), nameof(TownIndex), nameof(MaximumPrice), nameof(VisibleCount), nameof(MappedCount), nameof(FirstVisibleId), nameof(FilterSummary),
             nameof(SelectedId), nameof(SelectedMapKey), nameof(SelectionDetails));
-        LastFilterCompletedMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        MapRevision++;
-        Notify(nameof(LastFilterStartedMs), nameof(LastFilterCompletedMs), nameof(MapRevision));
         if (ScaleGate)
         {
-            Console.WriteLine(FormattableString.Invariant($"HDB_FILTER_STAGE revision={MapRevision} list-begin-ms={listBeginMs:F3} filter-list-end-ms={filterAndListEndMs:F3} property-notify-ms={stage.Elapsed.TotalMilliseconds:F3} total-ms={timer.Elapsed.TotalMilliseconds:F3}"));
+            LastFilterCompletedMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            MapRevision++;
+            Notify(nameof(LastFilterStartedMs), nameof(LastFilterCompletedMs), nameof(MapRevision));
+            Console.WriteLine(FormattableString.Invariant($"HDB_FILTER_STAGE revision={MapRevision} list-begin-ms={listBeginMs:F3} filter-ms={filterMs:F3} list-end-ms={listEndMs:F3} property-notify-ms={stage.Elapsed.TotalMilliseconds:F3} total-ms={timer.Elapsed.TotalMilliseconds:F3}"));
             Console.WriteLine($"HDB_SCALE_RESET {(long)resetMs} rows={VisibleCount} mapped={MappedCount}");
         }
     }

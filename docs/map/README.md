@@ -32,7 +32,7 @@ per-delegate callbacks. `HDB_MAP_LIFECYCLE=0` disables lifecycle callbacks for a
 instrumentation comparison. Normal UI runs do not collect lifecycle events.
 
 - C# aggregation is timed separately from synchronous map-model notifications.
-- Sidebar begin-reset and combined filtering/end-reset are measured separately.
+- Sidebar filtering, begin-reset and end-reset notifications are measured separately.
 - Property notifications, revision observation, last delegate event and QML
   readiness are separate observations. QML includes its 25ms timer cadence and
   assertion overhead; it is not a GPU frame-time measurement.
@@ -47,3 +47,39 @@ that mode does not pass the ordinary acceptance limits. Baseline and optimized
 measurements must use the same provider, inputs and assertion workload, with
 cache/instrumentation differences disclosed. Final results are recorded in
 `verification.md` after native verification.
+
+## Stable-key incremental updates
+
+`MapRowDiff` plans ordinal-key removals, insertions and value updates before the
+first Qt notification. Contiguous removals are applied backwards; insertions
+are applied forwards. Retained address keys never move relative to each other.
+Matching `BeginRemoveRows`/`EndRemoveRows` and `BeginInsertRows`/`EndInsertRows`
+pairs bracket the backing-list changes. `DataChanged` announces only roles whose
+values changed; coordinates are explicitly compared rather than assumed stable.
+No filtered transaction, summary grouping, geometry or identity rule changes.
+The sidebar remains the existing virtualized model, independently reset.
+
+These helpers are part of Qt Bridge's Model contract and native event dispatcher.
+The inspected upstream source revision was
+`7019264f1a771a1f44ec55c33aa748f693faba75`; installed Linux package support is
+verified by native Debug/Release execution, rather than inferred to be identical
+to that newer source. No unofficial native host patch or new package is used.
+
+`HDB_MAP_UPDATE=reset` restores the baseline strategy only when the scale gate is
+opted in. This permits like-for-like measurements of the final provider, pin
+appearance, assertions and instrumentation. Normal UI uses incremental updates.
+`--extended` exercises sixteen full/subset/different/empty/reset/selection-hidden/
+repeat/zoom/pan transitions with the same 5-second state bound and a separately
+stated 45-second process budget. Every completed snapshot checks unique keys and
+all displayed fields; surviving keys must refer to the same QML objects.
+
+All markers remain present at low zoom. Below zoom 13 their dots are 14px and
+ordinary count labels are hidden; at zoom 13+ they are 24px with counts. The
+selected address stays orange, 28px, labelled and raised above other pins at
+all zoom levels. This is density styling, not clustering or viewport culling.
+
+The town-label array is cached from the immutable import. In the extended gate,
+the alternate-town value is evaluated once before scanning rows; an early test
+mistakenly evaluated that derived label in the per-row predicate, causing an
+O(n²) oracle startup timeout. That introduced test bug was fixed without changing
+any deadline or production filtering rule.

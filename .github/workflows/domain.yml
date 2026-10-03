@@ -1,7 +1,7 @@
 name: Domain and offline tools
 on:
   push:
-    branches: [main, milestone-6-scale]
+    branches: [main, milestone-6-scale, milestone-7-map]
   pull_request:
 permissions:
   contents: read

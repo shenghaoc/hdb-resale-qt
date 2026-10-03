@@ -10,8 +10,11 @@ namespace HdbResale.App;
 // Unlocated transactions remain in Resales (the sidebar) and never enter this model.
 public sealed class LocatedMapModel : Model
 {
-    private IReadOnlyList<BlockSummary> rows;
-    internal LocatedMapModel(IReadOnlyList<ResaleTransaction> transactions) => rows = BlockSummaries.Located(transactions);
+    private readonly List<BlockSummary> rows;
+    // Diagnostic baseline only; ordinary UI always uses the incremental model.
+    internal bool UseReset => Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1"
+        && Environment.GetEnvironmentVariable("HDB_MAP_UPDATE") == "reset";
+    internal LocatedMapModel(IReadOnlyList<ResaleTransaction> transactions) => rows = BlockSummaries.Located(transactions).ToList();
     internal int Count => rows.Count;
     internal void Replace(IReadOnlyList<ResaleTransaction> transactions)
     {
@@ -20,11 +23,45 @@ public sealed class LocatedMapModel : Model
         var aggregateMs = timer.Elapsed.TotalMilliseconds;
         var previous = rows.Count;
         timer.Restart();
-        BeginResetModel();
-        try { rows = next; }
-        finally { EndResetModel(); }
+        IReadOnlyList<MapRowEdit> edits = UseReset ? [] : MapRowDiff.Plan(rows, next);
+        var planMs = timer.Elapsed.TotalMilliseconds;
+        var removed = 0; var inserted = 0; var changed = 0;
+        timer.Restart();
+        if (UseReset)
+        {
+            BeginResetModel();
+            try { rows.Clear(); rows.AddRange(next); }
+            finally { EndResetModel(); }
+            removed = previous; inserted = rows.Count;
+        }
+        else foreach (var edit in edits)
+        {
+            switch (edit.Kind)
+            {
+                case MapRowEditKind.Remove:
+                    BeginRemoveRows(ModelIndex.Empty, edit.First, edit.First + edit.Count - 1);
+                    try { rows.RemoveRange(edit.First, edit.Count); }
+                    finally { EndRemoveRows(); }
+                    removed += edit.Count;
+                    break;
+                case MapRowEditKind.Insert:
+                    BeginInsertRows(ModelIndex.Empty, edit.First, edit.First + edit.Count - 1);
+                    try { rows.InsertRange(edit.First, edit.Rows); }
+                    finally { EndInsertRows(); }
+                    inserted += edit.Count;
+                    break;
+                case MapRowEditKind.Update:
+                    var roles = MapRowDiff.ChangedRoles(rows, edit);
+                    for (var i = 0; i < edit.Count; i++) rows[edit.First + i] = edit.Rows[i];
+                    // Avoid re-evaluating unchanged coordinates/labels. Coordinate changes
+                    // are still explicitly checked; no source identity assumption hides them.
+                    if (roles.Length > 0) DataChanged(new(edit.First, 0), new(edit.First + edit.Count - 1, 0), roles);
+                    changed += edit.Count;
+                    break;
+            }
+        }
         if (Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1")
-            Console.WriteLine(FormattableString.Invariant($"HDB_MAP_UPDATE strategy=reset aggregate-ms={aggregateMs:F3} notifications-ms={timer.Elapsed.TotalMilliseconds:F3} before={previous} after={rows.Count} removed={previous} inserted={rows.Count} changed=0"));
+            Console.WriteLine(FormattableString.Invariant($"HDB_MAP_UPDATE strategy={(UseReset ? "reset" : "incremental")} aggregate-ms={aggregateMs:F3} plan-ms={planMs:F3} notifications-ms={timer.Elapsed.TotalMilliseconds:F3} before={previous} after={rows.Count} removed={removed} inserted={inserted} changed={changed}"));
     }
     internal string GateRowsJson => System.Text.Json.JsonSerializer.Serialize(rows.Select(block => new
     {
