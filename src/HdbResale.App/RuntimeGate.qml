@@ -61,7 +61,8 @@ Item {
             case 4:
                 if (Resales.selectedId !== "HDB-1188") return
                 advance("remaining-selected")
-                Resales.setMaximumPrice(0)
+                // Negative self-check deliberately skips a mutation; normal gate/app are unchanged.
+                if (Resales.runtimeGateFault !== "skip-empty") Resales.setMaximumPrice(0)
                 break
             case 5:
                 if (!rows(0) || Resales.selectedId !== "" || priceControl.value !== 0) return

@@ -1,6 +1,7 @@
 # HDB resale native fixture explorer
 
-Milestone 3: a runnable local official-record address-matching native slice, verified on macOS
+Milestone 4: a runnable native slice with a reproducible bounded coverage study
+and automated native interaction gate, verified on macOS
 arm64. This is the C#/Qt sibling of the
 [web HDB resale visualizer](https://github.com/shenghaoc/hdb-resale-visualizer);
 the web project is a product and behavior reference, not a translated frontend.
@@ -105,7 +106,9 @@ output stay under ignored `obj`/`bin` directories.
 src/HdbResale.Domain/  immutable facts/match/location records, CSV/GeoJSON importer, ExplorerState
 src/HdbResale.App/     official-template csproj, Program, ResaleMapModel, LocatedMapModel, Main.qml, Info.plist
 tests/HdbResale.Tests/ import/domain/evidence tests, independent of Qt
-data/                 tiny CSVs, source metadata, bounded official join/geometry evidence
+data/                 six-row correctness fixture and official evidence
+docs/coverage/        separate 416-row study, source/hash pins, report and audit
+tools/                offline sample/audit scripts and bounded native gate
 ```
 
 The bridge singleton `Resales` derives from the documented `Qt.Bridge.Models.Model`,
@@ -196,9 +199,61 @@ may fall outside irregular shapes and never locate a flat. Current registered
 addresses/buildings can change; no historical certainty or full-data coverage
 is claimed. No full-history pipeline, online geocoder or database exists.
 
-Next milestone: obtain an authoritative HDB address-to-building link or assess
-bounded linkage coverage/conflicts before expanding the fixture. Linux/Windows
-validation and packaged distribution remain separate work.
+The [bounded coverage study](docs/coverage/README.md) runs 416 stratified real
+transactions through unchanged M3 matching: 22 ExactAddress, 48
+NormalizedAddress, 1 Ambiguous and 345 Unmatched; 70 approximate points.
+This is **ACRA B-only coverage under current conservative normalization**, not
+general matcher accuracy. Missing corroboration does not prove wrong addresses.
+Full source/derived hashes, every failure and town/time cross-tabs are retained;
+all failure source references were mechanically checked, with detailed manual
+review of 24 fixed-ranked missing representatives plus the one postal conflict.
+Normal startup still loads only the original six-row fixture.
+
+Next milestone: investigate an authoritative address/postal source and narrowly
+audited spelling rules against the fixed sample, preserving conflict handling
+and reporting before/after results. Linux/Windows validation and packaged
+distribution remain separate work.
+
+## Native runtime gate
+
+With README's PATH and QtDir exports, execute Debug and Release checks:
+
+```sh
+dotnet build
+dotnet test
+dotnet build -c Release
+dotnet test -c Release
+python3 -m unittest discover -s tools -p 'test_*.py' -v
+python3 tools/native_gate.py \
+  --executable src/HdbResale.App/obj/Release/net10.0/HdbResale.app/Contents/MacOS/HdbResale.App \
+  --log /tmp/hdb-release-gate.log
+# Substitute Debug for Release to run the same gate against Debug.
+# Expected negative self-check: exits 1, never reports acceptance.
+HDB_GATE_FAULT=skip-empty python3 tools/native_gate.py \
+  --executable src/HdbResale.App/obj/Release/net10.0/HdbResale.app/Contents/MacOS/HdbResale.App \
+  --log /tmp/hdb-negative-gate.log
+```
+
+The standard-library Python harness opts into `HDB_RUNTIME_GATE=1` only for its
+child process. A separate QML test component observes the actual C# bridge
+properties, bound controls, ListView row count and Map mapItems after each
+mutation. It requires mapReady/a usable map shell, town filter, selection,
+hidden-selection clearing, empty results, reset/repopulation, zoom, pan,
+recenter, ordered completion and clean native/C# shutdown. State deadlines are
+5 seconds per phase; process/shutdown deadline is 25 seconds. Qt/QML error
+signatures, nonzero native exits, missing/reordered steps and missing teardown
+fail the command with its full log. No sleep/retry loop or pixel framework exists.
+The explicit negative fault skips one test mutation and must time out at phase
+5. The test component is inactive without the opt-in environment variable;
+normal Release behavior/data are unchanged.
+
+This is automated **QML-hook/model acceptance**, not evidence of physical input
+or successful network tile rendering. The gate does not certify tile pixels.
+Real Cocoa desktop inputs and screenshots were separately exercised, including
+rendered OSM, selected orange pin, wheel/drag, unlocated selection and visible
+startup diagnostics; details and limits are in [verification](docs/verification.md).
+The gate is currently verified on macOS arm64 only, inspired by the sibling
+rowplay-qt runtime gate but implemented with the C# bridge and no sibling edits.
 
 ## Development workflow
 

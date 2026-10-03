@@ -23,6 +23,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
 
     // Explicit test opt-in; normal application state and fixture are unchanged.
     public bool RuntimeGate => Environment.GetEnvironmentVariable("HDB_RUNTIME_GATE") == "1";
+    public string RuntimeGateFault => RuntimeGate ? Environment.GetEnvironmentVariable("HDB_GATE_FAULT") ?? "" : "";
     public int VisibleCount => state.Visible.Count;
     public string Town => state.Town;
     public int MaximumPrice => (int)state.MaximumPrice;

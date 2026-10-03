@@ -1,3 +1,96 @@
+# Milestone 4 verification — 2026-10-03
+
+Branch `milestone-4-coverage`, based on fetched public main
+`36fcde3d214ef7d7a8c691eaabe9c8fb3867798d`. Toolchain unchanged: .NET SDK
+10.0.401 / net10.0, Qt 6.12.0, Bridge 0.4.0.22-beta, macOS arm64. First meaningful
+implementation checkpoint 59ba5a8 was committed/pushed before final verification.
+No dependency upgrade, matcher weakening, invented coordinates or sibling edit.
+
+With README's toolchain PATH and QtDir, all required root commands ran:
+
+```sh
+dotnet build
+dotnet test
+dotnet build -c Release
+dotnet test -c Release
+python3 -m unittest discover -s tools -p 'test_*.py' -v
+python3 tools/native_gate.py \
+  --executable src/HdbResale.App/obj/Release/net10.0/HdbResale.app/Contents/MacOS/HdbResale.App \
+  --log /tmp/hdb-release-gate.log
+```
+
+Debug and Release: **0 warnings/errors**, **28 C# tests passed** each.
+**5 Python tests passed**, including executed invalid-transcript/exit rejection
+assertions. Both Debug and Release real Cocoa runtime gates passed the ordered
+loaded → filtered → selected → selection-cleared → remaining-selected → empty
+→ reset → zoomed → panned → recentered walk, HDB_GATE_PASS, HDB_GATE_EXIT and
+native exit zero. The separate QML hook checks actual bridged values, controls,
+ListView/model count and map delegates under state/process deadlines. It does
+not exercise physical input or certify downloaded tile pixels.
+
+An actual **Release negative run** set HDB_GATE_FAULT=skip-empty and skipped
+one mutation only in the isolated test scenario. It stopped with
+`HDB_GATE_FAIL state timeout phase 5`; Python rejected it with exit **1**.
+No pass marker appeared. This proves a failed transition is rejected end-to-end,
+not merely that the harness contains a rejection branch. Synthetic harness
+checks also execute rejection for crash exit, stale/order failure, QML generic/
+TypeError, missing teardown and timeout logs.
+
+Offline study: **416** official rows, deterministic four-per-town/period
+selection, 26 towns, 7 flat types, 378 addresses, 239 streets. Full snapshot
+hashes and all five generated input/manifest files were independently reproduced
+byte-for-byte. C# output: **22 ExactAddress, 48 NormalizedAddress, 1 Ambiguous,
+345 Unmatched; 70 BlockApproximation, 346 Missing; 0 rejected/diagnostics/
+matched-without-geometry**. Report/audit output hashes are pinned separately.
+All 346 failures received mechanical full-source evidence checks; detailed
+manual audit was **24 deterministic missing representatives plus one conflict**.
+See [coverage details](coverage/README.md) for exact algorithm, counts, cross-tabs,
+source identities, audit limits and the real conflicting postal assertion.
+Missing means no corroboration under current normalization in **ACRA B only**,
+not proof of wrong address or general matcher failure. M3 matcher/importer source
+and six canonical transaction rows were byte-checked unchanged; before/after
+study outcomes are identical. Release report bytes also match Debug output.
+
+Separate normal **Release native desktop** checks used accessibility/keyboard,
+actual pointer drag/wheel/pin tap and screenshots:
+
+- Startup: Singapore OSM tiles/attribution rendered, six rows/map delegates,
+  six matches and zero import diagnostics.
+- Marker 509 selection + town ANG MO KIO: 2 visible/mapped, selection retained.
+  Physical price input S$238,000: 1 visible/mapped, hidden 509 selection cleared.
+  List-select 510, reset: 6 mapped and still-visible selection retained.
+- Budget zero: zero map/list rows, no-matches message, selection clears. Reset
+  restores the six rows and controls.
+- Drag center 1.3521,103.8198 → 1.4211,103.7508; Singapore restores center/zoom.
+  Plus/minus 11 → 12 → 11; wheel → 14.3, center 1.3191,103.7720. Screenshot
+  shows separated Clementi pins and resolved OSM tiles. Actual pointer tap on
+  449 selects HDB-371, orange pin and highlighted list row with nine source
+  assertions/OBJECTID evidence.
+- Only ignored Release bundle copies were altered for null 510 geometry plus
+  an appended invalid-price row. Startup shows **6 accepted/6 matched,
+  5 mapped/1 unlocated,1 rejected/1 diagnostic**, including transactions.csv:8
+  price error. Selecting 510 via the real list displays NormalizedAddress /
+  Missing, its original footprint IDs and no placeholder marker; screenshot
+  shows highlighted row, evidence and rendered basemap. The canonical copies
+  were restored and byte-compared before final gates/normal-state recheck.
+- Normal and controlled Release UI stdout/stderr logs were empty. Source fixture
+  files were never altered by these controlled checks. Final canonical gate
+  again required six rows/map delegates and no diagnostics.
+
+No credible Qt Bridge/Location upstream defect was found; no bug report or
+invisible workaround. Qt Location 6.12 remains deliberate Technology Preview,
+Bridge beta is coupled to the matching external Qt installation. Public OSM
+network tile delivery is separate from automated map-shell acceptance.
+Physical pinch, Linux/Windows and signed/notarized distribution remain untested.
+No broadened ACRA-letter coverage, historical correctness or production matching
+accuracy is inferred. The next useful milestone is stronger authoritative
+address/postal evidence and narrowly audited spelling coverage against this
+unchanged benchmark, with before/after conflict and coverage reporting.
+
+---
+
+## Historical Milestone 3 verification
+
 # Milestone 3 verification — 2026-10-03
 
 Executed on the unchanged macOS arm64 toolchain in README. Branch

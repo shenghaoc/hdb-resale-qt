@@ -1,0 +1,9 @@
+{
+  "matcher_revision": "a02572fdb8aa83c855a3cebfa78756bccf2bbc9d",
+  "matcher_changed": false,
+  "before_after": "Identical: existing M3 matcher used for every study row; no fixes/aliases/conflict changes.",
+  "derived_sha256": {
+    "report.json": "b4041707f37acfe189f473e163bc2fff28890d42e5bd8389a16dabcc7203d821",
+    "audit.json": "80a26eb898e4b39eddb3f643722097bbe5eeb8edae88189bbf81124fd825b5ed"
+  }
+}

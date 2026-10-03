@@ -56,7 +56,8 @@ canonical-six regressions.
 
 ## Results and evidence audit
 
-[report.json](report.json) retains every failure, source evidence and town ×
+[results.json](results.json) pins the derived report/audit hashes and unchanged
+M3 matcher revision. [report.json](report.json) retains every failure, source evidence and town ×
 period × match × coordinate cells. Matched identity counts sum independently
 from coordinate counts:
 
