@@ -44,11 +44,32 @@ public sealed record DerivedLocation
     public string Source { get; }
 }
 public sealed record TransactionFacts(YearMonth Month, string Town, string Block, string Street,
-    string FlatType, decimal Price);
+    string FlatType, decimal Price)
+{
+    // These columns are optional. Preserve their exact source text separately
+    // from safe, nullable numeric interpretations; absent is not zero.
+    public string? StoreyRange { get; init; }
+    public string? FloorAreaSqmSource { get; init; }
+    public decimal? FloorAreaSqm { get; init; }
+    public string? FlatModel { get; init; }
+    public string? LeaseCommenceDateSource { get; init; }
+    public int? LeaseCommenceYear { get; init; }
+    public string? RemainingLeaseSource { get; init; }
+    public int? RemainingLeaseMonths { get; init; }
+}
 public sealed record ResaleTransaction(string Id, TransactionFacts Facts, DerivedLocation Location, AddressMatch Match)
 {
     public string Town => Facts.Town;
     public string Address => $"{Facts.Block} {Facts.Street}";
     public string FlatType => Facts.FlatType;
     public decimal Price => Facts.Price;
+    public decimal? PricePerSqm
+    {
+        get
+        {
+            if (Facts.FloorAreaSqm is not > 0 || Price <= 0) return null;
+            try { return Price / Facts.FloorAreaSqm.Value; }
+            catch (OverflowException) { return null; }
+        }
+    }
 }

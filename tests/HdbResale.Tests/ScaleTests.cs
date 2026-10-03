@@ -30,7 +30,10 @@ public sealed class ScaleTests
         Assert.Equal(rows[^1].Id, state.Selected!.Id);
         state.Filter("All towns", 100_100);
         Assert.Equal(state.Visible.Count, BlockSummaries.Located(state.Visible).Sum(g => g.Count));
-        Assert.Null(state.Selected);
+        // Selection belongs to the address: a different matching transaction
+        // represents it after the previously selected transaction is filtered out.
+        Assert.Equal(BlockSummaries.Key(rows[^1]), state.SelectedAddress!.Key);
+        Assert.Equal(state.SelectedAddress.Latest, state.Selected);
         state.Filter("All towns", 0);
         Assert.Empty(BlockSummaries.Located(state.Visible));
         state.Reset(); Assert.Equal(6000, state.Visible.Count);

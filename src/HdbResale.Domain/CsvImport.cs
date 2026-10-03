@@ -19,6 +19,7 @@ public static class CsvImport
     private sealed record CsvRow(long Number, Dictionary<string, int> Header, string[] Raw)
     {
         public string this[string name] => Raw[Header[name]];
+        public string? Optional(string name) => Header.TryGetValue(name, out var column) ? Raw[column] : null;
     }
     public static ImportResult LoadDirectory(string directory, IReadOnlyDictionary<string, OneMapSearch>? oneMapSearches = null, string? buildingEvidencePath = null, IReadOnlyDictionary<string, HistoricalPostalAssertion>? historicalAssertions = null, Action<string>? stage = null, bool indexed = true, bool referenceCsv = false, bool supportMultiPolygon = true)
     {
@@ -104,7 +105,17 @@ public static class CsvImport
             else
             {
                 var facts = new TransactionFacts(month!, strings.Share(f["town"]), strings.Share(f["block"]),
-                    strings.Share(f["street_name"]), strings.Share(f["flat_type"]), price);
+                    strings.Share(f["street_name"]), strings.Share(f["flat_type"]), price)
+                {
+                    StoreyRange = strings.ShareOptional(f.Optional("storey_range")),
+                    FloorAreaSqmSource = strings.ShareOptional(f.Optional("floor_area_sqm")),
+                    FloorAreaSqm = PositiveDecimal(f.Optional("floor_area_sqm")),
+                    FlatModel = strings.ShareOptional(f.Optional("flat_model")),
+                    LeaseCommenceDateSource = strings.ShareOptional(f.Optional("lease_commence_date")),
+                    LeaseCommenceYear = ValidYear(f.Optional("lease_commence_date")),
+                    RemainingLeaseSource = strings.ShareOptional(f.Optional("remaining_lease")),
+                    RemainingLeaseMonths = LeaseMonths(f.Optional("remaining_lease"))
+                };
                 parsed.Add((sourceRow, facts));
             }
             if (error is not null) Reject("transactions.csv", row, error, rejected, diagnostics);
@@ -140,6 +151,7 @@ public static class CsvImport
     private sealed class ExactStrings
     {
         private readonly Dictionary<string, string> values = new(StringComparer.Ordinal);
+        public string? ShareOptional(string? value) => value is null ? null : Share(value);
         public string Share(string value)
         {
             if (value.Length > 128) return value;
@@ -147,6 +159,23 @@ public static class CsvImport
             if (values.Count < 8192) values.Add(value, value);
             return value;
         }
+    }
+    private static decimal? PositiveDecimal(string? value) => decimal.TryParse(value,
+        NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var number) && number > 0 ? number : null;
+    private static int? ValidYear(string? value) => int.TryParse(value,
+        NumberStyles.None, CultureInfo.InvariantCulture, out var year) && year is >= 1 and <= 9999 ? year : null;
+    private static int? LeaseMonths(string? value)
+    {
+        if (value is null) return null;
+        // Source lease is independent evidence; commencement year is not a
+        // substitute. Retain malformed text without rejecting its transaction.
+        var match = System.Text.RegularExpressions.Regex.Match(value,
+            @"\A([0-9]{1,3}) years?(?: ([0-9]{1,2}) months?)?\z",
+            System.Text.RegularExpressions.RegexOptions.CultureInvariant);
+        if (!match.Success) return null;
+        var years = int.Parse(match.Groups[1].Value, CultureInfo.InvariantCulture);
+        var months = match.Groups[2].Success ? int.Parse(match.Groups[2].Value, CultureInfo.InvariantCulture) : 0;
+        return months <= 11 ? years * 12 + months : null;
     }
     private static bool ValidDataset(string value) => value.Length == 34 && value.StartsWith("d_", StringComparison.Ordinal) &&
         value.AsSpan(2).IndexOfAnyExcept("0123456789abcdef") < 0;
