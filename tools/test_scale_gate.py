@@ -1,4 +1,5 @@
 import unittest
+from pathlib import Path
 from scale_gate import verify, STEPS, EXTENDED_STEPS, REENTRANT_STEPS
 class ScaleGateTests(unittest.TestCase):
  def log(self):return ''.join('qml: HDB_SCALE_STEP '+s+' ms=1 rows=0 delegates=0\n' for s in STEPS)+'qml: HDB_SCALE_PASS\nHDB_GATE_EXIT\n'
@@ -18,7 +19,6 @@ class ScaleGateTests(unittest.TestCase):
   for code,log in cases:
    with self.subTest(code=code):
     with self.assertRaises(RuntimeError):verify(code,log)
-if __name__=='__main__':unittest.main()
 
 class ModelLifetimeContractTests(unittest.TestCase):
  def test_qml_model_has_persistent_reference_and_gate_only_gc_regression(self):
@@ -32,3 +32,5 @@ class ModelLifetimeContractTests(unittest.TestCase):
   self.assertNotIn('gc()',main)
   self.assertIn('HDB_MODEL_LIFETIME_GC',gate)
   self.assertIn('gc()',gate)
+
+if __name__=='__main__':unittest.main()
