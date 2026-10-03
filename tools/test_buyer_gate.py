@@ -10,6 +10,9 @@ class BuyerGateTests(unittest.TestCase):
   self.assertEqual(390000,chosen['medianPrice']);self.assertEqual(81,chosen['minimumArea'])
   self.assertEqual('HDB-34',chosen['recent'][0]['id'])
   self.assertEqual('62 years 05 months',chosen['recent'][0]['lease'])
+  self.assertEqual(24,len(es[6]['trend']['Points']));self.assertEqual(1,es[6]['trend']['Sales'])
+  self.assertEqual(390000,next(p['MedianPrice']for p in es[6]['trend']['Points']if p['Count']))
+  self.assertEqual(23,sum(p['MedianPrice']is None for p in es[6]['trend']['Points']))
   self.assertEqual(0,es[8]['rows']);self.assertIsNone(es[8]['selected']);self.assertIsNone(es[12]['selected'])
  def test_strict_runner_requires_every_step_and_teardown(self):
   good='\n'.join('HDB_BUYER_STEP '+s+' ms=1' for s in STEPS)+'\nHDB_BUYER_PASS\nHDB_GATE_EXIT\n'

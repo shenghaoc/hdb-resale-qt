@@ -16,6 +16,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     private long startupRoleReads;
     private readonly ExplorerState state;
     private readonly UiMutationQueue mutations = new();
+    private BuyerTrendData trend = BuyerTrendData.Empty;
     public LocatedMapModel MapPoints { get; }
     public int GateTownCount { get; }
     public int GateTownMapped { get; }
@@ -191,12 +192,13 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public bool BuyerGate => Environment.GetEnvironmentVariable("HDB_BUYER_GATE") == "1";
     public string GateBuyerExpectedJson => BuyerGate ? File.ReadAllText(Environment.GetEnvironmentVariable("HDB_BUYER_EXPECTATION")!) : "[]";
     public string BuyerStateJson => BuyerPresentation.StateJson(state);
+    public string TrendJson => System.Text.Json.JsonSerializer.Serialize(trend);
     public string RecentTransactionsJson => BuyerPresentation.RecentJson(state);
     public string SelectedHeading => state.SelectedAddress is { } b ? b.Latest.Address : "Choose an address";
     public string SelectedMetrics => BuyerPresentation.Metrics(state);
     public string SelectedLease => BuyerPresentation.Lease(state);
     public string SelectedEvidence => state.SelectedAddress is { } b ? $"Identity: {string.Join(", ", b.MatchQualities)}\nCoordinates: {string.Join(", ", b.CoordinateQualities)}\n{b.Latest.Match.Reason}\n{MatchSources(b.Latest.Match)}\n{b.Latest.Location.Source}" : "";
-    public string AboutText => "HDB Resale Explorer 0.1.0 (release candidate)\nIndependent desktop research tool. Not affiliated with HDB, SLA or the Singapore Government.\nHistorical resale registrations are not current listings, valuations, affordability advice or eligibility decisions.\nApplication source licence: pending owner decision. Qt, Bridge, data and map licences are separate; see repository notices.\nRepository: https://github.com/shenghaoc/hdb-resale-qt";
+    public string AboutText => "HDB Resale Explorer 0.1.0 (release candidate)\nIndependent desktop research tool. Not affiliated with HDB, SLA or the Singapore Government.\nHistorical resale registrations are not current listings, valuations, affordability advice or eligibility decisions.\nApplication source: GPL-3.0-or-later. Qt Graphs: GPLv3; Qt/Bridge and other components retain their terms. Public data and OneMap assets are separate; see LICENSE and THIRD_PARTY_NOTICES.md.\nRepository: https://github.com/shenghaoc/hdb-resale-qt";
     public string TownsJson => System.Text.Json.JsonSerializer.Serialize(Towns);
     public int TownIndex => Array.IndexOf(Towns, Town);
     public bool RuntimeGate => Environment.GetEnvironmentVariable("HDB_RUNTIME_GATE") == "1";
@@ -246,13 +248,14 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     });
     private void SelectionChanged()
     {
+        trend = BuyerTrend.Build(state);
         MapPoints.Select(SelectedMapKey);
         NotifyPresentation();
         NotifySelection();
     }
     private void NotifySelection() => Notify(nameof(SelectedId), nameof(SelectedMapKey), nameof(SelectionDetails),
         nameof(SelectedAddressIndex), nameof(SelectedHeading), nameof(SelectedMetrics), nameof(SelectedLease), nameof(SelectedEvidence),
-        nameof(RecentTransactionsJson), nameof(BuyerStateJson));
+        nameof(RecentTransactionsJson), nameof(BuyerStateJson), nameof(TrendJson));
     private void ApplyFilter(string town, string flatType, int minimum, int maximum, int months)
     {
         if (town == Town && flatType == FlatType && minimum == MinimumPrice && maximum == MaximumPrice && months == RecencyMonths) return;
@@ -277,6 +280,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
         stage.Restart();
         Notify(nameof(Town), nameof(TownIndex), nameof(FlatType), nameof(FlatTypeIndex), nameof(MinimumPrice), nameof(MaximumPrice),
             nameof(RecencyMonths), nameof(VisibleCount), nameof(AddressCount), nameof(MappedCount), nameof(FirstVisibleId), nameof(FirstAddressKey), nameof(FilterSummary));
+        trend = BuyerTrend.Build(state);
         NotifySelection();
         if (ScaleGate || BuyerGate)
         {

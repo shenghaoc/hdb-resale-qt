@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Native buyer flow with independently computed CSV cohorts/medians/recent rows."""
 import argparse,csv,json,os,re,subprocess,time,tempfile
-from decimal import Decimal
+from decimal import Decimal, ROUND_CEILING
 from pathlib import Path
 from native_gate import FORBIDDEN
 from scale_gate import validate_expanded_workload
@@ -35,7 +35,19 @@ def expectation(data):
   for r in selected_rows:
    m=re.fullmatch(r'(\d+) years?(?: (\d{1,2}) months?)?',r['remaining_lease'])
    if m:lease_observations.append(int(m[1])*12+int(m[2]or 0)-(end-month(r)))
-  result.append(dict(addressIndex=sorted({key(r)for r in g}).index(chosen) if selected else -1,leaseMinimum=min(lease_observations) if lease_observations else None,leaseMaximum=max(lease_observations) if lease_observations else None,expectedFullMapped=7618 if len(rows)==241920 and (data/'address-normalization.txt').is_file() and (data/'address-normalization.txt').read_text()=='terminal-road-types-v1\n' else 6 if len(rows)==6 else None,name=STEPS[i],town=t,type=typ,minimum=lo,maximum=hi,months=months,rows=len(g),addresses=len({key(r)for r in g}),latest=latest,selected=selected,key=chosen))
+  trend={'Points':[],'Start':'','End':'','ObservedMonths':0,'Sales':0,'MinimumY':0,'MaximumY':1}
+  if selected:
+   points=[]
+   for x in range(24):
+    index=end-23+x; label=f'{index//12:04d}-{index%12+1:02d}'
+    prices=[r['p'] for r in selected_rows if r['month']==label];value=median(prices)
+    points.append(dict(Month=label,X=x,Count=len(prices),MedianPrice=value,PriceThousands=None if value is None else value/1000))
+   observed=[p for p in points if p['Count']]
+   low=0 if not observed else (min(p['MedianPrice'] for p in observed)//50000)*50
+   high=1 if not observed else (max(p['MedianPrice'] for p in observed)/50000).to_integral_value(rounding=ROUND_CEILING)*50
+   if observed:low=max(0,low-50);high+=50
+   trend=dict(Points=points,Start=points[0]['Month'],End=points[-1]['Month'],ObservedMonths=len(observed),Sales=sum(p['Count']for p in observed),MinimumY=low,MaximumY=high)
+  result.append(dict(trend=trend,addressIndex=sorted({key(r)for r in g}).index(chosen) if selected else -1,leaseMinimum=min(lease_observations) if lease_observations else None,leaseMaximum=max(lease_observations) if lease_observations else None,expectedFullMapped=7618 if len(rows)==241920 and (data/'address-normalization.txt').is_file() and (data/'address-normalization.txt').read_text()=='terminal-road-types-v1\n' else 6 if len(rows)==6 else None,name=STEPS[i],town=t,type=typ,minimum=lo,maximum=hi,months=months,rows=len(g),addresses=len({key(r)for r in g}),latest=latest,selected=selected,key=chosen))
  return result
 
 def verify(code,output):

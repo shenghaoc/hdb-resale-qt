@@ -40,7 +40,7 @@ ApplicationWindow {
 
     Loader {
         active: Resales.buyerGate
-        sourceComponent: Component { BuyerGate { targetMap: map; targetList: transactionsList; townControl: townPicker; typeControl: typePicker; minimumControl: minimumPicker; priceControl: pricePicker; recencyControl: recencyPicker; attributionImage: oneMapLogo } }
+        sourceComponent: Component { BuyerGate { targetMap: map; targetList: transactionsList; townControl: townPicker; typeControl: typePicker; minimumControl: minimumPicker; priceControl: pricePicker; recencyControl: recencyPicker; attributionImage: oneMapLogo; targetTrendLoader: trendLoader } }
     }
 
     Loader {
@@ -68,10 +68,13 @@ ApplicationWindow {
         property int ticks: 0
         onTriggered: {
             ticks++
-            if (map.mapReady && map.error === Map.NoError && transactionsList.count === Resales.addressCount && Resales.visibleCount === 6 && oneMapLogo.status === Image.Ready) {
+            if (Resales.selectedMapKey === "") Resales.selectAddress(Resales.firstAddressKey)
+            if (map.mapReady && map.error === Map.NoError && transactionsList.count === Resales.addressCount && Resales.visibleCount === 6 && oneMapLogo.status === Image.Ready
+                    && trendLoader.item && trendLoader.item.pointCount === 24 && trendLoader.item.pointsAgree()) {
                 console.log("HDB_PACKAGE_SHELL")
                 console.log("HDB_PACKAGE_DATA")
                 console.log("HDB_PACKAGE_MAP_READY")
+                console.log("HDB_PACKAGE_CHART_READY")
                 stop(); packageExit.start()
             } else if (ticks > 100) { console.error("HDB_PACKAGE_FAIL readiness timeout"); stop(); Qt.quit() }
         }
@@ -334,7 +337,7 @@ ApplicationWindow {
                 }
                 ListView {
                     id: transactionsList
-                    Layout.fillWidth: true; Layout.preferredHeight: 220; Layout.minimumHeight: 120
+                    Layout.fillWidth: true; Layout.preferredHeight: Resales.selectedMapKey !== "" ? 140 : 220; Layout.minimumHeight: 120
                     clip: true; spacing: 3; model: Resales
                     activeFocusOnTab: true; keyNavigationEnabled: true
                     currentIndex: -1
@@ -394,6 +397,11 @@ ApplicationWindow {
                         width: detailsScroll.availableWidth; spacing: 8
                         Label { width: parent.width; text: Resales.selectedMetrics; wrapMode: Text.WordWrap; font.pixelSize: 13 }
                         Label { width: parent.width; text: Resales.selectedLease; wrapMode: Text.WordWrap; font.pixelSize: 12; color: "#455a64" }
+                        Loader {
+                            id: trendLoader; width: parent.width
+                            active: Resales.selectedMapKey !== ""
+                            sourceComponent: Component { BuyerTrendChart {} }
+                        }
                         Label { width: parent.width; text: "Recent matching transactions (up to 15)"; visible: Resales.selectedMapKey !== ""; font.bold: true }
                         Repeater {
                             model: JSON.parse(Resales.recentTransactionsJson)

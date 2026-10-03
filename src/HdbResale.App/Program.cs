@@ -75,6 +75,7 @@ internal static class Program
     {
         var options = new JsonSerializerOptions();
         options.Converters.Add(new JsonStringEnumConverter());
+        if (value is HistoricalExperimentReport) options.Converters.Add(new LegacyFactsJsonConverter());
         File.WriteAllText(path, JsonSerializer.Serialize(value,options)+"\n");
     }
 }
