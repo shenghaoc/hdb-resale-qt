@@ -9,7 +9,7 @@
     "src/HdbResale.Domain/BlockSummary.cs": "d6f04b2b05af34e3005f49e02a0fb044e2741348b87bed2af0948bc89326071e",
     "src/HdbResale.Domain/ExplorerState.cs": "02e62cf16d3c6fedce6a07611ee58f7478a368cfec0b6f048e729dc57aa2a935"
   },
-  "proof": "Both hashes independently executed by native Release host before chart. v2 changes only modeled fields already present in the pinned official CSV. Source/evidence/canonical/pin bytes remain unchanged. Chart series are separate presentation state and do not affect ImportResult serialization.",
+  "proof": "Final native Release at 82e6e99 reproduced both exact digests after the chart and report-only legacy converter. v2 changes only modeled fields already present in the pinned official CSV. Evidence/canonical/pin bytes remain unchanged. The M5 report reproduces its frozen byte hash; chart series do not affect ImportResult serialization.",
   "quality_counts": {
     "address": {
       "ExactAddress": 897,
@@ -27,5 +27,6 @@
       "mapped": 188573,
       "missing": 53347
     }
-  }
+  },
+  "frozen_m5_report_sha256": "d76614762c351eb121d3dd11ed03658e53daae1a5feeae36809a029b7e62d4be"
 }

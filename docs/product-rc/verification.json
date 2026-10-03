@@ -1,0 +1,7001 @@
+{
+  "production_source_commit": "82e6e9982885b75042ba18f1c3c148e6b4aeec8d",
+  "baseline_source_commit": "ff5cc7d1f8a61664408f35455e19a7fb8fff5227",
+  "platform": "Linux x64; Debian 13.6 XFCE/X11; .NET SDK 10.0.401/runtime10.0.12; Qt6.12.0; Linux Bridge0.4.0-beta",
+  "build_tests": {
+    "build-Debug": {
+      "exit": 0,
+      "log_sha256": "7d47896594a23620205a64d5238a0b47ac1c8c837c5db3643dd55f28e6b3902a",
+      "steps": [],
+      "max_state_ms": null,
+      "over_5000_ms_states": [],
+      "tail": [
+        "",
+        "Build succeeded.",
+        "    0 Warning(s)",
+        "    0 Error(s)",
+        "",
+        "Time Elapsed 00:00:07.60"
+      ]
+    },
+    "tests-Debug": {
+      "exit": 0,
+      "log_sha256": "71d317e57fae09e668524edd6a079f9d3e7d4b4ff56e802297818d1172767d1e",
+      "steps": [],
+      "max_state_ms": null,
+      "over_5000_ms_states": [],
+      "tail": [
+        "Test run for <checkout>/tests/HdbResale.Tests/bin/Debug/net10.0/HdbResale.Tests.dll (.NETCoreApp,Version=v10.0)",
+        "A total of 1 test files matched the specified pattern.",
+        "",
+        "Passed!  - Failed:     0, Passed:   191, Skipped:     0, Total:   191, Duration: 3 s - HdbResale.Tests.dll (net10.0)"
+      ]
+    },
+    "build-Release": {
+      "exit": 0,
+      "log_sha256": "8d36bf0c2289b9f8bf487a7ca98933cecf3577aeda4dbfccac9cf7ba5380883a",
+      "steps": [],
+      "max_state_ms": null,
+      "over_5000_ms_states": [],
+      "tail": [
+        "",
+        "Build succeeded.",
+        "    0 Warning(s)",
+        "    0 Error(s)",
+        "",
+        "Time Elapsed 00:00:05.31"
+      ]
+    },
+    "tests-Release": {
+      "exit": 0,
+      "log_sha256": "1e1b9501152b29def1fb70577103c766ed15ba5f9c0ad5258f9867e5ee066884",
+      "steps": [],
+      "max_state_ms": null,
+      "over_5000_ms_states": [],
+      "tail": [
+        "Test run for <checkout>/tests/HdbResale.Tests/bin/Release/net10.0/HdbResale.Tests.dll (.NETCoreApp,Version=v10.0)",
+        "A total of 1 test files matched the specified pattern.",
+        "",
+        "Passed!  - Failed:     0, Passed:   191, Skipped:     0, Total:   191, Duration: 3 s - HdbResale.Tests.dll (net10.0)"
+      ]
+    },
+    "python": {
+      "exit": 0,
+      "log_sha256": "d19965add5b467337b7522c7c277ad1c25673e4186f376870c99eb9239882139",
+      "steps": [],
+      "max_state_ms": null,
+      "over_5000_ms_states": [],
+      "tail": [
+        "test_reentrant_sequence_cannot_be_substituted_with_classic (test_scale_gate.ScaleGateTests.test_reentrant_sequence_cannot_be_substituted_with_classic) ... ok",
+        "",
+        "----------------------------------------------------------------------",
+        "Ran 39 tests in 2.826s",
+        "",
+        "OK"
+      ]
+    }
+  },
+  "native_positive_runs": {
+    "canonical/Debug": {
+      "exit": 0,
+      "log_sha256": "33db14e6bbec79e9d28dea84151675aee6595c2aeb289c1e4d225e32cb767d8b",
+      "steps": [],
+      "max_state_ms": null,
+      "over_5000_ms_states": []
+    },
+    "classic/Debug": {
+      "exit": 0,
+      "log_sha256": "13712492ab690a31157e84e38141155d3763f29274d54aad5442ba906b511dbd",
+      "seconds": 9.42,
+      "measurement_only": false,
+      "expanded_coverage": true,
+      "state_budget_ms": 10000,
+      "process_budget_seconds": 45,
+      "extended": false,
+      "reentrant": false,
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 345,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 23,
+          "destroyed": 0,
+          "last-create-ms": 314,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "filtered",
+          "ms": 175,
+          "rows": 9441,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 20,
+          "last-create-ms": -1,
+          "last-destroy-ms": 174,
+          "observed-ms": 47
+        },
+        {
+          "name": "budget-filtered",
+          "ms": 79,
+          "rows": 6469,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 54
+        },
+        {
+          "name": "selected",
+          "ms": 135,
+          "rows": 6469,
+          "delegates": 4,
+          "created": 1,
+          "destroyed": 0,
+          "last-create-ms": 104,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "empty-cleared",
+          "ms": 130,
+          "rows": 0,
+          "delegates": 0,
+          "created": 0,
+          "destroyed": 4,
+          "last-create-ms": -1,
+          "last-destroy-ms": 119,
+          "observed-ms": 21
+        },
+        {
+          "name": "reset",
+          "ms": 508,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 23,
+          "destroyed": 0,
+          "last-create-ms": 499,
+          "last-destroy-ms": -1,
+          "observed-ms": 474
+        },
+        {
+          "name": "zoomed",
+          "ms": 213,
+          "rows": 236791,
+          "delegates": 55,
+          "created": 55,
+          "destroyed": 23,
+          "last-create-ms": 81,
+          "last-destroy-ms": 204,
+          "observed-ms": -1
+        },
+        {
+          "name": "panned",
+          "ms": 187,
+          "rows": 236791,
+          "delegates": 43,
+          "created": 2,
+          "destroyed": 14,
+          "last-create-ms": 34,
+          "last-destroy-ms": 179,
+          "observed-ms": -1
+        },
+        {
+          "name": "recentered",
+          "ms": 213,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 23,
+          "destroyed": 43,
+          "last-create-ms": 51,
+          "last-destroy-ms": 199,
+          "observed-ms": -1
+        },
+        {
+          "name": "all-prices",
+          "ms": 628,
+          "rows": 241920,
+          "delegates": 23,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 617
+        }
+      ],
+      "max_state_ms": 628,
+      "over_5000_ms_states": []
+    },
+    "extended/Debug": {
+      "exit": 0,
+      "log_sha256": "bead2934851f720a5c53eea90decbebd741c13a71383d0f353bcaf0be50e7144",
+      "seconds": 13.06,
+      "measurement_only": false,
+      "expanded_coverage": true,
+      "state_budget_ms": 10000,
+      "process_budget_seconds": 60,
+      "extended": true,
+      "reentrant": false,
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 278,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 23,
+          "destroyed": 0,
+          "last-create-ms": 254,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "full",
+          "ms": 531,
+          "rows": 241920,
+          "delegates": 23,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 523
+        },
+        {
+          "name": "subset",
+          "ms": 194,
+          "rows": 9745,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 20,
+          "last-create-ms": -1,
+          "last-destroy-ms": 193,
+          "observed-ms": 43
+        },
+        {
+          "name": "different",
+          "ms": 169,
+          "rows": 12620,
+          "delegates": 2,
+          "created": 2,
+          "destroyed": 3,
+          "last-create-ms": 57,
+          "last-destroy-ms": 169,
+          "observed-ms": 54
+        },
+        {
+          "name": "empty",
+          "ms": 315,
+          "rows": 0,
+          "delegates": 0,
+          "created": 0,
+          "destroyed": 2,
+          "last-create-ms": -1,
+          "last-destroy-ms": 309,
+          "observed-ms": 21
+        },
+        {
+          "name": "reset",
+          "ms": 503,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 23,
+          "destroyed": 0,
+          "last-create-ms": 490,
+          "last-destroy-ms": -1,
+          "observed-ms": 482
+        },
+        {
+          "name": "full-restored",
+          "ms": 565,
+          "rows": 241920,
+          "delegates": 23,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 558
+        },
+        {
+          "name": "selected",
+          "ms": 105,
+          "rows": 241920,
+          "delegates": 24,
+          "created": 1,
+          "destroyed": 0,
+          "last-create-ms": 94,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "hidden-selection-cleared",
+          "ms": 328,
+          "rows": 12620,
+          "delegates": 2,
+          "created": 0,
+          "destroyed": 22,
+          "last-create-ms": -1,
+          "last-destroy-ms": 327,
+          "observed-ms": 36
+        },
+        {
+          "name": "full-again",
+          "ms": 630,
+          "rows": 241920,
+          "delegates": 23,
+          "created": 21,
+          "destroyed": 0,
+          "last-create-ms": 546,
+          "last-destroy-ms": -1,
+          "observed-ms": 535
+        },
+        {
+          "name": "repeat-subset",
+          "ms": 339,
+          "rows": 9745,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 20,
+          "last-create-ms": -1,
+          "last-destroy-ms": 339,
+          "observed-ms": 47
+        },
+        {
+          "name": "repeat-different",
+          "ms": 331,
+          "rows": 12620,
+          "delegates": 2,
+          "created": 2,
+          "destroyed": 3,
+          "last-create-ms": 44,
+          "last-destroy-ms": 331,
+          "observed-ms": 40
+        },
+        {
+          "name": "repeat-full",
+          "ms": 538,
+          "rows": 241920,
+          "delegates": 23,
+          "created": 21,
+          "destroyed": 0,
+          "last-create-ms": 518,
+          "last-destroy-ms": 0,
+          "observed-ms": 509
+        },
+        {
+          "name": "zoomed",
+          "ms": 365,
+          "rows": 241920,
+          "delegates": 55,
+          "created": 55,
+          "destroyed": 23,
+          "last-create-ms": 93,
+          "last-destroy-ms": 347,
+          "observed-ms": -1
+        },
+        {
+          "name": "panned",
+          "ms": 319,
+          "rows": 241920,
+          "delegates": 43,
+          "created": 2,
+          "destroyed": 14,
+          "last-create-ms": 30,
+          "last-destroy-ms": 314,
+          "observed-ms": -1
+        },
+        {
+          "name": "recentered",
+          "ms": 326,
+          "rows": 241920,
+          "delegates": 23,
+          "created": 23,
+          "destroyed": 43,
+          "last-create-ms": 47,
+          "last-destroy-ms": 319,
+          "observed-ms": -1
+        }
+      ],
+      "max_state_ms": 630,
+      "over_5000_ms_states": []
+    },
+    "reentrant/Debug": {
+      "exit": 0,
+      "log_sha256": "6a0e58bba6535016a69ae47b73937156f4d34fe55f05fc70d76e6dc33706ee0c",
+      "seconds": 12.6,
+      "measurement_only": false,
+      "expanded_coverage": true,
+      "state_budget_ms": 10000,
+      "process_budget_seconds": 45,
+      "extended": false,
+      "reentrant": true,
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 312,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 23,
+          "destroyed": 0,
+          "last-create-ms": 292,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "selected-retained-address",
+          "ms": 194,
+          "rows": 236791,
+          "delegates": 24,
+          "created": 1,
+          "destroyed": 0,
+          "last-create-ms": 150,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "selected-in-town",
+          "ms": 450,
+          "rows": 9441,
+          "delegates": 120,
+          "created": 119,
+          "destroyed": 23,
+          "last-create-ms": 360,
+          "last-destroy-ms": 442,
+          "observed-ms": 61
+        },
+        {
+          "name": "hidden-transaction-address-retained",
+          "ms": 468,
+          "rows": 6469,
+          "delegates": 102,
+          "created": 0,
+          "destroyed": 18,
+          "last-create-ms": -1,
+          "last-destroy-ms": 463,
+          "observed-ms": 99
+        },
+        {
+          "name": "reset",
+          "ms": 910,
+          "rows": 236791,
+          "delegates": 24,
+          "created": 23,
+          "destroyed": 101,
+          "last-create-ms": 611,
+          "last-destroy-ms": 880,
+          "observed-ms": 560
+        },
+        {
+          "name": "selected-for-burst",
+          "ms": 51,
+          "rows": 236791,
+          "delegates": 24,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "reentrant-burst-drained",
+          "ms": 1290,
+          "rows": 241920,
+          "delegates": 23,
+          "created": 23,
+          "destroyed": 24,
+          "last-create-ms": 1139,
+          "last-destroy-ms": 1280,
+          "observed-ms": 1121
+        },
+        {
+          "name": "final-reset",
+          "ms": 700,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 691
+        }
+      ],
+      "max_state_ms": 1290,
+      "over_5000_ms_states": []
+    },
+    "old-classic/Debug": {
+      "exit": 0,
+      "log_sha256": "3e9fd1bc79832c79400b36a7d76eff8b7f0596035703bd2f051866fa2b84e2bb",
+      "seconds": 7.99,
+      "measurement_only": false,
+      "expanded_coverage": false,
+      "state_budget_ms": 5000,
+      "process_budget_seconds": 25,
+      "extended": false,
+      "reentrant": false,
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 244,
+          "rows": 236791,
+          "delegates": 22,
+          "created": 22,
+          "destroyed": 0,
+          "last-create-ms": 225,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "filtered",
+          "ms": 169,
+          "rows": 9441,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 19,
+          "last-create-ms": -1,
+          "last-destroy-ms": 168,
+          "observed-ms": 56
+        },
+        {
+          "name": "budget-filtered",
+          "ms": 52,
+          "rows": 6469,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 37
+        },
+        {
+          "name": "selected",
+          "ms": 222,
+          "rows": 6469,
+          "delegates": 4,
+          "created": 1,
+          "destroyed": 0,
+          "last-create-ms": 109,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "empty-cleared",
+          "ms": 119,
+          "rows": 0,
+          "delegates": 0,
+          "created": 0,
+          "destroyed": 4,
+          "last-create-ms": -1,
+          "last-destroy-ms": 118,
+          "observed-ms": 23
+        },
+        {
+          "name": "reset",
+          "ms": 522,
+          "rows": 236791,
+          "delegates": 22,
+          "created": 22,
+          "destroyed": 0,
+          "last-create-ms": 512,
+          "last-destroy-ms": -1,
+          "observed-ms": 496
+        },
+        {
+          "name": "zoomed",
+          "ms": 196,
+          "rows": 236791,
+          "delegates": 43,
+          "created": 43,
+          "destroyed": 22,
+          "last-create-ms": 66,
+          "last-destroy-ms": 185,
+          "observed-ms": -1
+        },
+        {
+          "name": "panned",
+          "ms": 148,
+          "rows": 236791,
+          "delegates": 36,
+          "created": 3,
+          "destroyed": 10,
+          "last-create-ms": 27,
+          "last-destroy-ms": 145,
+          "observed-ms": -1
+        },
+        {
+          "name": "recentered",
+          "ms": 303,
+          "rows": 236791,
+          "delegates": 22,
+          "created": 22,
+          "destroyed": 36,
+          "last-create-ms": 47,
+          "last-destroy-ms": 301,
+          "observed-ms": -1
+        },
+        {
+          "name": "all-prices",
+          "ms": 501,
+          "rows": 241920,
+          "delegates": 22,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 494
+        }
+      ],
+      "max_state_ms": 522,
+      "over_5000_ms_states": []
+    },
+    "old-extended/Debug": {
+      "exit": 0,
+      "log_sha256": "6e5e863d80cbfba69748edf6379df38b4892b929c0d730499fecb10f8549c2a9",
+      "seconds": 10.71,
+      "measurement_only": false,
+      "expanded_coverage": false,
+      "state_budget_ms": 5000,
+      "process_budget_seconds": 45,
+      "extended": true,
+      "reentrant": false,
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 261,
+          "rows": 236791,
+          "delegates": 22,
+          "created": 22,
+          "destroyed": 0,
+          "last-create-ms": 241,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "full",
+          "ms": 573,
+          "rows": 241920,
+          "delegates": 22,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 567
+        },
+        {
+          "name": "subset",
+          "ms": 166,
+          "rows": 9745,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 19,
+          "last-create-ms": -1,
+          "last-destroy-ms": 165,
+          "observed-ms": 40
+        },
+        {
+          "name": "different",
+          "ms": 158,
+          "rows": 12620,
+          "delegates": 2,
+          "created": 2,
+          "destroyed": 3,
+          "last-create-ms": 51,
+          "last-destroy-ms": 151,
+          "observed-ms": 49
+        },
+        {
+          "name": "empty",
+          "ms": 317,
+          "rows": 0,
+          "delegates": 0,
+          "created": 0,
+          "destroyed": 2,
+          "last-create-ms": -1,
+          "last-destroy-ms": 315,
+          "observed-ms": 25
+        },
+        {
+          "name": "reset",
+          "ms": 524,
+          "rows": 236791,
+          "delegates": 22,
+          "created": 22,
+          "destroyed": 0,
+          "last-create-ms": 517,
+          "last-destroy-ms": -1,
+          "observed-ms": 504
+        },
+        {
+          "name": "full-restored",
+          "ms": 497,
+          "rows": 241920,
+          "delegates": 22,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 492
+        },
+        {
+          "name": "selected",
+          "ms": 97,
+          "rows": 241920,
+          "delegates": 23,
+          "created": 1,
+          "destroyed": 0,
+          "last-create-ms": 89,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "hidden-selection-cleared",
+          "ms": 430,
+          "rows": 12620,
+          "delegates": 2,
+          "created": 0,
+          "destroyed": 21,
+          "last-create-ms": -1,
+          "last-destroy-ms": 427,
+          "observed-ms": 138
+        },
+        {
+          "name": "full-again",
+          "ms": 436,
+          "rows": 241920,
+          "delegates": 22,
+          "created": 20,
+          "destroyed": 0,
+          "last-create-ms": 426,
+          "last-destroy-ms": -1,
+          "observed-ms": 416
+        },
+        {
+          "name": "repeat-subset",
+          "ms": 331,
+          "rows": 9745,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 19,
+          "last-create-ms": -1,
+          "last-destroy-ms": 330,
+          "observed-ms": 40
+        },
+        {
+          "name": "repeat-different",
+          "ms": 353,
+          "rows": 12620,
+          "delegates": 2,
+          "created": 2,
+          "destroyed": 3,
+          "last-create-ms": 50,
+          "last-destroy-ms": 337,
+          "observed-ms": 47
+        },
+        {
+          "name": "repeat-full",
+          "ms": 501,
+          "rows": 241920,
+          "delegates": 22,
+          "created": 20,
+          "destroyed": 0,
+          "last-create-ms": 497,
+          "last-destroy-ms": -1,
+          "observed-ms": 482
+        },
+        {
+          "name": "zoomed",
+          "ms": 319,
+          "rows": 241920,
+          "delegates": 43,
+          "created": 43,
+          "destroyed": 22,
+          "last-create-ms": 32,
+          "last-destroy-ms": 316,
+          "observed-ms": -1
+        },
+        {
+          "name": "panned",
+          "ms": 305,
+          "rows": 241920,
+          "delegates": 36,
+          "created": 3,
+          "destroyed": 10,
+          "last-create-ms": 18,
+          "last-destroy-ms": 303,
+          "observed-ms": -1
+        },
+        {
+          "name": "recentered",
+          "ms": 298,
+          "rows": 241920,
+          "delegates": 22,
+          "created": 22,
+          "destroyed": 36,
+          "last-create-ms": 26,
+          "last-destroy-ms": 296,
+          "observed-ms": -1
+        }
+      ],
+      "max_state_ms": 573,
+      "over_5000_ms_states": []
+    },
+    "old-reentrant/Debug": {
+      "exit": 0,
+      "log_sha256": "61f3dbe464da14462fd3eaa08f6dfbceb34555cfba2993d55d3c22a069a81789",
+      "seconds": 9.24,
+      "measurement_only": false,
+      "expanded_coverage": false,
+      "state_budget_ms": 5000,
+      "process_budget_seconds": 25,
+      "extended": false,
+      "reentrant": true,
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 289,
+          "rows": 236791,
+          "delegates": 22,
+          "created": 22,
+          "destroyed": 0,
+          "last-create-ms": 265,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "selected-retained-address",
+          "ms": 136,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 1,
+          "destroyed": 0,
+          "last-create-ms": 101,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "selected-in-town",
+          "ms": 219,
+          "rows": 9441,
+          "delegates": 96,
+          "created": 95,
+          "destroyed": 22,
+          "last-create-ms": 158,
+          "last-destroy-ms": 215,
+          "observed-ms": 57
+        },
+        {
+          "name": "hidden-transaction-address-retained",
+          "ms": 274,
+          "rows": 6469,
+          "delegates": 92,
+          "created": 0,
+          "destroyed": 4,
+          "last-create-ms": -1,
+          "last-destroy-ms": 253,
+          "observed-ms": 92
+        },
+        {
+          "name": "reset",
+          "ms": 1052,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 22,
+          "destroyed": 91,
+          "last-create-ms": 835,
+          "last-destroy-ms": 1046,
+          "observed-ms": 773
+        },
+        {
+          "name": "selected-for-burst",
+          "ms": 62,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "reentrant-burst-drained",
+          "ms": 1446,
+          "rows": 241920,
+          "delegates": 22,
+          "created": 22,
+          "destroyed": 23,
+          "last-create-ms": 1328,
+          "last-destroy-ms": 1439,
+          "observed-ms": 1306
+        },
+        {
+          "name": "final-reset",
+          "ms": 529,
+          "rows": 236791,
+          "delegates": 22,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 524
+        }
+      ],
+      "max_state_ms": 1446,
+      "over_5000_ms_states": []
+    },
+    "presentation-old/Debug": {
+      "exit": 0,
+      "log_sha256": "3dc3b45e73651eb5af40b9f2d5754be9c15eea0023b13521fc3f08386e9f817e",
+      "seconds": 14.46,
+      "expanded_coverage": false,
+      "state_budget_ms": 5000,
+      "process_budget_seconds": 45,
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 344,
+          "rows": 236791,
+          "mapped": 1921,
+          "in-view": 1921,
+          "objects": 22,
+          "clusters": 22,
+          "created": 22,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "full",
+          "ms": 831,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 0,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "town",
+          "ms": 315,
+          "rows": 9745,
+          "mapped": 279,
+          "in-view": 279,
+          "objects": 3,
+          "clusters": 3,
+          "created": 0,
+          "destroyed": 19,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "different",
+          "ms": 151,
+          "rows": 12620,
+          "mapped": 25,
+          "in-view": 25,
+          "objects": 2,
+          "clusters": 2,
+          "created": 2,
+          "destroyed": 3,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "budget",
+          "ms": 142,
+          "rows": 7750,
+          "mapped": 10,
+          "in-view": 10,
+          "objects": 1,
+          "clusters": 1,
+          "created": 0,
+          "destroyed": 1,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "small-to-full",
+          "ms": 793,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 21,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "empty",
+          "ms": 122,
+          "rows": 0,
+          "mapped": 0,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 22,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "empty-to-full",
+          "ms": 535,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 22,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "selection-only",
+          "ms": 138,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 23,
+          "clusters": 22,
+          "created": 1,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "individuals",
+          "ms": 271,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 91,
+          "objects": 91,
+          "clusters": 0,
+          "created": 90,
+          "destroyed": 22,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "selection-offscreen",
+          "ms": 286,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 91,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.2,
+          "longitude": 103.6
+        },
+        {
+          "name": "selection-returned",
+          "ms": 60,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 91,
+          "objects": 91,
+          "clusters": 0,
+          "created": 91,
+          "destroyed": 0,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "domain-hidden-cleared",
+          "ms": 259,
+          "rows": 12620,
+          "mapped": 25,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 91,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "recentered",
+          "ms": 650,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 22,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-twelve",
+          "ms": 209,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1751,
+          "objects": 43,
+          "clusters": 41,
+          "created": 43,
+          "destroyed": 22,
+          "zoom": 12,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-thirteen",
+          "ms": 192,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 594,
+          "objects": 26,
+          "clusters": 23,
+          "created": 26,
+          "destroyed": 43,
+          "zoom": 13,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-fourteen",
+          "ms": 149,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 111,
+          "objects": 12,
+          "clusters": 10,
+          "created": 11,
+          "destroyed": 25,
+          "zoom": 14,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-fifteen",
+          "ms": 313,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 12,
+          "zoom": 15,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "before-burst",
+          "ms": 67,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 22,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "rapid-reentrant",
+          "ms": 1786,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 22,
+          "destroyed": 22,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "rapid-viewport",
+          "ms": 361,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 91,
+          "objects": 91,
+          "clusters": 0,
+          "created": 91,
+          "destroyed": 22,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "reset",
+          "ms": 936,
+          "rows": 236791,
+          "mapped": 1921,
+          "in-view": 1921,
+          "objects": 22,
+          "clusters": 22,
+          "created": 22,
+          "destroyed": 91,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        }
+      ],
+      "max_state_ms": 1786,
+      "over_5000_ms_states": []
+    },
+    "presentation-expanded/Debug": {
+      "exit": 0,
+      "log_sha256": "140a61ed6f27ff36df9b7767c2cdd019e1495631e71b9adf7b56a58b3794ee76",
+      "seconds": 23.25,
+      "expanded_coverage": true,
+      "state_budget_ms": 10000,
+      "process_budget_seconds": 60,
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 787,
+          "rows": 236791,
+          "mapped": 7615,
+          "in-view": 7615,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "full",
+          "ms": 767,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 0,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "town",
+          "ms": 200,
+          "rows": 9745,
+          "mapped": 340,
+          "in-view": 340,
+          "objects": 3,
+          "clusters": 3,
+          "created": 0,
+          "destroyed": 20,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "different",
+          "ms": 254,
+          "rows": 12620,
+          "mapped": 197,
+          "in-view": 197,
+          "objects": 2,
+          "clusters": 2,
+          "created": 2,
+          "destroyed": 3,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "budget",
+          "ms": 170,
+          "rows": 7750,
+          "mapped": 145,
+          "in-view": 145,
+          "objects": 2,
+          "clusters": 2,
+          "created": 0,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "small-to-full",
+          "ms": 1156,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 21,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "empty",
+          "ms": 185,
+          "rows": 0,
+          "mapped": 0,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 23,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "empty-to-full",
+          "ms": 1111,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "selection-only",
+          "ms": 482,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 24,
+          "clusters": 23,
+          "created": 1,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "individuals",
+          "ms": 749,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 107,
+          "objects": 107,
+          "clusters": 0,
+          "created": 106,
+          "destroyed": 23,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "selection-offscreen",
+          "ms": 360,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 107,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.2,
+          "longitude": 103.6
+        },
+        {
+          "name": "selection-returned",
+          "ms": 135,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 107,
+          "objects": 107,
+          "clusters": 0,
+          "created": 107,
+          "destroyed": 0,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "domain-hidden-cleared",
+          "ms": 276,
+          "rows": 12620,
+          "mapped": 197,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 107,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "recentered",
+          "ms": 679,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-twelve",
+          "ms": 448,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 6256,
+          "objects": 55,
+          "clusters": 54,
+          "created": 55,
+          "destroyed": 23,
+          "zoom": 12,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-thirteen",
+          "ms": 304,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 1593,
+          "objects": 50,
+          "clusters": 47,
+          "created": 49,
+          "destroyed": 54,
+          "zoom": 13,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-fourteen",
+          "ms": 287,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 299,
+          "objects": 28,
+          "clusters": 26,
+          "created": 27,
+          "destroyed": 49,
+          "zoom": 14,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-fifteen",
+          "ms": 246,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 4,
+          "objects": 4,
+          "clusters": 0,
+          "created": 4,
+          "destroyed": 28,
+          "zoom": 15,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "before-burst",
+          "ms": 370,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 4,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "rapid-reentrant",
+          "ms": 2148,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 23,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "rapid-viewport",
+          "ms": 381,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 107,
+          "objects": 107,
+          "clusters": 0,
+          "created": 107,
+          "destroyed": 23,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "reset",
+          "ms": 1208,
+          "rows": 236791,
+          "mapped": 7615,
+          "in-view": 7615,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 107,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        }
+      ],
+      "max_state_ms": 2148,
+      "over_5000_ms_states": []
+    },
+    "buyer-old/Debug": {
+      "exit": 0,
+      "log_sha256": "d09dd60b6c6b12ce2ccf7de9fc5de47f5fcc263ea780b388de8a7813108f559a",
+      "seconds": 10.32,
+      "expanded_coverage": false,
+      "state_budget_ms": 5000,
+      "process_budget_seconds": 45,
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 307,
+          "transactions": 236791,
+          "addresses": 9746
+        },
+        {
+          "name": "full",
+          "ms": 748,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "town",
+          "ms": 495,
+          "transactions": 9745,
+          "addresses": 363
+        },
+        {
+          "name": "type",
+          "ms": 57,
+          "transactions": 5144,
+          "addresses": 214
+        },
+        {
+          "name": "minimum",
+          "ms": 28,
+          "transactions": 3817,
+          "addresses": 209
+        },
+        {
+          "name": "budget",
+          "ms": 51,
+          "transactions": 3779,
+          "addresses": 209
+        },
+        {
+          "name": "list-selected",
+          "ms": 97,
+          "transactions": 3779,
+          "addresses": 209
+        },
+        {
+          "name": "recent-window",
+          "ms": 147,
+          "transactions": 378,
+          "addresses": 158
+        },
+        {
+          "name": "empty",
+          "ms": 252,
+          "transactions": 0,
+          "addresses": 0
+        },
+        {
+          "name": "reset",
+          "ms": 657,
+          "transactions": 236791,
+          "addresses": 9746
+        },
+        {
+          "name": "address-detail",
+          "ms": 959,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "map-selected",
+          "ms": 71,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "hidden-address",
+          "ms": 232,
+          "transactions": 12620,
+          "addresses": 511
+        },
+        {
+          "name": "reentry",
+          "ms": 503,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "viewport-burst",
+          "ms": 251,
+          "transactions": 241920,
+          "addresses": 9755
+        }
+      ],
+      "max_state_ms": 959,
+      "over_5000_ms_states": []
+    },
+    "buyer-expanded/Debug": {
+      "exit": 0,
+      "log_sha256": "7960b98ed54c232767b33f2dc105997ad348a9bf71048221433b1b1b0885e5b4",
+      "seconds": 11.46,
+      "expanded_coverage": true,
+      "state_budget_ms": 10000,
+      "process_budget_seconds": 60,
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 286,
+          "transactions": 236791,
+          "addresses": 9746
+        },
+        {
+          "name": "full",
+          "ms": 482,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "town",
+          "ms": 213,
+          "transactions": 9745,
+          "addresses": 363
+        },
+        {
+          "name": "type",
+          "ms": 80,
+          "transactions": 5144,
+          "addresses": 214
+        },
+        {
+          "name": "minimum",
+          "ms": 37,
+          "transactions": 3817,
+          "addresses": 209
+        },
+        {
+          "name": "budget",
+          "ms": 35,
+          "transactions": 3779,
+          "addresses": 209
+        },
+        {
+          "name": "list-selected",
+          "ms": 125,
+          "transactions": 3779,
+          "addresses": 209
+        },
+        {
+          "name": "recent-window",
+          "ms": 46,
+          "transactions": 378,
+          "addresses": 158
+        },
+        {
+          "name": "empty",
+          "ms": 114,
+          "transactions": 0,
+          "addresses": 0
+        },
+        {
+          "name": "reset",
+          "ms": 609,
+          "transactions": 236791,
+          "addresses": 9746
+        },
+        {
+          "name": "address-detail",
+          "ms": 820,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "map-selected",
+          "ms": 86,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "hidden-address",
+          "ms": 231,
+          "transactions": 12620,
+          "addresses": 511
+        },
+        {
+          "name": "reentry",
+          "ms": 570,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "viewport-burst",
+          "ms": 297,
+          "transactions": 241920,
+          "addresses": 9755
+        }
+      ],
+      "max_state_ms": 820,
+      "over_5000_ms_states": []
+    },
+    "canonical/Release": {
+      "exit": 0,
+      "log_sha256": "33db14e6bbec79e9d28dea84151675aee6595c2aeb289c1e4d225e32cb767d8b",
+      "steps": [],
+      "max_state_ms": null,
+      "over_5000_ms_states": []
+    },
+    "classic/Release": {
+      "exit": 0,
+      "log_sha256": "877ba690090be5f745b403738f926c97b26dac918e74ea21a46bb152e3e4bfa1",
+      "seconds": 9.26,
+      "measurement_only": false,
+      "expanded_coverage": true,
+      "state_budget_ms": 10000,
+      "process_budget_seconds": 45,
+      "extended": false,
+      "reentrant": false,
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 284,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 23,
+          "destroyed": 0,
+          "last-create-ms": 258,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "filtered",
+          "ms": 175,
+          "rows": 9441,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 20,
+          "last-create-ms": -1,
+          "last-destroy-ms": 157,
+          "observed-ms": 46
+        },
+        {
+          "name": "budget-filtered",
+          "ms": 41,
+          "rows": 6469,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 32
+        },
+        {
+          "name": "selected",
+          "ms": 112,
+          "rows": 6469,
+          "delegates": 4,
+          "created": 1,
+          "destroyed": 0,
+          "last-create-ms": 91,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "empty-cleared",
+          "ms": 111,
+          "rows": 0,
+          "delegates": 0,
+          "created": 0,
+          "destroyed": 4,
+          "last-create-ms": -1,
+          "last-destroy-ms": 111,
+          "observed-ms": 22
+        },
+        {
+          "name": "reset",
+          "ms": 349,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 23,
+          "destroyed": 0,
+          "last-create-ms": 340,
+          "last-destroy-ms": 0,
+          "observed-ms": 330
+        },
+        {
+          "name": "zoomed",
+          "ms": 235,
+          "rows": 236791,
+          "delegates": 55,
+          "created": 55,
+          "destroyed": 23,
+          "last-create-ms": 84,
+          "last-destroy-ms": 225,
+          "observed-ms": -1
+        },
+        {
+          "name": "panned",
+          "ms": 224,
+          "rows": 236791,
+          "delegates": 43,
+          "created": 2,
+          "destroyed": 14,
+          "last-create-ms": 35,
+          "last-destroy-ms": 218,
+          "observed-ms": -1
+        },
+        {
+          "name": "recentered",
+          "ms": 208,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 23,
+          "destroyed": 43,
+          "last-create-ms": 44,
+          "last-destroy-ms": 199,
+          "observed-ms": -1
+        },
+        {
+          "name": "all-prices",
+          "ms": 728,
+          "rows": 241920,
+          "delegates": 23,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 716
+        }
+      ],
+      "max_state_ms": 728,
+      "over_5000_ms_states": []
+    },
+    "extended/Release": {
+      "exit": 0,
+      "log_sha256": "9617fe2addde7109c083b477b7ff29627cdd2c64cc2e223f73d81f3b27e47042",
+      "seconds": 14.62,
+      "measurement_only": false,
+      "expanded_coverage": true,
+      "state_budget_ms": 10000,
+      "process_budget_seconds": 60,
+      "extended": true,
+      "reentrant": false,
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 321,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 23,
+          "destroyed": 0,
+          "last-create-ms": 279,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "full",
+          "ms": 456,
+          "rows": 241920,
+          "delegates": 23,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 448
+        },
+        {
+          "name": "subset",
+          "ms": 172,
+          "rows": 9745,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 20,
+          "last-create-ms": -1,
+          "last-destroy-ms": 171,
+          "observed-ms": 41
+        },
+        {
+          "name": "different",
+          "ms": 178,
+          "rows": 12620,
+          "delegates": 2,
+          "created": 2,
+          "destroyed": 3,
+          "last-create-ms": 46,
+          "last-destroy-ms": 177,
+          "observed-ms": 43
+        },
+        {
+          "name": "empty",
+          "ms": 319,
+          "rows": 0,
+          "delegates": 0,
+          "created": 0,
+          "destroyed": 2,
+          "last-create-ms": -1,
+          "last-destroy-ms": 310,
+          "observed-ms": 20
+        },
+        {
+          "name": "reset",
+          "ms": 601,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 23,
+          "destroyed": 0,
+          "last-create-ms": 590,
+          "last-destroy-ms": -1,
+          "observed-ms": 574
+        },
+        {
+          "name": "full-restored",
+          "ms": 520,
+          "rows": 241920,
+          "delegates": 23,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 513
+        },
+        {
+          "name": "selected",
+          "ms": 100,
+          "rows": 241920,
+          "delegates": 24,
+          "created": 1,
+          "destroyed": 0,
+          "last-create-ms": 89,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "hidden-selection-cleared",
+          "ms": 322,
+          "rows": 12620,
+          "delegates": 2,
+          "created": 0,
+          "destroyed": 22,
+          "last-create-ms": -1,
+          "last-destroy-ms": 321,
+          "observed-ms": 30
+        },
+        {
+          "name": "full-again",
+          "ms": 385,
+          "rows": 241920,
+          "delegates": 23,
+          "created": 21,
+          "destroyed": 0,
+          "last-create-ms": 376,
+          "last-destroy-ms": -1,
+          "observed-ms": 365
+        },
+        {
+          "name": "repeat-subset",
+          "ms": 339,
+          "rows": 9745,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 20,
+          "last-create-ms": -1,
+          "last-destroy-ms": 331,
+          "observed-ms": 41
+        },
+        {
+          "name": "repeat-different",
+          "ms": 417,
+          "rows": 12620,
+          "delegates": 2,
+          "created": 2,
+          "destroyed": 3,
+          "last-create-ms": 81,
+          "last-destroy-ms": 406,
+          "observed-ms": 78
+        },
+        {
+          "name": "repeat-full",
+          "ms": 786,
+          "rows": 241920,
+          "delegates": 23,
+          "created": 21,
+          "destroyed": 0,
+          "last-create-ms": 779,
+          "last-destroy-ms": -1,
+          "observed-ms": 768
+        },
+        {
+          "name": "zoomed",
+          "ms": 325,
+          "rows": 241920,
+          "delegates": 55,
+          "created": 55,
+          "destroyed": 23,
+          "last-create-ms": 67,
+          "last-destroy-ms": 319,
+          "observed-ms": -1
+        },
+        {
+          "name": "panned",
+          "ms": 330,
+          "rows": 241920,
+          "delegates": 43,
+          "created": 2,
+          "destroyed": 14,
+          "last-create-ms": 24,
+          "last-destroy-ms": 326,
+          "observed-ms": -1
+        },
+        {
+          "name": "recentered",
+          "ms": 323,
+          "rows": 241920,
+          "delegates": 23,
+          "created": 23,
+          "destroyed": 43,
+          "last-create-ms": 31,
+          "last-destroy-ms": 317,
+          "observed-ms": -1
+        }
+      ],
+      "max_state_ms": 786,
+      "over_5000_ms_states": []
+    },
+    "reentrant/Release": {
+      "exit": 0,
+      "log_sha256": "79d3af5150f2e57bdfc066112df53a6276ee1338801dff4ba16927a94a271223",
+      "seconds": 10.59,
+      "measurement_only": false,
+      "expanded_coverage": true,
+      "state_budget_ms": 10000,
+      "process_budget_seconds": 45,
+      "extended": false,
+      "reentrant": true,
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 350,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 23,
+          "destroyed": 0,
+          "last-create-ms": 298,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "selected-retained-address",
+          "ms": 208,
+          "rows": 236791,
+          "delegates": 24,
+          "created": 1,
+          "destroyed": 0,
+          "last-create-ms": 154,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "selected-in-town",
+          "ms": 285,
+          "rows": 9441,
+          "delegates": 120,
+          "created": 119,
+          "destroyed": 23,
+          "last-create-ms": 281,
+          "last-destroy-ms": 274,
+          "observed-ms": 55
+        },
+        {
+          "name": "hidden-transaction-address-retained",
+          "ms": 286,
+          "rows": 6469,
+          "delegates": 102,
+          "created": 0,
+          "destroyed": 18,
+          "last-create-ms": -1,
+          "last-destroy-ms": 282,
+          "observed-ms": 69
+        },
+        {
+          "name": "reset",
+          "ms": 697,
+          "rows": 236791,
+          "delegates": 24,
+          "created": 23,
+          "destroyed": 101,
+          "last-create-ms": 472,
+          "last-destroy-ms": 687,
+          "observed-ms": 389
+        },
+        {
+          "name": "selected-for-burst",
+          "ms": 55,
+          "rows": 236791,
+          "delegates": 24,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "reentrant-burst-drained",
+          "ms": 1046,
+          "rows": 241920,
+          "delegates": 23,
+          "created": 23,
+          "destroyed": 24,
+          "last-create-ms": 904,
+          "last-destroy-ms": 1028,
+          "observed-ms": 859
+        },
+        {
+          "name": "final-reset",
+          "ms": 450,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 439
+        }
+      ],
+      "max_state_ms": 1046,
+      "over_5000_ms_states": []
+    },
+    "old-classic/Release": {
+      "exit": 0,
+      "log_sha256": "4a787079f1403d1b87c0736c74a6c62e1da66ba7f181ae93a8a9e610997bf4aa",
+      "seconds": 8.11,
+      "measurement_only": false,
+      "expanded_coverage": false,
+      "state_budget_ms": 5000,
+      "process_budget_seconds": 25,
+      "extended": false,
+      "reentrant": false,
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 222,
+          "rows": 236791,
+          "delegates": 22,
+          "created": 22,
+          "destroyed": 0,
+          "last-create-ms": 207,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "filtered",
+          "ms": 185,
+          "rows": 9441,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 19,
+          "last-create-ms": -1,
+          "last-destroy-ms": 184,
+          "observed-ms": 58
+        },
+        {
+          "name": "budget-filtered",
+          "ms": 117,
+          "rows": 6469,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 96
+        },
+        {
+          "name": "selected",
+          "ms": 113,
+          "rows": 6469,
+          "delegates": 4,
+          "created": 1,
+          "destroyed": 0,
+          "last-create-ms": 85,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "empty-cleared",
+          "ms": 100,
+          "rows": 0,
+          "delegates": 0,
+          "created": 0,
+          "destroyed": 4,
+          "last-create-ms": -1,
+          "last-destroy-ms": 100,
+          "observed-ms": 21
+        },
+        {
+          "name": "reset",
+          "ms": 527,
+          "rows": 236791,
+          "delegates": 22,
+          "created": 22,
+          "destroyed": 0,
+          "last-create-ms": 522,
+          "last-destroy-ms": 0,
+          "observed-ms": 492
+        },
+        {
+          "name": "zoomed",
+          "ms": 181,
+          "rows": 236791,
+          "delegates": 43,
+          "created": 43,
+          "destroyed": 22,
+          "last-create-ms": 75,
+          "last-destroy-ms": 178,
+          "observed-ms": -1
+        },
+        {
+          "name": "panned",
+          "ms": 195,
+          "rows": 236791,
+          "delegates": 36,
+          "created": 3,
+          "destroyed": 10,
+          "last-create-ms": 24,
+          "last-destroy-ms": 191,
+          "observed-ms": -1
+        },
+        {
+          "name": "recentered",
+          "ms": 318,
+          "rows": 236791,
+          "delegates": 22,
+          "created": 22,
+          "destroyed": 36,
+          "last-create-ms": 45,
+          "last-destroy-ms": 316,
+          "observed-ms": -1
+        },
+        {
+          "name": "all-prices",
+          "ms": 428,
+          "rows": 241920,
+          "delegates": 22,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 422
+        }
+      ],
+      "max_state_ms": 527,
+      "over_5000_ms_states": []
+    },
+    "old-extended/Release": {
+      "exit": 0,
+      "log_sha256": "46b3f4d2fda4fc9448b66b375ea5b133b4d9cad2185310cf11ecd362a3afb742",
+      "seconds": 10.65,
+      "measurement_only": false,
+      "expanded_coverage": false,
+      "state_budget_ms": 5000,
+      "process_budget_seconds": 45,
+      "extended": true,
+      "reentrant": false,
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 254,
+          "rows": 236791,
+          "delegates": 22,
+          "created": 22,
+          "destroyed": 0,
+          "last-create-ms": 233,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "full",
+          "ms": 599,
+          "rows": 241920,
+          "delegates": 22,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 592
+        },
+        {
+          "name": "subset",
+          "ms": 154,
+          "rows": 9745,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 19,
+          "last-create-ms": -1,
+          "last-destroy-ms": 153,
+          "observed-ms": 37
+        },
+        {
+          "name": "different",
+          "ms": 167,
+          "rows": 12620,
+          "delegates": 2,
+          "created": 2,
+          "destroyed": 3,
+          "last-create-ms": 46,
+          "last-destroy-ms": 149,
+          "observed-ms": 43
+        },
+        {
+          "name": "empty",
+          "ms": 316,
+          "rows": 0,
+          "delegates": 0,
+          "created": 0,
+          "destroyed": 2,
+          "last-create-ms": -1,
+          "last-destroy-ms": 314,
+          "observed-ms": 24
+        },
+        {
+          "name": "reset",
+          "ms": 502,
+          "rows": 236791,
+          "delegates": 22,
+          "created": 22,
+          "destroyed": 0,
+          "last-create-ms": 499,
+          "last-destroy-ms": -1,
+          "observed-ms": 481
+        },
+        {
+          "name": "full-restored",
+          "ms": 508,
+          "rows": 241920,
+          "delegates": 22,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 500
+        },
+        {
+          "name": "selected",
+          "ms": 117,
+          "rows": 241920,
+          "delegates": 23,
+          "created": 1,
+          "destroyed": 0,
+          "last-create-ms": 114,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "hidden-selection-cleared",
+          "ms": 381,
+          "rows": 12620,
+          "delegates": 2,
+          "created": 0,
+          "destroyed": 21,
+          "last-create-ms": -1,
+          "last-destroy-ms": 365,
+          "observed-ms": 75
+        },
+        {
+          "name": "full-again",
+          "ms": 351,
+          "rows": 241920,
+          "delegates": 22,
+          "created": 20,
+          "destroyed": 0,
+          "last-create-ms": 342,
+          "last-destroy-ms": -1,
+          "observed-ms": 331
+        },
+        {
+          "name": "repeat-subset",
+          "ms": 349,
+          "rows": 9745,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 19,
+          "last-create-ms": -1,
+          "last-destroy-ms": 348,
+          "observed-ms": 36
+        },
+        {
+          "name": "repeat-different",
+          "ms": 341,
+          "rows": 12620,
+          "delegates": 2,
+          "created": 2,
+          "destroyed": 3,
+          "last-create-ms": 52,
+          "last-destroy-ms": 339,
+          "observed-ms": 49
+        },
+        {
+          "name": "repeat-full",
+          "ms": 373,
+          "rows": 241920,
+          "delegates": 22,
+          "created": 20,
+          "destroyed": 0,
+          "last-create-ms": 367,
+          "last-destroy-ms": -1,
+          "observed-ms": 359
+        },
+        {
+          "name": "zoomed",
+          "ms": 330,
+          "rows": 241920,
+          "delegates": 43,
+          "created": 43,
+          "destroyed": 22,
+          "last-create-ms": 28,
+          "last-destroy-ms": 327,
+          "observed-ms": -1
+        },
+        {
+          "name": "panned",
+          "ms": 349,
+          "rows": 241920,
+          "delegates": 36,
+          "created": 3,
+          "destroyed": 10,
+          "last-create-ms": 24,
+          "last-destroy-ms": 328,
+          "observed-ms": -1
+        },
+        {
+          "name": "recentered",
+          "ms": 296,
+          "rows": 241920,
+          "delegates": 22,
+          "created": 22,
+          "destroyed": 36,
+          "last-create-ms": 38,
+          "last-destroy-ms": 294,
+          "observed-ms": -1
+        }
+      ],
+      "max_state_ms": 599,
+      "over_5000_ms_states": []
+    },
+    "old-reentrant/Release": {
+      "exit": 0,
+      "log_sha256": "89d1a49e4092dd7e769767fc3edabc6c0164588d75d22b4858a628491dd67dc1",
+      "seconds": 11.93,
+      "measurement_only": false,
+      "expanded_coverage": false,
+      "state_budget_ms": 5000,
+      "process_budget_seconds": 25,
+      "extended": false,
+      "reentrant": true,
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 349,
+          "rows": 236791,
+          "delegates": 22,
+          "created": 22,
+          "destroyed": 0,
+          "last-create-ms": 311,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "selected-retained-address",
+          "ms": 255,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 1,
+          "destroyed": 0,
+          "last-create-ms": 218,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "selected-in-town",
+          "ms": 517,
+          "rows": 9441,
+          "delegates": 96,
+          "created": 95,
+          "destroyed": 22,
+          "last-create-ms": 452,
+          "last-destroy-ms": 495,
+          "observed-ms": 143
+        },
+        {
+          "name": "hidden-transaction-address-retained",
+          "ms": 543,
+          "rows": 6469,
+          "delegates": 92,
+          "created": 0,
+          "destroyed": 4,
+          "last-create-ms": -1,
+          "last-destroy-ms": 536,
+          "observed-ms": 99
+        },
+        {
+          "name": "reset",
+          "ms": 1175,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 22,
+          "destroyed": 91,
+          "last-create-ms": 652,
+          "last-destroy-ms": 1147,
+          "observed-ms": 547
+        },
+        {
+          "name": "selected-for-burst",
+          "ms": 149,
+          "rows": 236791,
+          "delegates": 24,
+          "created": 1,
+          "destroyed": 0,
+          "last-create-ms": 147,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "reentrant-burst-drained",
+          "ms": 2239,
+          "rows": 241920,
+          "delegates": 22,
+          "created": 22,
+          "destroyed": 24,
+          "last-create-ms": 2081,
+          "last-destroy-ms": 2215,
+          "observed-ms": 1977
+        },
+        {
+          "name": "final-reset",
+          "ms": 363,
+          "rows": 236791,
+          "delegates": 22,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 359
+        }
+      ],
+      "max_state_ms": 2239,
+      "over_5000_ms_states": []
+    },
+    "presentation-old/Release": {
+      "exit": 0,
+      "log_sha256": "d0a95deac127e5c0042d33c145d5f49a54b25fcd3db3ca0cb6709951bd52b0b0",
+      "seconds": 13.82,
+      "expanded_coverage": false,
+      "state_budget_ms": 5000,
+      "process_budget_seconds": 45,
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 261,
+          "rows": 236791,
+          "mapped": 1921,
+          "in-view": 1921,
+          "objects": 22,
+          "clusters": 22,
+          "created": 22,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "full",
+          "ms": 541,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 0,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "town",
+          "ms": 158,
+          "rows": 9745,
+          "mapped": 279,
+          "in-view": 279,
+          "objects": 3,
+          "clusters": 3,
+          "created": 0,
+          "destroyed": 19,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "different",
+          "ms": 146,
+          "rows": 12620,
+          "mapped": 25,
+          "in-view": 25,
+          "objects": 2,
+          "clusters": 2,
+          "created": 2,
+          "destroyed": 3,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "budget",
+          "ms": 320,
+          "rows": 7750,
+          "mapped": 10,
+          "in-view": 10,
+          "objects": 1,
+          "clusters": 1,
+          "created": 0,
+          "destroyed": 1,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "small-to-full",
+          "ms": 591,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 21,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "empty",
+          "ms": 341,
+          "rows": 0,
+          "mapped": 0,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 22,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "empty-to-full",
+          "ms": 390,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 22,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "selection-only",
+          "ms": 130,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 23,
+          "clusters": 22,
+          "created": 1,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "individuals",
+          "ms": 344,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 91,
+          "objects": 91,
+          "clusters": 0,
+          "created": 90,
+          "destroyed": 22,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "selection-offscreen",
+          "ms": 368,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 91,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.2,
+          "longitude": 103.6
+        },
+        {
+          "name": "selection-returned",
+          "ms": 71,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 91,
+          "objects": 91,
+          "clusters": 0,
+          "created": 91,
+          "destroyed": 0,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "domain-hidden-cleared",
+          "ms": 343,
+          "rows": 12620,
+          "mapped": 25,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 91,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "recentered",
+          "ms": 497,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 22,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-twelve",
+          "ms": 344,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1751,
+          "objects": 43,
+          "clusters": 41,
+          "created": 43,
+          "destroyed": 22,
+          "zoom": 12,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-thirteen",
+          "ms": 351,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 594,
+          "objects": 26,
+          "clusters": 23,
+          "created": 26,
+          "destroyed": 43,
+          "zoom": 13,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-fourteen",
+          "ms": 342,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 111,
+          "objects": 12,
+          "clusters": 10,
+          "created": 11,
+          "destroyed": 25,
+          "zoom": 14,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-fifteen",
+          "ms": 345,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 12,
+          "zoom": 15,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "before-burst",
+          "ms": 70,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 22,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "rapid-reentrant",
+          "ms": 1463,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 22,
+          "destroyed": 22,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "rapid-viewport",
+          "ms": 340,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 91,
+          "objects": 91,
+          "clusters": 0,
+          "created": 91,
+          "destroyed": 22,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "reset",
+          "ms": 684,
+          "rows": 236791,
+          "mapped": 1921,
+          "in-view": 1921,
+          "objects": 22,
+          "clusters": 22,
+          "created": 22,
+          "destroyed": 91,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        }
+      ],
+      "max_state_ms": 1463,
+      "over_5000_ms_states": []
+    },
+    "presentation-expanded/Release": {
+      "exit": 0,
+      "log_sha256": "66d692f41337553e3f9fe518258c5d7dabe7c259e6995286f70ff6503f3db521",
+      "seconds": 18.14,
+      "expanded_coverage": true,
+      "state_budget_ms": 10000,
+      "process_budget_seconds": 60,
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 512,
+          "rows": 236791,
+          "mapped": 7615,
+          "in-view": 7615,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "full",
+          "ms": 525,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 0,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "town",
+          "ms": 185,
+          "rows": 9745,
+          "mapped": 340,
+          "in-view": 340,
+          "objects": 3,
+          "clusters": 3,
+          "created": 0,
+          "destroyed": 20,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "different",
+          "ms": 188,
+          "rows": 12620,
+          "mapped": 197,
+          "in-view": 197,
+          "objects": 2,
+          "clusters": 2,
+          "created": 2,
+          "destroyed": 3,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "budget",
+          "ms": 38,
+          "rows": 7750,
+          "mapped": 145,
+          "in-view": 145,
+          "objects": 2,
+          "clusters": 2,
+          "created": 0,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "small-to-full",
+          "ms": 803,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 21,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "empty",
+          "ms": 323,
+          "rows": 0,
+          "mapped": 0,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 23,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "empty-to-full",
+          "ms": 540,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "selection-only",
+          "ms": 241,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 24,
+          "clusters": 23,
+          "created": 1,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "individuals",
+          "ms": 428,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 107,
+          "objects": 107,
+          "clusters": 0,
+          "created": 106,
+          "destroyed": 23,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "selection-offscreen",
+          "ms": 464,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 107,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.2,
+          "longitude": 103.6
+        },
+        {
+          "name": "selection-returned",
+          "ms": 154,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 107,
+          "objects": 107,
+          "clusters": 0,
+          "created": 107,
+          "destroyed": 0,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "domain-hidden-cleared",
+          "ms": 336,
+          "rows": 12620,
+          "mapped": 197,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 107,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "recentered",
+          "ms": 461,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-twelve",
+          "ms": 458,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 6256,
+          "objects": 55,
+          "clusters": 54,
+          "created": 55,
+          "destroyed": 23,
+          "zoom": 12,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-thirteen",
+          "ms": 454,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 1593,
+          "objects": 50,
+          "clusters": 47,
+          "created": 49,
+          "destroyed": 54,
+          "zoom": 13,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-fourteen",
+          "ms": 457,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 299,
+          "objects": 28,
+          "clusters": 26,
+          "created": 27,
+          "destroyed": 49,
+          "zoom": 14,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-fifteen",
+          "ms": 425,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 4,
+          "objects": 4,
+          "clusters": 0,
+          "created": 4,
+          "destroyed": 28,
+          "zoom": 15,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "before-burst",
+          "ms": 469,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 4,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "rapid-reentrant",
+          "ms": 1482,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 23,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "rapid-viewport",
+          "ms": 439,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 107,
+          "objects": 107,
+          "clusters": 0,
+          "created": 107,
+          "destroyed": 23,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "reset",
+          "ms": 957,
+          "rows": 236791,
+          "mapped": 7615,
+          "in-view": 7615,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 107,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        }
+      ],
+      "max_state_ms": 1482,
+      "over_5000_ms_states": []
+    },
+    "buyer-old/Release": {
+      "exit": 0,
+      "log_sha256": "6cdf212e398993f49e98a8cd4d2f67bb1e54f0e3fb844f6150c75a68ddfab23b",
+      "seconds": 9.03,
+      "expanded_coverage": false,
+      "state_budget_ms": 5000,
+      "process_budget_seconds": 45,
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 297,
+          "transactions": 236791,
+          "addresses": 9746
+        },
+        {
+          "name": "full",
+          "ms": 491,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "town",
+          "ms": 165,
+          "transactions": 9745,
+          "addresses": 363
+        },
+        {
+          "name": "type",
+          "ms": 73,
+          "transactions": 5144,
+          "addresses": 214
+        },
+        {
+          "name": "minimum",
+          "ms": 28,
+          "transactions": 3817,
+          "addresses": 209
+        },
+        {
+          "name": "budget",
+          "ms": 26,
+          "transactions": 3779,
+          "addresses": 209
+        },
+        {
+          "name": "list-selected",
+          "ms": 92,
+          "transactions": 3779,
+          "addresses": 209
+        },
+        {
+          "name": "recent-window",
+          "ms": 54,
+          "transactions": 378,
+          "addresses": 158
+        },
+        {
+          "name": "empty",
+          "ms": 121,
+          "transactions": 0,
+          "addresses": 0
+        },
+        {
+          "name": "reset",
+          "ms": 420,
+          "transactions": 236791,
+          "addresses": 9746
+        },
+        {
+          "name": "address-detail",
+          "ms": 624,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "map-selected",
+          "ms": 150,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "hidden-address",
+          "ms": 264,
+          "transactions": 12620,
+          "addresses": 511
+        },
+        {
+          "name": "reentry",
+          "ms": 438,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "viewport-burst",
+          "ms": 237,
+          "transactions": 241920,
+          "addresses": 9755
+        }
+      ],
+      "max_state_ms": 624,
+      "over_5000_ms_states": []
+    },
+    "buyer-expanded/Release": {
+      "exit": 0,
+      "log_sha256": "6010938f5e96ffa20621a2343bf483ea6b87f19aed373cac7431c772b8027e2b",
+      "seconds": 11.34,
+      "expanded_coverage": true,
+      "state_budget_ms": 10000,
+      "process_budget_seconds": 60,
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 319,
+          "transactions": 236791,
+          "addresses": 9746
+        },
+        {
+          "name": "full",
+          "ms": 434,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "town",
+          "ms": 195,
+          "transactions": 9745,
+          "addresses": 363
+        },
+        {
+          "name": "type",
+          "ms": 55,
+          "transactions": 5144,
+          "addresses": 214
+        },
+        {
+          "name": "minimum",
+          "ms": 38,
+          "transactions": 3817,
+          "addresses": 209
+        },
+        {
+          "name": "budget",
+          "ms": 52,
+          "transactions": 3779,
+          "addresses": 209
+        },
+        {
+          "name": "list-selected",
+          "ms": 131,
+          "transactions": 3779,
+          "addresses": 209
+        },
+        {
+          "name": "recent-window",
+          "ms": 58,
+          "transactions": 378,
+          "addresses": 158
+        },
+        {
+          "name": "empty",
+          "ms": 111,
+          "transactions": 0,
+          "addresses": 0
+        },
+        {
+          "name": "reset",
+          "ms": 442,
+          "transactions": 236791,
+          "addresses": 9746
+        },
+        {
+          "name": "address-detail",
+          "ms": 695,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "map-selected",
+          "ms": 61,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "hidden-address",
+          "ms": 244,
+          "transactions": 12620,
+          "addresses": 511
+        },
+        {
+          "name": "reentry",
+          "ms": 501,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "viewport-burst",
+          "ms": 247,
+          "transactions": 241920,
+          "addresses": 9755
+        }
+      ],
+      "max_state_ms": 695,
+      "over_5000_ms_states": []
+    }
+  },
+  "negative_expected_count": 42,
+  "native_negative_runs": {
+    "buyer-expanded-buyer-drop-trend-Debug": {
+      "exit": 1,
+      "log_sha256": "2ffdd9b3e349bae3a678ef04b20c5ebd7c80bce0fff6d7793065282ce24ed4c9",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 319,
+          "transactions": 236791,
+          "addresses": 9746
+        },
+        {
+          "name": "full",
+          "ms": 598,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "town",
+          "ms": 196,
+          "transactions": 9745,
+          "addresses": 363
+        },
+        {
+          "name": "type",
+          "ms": 66,
+          "transactions": 5144,
+          "addresses": 214
+        },
+        {
+          "name": "minimum",
+          "ms": 30,
+          "transactions": 3817,
+          "addresses": 209
+        },
+        {
+          "name": "budget",
+          "ms": 27,
+          "transactions": 3779,
+          "addresses": 209
+        }
+      ],
+      "max_state_ms": 598,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL buyer phase=6 elapsed=10003 state={\"rows\":3779,\"addresses\":209,\"mapped\":190,\"selected\":{\"key\":\"ANG MO KIO|509|ANG MO KIO AVE 8\",\"address\":\"509 ANG MO KIO AVE 8\",\"town\":\"ANG MO KIO\",\"count\":26,\"latest\":\"2026-06\",\"minimumPrice\":30000"
+      ]
+    },
+    "buyer-expanded-buyer-drop-trend-Release": {
+      "exit": 1,
+      "log_sha256": "1db15c0dd7b4a14df498f1140cc49a05989a9b2ece47245853850ff6335bd129",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 306,
+          "transactions": 236791,
+          "addresses": 9746
+        },
+        {
+          "name": "full",
+          "ms": 323,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "town",
+          "ms": 251,
+          "transactions": 9745,
+          "addresses": 363
+        },
+        {
+          "name": "type",
+          "ms": 90,
+          "transactions": 5144,
+          "addresses": 214
+        },
+        {
+          "name": "minimum",
+          "ms": 31,
+          "transactions": 3817,
+          "addresses": 209
+        },
+        {
+          "name": "budget",
+          "ms": 27,
+          "transactions": 3779,
+          "addresses": 209
+        }
+      ],
+      "max_state_ms": 323,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL buyer phase=6 elapsed=10022 state={\"rows\":3779,\"addresses\":209,\"mapped\":190,\"selected\":{\"key\":\"ANG MO KIO|509|ANG MO KIO AVE 8\",\"address\":\"509 ANG MO KIO AVE 8\",\"town\":\"ANG MO KIO\",\"count\":26,\"latest\":\"2026-06\",\"minimumPrice\":30000"
+      ]
+    },
+    "buyer-expanded-buyer-nan-trend-Debug": {
+      "exit": 1,
+      "log_sha256": "3315ef9695b1a65bd2e1f3065a734891c6b2f84fc1927687a20ed0e080f36205",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 284,
+          "transactions": 236791,
+          "addresses": 9746
+        },
+        {
+          "name": "full",
+          "ms": 570,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "town",
+          "ms": 186,
+          "transactions": 9745,
+          "addresses": 363
+        },
+        {
+          "name": "type",
+          "ms": 55,
+          "transactions": 5144,
+          "addresses": 214
+        },
+        {
+          "name": "minimum",
+          "ms": 35,
+          "transactions": 3817,
+          "addresses": 209
+        },
+        {
+          "name": "budget",
+          "ms": 25,
+          "transactions": 3779,
+          "addresses": 209
+        }
+      ],
+      "max_state_ms": 570,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL buyer phase=6 elapsed=10008 state={\"rows\":3779,\"addresses\":209,\"mapped\":190,\"selected\":{\"key\":\"ANG MO KIO|509|ANG MO KIO AVE 8\",\"address\":\"509 ANG MO KIO AVE 8\",\"town\":\"ANG MO KIO\",\"count\":26,\"latest\":\"2026-06\",\"minimumPrice\":30000"
+      ]
+    },
+    "buyer-expanded-buyer-nan-trend-Release": {
+      "exit": 1,
+      "log_sha256": "2a8ba4adaa2a9348763cac337560bfd2c36bf7f6399c99166d718d0fea523939",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 501,
+          "transactions": 236791,
+          "addresses": 9746
+        },
+        {
+          "name": "full",
+          "ms": 586,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "town",
+          "ms": 279,
+          "transactions": 9745,
+          "addresses": 363
+        },
+        {
+          "name": "type",
+          "ms": 91,
+          "transactions": 5144,
+          "addresses": 214
+        },
+        {
+          "name": "minimum",
+          "ms": 53,
+          "transactions": 3817,
+          "addresses": 209
+        },
+        {
+          "name": "budget",
+          "ms": 35,
+          "transactions": 3779,
+          "addresses": 209
+        }
+      ],
+      "max_state_ms": 586,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL buyer phase=6 elapsed=10013 state={\"rows\":3779,\"addresses\":209,\"mapped\":190,\"selected\":{\"key\":\"ANG MO KIO|509|ANG MO KIO AVE 8\",\"address\":\"509 ANG MO KIO AVE 8\",\"town\":\"ANG MO KIO\",\"count\":26,\"latest\":\"2026-06\",\"minimumPrice\":30000"
+      ]
+    },
+    "buyer-expanded-buyer-skip-list-Debug": {
+      "exit": 1,
+      "log_sha256": "9d54e5262372bd4b0a025c71f929327899ca4fee75a6f571c17f1959b4729ed5",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 353,
+          "transactions": 236791,
+          "addresses": 9746
+        },
+        {
+          "name": "full",
+          "ms": 600,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "town",
+          "ms": 183,
+          "transactions": 9745,
+          "addresses": 363
+        },
+        {
+          "name": "type",
+          "ms": 69,
+          "transactions": 5144,
+          "addresses": 214
+        },
+        {
+          "name": "minimum",
+          "ms": 25,
+          "transactions": 3817,
+          "addresses": 209
+        },
+        {
+          "name": "budget",
+          "ms": 33,
+          "transactions": 3779,
+          "addresses": 209
+        }
+      ],
+      "max_state_ms": 600,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL buyer phase=6 elapsed=10023 state={\"rows\":3779,\"addresses\":209,\"mapped\":190,\"selected\":null,\"latest\":\"2026-10\"}"
+      ]
+    },
+    "buyer-expanded-buyer-skip-list-Release": {
+      "exit": 1,
+      "log_sha256": "a567c8fcf84525e515c6ee971f54756c9f22726c99c53dda3095e2882d26e3b6",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 266,
+          "transactions": 236791,
+          "addresses": 9746
+        },
+        {
+          "name": "full",
+          "ms": 469,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "town",
+          "ms": 187,
+          "transactions": 9745,
+          "addresses": 363
+        },
+        {
+          "name": "type",
+          "ms": 68,
+          "transactions": 5144,
+          "addresses": 214
+        },
+        {
+          "name": "minimum",
+          "ms": 29,
+          "transactions": 3817,
+          "addresses": 209
+        },
+        {
+          "name": "budget",
+          "ms": 33,
+          "transactions": 3779,
+          "addresses": 209
+        }
+      ],
+      "max_state_ms": 469,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL buyer phase=6 elapsed=10018 state={\"rows\":3779,\"addresses\":209,\"mapped\":190,\"selected\":null,\"latest\":\"2026-10\"}"
+      ]
+    },
+    "buyer-expanded-buyer-skip-minimum-Debug": {
+      "exit": 1,
+      "log_sha256": "df705508ac9257b8b9339c22dfd48d835cf919921bdba2065e4709e48da6859c",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 303,
+          "transactions": 236791,
+          "addresses": 9746
+        },
+        {
+          "name": "full",
+          "ms": 622,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "town",
+          "ms": 180,
+          "transactions": 9745,
+          "addresses": 363
+        },
+        {
+          "name": "type",
+          "ms": 75,
+          "transactions": 5144,
+          "addresses": 214
+        }
+      ],
+      "max_state_ms": 622,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL buyer phase=4 elapsed=10017 state={\"rows\":5144,\"addresses\":214,\"mapped\":194,\"selected\":null,\"latest\":\"2026-10\"}"
+      ]
+    },
+    "buyer-expanded-buyer-skip-minimum-Release": {
+      "exit": 1,
+      "log_sha256": "b19cba47d7ba9799acdd073fdb79dbf565cf1e45ffecbe2ea22e24fe43bee188",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 326,
+          "transactions": 236791,
+          "addresses": 9746
+        },
+        {
+          "name": "full",
+          "ms": 571,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "town",
+          "ms": 198,
+          "transactions": 9745,
+          "addresses": 363
+        },
+        {
+          "name": "type",
+          "ms": 72,
+          "transactions": 5144,
+          "addresses": 214
+        }
+      ],
+      "max_state_ms": 571,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL buyer phase=4 elapsed=10010 state={\"rows\":5144,\"addresses\":214,\"mapped\":194,\"selected\":null,\"latest\":\"2026-10\"}"
+      ]
+    },
+    "buyer-old-buyer-drop-trend-Debug": {
+      "exit": 1,
+      "log_sha256": "c957b64d08c14276e4a886ea3d29db1052d61470e4d8bb92ccdc2c99093af49d",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 261,
+          "transactions": 236791,
+          "addresses": 9746
+        },
+        {
+          "name": "full",
+          "ms": 544,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "town",
+          "ms": 153,
+          "transactions": 9745,
+          "addresses": 363
+        },
+        {
+          "name": "type",
+          "ms": 109,
+          "transactions": 5144,
+          "addresses": 214
+        },
+        {
+          "name": "minimum",
+          "ms": 36,
+          "transactions": 3817,
+          "addresses": 209
+        },
+        {
+          "name": "budget",
+          "ms": 36,
+          "transactions": 3779,
+          "addresses": 209
+        }
+      ],
+      "max_state_ms": 544,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL buyer phase=6 elapsed=5017 state={\"rows\":3779,\"addresses\":209,\"mapped\":179,\"selected\":{\"key\":\"ANG MO KIO|509|ANG MO KIO AVE 8\",\"address\":\"509 ANG MO KIO AVE 8\",\"town\":\"ANG MO KIO\",\"count\":26,\"latest\":\"2026-06\",\"minimumPrice\":300000"
+      ]
+    },
+    "buyer-old-buyer-drop-trend-Release": {
+      "exit": 1,
+      "log_sha256": "8eab835d66a5ed21583e2b3617e8c2e967f92ae49e1850d6287046d084b0ed10",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 425,
+          "transactions": 236791,
+          "addresses": 9746
+        },
+        {
+          "name": "full",
+          "ms": 492,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "town",
+          "ms": 511,
+          "transactions": 9745,
+          "addresses": 363
+        },
+        {
+          "name": "type",
+          "ms": 73,
+          "transactions": 5144,
+          "addresses": 214
+        },
+        {
+          "name": "minimum",
+          "ms": 33,
+          "transactions": 3817,
+          "addresses": 209
+        },
+        {
+          "name": "budget",
+          "ms": 44,
+          "transactions": 3779,
+          "addresses": 209
+        }
+      ],
+      "max_state_ms": 511,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL buyer phase=6 elapsed=5024 state={\"rows\":3779,\"addresses\":209,\"mapped\":179,\"selected\":{\"key\":\"ANG MO KIO|509|ANG MO KIO AVE 8\",\"address\":\"509 ANG MO KIO AVE 8\",\"town\":\"ANG MO KIO\",\"count\":26,\"latest\":\"2026-06\",\"minimumPrice\":300000"
+      ]
+    },
+    "buyer-old-buyer-nan-trend-Debug": {
+      "exit": 1,
+      "log_sha256": "97f9e0e06149e112bc89b45aa73fba09bcc03b7451e270d34dc09ad6ced73acb",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 300,
+          "transactions": 236791,
+          "addresses": 9746
+        },
+        {
+          "name": "full",
+          "ms": 659,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "town",
+          "ms": 185,
+          "transactions": 9745,
+          "addresses": 363
+        },
+        {
+          "name": "type",
+          "ms": 63,
+          "transactions": 5144,
+          "addresses": 214
+        },
+        {
+          "name": "minimum",
+          "ms": 34,
+          "transactions": 3817,
+          "addresses": 209
+        },
+        {
+          "name": "budget",
+          "ms": 30,
+          "transactions": 3779,
+          "addresses": 209
+        }
+      ],
+      "max_state_ms": 659,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL buyer phase=6 elapsed=5003 state={\"rows\":3779,\"addresses\":209,\"mapped\":179,\"selected\":{\"key\":\"ANG MO KIO|509|ANG MO KIO AVE 8\",\"address\":\"509 ANG MO KIO AVE 8\",\"town\":\"ANG MO KIO\",\"count\":26,\"latest\":\"2026-06\",\"minimumPrice\":300000"
+      ]
+    },
+    "buyer-old-buyer-nan-trend-Release": {
+      "exit": 1,
+      "log_sha256": "94914d8ab1f2d80ae6fc78117bf0d9ad06b36fbd82b883f3189db6dccfadc5ba",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 227,
+          "transactions": 236791,
+          "addresses": 9746
+        },
+        {
+          "name": "full",
+          "ms": 360,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "town",
+          "ms": 301,
+          "transactions": 9745,
+          "addresses": 363
+        },
+        {
+          "name": "type",
+          "ms": 52,
+          "transactions": 5144,
+          "addresses": 214
+        },
+        {
+          "name": "minimum",
+          "ms": 37,
+          "transactions": 3817,
+          "addresses": 209
+        },
+        {
+          "name": "budget",
+          "ms": 24,
+          "transactions": 3779,
+          "addresses": 209
+        }
+      ],
+      "max_state_ms": 360,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL buyer phase=6 elapsed=5010 state={\"rows\":3779,\"addresses\":209,\"mapped\":179,\"selected\":{\"key\":\"ANG MO KIO|509|ANG MO KIO AVE 8\",\"address\":\"509 ANG MO KIO AVE 8\",\"town\":\"ANG MO KIO\",\"count\":26,\"latest\":\"2026-06\",\"minimumPrice\":300000"
+      ]
+    },
+    "buyer-old-buyer-skip-list-Debug": {
+      "exit": 1,
+      "log_sha256": "86d95aa74fd2c240aa61ae80f419423af21a9cf157a2e0b46e511f8ab041c220",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 315,
+          "transactions": 236791,
+          "addresses": 9746
+        },
+        {
+          "name": "full",
+          "ms": 602,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "town",
+          "ms": 191,
+          "transactions": 9745,
+          "addresses": 363
+        },
+        {
+          "name": "type",
+          "ms": 63,
+          "transactions": 5144,
+          "addresses": 214
+        },
+        {
+          "name": "minimum",
+          "ms": 33,
+          "transactions": 3817,
+          "addresses": 209
+        },
+        {
+          "name": "budget",
+          "ms": 105,
+          "transactions": 3779,
+          "addresses": 209
+        }
+      ],
+      "max_state_ms": 602,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL buyer phase=6 elapsed=5002 state={\"rows\":3779,\"addresses\":209,\"mapped\":179,\"selected\":null,\"latest\":\"2026-10\"}"
+      ]
+    },
+    "buyer-old-buyer-skip-list-Release": {
+      "exit": 1,
+      "log_sha256": "6994b33e1eaf002589ecc490ef2a5a161957039b6497bfacd202d0a453f2f483",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 332,
+          "transactions": 236791,
+          "addresses": 9746
+        },
+        {
+          "name": "full",
+          "ms": 483,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "town",
+          "ms": 198,
+          "transactions": 9745,
+          "addresses": 363
+        },
+        {
+          "name": "type",
+          "ms": 55,
+          "transactions": 5144,
+          "addresses": 214
+        },
+        {
+          "name": "minimum",
+          "ms": 36,
+          "transactions": 3817,
+          "addresses": 209
+        },
+        {
+          "name": "budget",
+          "ms": 27,
+          "transactions": 3779,
+          "addresses": 209
+        }
+      ],
+      "max_state_ms": 483,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL buyer phase=6 elapsed=5006 state={\"rows\":3779,\"addresses\":209,\"mapped\":179,\"selected\":null,\"latest\":\"2026-10\"}"
+      ]
+    },
+    "buyer-old-buyer-skip-minimum-Debug": {
+      "exit": 1,
+      "log_sha256": "b41affab2027ca08c3803ccadb95abfca4bb3268e01f3ed9d965db874777897f",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 253,
+          "transactions": 236791,
+          "addresses": 9746
+        },
+        {
+          "name": "full",
+          "ms": 454,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "town",
+          "ms": 243,
+          "transactions": 9745,
+          "addresses": 363
+        },
+        {
+          "name": "type",
+          "ms": 73,
+          "transactions": 5144,
+          "addresses": 214
+        }
+      ],
+      "max_state_ms": 454,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL buyer phase=4 elapsed=5003 state={\"rows\":5144,\"addresses\":214,\"mapped\":184,\"selected\":null,\"latest\":\"2026-10\"}"
+      ]
+    },
+    "buyer-old-buyer-skip-minimum-Release": {
+      "exit": 1,
+      "log_sha256": "e16646a6f10e181d31da9f04c997c2d2200e6a0720ca03fdbfbe80e6cbe8cf7f",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 332,
+          "transactions": 236791,
+          "addresses": 9746
+        },
+        {
+          "name": "full",
+          "ms": 496,
+          "transactions": 241920,
+          "addresses": 9755
+        },
+        {
+          "name": "town",
+          "ms": 268,
+          "transactions": 9745,
+          "addresses": 363
+        },
+        {
+          "name": "type",
+          "ms": 63,
+          "transactions": 5144,
+          "addresses": 214
+        }
+      ],
+      "max_state_ms": 496,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL buyer phase=4 elapsed=5004 state={\"rows\":5144,\"addresses\":214,\"mapped\":184,\"selected\":null,\"latest\":\"2026-10\"}"
+      ]
+    },
+    "canonical-Debug": {
+      "exit": 1,
+      "log_sha256": "200e2fceab49a24f1495b884f4e72c4be1d0578b21d75bed235b8c20094a2da7",
+      "steps": [],
+      "max_state_ms": null,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "critical: HDB_GATE_FAIL state timeout phase 5"
+      ]
+    },
+    "canonical-Release": {
+      "exit": 1,
+      "log_sha256": "200e2fceab49a24f1495b884f4e72c4be1d0578b21d75bed235b8c20094a2da7",
+      "steps": [],
+      "max_state_ms": null,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "critical: HDB_GATE_FAIL state timeout phase 5"
+      ]
+    },
+    "expanded-classic-Debug": {
+      "exit": 1,
+      "log_sha256": "450033b3ffd2922bcc28dd9e571983419693ce741d9adbab7fc50ea92e066c27",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 307,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 23,
+          "destroyed": 0,
+          "last-create-ms": 267,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "filtered",
+          "ms": 284,
+          "rows": 9441,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 20,
+          "last-create-ms": -1,
+          "last-destroy-ms": 282,
+          "observed-ms": 76
+        },
+        {
+          "name": "budget-filtered",
+          "ms": 63,
+          "rows": 6469,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 49
+        },
+        {
+          "name": "selected",
+          "ms": 155,
+          "rows": 6469,
+          "delegates": 4,
+          "created": 1,
+          "destroyed": 0,
+          "last-create-ms": 129,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        }
+      ],
+      "max_state_ms": 307,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL scale phase 4 elapsed-ms=10005 budget-ms=10000 mapReady=true mapError=0 rows=6469 list=316 delegates=4 expected=294 identities=true town=ANG MO KIO price=500000"
+      ]
+    },
+    "expanded-classic-Release": {
+      "exit": 1,
+      "log_sha256": "1d1f592acbe12c6cd53ff2764a95281a09b741b39d9f6351a13238a9b9e07712",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 381,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 23,
+          "destroyed": 0,
+          "last-create-ms": 349,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "filtered",
+          "ms": 241,
+          "rows": 9441,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 20,
+          "last-create-ms": -1,
+          "last-destroy-ms": 239,
+          "observed-ms": 60
+        },
+        {
+          "name": "budget-filtered",
+          "ms": 98,
+          "rows": 6469,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 77
+        },
+        {
+          "name": "selected",
+          "ms": 238,
+          "rows": 6469,
+          "delegates": 4,
+          "created": 1,
+          "destroyed": 0,
+          "last-create-ms": 207,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        }
+      ],
+      "max_state_ms": 381,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL scale phase 4 elapsed-ms=10018 budget-ms=10000 mapReady=true mapError=0 rows=6469 list=316 delegates=4 expected=294 identities=true town=ANG MO KIO price=500000"
+      ]
+    },
+    "expanded-extended-Debug": {
+      "exit": 1,
+      "log_sha256": "2605f577c7119a395efc94737c4b7ec758fcc1a07abab61fc18553c7672ef30a",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 275,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 23,
+          "destroyed": 0,
+          "last-create-ms": 250,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "full",
+          "ms": 520,
+          "rows": 241920,
+          "delegates": 23,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 507
+        },
+        {
+          "name": "subset",
+          "ms": 180,
+          "rows": 9745,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 20,
+          "last-create-ms": -1,
+          "last-destroy-ms": 179,
+          "observed-ms": 37
+        },
+        {
+          "name": "different",
+          "ms": 157,
+          "rows": 12620,
+          "delegates": 2,
+          "created": 2,
+          "destroyed": 3,
+          "last-create-ms": 43,
+          "last-destroy-ms": 147,
+          "observed-ms": 40
+        }
+      ],
+      "max_state_ms": 520,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL scale phase 4 elapsed-ms=10021 budget-ms=10000 mapReady=true mapError=0 rows=12620 list=511 delegates=2 expected=197 identities=true town=BEDOK price=1728000"
+      ]
+    },
+    "expanded-extended-Release": {
+      "exit": 1,
+      "log_sha256": "5cf1466e740875906275bbd36f858ff3024f562336ce289db6e275428fadcd2d",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 325,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 23,
+          "destroyed": 0,
+          "last-create-ms": 295,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "full",
+          "ms": 454,
+          "rows": 241920,
+          "delegates": 23,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 442
+        },
+        {
+          "name": "subset",
+          "ms": 197,
+          "rows": 9745,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 20,
+          "last-create-ms": -1,
+          "last-destroy-ms": 196,
+          "observed-ms": 41
+        },
+        {
+          "name": "different",
+          "ms": 154,
+          "rows": 12620,
+          "delegates": 2,
+          "created": 2,
+          "destroyed": 3,
+          "last-create-ms": 41,
+          "last-destroy-ms": 148,
+          "observed-ms": 38
+        }
+      ],
+      "max_state_ms": 454,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL scale phase 4 elapsed-ms=10024 budget-ms=10000 mapReady=true mapError=0 rows=12620 list=511 delegates=2 expected=197 identities=true town=BEDOK price=1728000"
+      ]
+    },
+    "expanded-reentrant-Debug": {
+      "exit": 1,
+      "log_sha256": "3daeba3baff964d7d887e0c23b6d0082b325551834f4c4a9ba8b9ba951c7c465",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 314,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 23,
+          "destroyed": 0,
+          "last-create-ms": 284,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "selected-retained-address",
+          "ms": 152,
+          "rows": 236791,
+          "delegates": 24,
+          "created": 1,
+          "destroyed": 0,
+          "last-create-ms": 140,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "selected-in-town",
+          "ms": 288,
+          "rows": 9441,
+          "delegates": 120,
+          "created": 119,
+          "destroyed": 23,
+          "last-create-ms": 283,
+          "last-destroy-ms": 271,
+          "observed-ms": 80
+        },
+        {
+          "name": "hidden-transaction-address-retained",
+          "ms": 334,
+          "rows": 6469,
+          "delegates": 102,
+          "created": 0,
+          "destroyed": 18,
+          "last-create-ms": -1,
+          "last-destroy-ms": 328,
+          "observed-ms": 121
+        },
+        {
+          "name": "reset",
+          "ms": 1018,
+          "rows": 236791,
+          "delegates": 24,
+          "created": 23,
+          "destroyed": 101,
+          "last-create-ms": 740,
+          "last-destroy-ms": 1004,
+          "observed-ms": 651
+        },
+        {
+          "name": "selected-for-burst",
+          "ms": 46,
+          "rows": 236791,
+          "delegates": 24,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        }
+      ],
+      "max_state_ms": 1018,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL scale phase 6 elapsed-ms=10003 budget-ms=10000 mapReady=true mapError=0 rows=9441 list=363 delegates=4 expected=340 identities=true town=ANG MO KIO price=1000000"
+      ]
+    },
+    "expanded-reentrant-Release": {
+      "exit": 1,
+      "log_sha256": "c731ad882e1301656281fa6e8bb671471cf7b17bdd1c3958d984daeed5b7d8e9",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 340,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 23,
+          "destroyed": 0,
+          "last-create-ms": 310,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "selected-retained-address",
+          "ms": 190,
+          "rows": 236791,
+          "delegates": 24,
+          "created": 1,
+          "destroyed": 0,
+          "last-create-ms": 113,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "selected-in-town",
+          "ms": 263,
+          "rows": 9441,
+          "delegates": 120,
+          "created": 119,
+          "destroyed": 23,
+          "last-create-ms": 184,
+          "last-destroy-ms": 256,
+          "observed-ms": 56
+        },
+        {
+          "name": "hidden-transaction-address-retained",
+          "ms": 282,
+          "rows": 6469,
+          "delegates": 102,
+          "created": 0,
+          "destroyed": 18,
+          "last-create-ms": -1,
+          "last-destroy-ms": 258,
+          "observed-ms": 64
+        },
+        {
+          "name": "reset",
+          "ms": 823,
+          "rows": 236791,
+          "delegates": 24,
+          "created": 23,
+          "destroyed": 101,
+          "last-create-ms": 550,
+          "last-destroy-ms": 808,
+          "observed-ms": 450
+        },
+        {
+          "name": "selected-for-burst",
+          "ms": 51,
+          "rows": 236791,
+          "delegates": 24,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        }
+      ],
+      "max_state_ms": 823,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL scale phase 6 elapsed-ms=10008 budget-ms=10000 mapReady=true mapError=0 rows=9441 list=363 delegates=4 expected=340 identities=true town=ANG MO KIO price=1000000"
+      ]
+    },
+    "old-classic-Debug": {
+      "exit": 1,
+      "log_sha256": "c1e05ad1b99b457a7dcfe2006bde3933d60de975ae0f3a940af332893077710b",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 308,
+          "rows": 236791,
+          "delegates": 22,
+          "created": 22,
+          "destroyed": 0,
+          "last-create-ms": 289,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "filtered",
+          "ms": 177,
+          "rows": 9441,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 19,
+          "last-create-ms": -1,
+          "last-destroy-ms": 176,
+          "observed-ms": 49
+        },
+        {
+          "name": "budget-filtered",
+          "ms": 65,
+          "rows": 6469,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 50
+        },
+        {
+          "name": "selected",
+          "ms": 127,
+          "rows": 6469,
+          "delegates": 4,
+          "created": 1,
+          "destroyed": 0,
+          "last-create-ms": 101,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        }
+      ],
+      "max_state_ms": 308,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL scale phase 4 elapsed-ms=5006 budget-ms=5000 mapReady=true mapError=0 rows=6469 list=316 delegates=4 expected=264 identities=true town=ANG MO KIO price=500000"
+      ]
+    },
+    "old-classic-Release": {
+      "exit": 1,
+      "log_sha256": "d1f019a566b77310ee85022a1ed734fa3a74f525bf93c4b433985761a9eb508e",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 303,
+          "rows": 236791,
+          "delegates": 22,
+          "created": 22,
+          "destroyed": 0,
+          "last-create-ms": 276,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "filtered",
+          "ms": 194,
+          "rows": 9441,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 19,
+          "last-create-ms": -1,
+          "last-destroy-ms": 193,
+          "observed-ms": 50
+        },
+        {
+          "name": "budget-filtered",
+          "ms": 48,
+          "rows": 6469,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 34
+        },
+        {
+          "name": "selected",
+          "ms": 142,
+          "rows": 6469,
+          "delegates": 4,
+          "created": 1,
+          "destroyed": 0,
+          "last-create-ms": 121,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        }
+      ],
+      "max_state_ms": 303,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL scale phase 4 elapsed-ms=5018 budget-ms=5000 mapReady=true mapError=0 rows=6469 list=316 delegates=4 expected=264 identities=true town=ANG MO KIO price=500000"
+      ]
+    },
+    "old-extended-Debug": {
+      "exit": 1,
+      "log_sha256": "322686e6d7a982ed50862e5b9bb7c77d083d5e6850b74c35ba648e09f8427295",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 238,
+          "rows": 236791,
+          "delegates": 22,
+          "created": 22,
+          "destroyed": 0,
+          "last-create-ms": 220,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "full",
+          "ms": 480,
+          "rows": 241920,
+          "delegates": 22,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 476
+        },
+        {
+          "name": "subset",
+          "ms": 189,
+          "rows": 9745,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 19,
+          "last-create-ms": -1,
+          "last-destroy-ms": 180,
+          "observed-ms": 46
+        },
+        {
+          "name": "different",
+          "ms": 268,
+          "rows": 12620,
+          "delegates": 2,
+          "created": 2,
+          "destroyed": 3,
+          "last-create-ms": 61,
+          "last-destroy-ms": 267,
+          "observed-ms": 58
+        }
+      ],
+      "max_state_ms": 480,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL scale phase 4 elapsed-ms=5005 budget-ms=5000 mapReady=true mapError=0 rows=12620 list=511 delegates=2 expected=25 identities=true town=BEDOK price=1728000"
+      ]
+    },
+    "old-extended-Release": {
+      "exit": 1,
+      "log_sha256": "1625e0be106ed4f47944f8e05ae5bcc114594cea51d980501d5b82e96f21c30b",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 282,
+          "rows": 236791,
+          "delegates": 22,
+          "created": 22,
+          "destroyed": 0,
+          "last-create-ms": 264,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "full",
+          "ms": 464,
+          "rows": 241920,
+          "delegates": 22,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 459
+        },
+        {
+          "name": "subset",
+          "ms": 194,
+          "rows": 9745,
+          "delegates": 3,
+          "created": 0,
+          "destroyed": 19,
+          "last-create-ms": -1,
+          "last-destroy-ms": 193,
+          "observed-ms": 56
+        },
+        {
+          "name": "different",
+          "ms": 161,
+          "rows": 12620,
+          "delegates": 2,
+          "created": 2,
+          "destroyed": 3,
+          "last-create-ms": 48,
+          "last-destroy-ms": 159,
+          "observed-ms": 44
+        }
+      ],
+      "max_state_ms": 464,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL scale phase 4 elapsed-ms=5021 budget-ms=5000 mapReady=true mapError=0 rows=12620 list=511 delegates=2 expected=25 identities=true town=BEDOK price=1728000"
+      ]
+    },
+    "old-reentrant-Debug": {
+      "exit": 1,
+      "log_sha256": "1542350c77ef0d439d9c5a124ab3167188af4ebc3f7c94f4ff5134b3c49e22b0",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 260,
+          "rows": 236791,
+          "delegates": 22,
+          "created": 22,
+          "destroyed": 0,
+          "last-create-ms": 242,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "selected-retained-address",
+          "ms": 144,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 1,
+          "destroyed": 0,
+          "last-create-ms": 112,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "selected-in-town",
+          "ms": 366,
+          "rows": 9441,
+          "delegates": 96,
+          "created": 95,
+          "destroyed": 22,
+          "last-create-ms": 148,
+          "last-destroy-ms": 361,
+          "observed-ms": 54
+        },
+        {
+          "name": "hidden-transaction-address-retained",
+          "ms": 241,
+          "rows": 6469,
+          "delegates": 92,
+          "created": 0,
+          "destroyed": 4,
+          "last-create-ms": -1,
+          "last-destroy-ms": 238,
+          "observed-ms": 68
+        },
+        {
+          "name": "reset",
+          "ms": 1400,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 22,
+          "destroyed": 91,
+          "last-create-ms": 1189,
+          "last-destroy-ms": 1376,
+          "observed-ms": 1088
+        },
+        {
+          "name": "selected-for-burst",
+          "ms": 43,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        }
+      ],
+      "max_state_ms": 1400,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL scale phase 6 elapsed-ms=5005 budget-ms=5000 mapReady=true mapError=0 rows=9441 list=363 delegates=4 expected=279 identities=true town=ANG MO KIO price=1000000"
+      ]
+    },
+    "old-reentrant-Release": {
+      "exit": 1,
+      "log_sha256": "ae17e76aa51aac46c828f8fb92c2ed3ca6b6efcc25c635f42c758556003ebdbb",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 265,
+          "rows": 236791,
+          "delegates": 22,
+          "created": 22,
+          "destroyed": 0,
+          "last-create-ms": 242,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "selected-retained-address",
+          "ms": 158,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 1,
+          "destroyed": 0,
+          "last-create-ms": 124,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "selected-in-town",
+          "ms": 272,
+          "rows": 9441,
+          "delegates": 96,
+          "created": 95,
+          "destroyed": 22,
+          "last-create-ms": 239,
+          "last-destroy-ms": 267,
+          "observed-ms": 87
+        },
+        {
+          "name": "hidden-transaction-address-retained",
+          "ms": 245,
+          "rows": 6469,
+          "delegates": 92,
+          "created": 0,
+          "destroyed": 4,
+          "last-create-ms": -1,
+          "last-destroy-ms": 240,
+          "observed-ms": 82
+        },
+        {
+          "name": "reset",
+          "ms": 1086,
+          "rows": 236791,
+          "delegates": 23,
+          "created": 22,
+          "destroyed": 91,
+          "last-create-ms": 734,
+          "last-destroy-ms": 1067,
+          "observed-ms": 609
+        },
+        {
+          "name": "selected-for-burst",
+          "ms": 129,
+          "rows": 236791,
+          "delegates": 24,
+          "created": 1,
+          "destroyed": 0,
+          "last-create-ms": 126,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        }
+      ],
+      "max_state_ms": 1086,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL scale phase 6 elapsed-ms=5015 budget-ms=5000 mapReady=true mapError=0 rows=9441 list=363 delegates=4 expected=279 identities=true town=ANG MO KIO price=1000000"
+      ]
+    },
+    "presentation-expanded-drop-presentation-Debug": {
+      "exit": 1,
+      "log_sha256": "f3ddd8afd7bc90b9dec50b3c0c55b3f34cc8923d2d9b16f3b9ebabaa2e39d3af",
+      "steps": [],
+      "max_state_ms": null,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL presentation phase=0 elapsed=10056 truth=7615 objects=22 expected=22 identities=false"
+      ]
+    },
+    "presentation-expanded-drop-presentation-Release": {
+      "exit": 1,
+      "log_sha256": "d1f0d579893c92fd55916d397a31a1270f948e4a40bddc6d8b76463ffe05f5d1",
+      "steps": [],
+      "max_state_ms": null,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL presentation phase=0 elapsed=10123 truth=7615 objects=22 expected=22 identities=false"
+      ]
+    },
+    "presentation-expanded-skip-burst-Debug": {
+      "exit": 1,
+      "log_sha256": "5c37cc035cbb14520f7da2c7a4f267979bbacd12d0c420a3f3890841f2271e23",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 529,
+          "rows": 236791,
+          "mapped": 7615,
+          "in-view": 7615,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "full",
+          "ms": 731,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 0,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "town",
+          "ms": 202,
+          "rows": 9745,
+          "mapped": 340,
+          "in-view": 340,
+          "objects": 3,
+          "clusters": 3,
+          "created": 0,
+          "destroyed": 20,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "different",
+          "ms": 276,
+          "rows": 12620,
+          "mapped": 197,
+          "in-view": 197,
+          "objects": 2,
+          "clusters": 2,
+          "created": 2,
+          "destroyed": 3,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "budget",
+          "ms": 48,
+          "rows": 7750,
+          "mapped": 145,
+          "in-view": 145,
+          "objects": 2,
+          "clusters": 2,
+          "created": 0,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "small-to-full",
+          "ms": 1270,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 21,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "empty",
+          "ms": 230,
+          "rows": 0,
+          "mapped": 0,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 23,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "empty-to-full",
+          "ms": 765,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "selection-only",
+          "ms": 277,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 24,
+          "clusters": 23,
+          "created": 1,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "individuals",
+          "ms": 337,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 107,
+          "objects": 107,
+          "clusters": 0,
+          "created": 106,
+          "destroyed": 23,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "selection-offscreen",
+          "ms": 329,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 107,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.2,
+          "longitude": 103.6
+        },
+        {
+          "name": "selection-returned",
+          "ms": 153,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 107,
+          "objects": 107,
+          "clusters": 0,
+          "created": 107,
+          "destroyed": 0,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "domain-hidden-cleared",
+          "ms": 429,
+          "rows": 12620,
+          "mapped": 197,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 107,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "recentered",
+          "ms": 1090,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 45,
+          "destroyed": 22,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-twelve",
+          "ms": 604,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 6256,
+          "objects": 55,
+          "clusters": 54,
+          "created": 55,
+          "destroyed": 23,
+          "zoom": 12,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-thirteen",
+          "ms": 359,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 1593,
+          "objects": 50,
+          "clusters": 47,
+          "created": 49,
+          "destroyed": 54,
+          "zoom": 13,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-fourteen",
+          "ms": 303,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 299,
+          "objects": 28,
+          "clusters": 26,
+          "created": 27,
+          "destroyed": 49,
+          "zoom": 14,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-fifteen",
+          "ms": 301,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 4,
+          "objects": 4,
+          "clusters": 0,
+          "created": 4,
+          "destroyed": 28,
+          "zoom": 15,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "before-burst",
+          "ms": 292,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 4,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        }
+      ],
+      "max_state_ms": 1270,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL presentation phase=19 elapsed=10004 truth=340 objects=3 expected=3 identities=true"
+      ]
+    },
+    "presentation-expanded-skip-burst-Release": {
+      "exit": 1,
+      "log_sha256": "519ea558c391f6ec3925d7a22917c2148cbc161de55f629440c213d81d4a594b",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 499,
+          "rows": 236791,
+          "mapped": 7615,
+          "in-view": 7615,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "full",
+          "ms": 529,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 0,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "town",
+          "ms": 177,
+          "rows": 9745,
+          "mapped": 340,
+          "in-view": 340,
+          "objects": 3,
+          "clusters": 3,
+          "created": 0,
+          "destroyed": 20,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "different",
+          "ms": 160,
+          "rows": 12620,
+          "mapped": 197,
+          "in-view": 197,
+          "objects": 2,
+          "clusters": 2,
+          "created": 2,
+          "destroyed": 3,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "budget",
+          "ms": 36,
+          "rows": 7750,
+          "mapped": 145,
+          "in-view": 145,
+          "objects": 2,
+          "clusters": 2,
+          "created": 0,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "small-to-full",
+          "ms": 804,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 21,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "empty",
+          "ms": 154,
+          "rows": 0,
+          "mapped": 0,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 23,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "empty-to-full",
+          "ms": 575,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "selection-only",
+          "ms": 291,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 24,
+          "clusters": 23,
+          "created": 1,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "individuals",
+          "ms": 361,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 107,
+          "objects": 107,
+          "clusters": 0,
+          "created": 106,
+          "destroyed": 23,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "selection-offscreen",
+          "ms": 336,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 107,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.2,
+          "longitude": 103.6
+        },
+        {
+          "name": "selection-returned",
+          "ms": 157,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 107,
+          "objects": 107,
+          "clusters": 0,
+          "created": 107,
+          "destroyed": 0,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "domain-hidden-cleared",
+          "ms": 251,
+          "rows": 12620,
+          "mapped": 197,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 107,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "recentered",
+          "ms": 568,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-twelve",
+          "ms": 314,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 6256,
+          "objects": 55,
+          "clusters": 54,
+          "created": 55,
+          "destroyed": 23,
+          "zoom": 12,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-thirteen",
+          "ms": 308,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 1593,
+          "objects": 50,
+          "clusters": 47,
+          "created": 49,
+          "destroyed": 54,
+          "zoom": 13,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-fourteen",
+          "ms": 274,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 299,
+          "objects": 28,
+          "clusters": 26,
+          "created": 27,
+          "destroyed": 49,
+          "zoom": 14,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-fifteen",
+          "ms": 237,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 4,
+          "objects": 4,
+          "clusters": 0,
+          "created": 4,
+          "destroyed": 28,
+          "zoom": 15,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "before-burst",
+          "ms": 305,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 4,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        }
+      ],
+      "max_state_ms": 804,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL presentation phase=19 elapsed=10006 truth=340 objects=3 expected=3 identities=true"
+      ]
+    },
+    "presentation-expanded-skip-empty-Debug": {
+      "exit": 1,
+      "log_sha256": "91d205ad243e7c358a18241348ef3fb23b1a776397060cfce3603fecd4b253b7",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 478,
+          "rows": 236791,
+          "mapped": 7615,
+          "in-view": 7615,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "full",
+          "ms": 593,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 0,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "town",
+          "ms": 246,
+          "rows": 9745,
+          "mapped": 340,
+          "in-view": 340,
+          "objects": 3,
+          "clusters": 3,
+          "created": 0,
+          "destroyed": 20,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "different",
+          "ms": 261,
+          "rows": 12620,
+          "mapped": 197,
+          "in-view": 197,
+          "objects": 2,
+          "clusters": 2,
+          "created": 2,
+          "destroyed": 3,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "budget",
+          "ms": 60,
+          "rows": 7750,
+          "mapped": 145,
+          "in-view": 145,
+          "objects": 2,
+          "clusters": 2,
+          "created": 0,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "small-to-full",
+          "ms": 1297,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 21,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        }
+      ],
+      "max_state_ms": 1297,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL presentation phase=6 elapsed=10012 truth=7618 objects=23 expected=23 identities=true"
+      ]
+    },
+    "presentation-expanded-skip-empty-Release": {
+      "exit": 1,
+      "log_sha256": "b3739078ef48c600ef025e2963803baef44e55f8545ffbfe8490c791cb16c5bd",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 480,
+          "rows": 236791,
+          "mapped": 7615,
+          "in-view": 7615,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "full",
+          "ms": 538,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 0,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "town",
+          "ms": 206,
+          "rows": 9745,
+          "mapped": 340,
+          "in-view": 340,
+          "objects": 3,
+          "clusters": 3,
+          "created": 0,
+          "destroyed": 20,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "different",
+          "ms": 174,
+          "rows": 12620,
+          "mapped": 197,
+          "in-view": 197,
+          "objects": 2,
+          "clusters": 2,
+          "created": 2,
+          "destroyed": 3,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "budget",
+          "ms": 39,
+          "rows": 7750,
+          "mapped": 145,
+          "in-view": 145,
+          "objects": 2,
+          "clusters": 2,
+          "created": 0,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "small-to-full",
+          "ms": 755,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 21,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        }
+      ],
+      "max_state_ms": 755,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL presentation phase=6 elapsed=10002 truth=7618 objects=23 expected=23 identities=true"
+      ]
+    },
+    "presentation-old-drop-presentation-Debug": {
+      "exit": 1,
+      "log_sha256": "e2e499cf4f3bddedea0407f2ff350364060dd7ff759ece66a9a6aed66daa0e29",
+      "steps": [],
+      "max_state_ms": null,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL presentation phase=0 elapsed=5029 truth=1921 objects=21 expected=21 identities=false"
+      ]
+    },
+    "presentation-old-drop-presentation-Release": {
+      "exit": 1,
+      "log_sha256": "5d7430101a9f81db9103efa73221771d6a640fc4ff92a1be2bd019cb5a958373",
+      "steps": [],
+      "max_state_ms": null,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL presentation phase=0 elapsed=5020 truth=1921 objects=21 expected=21 identities=false"
+      ]
+    },
+    "presentation-old-skip-burst-Debug": {
+      "exit": 1,
+      "log_sha256": "dad3ef986f8e936458946613ade38919c74f9b452522c38037deccb9673669b6",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 333,
+          "rows": 236791,
+          "mapped": 1921,
+          "in-view": 1921,
+          "objects": 22,
+          "clusters": 22,
+          "created": 22,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "full",
+          "ms": 633,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 0,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "town",
+          "ms": 178,
+          "rows": 9745,
+          "mapped": 279,
+          "in-view": 279,
+          "objects": 3,
+          "clusters": 3,
+          "created": 0,
+          "destroyed": 19,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "different",
+          "ms": 169,
+          "rows": 12620,
+          "mapped": 25,
+          "in-view": 25,
+          "objects": 2,
+          "clusters": 2,
+          "created": 2,
+          "destroyed": 3,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "budget",
+          "ms": 336,
+          "rows": 7750,
+          "mapped": 10,
+          "in-view": 10,
+          "objects": 1,
+          "clusters": 1,
+          "created": 0,
+          "destroyed": 1,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "small-to-full",
+          "ms": 868,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 21,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "empty",
+          "ms": 311,
+          "rows": 0,
+          "mapped": 0,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 22,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "empty-to-full",
+          "ms": 510,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 22,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "selection-only",
+          "ms": 137,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 23,
+          "clusters": 22,
+          "created": 1,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "individuals",
+          "ms": 339,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 91,
+          "objects": 91,
+          "clusters": 0,
+          "created": 90,
+          "destroyed": 22,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "selection-offscreen",
+          "ms": 403,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 91,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.2,
+          "longitude": 103.6
+        },
+        {
+          "name": "selection-returned",
+          "ms": 103,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 91,
+          "objects": 91,
+          "clusters": 0,
+          "created": 91,
+          "destroyed": 0,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "domain-hidden-cleared",
+          "ms": 368,
+          "rows": 12620,
+          "mapped": 25,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 91,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "recentered",
+          "ms": 557,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 22,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-twelve",
+          "ms": 343,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1751,
+          "objects": 43,
+          "clusters": 41,
+          "created": 43,
+          "destroyed": 22,
+          "zoom": 12,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-thirteen",
+          "ms": 346,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 594,
+          "objects": 26,
+          "clusters": 23,
+          "created": 26,
+          "destroyed": 43,
+          "zoom": 13,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-fourteen",
+          "ms": 343,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 111,
+          "objects": 12,
+          "clusters": 10,
+          "created": 11,
+          "destroyed": 25,
+          "zoom": 14,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-fifteen",
+          "ms": 349,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 12,
+          "zoom": 15,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "before-burst",
+          "ms": 67,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 22,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        }
+      ],
+      "max_state_ms": 868,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL presentation phase=19 elapsed=5004 truth=279 objects=3 expected=3 identities=true"
+      ]
+    },
+    "presentation-old-skip-burst-Release": {
+      "exit": 1,
+      "log_sha256": "526ba9c31f13df103ba7f6db682e565c3819d556b6ee87f71b6431b21686f67d",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 345,
+          "rows": 236791,
+          "mapped": 1921,
+          "in-view": 1921,
+          "objects": 22,
+          "clusters": 22,
+          "created": 22,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "full",
+          "ms": 581,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 0,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "town",
+          "ms": 189,
+          "rows": 9745,
+          "mapped": 279,
+          "in-view": 279,
+          "objects": 3,
+          "clusters": 3,
+          "created": 0,
+          "destroyed": 19,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "different",
+          "ms": 167,
+          "rows": 12620,
+          "mapped": 25,
+          "in-view": 25,
+          "objects": 2,
+          "clusters": 2,
+          "created": 2,
+          "destroyed": 3,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "budget",
+          "ms": 147,
+          "rows": 7750,
+          "mapped": 10,
+          "in-view": 10,
+          "objects": 1,
+          "clusters": 1,
+          "created": 0,
+          "destroyed": 1,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "small-to-full",
+          "ms": 702,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 21,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "empty",
+          "ms": 143,
+          "rows": 0,
+          "mapped": 0,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 22,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "empty-to-full",
+          "ms": 359,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 22,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "selection-only",
+          "ms": 123,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 23,
+          "clusters": 22,
+          "created": 1,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "individuals",
+          "ms": 317,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 91,
+          "objects": 91,
+          "clusters": 0,
+          "created": 90,
+          "destroyed": 22,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "selection-offscreen",
+          "ms": 304,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 91,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.2,
+          "longitude": 103.6
+        },
+        {
+          "name": "selection-returned",
+          "ms": 80,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 91,
+          "objects": 91,
+          "clusters": 0,
+          "created": 91,
+          "destroyed": 0,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "domain-hidden-cleared",
+          "ms": 338,
+          "rows": 12620,
+          "mapped": 25,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 91,
+          "zoom": 16,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3702454096,
+          "longitude": 103.8394651188
+        },
+        {
+          "name": "recentered",
+          "ms": 423,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 22,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-twelve",
+          "ms": 201,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1751,
+          "objects": 43,
+          "clusters": 41,
+          "created": 43,
+          "destroyed": 22,
+          "zoom": 12,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-thirteen",
+          "ms": 187,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 594,
+          "objects": 26,
+          "clusters": 23,
+          "created": 26,
+          "destroyed": 43,
+          "zoom": 13,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-fourteen",
+          "ms": 194,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 111,
+          "objects": 12,
+          "clusters": 10,
+          "created": 11,
+          "destroyed": 25,
+          "zoom": 14,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "zoom-fifteen",
+          "ms": 152,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 12,
+          "zoom": 15,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "before-burst",
+          "ms": 54,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 22,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        }
+      ],
+      "max_state_ms": 702,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL presentation phase=19 elapsed=5113 truth=279 objects=3 expected=3 identities=true"
+      ]
+    },
+    "presentation-old-skip-empty-Debug": {
+      "exit": 1,
+      "log_sha256": "8f57ba32401d200b7c9730a214ec9c3c20b7457962a0ada26f0f7e1eb852f896",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 703,
+          "rows": 236791,
+          "mapped": 1921,
+          "in-view": 1921,
+          "objects": 22,
+          "clusters": 22,
+          "created": 22,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "full",
+          "ms": 867,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 0,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "town",
+          "ms": 168,
+          "rows": 9745,
+          "mapped": 279,
+          "in-view": 279,
+          "objects": 3,
+          "clusters": 3,
+          "created": 0,
+          "destroyed": 19,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "different",
+          "ms": 219,
+          "rows": 12620,
+          "mapped": 25,
+          "in-view": 25,
+          "objects": 2,
+          "clusters": 2,
+          "created": 2,
+          "destroyed": 3,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "budget",
+          "ms": 476,
+          "rows": 7750,
+          "mapped": 10,
+          "in-view": 10,
+          "objects": 1,
+          "clusters": 1,
+          "created": 0,
+          "destroyed": 1,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "small-to-full",
+          "ms": 863,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 21,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        }
+      ],
+      "max_state_ms": 867,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL presentation phase=6 elapsed=5021 truth=1922 objects=22 expected=22 identities=true"
+      ]
+    },
+    "presentation-old-skip-empty-Release": {
+      "exit": 1,
+      "log_sha256": "b6a336d2c540bd72ae719390595f4555240698dabb9503027f629443e4c03666",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 327,
+          "rows": 236791,
+          "mapped": 1921,
+          "in-view": 1921,
+          "objects": 22,
+          "clusters": 22,
+          "created": 22,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "full",
+          "ms": 628,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 0,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "town",
+          "ms": 231,
+          "rows": 9745,
+          "mapped": 279,
+          "in-view": 279,
+          "objects": 3,
+          "clusters": 3,
+          "created": 0,
+          "destroyed": 19,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "different",
+          "ms": 169,
+          "rows": 12620,
+          "mapped": 25,
+          "in-view": 25,
+          "objects": 2,
+          "clusters": 2,
+          "created": 2,
+          "destroyed": 3,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "budget",
+          "ms": 178,
+          "rows": 7750,
+          "mapped": 10,
+          "in-view": 10,
+          "objects": 1,
+          "clusters": 1,
+          "created": 0,
+          "destroyed": 1,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        },
+        {
+          "name": "small-to-full",
+          "ms": 828,
+          "rows": 241920,
+          "mapped": 1922,
+          "in-view": 1922,
+          "objects": 22,
+          "clusters": 22,
+          "created": 21,
+          "destroyed": 0,
+          "zoom": 11,
+          "width": 741,
+          "height": 499,
+          "latitude": 1.3521,
+          "longitude": 103.8198
+        }
+      ],
+      "max_state_ms": 828,
+      "over_5000_ms_states": [],
+      "expected_fault_detected": true,
+      "failure_lines": [
+        "qml: HDB_GATE_FAIL presentation phase=6 elapsed=5015 truth=1922 objects=22 expected=22 identities=true"
+      ]
+    }
+  },
+  "native_startup_runs": [
+    {
+      "seconds": 7.339277159997437,
+      "process_exit": 0,
+      "verified": true,
+      "view": "full",
+      "iteration": 1,
+      "log_sha256": "90804bfabbd77f126250480d914074a5cb23953084cc8803f8874faa913ca714"
+    },
+    {
+      "seconds": 7.637455648997275,
+      "process_exit": 0,
+      "verified": true,
+      "view": "full",
+      "iteration": 2,
+      "log_sha256": "dd34ba899ced4bdfdb0f7a8dbe54a7fd65bb8c84db3cf9a8ae5255cf7f59cf00"
+    },
+    {
+      "seconds": 7.273143255995819,
+      "process_exit": 0,
+      "verified": true,
+      "view": "map-shell",
+      "iteration": 1,
+      "log_sha256": "adec1cb728b1683eec47007094f76ba3c17a8dc3c74352d53561085d2f58419c"
+    },
+    {
+      "seconds": 6.963252410998393,
+      "process_exit": 0,
+      "verified": true,
+      "view": "map-shell",
+      "iteration": 2,
+      "log_sha256": "1eaf26bee2af6bfef41c81678a41362f7cc4a84edafa6d465e71d84f4e0053f1"
+    },
+    {
+      "seconds": 6.940400990002672,
+      "process_exit": 0,
+      "verified": true,
+      "view": "qml-shell",
+      "iteration": 1,
+      "log_sha256": "9aff342fb307fadcb6e225381c01d28b62c502c7d64b2475fd4077e3ef355562"
+    },
+    {
+      "seconds": 7.014706122005009,
+      "process_exit": 0,
+      "verified": true,
+      "view": "qml-shell",
+      "iteration": 2,
+      "log_sha256": "a69957150986565ebb54cccf6bebee13caeddec3adc2fdf325c5478bdd72b92b"
+    }
+  ],
+  "data_contract": {
+    "contract_version": 2,
+    "base": "ff5cc7d1f8a61664408f35455e19a7fb8fff5227",
+    "legacy_import_sha256": "88118bdb3a9a68f59ea47cddae27568623f136cb7b7d5320a376f8f752dc6cc5",
+    "expanded_import_v2_sha256": "46ac65f199f916b78f56b388a19fa3a510617a6c0917c5d4787ef4e6cc856393",
+    "allowed_domain_sha256": {
+      "src/HdbResale.Domain/ResaleTransaction.cs": "bf48b7bf89f5e5e1bed18a4a1efbcdae660b9fb1d9e6c6888520f040f7fad506",
+      "src/HdbResale.Domain/CsvImport.cs": "c105bdb70f3db08c42b0be2c91e5fde3ceba89a67b57c5675bd18817ba7e5af3",
+      "src/HdbResale.Domain/BlockSummary.cs": "d6f04b2b05af34e3005f49e02a0fb044e2741348b87bed2af0948bc89326071e",
+      "src/HdbResale.Domain/ExplorerState.cs": "02e62cf16d3c6fedce6a07611ee58f7478a368cfec0b6f048e729dc57aa2a935"
+    },
+    "proof": "Final native Release at 82e6e99 reproduced both exact digests after the chart and report-only legacy converter. v2 changes only modeled fields already present in the pinned official CSV. Evidence/canonical/pin bytes remain unchanged. The M5 report reproduces its frozen byte hash; chart series do not affect ImportResult serialization.",
+    "quality_counts": {
+      "address": {
+        "ExactAddress": 897,
+        "NormalizedAddress": 6721,
+        "Ambiguous": 209,
+        "Unmatched": 1928,
+        "mapped": 7618,
+        "missing": 2137
+      },
+      "transactions": {
+        "ExactAddress": 28396,
+        "NormalizedAddress": 160177,
+        "Ambiguous": 4305,
+        "Unmatched": 49042,
+        "mapped": 188573,
+        "missing": 53347
+      }
+    },
+    "frozen_m5_report_sha256": "d76614762c351eb121d3dd11ed03658e53daae1a5feeae36809a029b7e62d4be"
+  },
+  "frozen_416_cmp_exit": 0,
+  "frozen_m5_cmp_exit": 0,
+  "frozen_m5_sha256": "d76614762c351eb121d3dd11ed03658e53daae1a5feeae36809a029b7e62d4be",
+  "screenshots_sha256": {
+    "address-detail-linux.jpg": "09a176636274bdc40fcce7006bbc543a94cc6a67317ab845e9c04ac7ce709983",
+    "monthly-trend-linux.jpg": "d1bd1faeccd279fd1020836d7103090fbfbbcfc955bcc25b6c60976162e78020",
+    "overview-linux.jpg": "65245568347d586f59a114dab7a7069551580d1f8b5a18ff81c399d7af0df0d6"
+  },
+  "physical_release": "Actual1180x812 window: keyboard after click, map/list/detail selection, required filters, recency, crossed-bound empty, reset, chart/gaps/single point, detail scrolling, About/Escape and clean exit passed. No macOS/Windows or human wheel-zoom claim.",
+  "limits": [
+    "State readiness includes assertion/timer overhead, not isolated GPU/paint or network timing.",
+    "Fresh-process startup samples use warm OS/cache state; no controlled cold-start claim.",
+    "Pre-chart startup log names were overwritten by final-chart samples and copied to verified names. Earlier7.437/8.007 summary is retained as a historical observation only.",
+    "Private full-reference display-name/coordinate-pair scan is unavailable, not newly certified.",
+    "Local Linux package remains a bounded technical artifact; redistribution source/notices compliance and other-platform packaging remain open."
+  ],
+  "main_qml_sha256": "1d0cb863e7a8daa4cc70e71206ffd6722122892a7dd6b9fe6cc362350c1770ca",
+  "baseline_observations": {
+    "source_commit": "ff5cc7d1f8a61664408f35455e19a7fb8fff5227",
+    "release_expanded": {
+      "classic": {
+        "process_seconds": 8.37,
+        "max_state_ms": 440
+      },
+      "extended": {
+        "process_seconds": 11.45,
+        "max_state_ms": 835
+      },
+      "reentrant": {
+        "process_seconds": 10.28,
+        "max_state_ms": 839
+      },
+      "presentation": {
+        "process_seconds": 16.83,
+        "max_state_ms": 1145
+      }
+    },
+    "full_startup_seconds": 5.95,
+    "scope": "Sequential same-host observations, different product layouts; no isolated renderer/paint or statistical speedup claim."
+  }
+}

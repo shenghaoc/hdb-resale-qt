@@ -1,6 +1,6 @@
 # HDB Resale Explorer
 
-An independent C# / Qt desktop app for exploring Singapore HDB resale registrations by address. **0.1.0 release candidate**, with Linux x64 verification in progress. It is not affiliated with HDB, SLA or the Singapore Government.
+An independent C# / Qt desktop app for exploring Singapore HDB resale registrations by address. **0.1.0 release candidate**, with the Linux x64 workflow verified. It is not affiliated with HDB, SLA or the Singapore Government.
 
 ![Linux Release with address groups and the selected-address monthly median trend](docs/product-rc/screenshots/monthly-trend-linux.jpg)
 
@@ -59,6 +59,12 @@ See [buyer semantics and verification](docs/product-rc/README.md), [official HDB
 `HdbResale.Domain` owns immutable source facts, evidence, filtering, address summaries, deterministic recent rows and selection. `HdbResale.App` exposes Qt models, an incremental viewport/grid map projection and native QML controls. Reentrant UI mutations drain through one FIFO queue. The parentless Bridge map wrapper retains its explicit QML lifetime anchor.
 
 The [sibling web visualizer](https://github.com/shenghaoc/hdb-resale-visualizer) is a product reference. Its block-median filters and out-of-filter selection behavior are deliberately not copied: this app filters transactions, then summarizes the matching cohort.
+
+## Verification
+
+Both Debug and Release build and pass **191 C# tests each**; all **39 Python tests** pass. The final Linux matrix passes **22 native positive cases** and detects all **42 deliberate failures**. Every completed interaction state is below the unchanged five-second goal; the slowest observed case is a 2.239-second reentrant burst. The expanded buyer flow peaks at 695 ms in Release.
+
+Fresh-process full-corpus startup is 7.339–7.637 seconds with warm OS/cache state, compared with the measured M10 baseline of 5.950 seconds. That startup cost is disclosed separately from interaction responsiveness. [Detailed results, scope and caveats](docs/product-rc/README.md#final-linux-native-acceptance).
 
 ## Platforms, licence and RC limits
 

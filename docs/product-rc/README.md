@@ -26,7 +26,7 @@ The serialized full ImportResult is intentionally **contract v2** because facts 
 
 Existing canonical/classic/extended/reentrant/presentation gates keep transaction truth, mapped-address truth, all-role/delegate identity, native Qt projection coverage, map lifetime and FIFO checks. List count now means addresses and is checked against the independent buyer oracle.
 
-Final builds, tests, timings, digest parity, physical Release evidence, deliberate failure sensitivity and publication audit are recorded after native verification. See [licensing and local packaging](licensing-packaging.md) for the separate RC distribution blockers.
+Final builds, tests, timings, digest parity, physical Release evidence and deliberate failure sensitivity are recorded in [verification.json](verification.json) and summarized below. See [licensing and local packaging](licensing-packaging.md) for the separate RC distribution blockers.
 
 ## Physical Linux Release check
 
@@ -49,3 +49,35 @@ The first full native checkpoint exposed eight new Facts fields in the historica
 The original audit still rejects changed protected Domain/evidence bytes by default. M11 adds an explicit `--m11-buyer-contract` mode requiring exact M10 ancestry and the committed [data-contract evidence](data-contract.json): precisely four authorized Domain source SHA-256 pins, the exact old-field digest, and a distinct v2 full digest. Evidence, canonical/sample bytes, source/build pins and unrelated Domain files remain protected. Unit tests reject each of those unexpected changes. This mode acknowledges authorized importer/model evolution; it does not call the Domain unchanged or replace native digest reproduction.
 
 The generic all-ref audit checks excluded cache/build/binary paths, raw-export hash/header, credential-shaped content and minimized historical fields. Exact private display-name/coordinate-pair absence cannot be newly certified without the excluded private reference, which was not available, transferred, read or reconstructed.
+
+## Final Linux native acceptance
+
+Production source is `82e6e99` (full hash in [verification.json](verification.json)); subsequent commits add audit/documentation evidence only. Source, Debug and Release Main.qml all have SHA-256 `1d0cb863e7a8daa4cc70e71206ffd6722122892a7dd6b9fe6cc362350c1770ca`. Both root configurations build with zero warnings/errors and each passes 191 C# tests. The Python suite passes 39 tests with no skip.
+
+All **22 native positive cases** pass: canonical plus classic/extended/reentrant, presentation and buyer scenarios across the original strict workload and expanded M9 workload in both Debug and Release. The normal five-second state budgets and explicitly validated expanded-corpus ten-second acceptance budgets are unchanged. No completed positive state exceeded five seconds. The slowest complete state was the original-workload Release reentrant burst at **2,239 ms**; expanded Debug presentation peaked at 2,148 ms.
+
+All **42 deliberately faulty runs** fail with expected `HDB_GATE_FAIL` assertions and clean C# teardown, rather than crashes. They cover both builds/workloads and the inherited skipped-empty, skipped-burst and dropped-projection faults plus buyer skipped minimum/list action, dropped chart point and NaN substituted for an observed value. Skipped minimum fails at buyer phase 4; list/chart faults fail at phase 6. The full matrix preserves the independent Qt viewport oracle and exact CSV-derived buyer/plot oracles.
+
+### Same-host Release observations
+
+| Expanded scenario | M10 process / max state | Final M11 process / max state |
+| --- | ---: | ---: |
+| Classic | 8.37 s / 440 ms | 9.26 s / 728 ms |
+| Extended | 11.45 s / 835 ms | 14.62 s / 786 ms |
+| Reentrant | 10.28 s / 839 ms | 10.59 s / 1,046 ms |
+| Presentation | 16.83 s / 1,145 ms | 18.14 s / 1,482 ms |
+| New buyer workflow | Not present | 11.34 s / 695 ms |
+
+These are sequential observations, not statistical estimates. Product layouts/viewport dimensions differ. Completed states include timer cadence and all assertions; they do not isolate GPU, native paint, layout, Bridge marshalling or network time. The new buyer scenario is not a like-for-like M10 process comparison.
+
+Full native startup was **7.339 / 7.637 seconds**, versus the fresh M10 baseline's 5.950 seconds. These are fresh processes using warm OS/file/tile caches, not controlled cold starts. Optional source parsing and complete address metrics add work; this record makes no startup-speedup claim. Managed profiles include the inherited study's additional aggregation/probes, so those diagnostic operations must not be confused with the production model's single shared summary set.
+
+A runner label initially wrote final startup samples under the earlier raw-log names; exact final files were copied to the verified prefix. The prior pre-chart 7.437 / 8.007-second summary remains historical only. No overwritten pre-chart raw sample is presented as preserved evidence.
+
+### Data and frozen reports
+
+The final native host reproduces the old-field digest `88118bdb3a9a68f59ea47cddae27568623f136cb7b7d5320a376f8f752dc6cc5` and distinct v2 digest `46ac65f199f916b78f56b388a19fa3a510617a6c0917c5d4787ef4e6cc856393`. The 416-row report byte comparison passes. The M5 report again has exact frozen SHA-256 `d76614762c351eb121d3dd11ed03658e53daae1a5feeae36809a029b7e62d4be`; its first expanded-facts serialization failure was corrected, not accepted.
+
+Address qualities remain **897 Exact / 6,721 Normalized / 209 Ambiguous / 1,928 Unmatched**. Transaction qualities remain **28,396 / 160,177 / 4,305 / 49,042** respectively. There are **7,618 mapped and 2,137 missing-coordinate addresses**, and **188,573 mapped and 53,347 missing-coordinate transactions**. The six-row default, 416-row benchmark, source hashes, evidence grammar and coordinates are unchanged.
+
+The separate clean, relocated private Linux package check follows the final documentation checkpoint. Its result does not broaden verification to another distribution, macOS, Windows, human wheel zoom, signing, notarization or official publication. Source/notices obligations for redistribution remain open even when technical launch passes.
