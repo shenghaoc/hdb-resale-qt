@@ -2,9 +2,9 @@
 
 An independent C# / Qt desktop app for exploring Singapore HDB resale registrations by address. **0.1.0 release candidate**, with Linux x64 verification in progress. It is not affiliated with HDB, SLA or the Singapore Government.
 
-![Linux expanded-corpus overview with address groups and matching sales](docs/product-rc/screenshots/overview-linux.jpg)
+![Linux Release with address groups and the selected-address monthly median trend](docs/product-rc/screenshots/monthly-trend-linux.jpg)
 
-[Address-level detail screenshot](docs/product-rc/screenshots/address-detail-linux.jpg) · Actual Linux Release captures with the locally prepared expanded corpus. The default clone uses six registrations.
+Actual Linux Release capture with the locally prepared expanded corpus and default S$1,000,000 maximum. The default clone uses six registrations. [Verification screenshots and checkpoints](docs/product-rc/README.md#physical-linux-release-check).
 
 ## Find an address worth investigating
 

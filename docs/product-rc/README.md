@@ -30,9 +30,9 @@ Final builds, tests, timings, digest parity, physical Release evidence, delibera
 
 ## Physical Linux Release check
 
-The final source's actual 1180×812 window was inspected on XFCE/X11. After clicking an address, Down+Enter selected the next address and Up+Enter returned, with a visible focused-row outline. A map marker selected a different address and scrolled the list to its highlight; the summary and recent rows agreed. Registration controls, price/type/window combinations, crossed-bounds empty state, reset, detail scrolling, Show selected address, recenter, About/Escape and clean exit were checked.
+The final source's actual 1180×812 window was inspected on XFCE/X11. The entire chart, title, date endpoints and gap caption fit together. A single S$500,000 observation was visibly centered within a S$450,000–550,000 axis, and zero results cleared the chart with the selection. After clicking an address, Down+Enter selected the next address and Up+Enter returned, with a visible focused-row outline. A map marker selected a different address and scrolled the list to its highlight; the summary and recent rows agreed. Registration controls, price/type/window combinations, crossed-bounds empty state, reset, detail scrolling, Show selected address, recenter, About/Escape and clean exit were checked.
 
-[Overview](screenshots/overview-linux.jpg) and [address detail](screenshots/address-detail-linux.jpg) are unaltered native JPEG captures. Required OneMap logo/attribution remain visible and are not application branding. No macOS/Windows physical verification or human mouse-wheel zoom test is claimed.
+[Final monthly-trend view](screenshots/monthly-trend-linux.jpg) is the final compact-chart Release capture. [Overview](screenshots/overview-linux.jpg) and [address detail](screenshots/address-detail-linux.jpg) preserve the earlier pre-chart checkpoint. All are unaltered native JPEG captures. Required OneMap logo/attribution remain visible and are not application branding. No macOS/Windows physical verification or human mouse-wheel zoom test is claimed.
 
 ## Approved GPL licence and bounded trend chart
 
