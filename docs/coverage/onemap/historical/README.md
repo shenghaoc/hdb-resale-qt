@@ -48,10 +48,12 @@ it does not establish exhaustive returned-address/candidate uniqueness.**
 Independent full-source mechanical checks passed on all340changed rows:
 unique original HDB property,0ACRAassertions, exact raw cache key/search/postal/time,
 one block/postal footprint, identical OBJECTID and independently computed point.
-This is not a340-address manual ground-truth audit. Human review covers the5
-residual failures and1conflict below plus tenant-name cases. Cached first hits
-include schools/childcare/student-care organisations (12changedtransactions across
-10identities), demonstrating why BUILDING cannot prove unique intended identity.
+An [individual changed-address review](manual-review.md) is now complete for
+all310identities/340transactions, alongside the5residual failures and1conflict.
+All310returned identities and candidate uniqueness remain **Unverified**. This
+is record-chain inspection, not a manual ground-truth audit. Fifteen addresses
+covering17transactions have institutional/tenant first-hit labels, demonstrating
+why BUILDING cannot prove intended residential identity.
 Audit-only cache-point distances: max58.31m atHDB-82898,0above100m; never a join,
 footprint choice, conflict decision or app coordinate input. Raw lat/lng untracked.
 

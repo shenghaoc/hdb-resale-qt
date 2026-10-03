@@ -1,3 +1,19 @@
+# Milestone5 individual manual review — 2026-10-03
+
+Completed individual inspection of all310changed identities covering all340changed
+transactions, grouped repeated sales and recorded each covered ID/property source
+row/footprint OBJECTID+ENTITYID/reason in the [scoped manual ledger](coverage/onemap/historical/manual-review.md).
+All preserved chains agree, but every returned identity and candidate uniqueness
+is explicitly Unverified.15addresses/17transactions flagged for institutional or
+tenant first-hit labels;128NIL/167other descriptive first hits equally lack returned
+address/candidate proof. No fuzzy/coordinate/name/majority matching or outcome change.
+Publication and main remain paused. Original stronger identity/uniqueness evidence
+cannot be recovered from this export; manual inspection itself is now complete.
+Only documentation/ledger changed since the40C#tests/11Python tests and native
+gates below; canonical fixtures/frozen study/rules/outcomes remain unchanged.
+
+---
+
 # Historical milestone5 local verification — 2026-10-03
 
 Later supplied export successfully materialized/read on this Mac with preserved
