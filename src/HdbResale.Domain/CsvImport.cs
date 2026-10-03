@@ -24,6 +24,18 @@ public static class CsvImport
     {
         var rejected = new List<RejectedRecord>();
         var diagnostics = new List<ImportDiagnostic>();
+        var expandRoadAliases = false;
+        var normalizationPath = Path.Combine(directory, "address-normalization.txt");
+        if (File.Exists(normalizationPath))
+        {
+            try
+            {
+                if (File.ReadAllText(normalizationPath) == "terminal-road-types-v1\n") expandRoadAliases = true;
+                else diagnostics.Add(new(Path.GetFileName(normalizationPath), 0, "Unknown address normalization profile; no expanded aliases used."));
+            }
+            catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+            { diagnostics.Add(new(Path.GetFileName(normalizationPath), 0, e.Message)); }
+        }
         var historicalPath = Path.Combine(directory, "historical-postal-evidence.json");
         if (historicalAssertions is null && File.Exists(historicalPath))
         {
@@ -65,8 +77,8 @@ public static class CsvImport
         stage?.Invoke("postal-evidence");
         var footprints = ReadFootprints(buildingEvidencePath ?? Path.Combine(directory, "building-evidence.geojson"), rejected, diagnostics, stage, supportMultiPolygon);
         stage?.Invoke("footprints");
-        var propertyIndex = properties.ToLookup(p => (AddressNormalizer.Block(p.Block), AddressNormalizer.Street(p.Street)));
-        var postalIndex = postalAddresses.ToLookup(p => (AddressNormalizer.Block(p.Block), AddressNormalizer.Street(p.Street)));
+        var propertyIndex = properties.ToLookup(p => (AddressNormalizer.Block(p.Block), AddressNormalizer.Street(p.Street, expandRoadAliases)));
+        var postalIndex = postalAddresses.ToLookup(p => (AddressNormalizer.Block(p.Block), AddressNormalizer.Street(p.Street, expandRoadAliases)));
         var footprintIndex = footprints.ToLookup(p => AddressNormalizer.Block(p.Identity.Block));
         var matches = new Dictionary<(string Town, string Block, string Street), AddressMatch>();
         stage?.Invoke("evidence-index");
@@ -108,11 +120,11 @@ public static class CsvImport
                 oneMapSearches?.TryGetValue(OneMapEvidence.AddressKey(facts.Block,facts.Street), out search);
                 HistoricalPostalAssertion? historical = null;
                 historicalAssertions?.TryGetValue(HistoricalOneMap.Key(facts),out historical);
-                var addressKey = (AddressNormalizer.Block(facts.Block), AddressNormalizer.Street(facts.Street));
+                var addressKey = (AddressNormalizer.Block(facts.Block), AddressNormalizer.Street(facts.Street, expandRoadAliases));
                 match = AddressMatcher.Match(facts,
                     indexed ? propertyIndex[addressKey].ToArray() : properties,
                     indexed ? postalIndex[addressKey].ToArray() : postalAddresses,
-                    indexed ? footprintIndex[addressKey.Item1].ToArray() : footprints, search, historical);
+                    indexed ? footprintIndex[addressKey.Item1].ToArray() : footprints, search, historical, expandRoadAliases);
                 if (indexed) matches.Add(key, match);
             }
             var location = match.MatchedFootprint?.Location ?? new DerivedLocation(null, CoordinateQuality.Missing, match.Reason);

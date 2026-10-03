@@ -21,6 +21,22 @@ public sealed class AddressCoverageTests : IDisposable
     private void Postals(string rows) => File.WriteAllText(Path.Combine(directory,"postal-address-evidence.csv"),
         "source_row,block,street_name,postal_code,source_dataset\n" + rows);
     [Fact]
+    public void ExplicitDirectoryProfileUsesSameRoadRuleForIndexesAndMatcherWithoutChangingFacts()
+    {
+        File.WriteAllText(Path.Combine(directory,"transactions.csv"),"source_row,month,town,flat_type,block,street_name,resale_price\n2,2024-01,T,3 ROOM,1,TEST ST 11,100\n");
+        File.WriteAllText(Path.Combine(directory,"address-evidence.csv"),"source_row,blk_no,street\n2,1,TEST ST 11\n");
+        Postals($"2,1,TEST STREET 11,123456,{A}\n");
+        Assert.Equal(MatchQuality.Unmatched,Assert.Single(CsvImport.LoadDirectory(directory).Accepted).Match.Quality);
+        File.WriteAllText(Path.Combine(directory,"address-normalization.txt"),"terminal-road-types-v1\n");
+        var result=CsvImport.LoadDirectory(directory);var row=Assert.Single(result.Accepted);
+        Assert.Equal("TEST ST 11",row.Facts.Street);Assert.Equal(MatchQuality.NormalizedAddress,row.Match.Quality);
+        Assert.Equal(JsonSerializer.Serialize(result),JsonSerializer.Serialize(CsvImport.LoadDirectory(directory,indexed:false)));
+        Assert.Equal(JsonSerializer.Serialize(result),JsonSerializer.Serialize(CsvImport.LoadDirectory(directory,referenceCsv:true)));
+        File.WriteAllText(Path.Combine(directory,"address-normalization.txt"),"unknown-profile\n");
+        var invalid=CsvImport.LoadDirectory(directory);Assert.Single(invalid.Diagnostics);
+        Assert.Equal(MatchQuality.Unmatched,Assert.Single(invalid.Accepted).Match.Quality);
+    }
+    [Fact]
     public void DatasetQualifiedRowsPreserveAllAssertionsIncludingSameOrdinalAcrossDatasets()
     {
         Postals($"2,1,ST,123456,{A}\n2,1,ST,123456,{B}\n");

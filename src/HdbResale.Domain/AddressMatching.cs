@@ -28,13 +28,24 @@ public sealed record AddressMatch(MatchQuality Quality, string Reason,
 public static class AddressNormalizer
 {
     public static string Block(string value) => value.Trim().ToUpperInvariant();
-    public static string Street(string value)
+    public static string Street(string value, bool expandRoadAliases = false)
     {
         var tokens = value.ToUpperInvariant().Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
         // Only the two observed road tokens, immediately before a numeric suffix.
         // Keep punctuation, block suffixes and number spelling; no fuzzy matching.
         if (tokens.Length > 1 && tokens[^1].All(char.IsAsciiDigit))
             tokens[^2] = tokens[^2] switch { "AVE" => "AVENUE", "CTRL" => "CENTRAL", _ => tokens[^2] };
+        if (expandRoadAliases)
+        {
+            var index = tokens.Length > 1 && tokens[^1].All(char.IsAsciiDigit) ? tokens.Length - 2 : tokens.Length - 1;
+            // A road type follows an actual name: never reinterpret leading ST
+            // (Saint), standalone ST, punctuation, number spelling or substrings.
+            if (index > 0) tokens[index] = tokens[index] switch
+            {
+                "ST" => "STREET", "RD" => "ROAD", "DR" => "DRIVE",
+                "CRES" when index == tokens.Length - 1 => "CRESCENT", _ => tokens[index]
+            };
+        }
         return string.Join(' ', tokens);
     }
 }
@@ -42,10 +53,10 @@ public static class AddressNormalizer
 public static class AddressMatcher
 {
     public static AddressMatch Match(TransactionFacts facts, IReadOnlyList<PropertyAddress> properties,
-        IReadOnlyList<PostalAddress> postalAddresses, IReadOnlyList<FootprintRecord> footprints, OneMapSearch? oneMapSearch = null, HistoricalPostalAssertion? historicalAssertion = null)
+        IReadOnlyList<PostalAddress> postalAddresses, IReadOnlyList<FootprintRecord> footprints, OneMapSearch? oneMapSearch = null, HistoricalPostalAssertion? historicalAssertion = null, bool expandRoadAliases = false)
     {
-        var propertyMatches = Array.AsReadOnly(properties.Where(p => SameAddress(facts, p.Block, p.Street)).ToArray());
-        var assertions = Array.AsReadOnly(postalAddresses.Where(p => SameAddress(facts, p.Block, p.Street)).ToArray());
+        var propertyMatches = Array.AsReadOnly(properties.Where(p => SameAddress(facts, p.Block, p.Street, expandRoadAliases)).ToArray());
+        var assertions = Array.AsReadOnly(postalAddresses.Where(p => SameAddress(facts, p.Block, p.Street, expandRoadAliases)).ToArray());
         IReadOnlyList<FootprintRecord> candidates = Array.Empty<FootprintRecord>();
         var historicalPostal = historicalAssertion is not null && HistoricalOneMap.Usable(facts,historicalAssertion) ? historicalAssertion.Postal : null;
         var oneMap = oneMapSearch is null ? null : OneMapEvidence.Assess(facts, oneMapSearch);
@@ -89,7 +100,7 @@ public static class AddressMatcher
             : $"One HDB property address + {assertions.Count} agreeing ACRA postal assertions + one footprint on block/postal. " +
             "Official-record corroboration, not an authoritative HDB ID link.");
     }
-    private static bool SameAddress(TransactionFacts facts, string block, string street) =>
+    private static bool SameAddress(TransactionFacts facts, string block, string street, bool expandRoadAliases) =>
         AddressNormalizer.Block(facts.Block) == AddressNormalizer.Block(block) &&
-        AddressNormalizer.Street(facts.Street) == AddressNormalizer.Street(street);
+        AddressNormalizer.Street(facts.Street, expandRoadAliases) == AddressNormalizer.Street(street, expandRoadAliases);
 }

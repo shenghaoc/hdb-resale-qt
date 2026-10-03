@@ -7,6 +7,15 @@ public sealed class CoverageStudyTests
 {
     private static ImportResult Study() => CsvImport.LoadDirectory(Path.Combine(AppContext.BaseDirectory, "coverage"));
     [Fact]
+    public void NewInvalidPostalCategoryDoesNotChangeFrozenHistoricalReportShapeWhenAbsent()
+    {
+        var row=ExplorerStateTests.Fixture().Accepted[0];
+        row=row with {Match=row.Match with {HistoricalOneMap=new(HistoricalOneMap.Key(row.Facts),HistoricalOneMap.SearchValue(row.Facts),"HistoricalFirstHit",row.Match.PostalAssertions[0].PostalCode,"2026-05-24T10:00:00Z")}};
+        var report=CoverageStudy.Summarize(new([row],[],[]));
+        Assert.DoesNotContain(nameof(CoverageReason.InvalidPostalAssertion),report.Reasons.Keys);
+        Assert.Contains(nameof(CoverageReason.CrossSourcePostalConflict),report.Reasons.Keys);
+    }
+    [Fact]
     public void SampleCountsCrossTabsAndSourceDerivedHashesStayConsistent()
     {
         var directory = Path.Combine(AppContext.BaseDirectory, "coverage");

@@ -10,6 +10,36 @@ public sealed class AddressMatchingTests
     }
     private static FootprintRecord Footprint(int id = 937499, string block = "509", string postal = "560509") =>
         new(new(id, 7861, block, postal), new(new(1.3739973579, 103.8501378907), CoordinateQuality.BlockApproximation, $"HDB OBJECTID {id}"));
+    [Theory]
+    [InlineData("ANG MO KIO ST 52", "ANG MO KIO STREET 52")]
+    [InlineData("ANCHORVALE ST", "ANCHORVALE STREET")]
+    [InlineData("BEDOK RESERVOIR RD", "BEDOK RESERVOIR ROAD")]
+    [InlineData("EUNOS RD 5", "EUNOS ROAD 5")]
+    [InlineData("BRIGHT HILL DR", "BRIGHT HILL DRIVE")]
+    [InlineData("PASIR RIS DR 10", "PASIR RIS DRIVE 10")]
+    [InlineData("TELOK BLANGAH CRES", "TELOK BLANGAH CRESCENT")]
+    public void ExplicitProfileExpandsOnlyObservedRoadTypeContexts(string raw,string full)
+    {
+        Assert.NotEqual(AddressNormalizer.Street(raw),AddressNormalizer.Street(full));
+        Assert.Equal(AddressNormalizer.Street(raw,true),AddressNormalizer.Street(full,true));
+    }
+    [Theory]
+    [InlineData("ST 11", "STREET 11")]
+    [InlineData("ST", "STREET")]
+    [InlineData("ST JOHN RD", "STREET JOHN ROAD")]
+    [InlineData("ST. GEORGE'S RD", "ST GEORGES ROAD")]
+    [InlineData("ANG MO KIO ST 01", "ANG MO KIO STREET 1")]
+    [InlineData("ANG MO KIO ST. 11", "ANG MO KIO STREET 11")]
+    [InlineData("ANG MO KIO ST １１", "ANG MO KIO STREET １１")]
+    [InlineData("MAIN ST 11 ANNEX", "MAIN STREET 11 ANNEX")]
+    [InlineData("EUNOS RD 05", "EUNOS ROAD 5")]
+    [InlineData("TEST CRES 1", "TEST CRESCENT 1")]
+    [InlineData("BROADWAY", "BROADWAY ROAD")]
+    [InlineData("STADIUM", "STREETADIUM")]
+    public void ExpandedProfileNeverChangesNumbersPunctuationLeadingSaintOrSubstrings(string a,string b)
+    {
+        Assert.NotEqual(AddressNormalizer.Street(a,true),AddressNormalizer.Street(b,true));
+    }
     [Fact]
     public void ConservativeObservedNormalizationMatchesButDoesNotCollapseSimilarAddresses()
     {
