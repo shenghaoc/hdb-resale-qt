@@ -224,3 +224,9 @@ contract. No member is missing, no malformed geometry or duplicate source key
 explains these diagnostics, and no accepted-type importer mishandling was found.
 Therefore no behavior-changing parser fix, identity relaxation, geometry repair
 or expanded geometry support was introduced. All diagnostics remain visible.
+
+## M11 additional chart modules
+
+M11's owner-approved GPL-3.0-or-later application includes a small Qt Graphs 2D selected-address trend. Add the matching official **Qt 6.12.0** `qtgraphs` and `qtquick3d` modules to the existing installation. The official Graphs binary links Quick3D/RuntimeRender/Utils even for 2D; the app adds no 3D flow. `qtquicktimeline` was provisioned as an official recommended supporting module, but only actual scanner/ELF dependencies are included in the private package. QtShaderTools was already part of the pinned setup.
+
+Use the existing aqt 3.3.0 environment, preserving the base installation and package hash verification. The module archive version was `6.12.0-0-202609280346`; no system ICU or obsolete binary compatibility package was installed. See [M11 licensing/packaging](product-rc/licensing-packaging.md) for the exact local closure and redistribution limits.
