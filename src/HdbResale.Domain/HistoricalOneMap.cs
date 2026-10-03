@@ -42,10 +42,10 @@ public static class HistoricalOneMap
             if (e.SearchValue!=SearchValue(t.Facts) || e.Status is not ("MissingKey" or "SearchMismatch" or "InvalidPostal" or "HistoricalFirstHit") ||
                 (e.Status=="HistoricalFirstHit" && (!Usable(t.Facts,e) || !DateTimeOffset.TryParse(e.UpdatedAt,out _)))) throw new InvalidDataException("Malformed historical assertion.");
         }
-        var fullBaseline=CsvImport.LoadDirectory(sampleDirectory,buildingEvidencePath:originalFootprints);
+        var fullBaseline=CsvImport.LoadDirectory(sampleDirectory,buildingEvidencePath:originalFootprints,supportMultiPolygon:false);
         if (!baseline.Accepted.Select(t=>(t.Id,t.Match.Quality,t.Location.Point)).SequenceEqual(fullBaseline.Accepted.Select(t=>(t.Id,t.Match.Quality,t.Location.Point))))
             throw new InvalidDataException("Full footprint source changes baseline.");
-        var after=CsvImport.LoadDirectory(sampleDirectory,buildingEvidencePath:originalFootprints,historicalAssertions:entries);
+        var after=CsvImport.LoadDirectory(sampleDirectory,buildingEvidencePath:originalFootprints,historicalAssertions:entries,supportMultiPolygon:false);
         var rows=baseline.Accepted.Zip(after.Accepted).Select(p=>new HistoricalExperimentRow(p.First.Id,p.First.Facts,p.First.Match.Quality,p.Second.Match.Quality,p.First.Location.Quality,p.Second.Location.Quality,p.Second.Match)).ToArray();
         var transitions=rows.GroupBy(t=>$"{t.Before}→{t.ExperimentalAfter}").OrderBy(g=>g.Key,StringComparer.Ordinal).ToDictionary(g=>g.Key,g=>g.Count());
         var audit=rows.Where(t=>t.Before!=t.ExperimentalAfter || t.BeforeCoordinates!=t.ExperimentalCoordinates || t.ExperimentalAfter==MatchQuality.Ambiguous || t.Evidence.HistoricalOneMap?.Status is "SearchMismatch" or "InvalidPostal").ToArray();

@@ -20,7 +20,7 @@ public static class CsvImport
     {
         public string this[string name] => Raw[Header[name]];
     }
-    public static ImportResult LoadDirectory(string directory, IReadOnlyDictionary<string, OneMapSearch>? oneMapSearches = null, string? buildingEvidencePath = null, IReadOnlyDictionary<string, HistoricalPostalAssertion>? historicalAssertions = null, Action<string>? stage = null, bool indexed = true, bool referenceCsv = false)
+    public static ImportResult LoadDirectory(string directory, IReadOnlyDictionary<string, OneMapSearch>? oneMapSearches = null, string? buildingEvidencePath = null, IReadOnlyDictionary<string, HistoricalPostalAssertion>? historicalAssertions = null, Action<string>? stage = null, bool indexed = true, bool referenceCsv = false, bool supportMultiPolygon = true)
     {
         var rejected = new List<RejectedRecord>();
         var diagnostics = new List<ImportDiagnostic>();
@@ -46,7 +46,7 @@ public static class CsvImport
             else postalAddresses.Add(new(sourceRow, f["block"], f["street_name"], f["postal_code"]));
         }
         stage?.Invoke("postal-evidence");
-        var footprints = ReadFootprints(buildingEvidencePath ?? Path.Combine(directory, "building-evidence.geojson"), rejected, diagnostics, stage);
+        var footprints = ReadFootprints(buildingEvidencePath ?? Path.Combine(directory, "building-evidence.geojson"), rejected, diagnostics, stage, supportMultiPolygon);
         stage?.Invoke("footprints");
         var propertyIndex = properties.ToLookup(p => (AddressNormalizer.Block(p.Block), AddressNormalizer.Street(p.Street)));
         var postalIndex = postalAddresses.ToLookup(p => (AddressNormalizer.Block(p.Block), AddressNormalizer.Street(p.Street)));
@@ -121,7 +121,7 @@ public static class CsvImport
     }
     private static bool PostalCode(string value) => value.Length == 6 && value.All(char.IsAsciiDigit);
     private static IReadOnlyList<FootprintRecord> ReadFootprints(string path,
-        List<RejectedRecord> rejected, List<ImportDiagnostic> diagnostics, Action<string>? stage)
+        List<RejectedRecord> rejected, List<ImportDiagnostic> diagnostics, Action<string>? stage, bool supportMultiPolygon)
     {
         var result = new List<FootprintRecord>();
         var file = Path.GetFileName(path);
@@ -172,12 +172,15 @@ public static class CsvImport
                 else
                 {
                     GeoPoint? point = null;
-                    if (geometry.ValueKind != JsonValueKind.Null) error = Midpoint(geometry, out point);
+                    if (geometry.ValueKind != JsonValueKind.Null) error = Midpoint(geometry, out point, supportMultiPolygon);
                     if (error is null)
                     {
                         var identity = new FootprintIdentity(objectId, entityId, block, postal);
                         var source = $"HDB Existing Building OBJECTID {objectId}; ENTITYID {entityId}; postal {postal}; " +
-                            (point is null ? "no geometry in local evidence." : "exterior-ring bounding-box midpoint (not exact/interior guaranteed).");
+                            (point is null ? "no geometry in local evidence." :
+                                geometry.GetProperty("type").GetString() == "MultiPolygon"
+                                ? "all component exterior-ring union bounding-box midpoint (not exact/interior guaranteed)."
+                                : "exterior-ring bounding-box midpoint (not exact/interior guaranteed).");
                         result.Add(new(identity, new(point, point is null ? CoordinateQuality.Missing : CoordinateQuality.BlockApproximation, source)));
                     }
                 }
@@ -205,12 +208,42 @@ public static class CsvImport
         value = p.GetString()!;
         return true;
     }
-    private static string? Midpoint(JsonElement geometry, out GeoPoint? point)
+    private static string? Midpoint(JsonElement geometry, out GeoPoint? point, bool supportMultiPolygon)
     {
         point = null;
+        if (supportMultiPolygon && geometry.ValueKind == JsonValueKind.Object &&
+            Text(geometry, "type", out var geometryType) && geometryType == "MultiPolygon")
+        {
+            if (!geometry.TryGetProperty("coordinates", out var polygons) || polygons.ValueKind != JsonValueKind.Array || polygons.GetArrayLength() == 0)
+                return "Expected MultiPolygon with at least one polygon.";
+            Bounds? union = null;
+            foreach (var polygon in polygons.EnumerateArray())
+            {
+                var error = ExteriorBounds(polygon, out var bounds);
+                if (error is not null) return "MultiPolygon component: " + error;
+                union = union is null ? bounds : new Bounds(Math.Min(union.Value.MinLongitude, bounds.MinLongitude),
+                    Math.Max(union.Value.MaxLongitude, bounds.MaxLongitude), Math.Min(union.Value.MinLatitude, bounds.MinLatitude),
+                    Math.Max(union.Value.MaxLatitude, bounds.MaxLatitude));
+            }
+            point = Point(union!.Value);
+            return null;
+        }
         if (geometry.ValueKind != JsonValueKind.Object || !Text(geometry, "type", out var type) || type != "Polygon" ||
             !geometry.TryGetProperty("coordinates", out var rings) || rings.ValueKind != JsonValueKind.Array ||
             rings.GetArrayLength() == 0 || rings[0].ValueKind != JsonValueKind.Array || rings[0].GetArrayLength() < 4)
+            return "Expected Polygon with an exterior ring of at least four positions.";
+        var polygonError = ExteriorBounds(rings, out var polygonBounds);
+        if (polygonError is null) point = Point(polygonBounds);
+        return polygonError;
+    }
+    private readonly record struct Bounds(double MinLongitude, double MaxLongitude, double MinLatitude, double MaxLatitude);
+    private static GeoPoint Point(Bounds b) => new(Math.Round((b.MinLatitude + b.MaxLatitude) / 2, 10),
+        Math.Round((b.MinLongitude + b.MaxLongitude) / 2, 10));
+    private static string? ExteriorBounds(JsonElement rings, out Bounds bounds)
+    {
+        bounds = default;
+        if (rings.ValueKind != JsonValueKind.Array || rings.GetArrayLength() == 0 ||
+            rings[0].ValueKind != JsonValueKind.Array || rings[0].GetArrayLength() < 4)
             return "Expected Polygon with an exterior ring of at least four positions.";
         (double Longitude, double Latitude) first = default, last = default;
         double minLongitude = 0, maxLongitude = 0, minLatitude = 0, maxLatitude = 0;
@@ -238,8 +271,7 @@ public static class CsvImport
             last = (lon, lat);
         }
         if (first != last) return "Polygon exterior ring must be closed.";
-        point = new(Math.Round((minLatitude + maxLatitude) / 2, 10),
-            Math.Round((minLongitude + maxLongitude) / 2, 10));
+        bounds = new(minLongitude, maxLongitude, minLatitude, maxLatitude);
         return null;
     }
     private static void Reject(string file, CsvRow row, string error, List<RejectedRecord> rejected,

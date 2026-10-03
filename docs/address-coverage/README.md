@@ -44,3 +44,24 @@ explicit asserted postal. It distinguishes absent source geometry, unsupported
 type and rejected identity, without guessing postals, street codes or coordinates.
 No new normalization rule is present. Canonical six, frozen 416 and M5 projection
 inputs are unchanged.
+
+## Narrow geometry support
+
+MultiPolygon is accepted as **one original footprint feature**, with a bounding
+box spanning all component exterior rings. No component wins by position, size or
+proximity. Every component exterior ring must satisfy the same finite numeric,
+range, minimum-position and closure checks as Polygon; a bad later component
+rejects the whole feature. Interior rings and extra ordinates keep existing
+Polygon semantics. No geometry repair or footprint split occurs. Scalar bounds
+remain value types; the importer retains no coordinate lists or JsonElement.
+ENTITYID must remain positive. A point is only BlockApproximation and may lie
+outside/between components.
+
+On original ACRA B evidence alone, support adds exactly **1 address / 36
+transactions** (226A SUMANG LANE), bringing located counts to 1,922 / 52,550.
+All other address outcomes and existing coordinates are unchanged. Footprint
+rejections drop from eleven to one (the same ENTITYID 0 feature). This is
+separate from gains attributable to additional public postal assertions.
+The frozen M5 experiment explicitly keeps its original Polygon-only policy so
+its report and diagnostics remain byte-identical; `--address-coverage-baseline`
+similarly reproduces the original full-data inventory.

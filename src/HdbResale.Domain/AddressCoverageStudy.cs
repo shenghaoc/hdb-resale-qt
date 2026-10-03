@@ -11,9 +11,9 @@ public sealed record AddressCoverageReport(int Transactions, int Addresses, int 
 /// <summary>Complete deterministic address inventory, using actual importer decisions.</summary>
 public static class AddressCoverageStudy
 {
-    public static AddressCoverageReport Run(string directory)
+    public static AddressCoverageReport Run(string directory, bool supportMultiPolygon = true)
     {
-        var imported = CsvImport.LoadDirectory(directory);
+        var imported = CsvImport.LoadDirectory(directory, supportMultiPolygon: supportMultiPolygon);
         var rows = imported.Accepted.GroupBy(t => (t.Town, t.Facts.Block, t.Facts.Street))
             .OrderBy(g => g.Key.Town, StringComparer.Ordinal).ThenBy(g => g.Key.Block, StringComparer.Ordinal)
             .ThenBy(g => g.Key.Street, StringComparer.Ordinal).Select(g =>

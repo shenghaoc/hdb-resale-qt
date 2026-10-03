@@ -7,9 +7,9 @@ internal static class Program
 {
     private static void Main(string[] args)
     {
-        if (args.Length == 3 && args[0] == "--address-coverage")
+        if (args.Length == 3 && args[0] is "--address-coverage" or "--address-coverage-baseline")
         {
-            WriteReport(args[2], AddressCoverageStudy.Run(args[1]));
+            WriteReport(args[2], AddressCoverageStudy.Run(args[1], supportMultiPolygon: args[0] != "--address-coverage-baseline"));
             return;
         }
         if (args.Length == 3 && args[0] == "--coverage")

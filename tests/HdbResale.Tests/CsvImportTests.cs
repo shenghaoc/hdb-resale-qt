@@ -42,6 +42,50 @@ public sealed class CsvImportTests : IDisposable
         Assert.Equal(1.3, row.Location.Point!.Latitude);
         Assert.Empty(result.Rejected);
     }
+    [Fact]
+    public void MultiPolygonUsesAllComponentExteriorBoundsWithoutChoosingFirstOrLargest()
+    {
+        var geometry = JsonNode.Parse("""
+            {"type":"MultiPolygon","coordinates":[[[[100,0],[102,0],[102,2],[100,0]],[[180,90]]],[[[110,4],[114,4],[114,8],[110,4]]]]}
+            """)!;
+        var result = Load(Header + "2,2024-01,T,3 ROOM,1,ST,100\n",
+            PropertyHeader + "2,1,ST\n", PostalHeader + "2,1,ST,123456\n", Feature(42, geometry));
+        var row = Assert.Single(result.Accepted);
+        Assert.Equal(new GeoPoint(4, 107), row.Location.Point);
+        Assert.Equal(MatchQuality.ExactAddress, row.Match.Quality);
+        Assert.Contains("all component", row.Location.Source);
+        Assert.Empty(result.Diagnostics);
+        var legacy = CsvImport.LoadDirectory(directory, supportMultiPolygon: false);
+        Assert.Null(Assert.Single(legacy.Accepted).Location.Point);
+        Assert.Contains("Expected Polygon", Assert.Single(legacy.Diagnostics).Message);
+    }
+    [Theory]
+    [InlineData("[]")]
+    [InlineData("[[]]")]
+    [InlineData("[[[[100,0],[101,0],[101,1],[100,0]]],[]]")]
+    [InlineData("[[[[100,0],[101,0],[101,1],[100,0]]],[[[103,0],[104,0],[104,1],[103,1]]]]")]
+    [InlineData("[[[[100,0],[101,0],[101,1],[100,0]]],[[[103,91],[104,0],[104,1],[103,91]]]]")]
+    public void MalformedLaterMultiPolygonComponentRejectsWholeFeature(string coordinates)
+    {
+        var result = Load(Header + "2,2024-01,T,3 ROOM,1,ST,100\n",
+            PropertyHeader + "2,1,ST\n", PostalHeader + "2,1,ST,123456\n",
+            Feature(42, JsonNode.Parse("{\"type\":\"MultiPolygon\",\"coordinates\":" + coordinates + "}")));
+        Assert.Null(Assert.Single(result.Accepted).Location.Point);
+        Assert.Single(result.Diagnostics); Assert.Single(result.Rejected);
+    }
+    [Fact]
+    public void MultiPolygonDoesNotRelaxPositiveEntityOrResolveMultipleFootprints()
+    {
+        var multi = JsonNode.Parse("""{"type":"MultiPolygon","coordinates":[[[[100,0],[102,0],[102,2],[100,0]]]]}""")!;
+        var zero = Feature(41, multi.DeepClone()); zero["properties"]!["ENTITYID"] = 0;
+        var result = Load(Header + "2,2024-01,T,3 ROOM,1,ST,100\n",
+            PropertyHeader + "2,1,ST\n", PostalHeader + "2,1,ST,123456\n",
+            zero, Feature(42, multi.DeepClone()), Feature(43, multi.DeepClone()));
+        var row = Assert.Single(result.Accepted);
+        Assert.Equal(MatchQuality.Ambiguous, row.Match.Quality);
+        Assert.Equal(2, row.Match.FootprintCandidates.Count); Assert.Null(row.Location.Point);
+        Assert.Contains("ENTITYID", Assert.Single(result.Diagnostics).Message);
+    }
     [Theory]
     [InlineData("2,2024-13,T,3 ROOM,1,ST,100", "Month")]
     [InlineData("2,2024-1,T,3 ROOM,1,ST,100", "Month")]
