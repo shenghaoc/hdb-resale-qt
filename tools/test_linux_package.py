@@ -33,7 +33,7 @@ class PackageChecks(unittest.TestCase):
             for link in runtime.iterdir():
                 self.assertTrue(link.is_symlink())
                 self.assertFalse(link.readlink().is_absolute())
-                self.assertTrue(link.resolve().is_relative_to(root / "qt/lib"))
+                self.assertTrue(link.resolve().is_relative_to((root / "qt/lib").resolve()))
                 self.assertEqual(link.read_bytes(), b"unchanged-runtime")
 
     def test_environment_excludes_developer_state(self):
