@@ -200,6 +200,21 @@ Next milestone: obtain an authoritative HDB address-to-building link or assess
 bounded linkage coverage/conflicts before expanding the fixture. Linux/Windows
 validation and packaged distribution remain separate work.
 
+## Development workflow
+
+This repository uses a lightweight rapid-development workflow:
+
+- Use a meaningful feature or milestone branch and make logical checkpoint
+  commits. Push once meaningful work exists and keep the branch reasonably
+  current with normal pushes; local-only work is temporary.
+- After a milestone is verified, promptly update `main`. Prefer a fast-forward
+  when history is naturally linear; do not rewrite history to manufacture one.
+- Keep `main` buildable and usable. Updating it is not a production-release gate.
+  Use a PR when CI or review is useful; a PR is optional.
+- Preserve existing work and history. No force pushes without a concrete,
+  explicit request; no tags or releases unless asked. Never change global Git
+  configuration for this repository's workflow.
+
 ## Official references
 
 - [Qt Bridge C# README / examples](https://code.qt.io/cgit/qt/qtbridge-csharp.git/tree/)
