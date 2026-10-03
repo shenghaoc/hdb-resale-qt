@@ -77,3 +77,44 @@ The next comparison is an isolated, serious MapLibre Native Qt source build and
 one-source/style-layer renderer using the same 7,618 points. No renderer
 migration is preselected or claimed here. The final decision and exact-source
 acceptance will be added after those measurements and independent review.
+
+## Independently checked B candidate
+
+A second review strengthened the gate to derive every in-view truth address
+independently through native Qt `Map.fromCoordinate`, rather than trusting the
+C# presentation plan as its own viewport oracle. It asserts exact address-set
+accounting, no duplicates, cluster cell membership, transaction sums, stable
+individual coordinates/IDs, all eight roles, current camera metadata, town
+index/text/model agreement, lifetime retention and selection/FIFO behavior.
+A deliberate `drop-presentation` fault removes coverage from both the C# model
+and its serialized presentation expectation; the independent Qt oracle fails it.
+
+The refined Release candidate passes canonical plus all old classic/extended/
+reentrant scenarios and the 22-step presentation scenario. The old gates now
+assert complete mapped-address truth separately from the number of presentation
+objects. Camera steps wait for final delegate readiness before taking identity
+snapshots. The first adapted classic gate exposed that missing wait; its genuine
+failure was corrected, not accepted or given longer limits. Reentrant retained-
+address selection is additionally checked at individual-marker zoom. Default
+asynchronous incubation may cancel an intermediate queued creation, so lifecycle
+accounting checks the exact created-minus-destroyed live-object balance rather
+than assuming every temporary requested row is instantiated.
+
+The [candidate verification record](candidate-verification.json) contains
+all stage observations, three successful failure-sensitivity checks and the
+alternating importer samples. Presentation/classic/extended/reentrant processes
+took 14.28/8.10/9.48/7.68 seconds; maximum completed states were respectively
+820/340/436/859 ms. Native synchronous notifications were at most 51.275 ms in
+these four observations, compared with the reproduced M9 maximum 4,294.341 ms.
+This is a measured workload result, not an isolated marshalling/GPU assertion.
+Ten new linked pure projection/diff/FIFO tests bring the C# suite to 144; 28 Python
+tests passed independently in the candidate before final root audit tests.
+
+The quiet-window alternating profiles use the unchanged frozen baseline and
+candidate, with native compilers paused. M9 warm samples were
+2,755 / 2,813 / 4,057 / 3,524 ms; B was 3,169 / 2,648 / 2,703 / 2,509 ms. They
+show substantial process variance and no stable importer-regression signal;
+they do not guarantee every warm run remains inside the older 2.65–2.90-second
+interval. All counts remain exact, and the entire Domain/importer source is
+unchanged. A renderer-only workload cannot justify silently changing import or
+matching semantics to make a timing number look better.
