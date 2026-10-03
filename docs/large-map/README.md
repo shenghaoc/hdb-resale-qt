@@ -1,0 +1,79 @@
+# M10 large-map presentation investigation
+
+M10 starts from clean exact M9 `bdc35e67cdff7ec52d2a9cc6cb144d9065c138df`.
+Its workload is **7,618 mapped addresses**, 241,920 transactions and 188,573
+located transactions. This is a presentation investigation; evidence, importer,
+matcher, source hashes and coverage are unchanged. The original M6–M9 history
+and branches are preserved, and nothing is pushed.
+
+## Reproduced M9 and experiment A
+
+[Initial machine-readable observations](initial-comparison.json) distinguish
+filtering, aggregation, edit planning, synchronous Qt/Bridge notifications,
+delegate events, QML state completion and startup stages. Native measurements
+use the real Linux desktop and pinned .NET 10.0.401, Qt 6.12.0 and Linux Bridge
+0.4.0-beta. The macOS 0.4.0.22-beta pin is unchanged and not executed here.
+
+| Observation | Exact M9 | A: retained 7,618 delegates |
+| --- | ---: | ---: |
+| Classic process | 18.83 s | 30.44 s |
+| Extended process | 36.44 s | 59.36 s |
+| Classic selection-only state | 27 ms | 502 ms |
+| Classic budget state | 542 ms | 1,983 ms |
+| Classic empty state | 236 ms | 1,987 ms |
+| Extended repeat small-to-full | 4,919 ms | 3,820 ms |
+| Full startup process | 8.585 s | 9.070 s |
+| Post-GC working set | 1,121.1 MB | 1,121.0 MB |
+
+M9's reentrant process took 27.49 seconds, with a **6,623 ms** completed state;
+its maximum observed notification interval was 4,294.341 ms. The old expanded
+10-second correctness allowance remains explicitly a performance warning above
+five seconds. It is not a responsiveness claim.
+
+A keeps every delegate alive, hides inactive addresses, and uses targeted
+membership/fact-role notifications. Lifecycle counters confirm 7,618 initial
+objects and zero subsequent construction/destruction while active addresses
+range from zero to 7,618. It improves one repopulation observation but regresses
+several common filters and selection, retains roughly the same working set,
+and nearly consumes the extended process limit. **A is rejected.** Its
+[reproducible isolated patch](../../experiments/large-map/retention.patch) is not
+production acceptance; removal-triggered FIFO tests do not apply to that spike.
+
+## Candidate B, before final acceptance
+
+B retains the complete C# filtered-address truth, projects viewport rows in C#,
+and groups low-zoom in-view addresses by stable 64-pixel Web-Mercator cells at
+integer zoom levels. Group numbers mean **addresses**, individual numbers mean
+**transactions**. At zoom 15 and above, every in-view address has its own marker.
+There is no arbitrary top-N point limit. Changing the viewport never edits the
+filter or evidence. Selection is shown as an individual marker if in view and
+remains selected with an explicit outside-view notice if panned away; a domain
+filter hiding the selected transaction clears it as before.
+
+First exploratory Release run: all 22 presentation transitions completed in
+13.18 seconds; maximum state 856 ms. Small-to-full was 438 ms, empty-to-full
+313 ms and selection-only 141 ms. At the full view, 23 groups represented all
+7,618 addresses; zoom 16 showed 127 individual in-view addresses, and the
+explicit offscreen view showed zero while preserving selection. Full native
+startup was 6.139 seconds, QML-ready 419 ms and post-GC working set 690.9 MB
+(about 410 MiB below the M9 observation). Retained managed heap was effectively
+unchanged, consistent with retaining the same evidence/transactions.
+
+These are sequential observations, not statistical estimates. The B presentation
+scenario includes different additional states from M9's classic/extended gates,
+so total process times are not a like-for-like speedup ratio. QML completion
+includes timer cadence and assertions; none of these numbers isolates GPU,
+network, native paint, layout or Bridge marshalling. First B measurements precede
+the stronger independent Qt-projection oracle and are not final acceptance.
+
+B uses the public default MapItemView incubation behavior. M9's synchronous
+`incubateDelegates: false` was a QML-exposed but publicly undocumented Qt 6.12
+property. The candidate avoids that version-coupled override while preserving
+the explicit QML wrapper lifetime anchor. Its viewport submissions coalesce into
+one pending event-loop callback reading the latest camera, without sleeps;
+mutations then use the existing UI-thread FIFO queue.
+
+The next comparison is an isolated, serious MapLibre Native Qt source build and
+one-source/style-layer renderer using the same 7,618 points. No renderer
+migration is preselected or claimed here. The final decision and exact-source
+acceptance will be added after those measurements and independent review.

@@ -1,0 +1,243 @@
+diff --git a/src/HdbResale.App/LocatedMapModel.cs b/src/HdbResale.App/LocatedMapModel.cs
+index 359a615..94b3642 100644
+--- a/src/HdbResale.App/LocatedMapModel.cs
++++ b/src/HdbResale.App/LocatedMapModel.cs
+@@ -11,6 +11,7 @@ namespace HdbResale.App;
+ public sealed class LocatedMapModel : Model
+ {
+     private readonly List<BlockSummary> rows;
++    private HashSet<string> activeKeys = new(StringComparer.Ordinal);
+     private IReadOnlyList<BlockSummary> gateExpectedRows = [];
+     // Diagnostic baseline only; ordinary UI always uses the incremental model.
+     internal bool UseReset => Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1"
+@@ -22,10 +23,11 @@ public sealed class LocatedMapModel : Model
+         var summaries = BlockSummaries.Located(transactions);
+         stage?.Invoke("map-aggregation");
+         rows = summaries.ToList();
++        activeKeys = rows.Select(r => r.Key).ToHashSet(StringComparer.Ordinal);
+         stage?.Invoke("map-model-population");
+         if (Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1") gateExpectedRows = rows.ToArray();
+     }
+-    internal int Count => rows.Count;
++    internal int Count => activeKeys.Count;
+     internal void Replace(IReadOnlyList<ResaleTransaction> transactions)
+     {
+         var timer = Stopwatch.StartNew();
+@@ -34,47 +36,37 @@ public sealed class LocatedMapModel : Model
+         // The gate compares delegates to the complete target projection, never the
+         // partially mutated backing list while Bridge pumps events during an update.
+         if (Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1") gateExpectedRows = next;
+-        var previous = rows.Count;
++        var previous = activeKeys.Count;
+         timer.Restart();
+-        IReadOnlyList<MapRowEdit> edits = UseReset ? [] : MapRowDiff.Plan(rows, next);
+-        var planMs = timer.Elapsed.TotalMilliseconds;
+-        var removed = 0; var inserted = 0; var changed = 0;
+-        timer.Restart();
+-        if (UseReset)
+-        {
+-            BeginResetModel();
+-            try { rows.Clear(); rows.AddRange(next); }
+-            finally { EndResetModel(); }
+-            removed = previous; inserted = rows.Count;
+-        }
+-        else foreach (var edit in edits)
++        var nextByKey = next.ToDictionary(r => r.Key, StringComparer.Ordinal);
++        var changes = new List<(int Index, int[] Roles)>();
++        for (var i = 0; i < rows.Count; i++)
+         {
+-            switch (edit.Kind)
++            var before = rows[i];
++            var wasActive = activeKeys.Contains(before.Key);
++            var isActive = nextByKey.TryGetValue(before.Key, out var updated);
++            var roles = new HashSet<int>();
++            if (wasActive != isActive) roles.Add(263);
++            if (updated is not null && before != updated)
+             {
+-                case MapRowEditKind.Remove:
+-                    BeginRemoveRows(ModelIndex.Empty, edit.First, edit.First + edit.Count - 1);
+-                    try { rows.RemoveRange(edit.First, edit.Count); }
+-                    finally { EndRemoveRows(); }
+-                    removed += edit.Count;
+-                    break;
+-                case MapRowEditKind.Insert:
+-                    BeginInsertRows(ModelIndex.Empty, edit.First, edit.First + edit.Count - 1);
+-                    try { rows.InsertRange(edit.First, edit.Rows); }
+-                    finally { EndInsertRows(); }
+-                    inserted += edit.Count;
+-                    break;
+-                case MapRowEditKind.Update:
+-                    var roles = MapRowDiff.ChangedRoles(rows, edit);
+-                    for (var i = 0; i < edit.Count; i++) rows[edit.First + i] = edit.Rows[i];
+-                    // Avoid re-evaluating unchanged coordinates/labels. Coordinate changes
+-                    // are still explicitly checked; no source identity assumption hides them.
+-                    if (roles.Length > 0) DataChanged(new(edit.First, 0), new(edit.First + edit.Count - 1, 0), roles);
+-                    changed += edit.Count;
+-                    break;
++                foreach (var role in MapRowDiff.ChangedRoles([before], new(MapRowEditKind.Update, 0, 1, [updated]))) roles.Add(role);
++                rows[i] = updated;
+             }
++            if (roles.Count > 0) changes.Add((i, roles.Order().ToArray()));
++        }
++        activeKeys = nextByKey.Keys.ToHashSet(StringComparer.Ordinal);
++        var planMs = timer.Elapsed.TotalMilliseconds;
++        timer.Restart();
++        // All immutable addresses/delegates are kept for this experiment.
++        // Only active membership and changed facts are notified.
++        for (var i=0; i<changes.Count;)
++        {
++            var first = changes[i]; var last=first.Index; i++;
++            while (i<changes.Count && changes[i].Index == last+1 && changes[i].Roles.SequenceEqual(first.Roles)) last=changes[i++].Index;
++            DataChanged(new(first.Index,0),new(last,0),first.Roles);
+         }
+         if (Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1")
+-            Console.WriteLine(FormattableString.Invariant($"HDB_MAP_UPDATE strategy={(UseReset ? "reset" : "incremental")} aggregate-ms={aggregateMs:F3} plan-ms={planMs:F3} notifications-ms={timer.Elapsed.TotalMilliseconds:F3} before={previous} after={rows.Count} removed={removed} inserted={inserted} changed={changed}"));
++            Console.WriteLine(FormattableString.Invariant($"HDB_MAP_UPDATE strategy=retention aggregate-ms={aggregateMs:F3} plan-ms={planMs:F3} notifications-ms={timer.Elapsed.TotalMilliseconds:F3} before={previous} after={activeKeys.Count} objects={rows.Count} removed=0 inserted=0 changed={changes.Count}"));
+     }
+     internal string GateRowsJson => System.Text.Json.JsonSerializer.Serialize(gateExpectedRows.Select(block => new
+     {
+@@ -93,7 +85,7 @@ public sealed class LocatedMapModel : Model
+     public override Dictionary<int, string> RoleNames() => new()
+     {
+         [256] = "transactionId", [257] = "latitude", [258] = "longitude",
+-        [259] = "address", [260] = "priceLabel", [261] = "mapKey", [262] = "transactionCount"
++        [259] = "address", [260] = "priceLabel", [261] = "mapKey", [262] = "transactionCount", [263] = "activeAddress"
+     };
+     public override object? Data(ModelIndex index, int role)
+     {
+@@ -105,7 +97,7 @@ public sealed class LocatedMapModel : Model
+         {
+             256 => t.Id, 257 => t.Location.Point!.Latitude, 258 => t.Location.Point!.Longitude,
+             259 => t.Address, 260 => PriceLabel(block),
+-            261 => block.Key, 262 => block.Count, _ => null
++            261 => block.Key, 262 => block.Count, 263 => activeKeys.Contains(block.Key), _ => null
+         };
+     }
+ }
+diff --git a/src/HdbResale.App/Main.qml b/src/HdbResale.App/Main.qml
+index e0b4f68..66706b2 100644
+--- a/src/HdbResale.App/Main.qml
++++ b/src/HdbResale.App/Main.qml
+@@ -151,6 +151,8 @@ ApplicationWindow {
+                             required property string address
+                             required property string mapKey
+                             required property int transactionCount
++                            required property bool activeAddress
++                            visible: activeAddress
+                             property bool selected: Resales.selectedMapKey === mapKey
+                             z: selected ? 1 : 0
+                             coordinate: QtPositioning.coordinate(latitude, longitude)
+diff --git a/src/HdbResale.App/ResaleMapModel.cs b/src/HdbResale.App/ResaleMapModel.cs
+index 80fa7d5..178c2f4 100644
+--- a/src/HdbResale.App/ResaleMapModel.cs
++++ b/src/HdbResale.App/ResaleMapModel.cs
+@@ -45,7 +45,8 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
+         // The startup-only probe uses all prices to exercise every located address marker.
+         if (StartupProbe) state.Filter("All towns", MaximumAvailablePrice);
+         MeasureStartup("state-construction");
+-        MapPoints = new(state.Visible, startupProfile is null ? null : MeasureStartup);
++        MapPoints = new(import.Accepted, startupProfile is null ? null : MeasureStartup);
++        MapPoints.Replace(state.Visible);
+         MeasureStartup("models-constructed");
+         if (ScaleGate) Console.WriteLine($"HDB_SCALE_CONSTRUCT {timer.ElapsedMilliseconds} rows={VisibleCount} mapped={MapPoints.Count} managed={GC.GetTotalMemory(false)} working={Environment.WorkingSet}");
+         if (ScaleGate)
+diff --git a/src/HdbResale.App/ScaleGate.qml b/src/HdbResale.App/ScaleGate.qml
+index e21a34c..8b925ac 100644
+--- a/src/HdbResale.App/ScaleGate.qml
++++ b/src/HdbResale.App/ScaleGate.qml
+@@ -38,13 +38,14 @@ Item {
+         console.log("HDB_MAP_OBSERVED revision=" + observedRevision + " after-csharp-ms=" + (observedMs - Resales.lastFilterCompletedMs))
+     }
+     visible: false
++    function activeItems() { return targetMap.mapItems.filter(item => item.activeAddress) }
+     function identitiesAgree() {
+         const expected = JSON.parse(Resales.gateMapRowsJson)
+         const incremental = Resales.mapUpdateStrategy === "incremental"
+         const byKey = {}
+         for (const row of expected) byKey[row.mapKey] = row
+         const seen = {}
+-        for (const item of targetMap.mapItems) {
++        for (const item of activeItems()) {
+             const row = byKey[item.mapKey]
+             if (!row || seen[item.mapKey]
+                 || (incremental && priorItems[item.mapKey] && priorItems[item.mapKey] !== item)
+@@ -54,11 +55,11 @@ Item {
+                 || Math.abs(item.longitude-row.longitude)>1e-10) return false
+             seen[item.mapKey] = true
+         }
+-        return targetMap.mapItems.length === expected.length
++        return activeItems().length === expected.length
+     }
+     function ready(rows, mapped) {
+         const complete = attributionImage.status === Image.Ready && Resales.visibleCount === rows && targetList.count === rows
+-            && targetMap.mapItems.length === mapped
++            && activeItems().length === mapped
+             && townControl.currentIndex === Resales.townIndex
+             && townControl.currentText === Resales.town
+             && JSON.parse(Resales.townsJson)[Resales.townIndex] === Resales.town
+@@ -78,19 +79,19 @@ Item {
+             + " budget-ms=" + ((Resales.scaleMeasurement || Resales.scaleExpandedCoverage) ? 10000 : 5000)
+             + " mapReady=" + targetMap.mapReady + " mapError=" + targetMap.error
+             + " rows=" + Resales.visibleCount + " list=" + targetList.count
+-            + " delegates=" + targetMap.mapItems.length + " expected=" + Resales.mappedCount
++            + " delegates=" + activeItems().length + " expected=" + Resales.mappedCount
+             + " identities=" + identitiesAgree() + " town=" + townControl.currentText + " price=" + priceControl.value)
+         targetMap.traceDelegates=false; gateTimer.stop(); Qt.quit()
+     }
+     function advance(name) {
+         const snapshot = {}
+-        for (const item of targetMap.mapItems) snapshot[item.mapKey] = item
++        for (const item of activeItems()) snapshot[item.mapKey] = item
+         // Callback-entry checks alone miss synchronous work or a costly identity
+         // scan. Include completed validation/snapshot work in every phase budget.
+         const elapsed = Date.now()-started
+         if (elapsed > ((Resales.scaleMeasurement || Resales.scaleExpandedCoverage) ? 10000 : 5000)) { failDeadline(elapsed); return false }
+         console.log("HDB_SCALE_STEP " + name + " ms=" + elapsed
+-            + " rows=" + Resales.visibleCount + " delegates=" + targetMap.mapItems.length
++            + " rows=" + Resales.visibleCount + " delegates=" + activeItems().length
+             + " created=" + (targetMap.createdDelegates-priorCreated)
+             + " destroyed=" + (targetMap.destroyedDelegates-priorDestroyed)
+             + " last-create-ms=" + (targetMap.lastDelegateCreatedMs >= started ? targetMap.lastDelegateCreatedMs-started : -1)
+@@ -114,13 +115,13 @@ Item {
+             if (!advance("selected-retained-address")) return; Resales.setTown(Resales.gateTown); break
+         case 2:
+             if (!ready(Resales.gateTownCount, Resales.gateTownMapped) || Resales.selectedId !== chosen) return
+-            for (const item of targetMap.mapItems) if (item.mapKey === Resales.gateRetainedSelectionKey) { retainedSelectedItem=item; break }
++            for (const item of activeItems()) if (item.mapKey === Resales.gateRetainedSelectionKey) { retainedSelectedItem=item; break }
+             if (!retainedSelectedItem) return
+             if (!advance("selected-in-town")) return; Resales.setMaximumPrice(500000); break
+         case 3:
+             if (!ready(Resales.gateBudgetCount, Resales.gateBudgetMapped) || Resales.selectedId !== "" || Resales.selectedMapKey !== "") return
+             let retained=false
+-            for (const item of targetMap.mapItems) if (item.mapKey === Resales.gateRetainedSelectionKey && item === retainedSelectedItem && item.z === 0) retained=true
++            for (const item of activeItems()) if (item.mapKey === Resales.gateRetainedSelectionKey && item === retainedSelectedItem && item.z === 0) retained=true
+             if (!retained) return
+             if (!advance("hidden-transaction-cleared")) return; Resales.resetFilters(); break
+         case 4:
+@@ -135,8 +136,8 @@ Item {
+         case 6:
+             if (burstFired !== 1 || Resales.gateMaximumQueuedMutations < 4
+                 || !ready(Resales.gateAllCount, Resales.gateAllMapped) || Resales.selectedId !== "") return
+-            if (Resales.scaleLifecycle && (targetMap.createdDelegates-priorCreated !== Resales.gateAllMapped
+-                || targetMap.destroyedDelegates-priorDestroyed !== Resales.gateInitialMapped)) return
++            if (Resales.scaleLifecycle && (targetMap.createdDelegates-priorCreated !== 0
++                || targetMap.destroyedDelegates-priorDestroyed !== 0)) return
+             if (!advance("reentrant-burst-drained")) return; Resales.resetFilters(); break
+         case 7:
+             if (!ready(Resales.gateInitialCount, Resales.gateInitialMapped) || Resales.selectedId !== "") return
+@@ -167,13 +168,13 @@ Item {
+         case 6:
+             if (!ready(Resales.gateAllCount, Resales.gateAllMapped)) return
+             chosen=""
+-            for (const item of targetMap.mapItems) if (item.mapKey.startsWith(Resales.gateTown + "|")) { chosen=item.transactionId; break }
++            for (const item of activeItems()) if (item.mapKey.startsWith(Resales.gateTown + "|")) { chosen=item.transactionId; break }
+             if (chosen === "") return
+             if (!advance("full-restored")) return; Resales.selectTransaction(chosen); break
+         case 7:
+             if (Resales.selectedId !== chosen || !ready(Resales.gateAllCount, Resales.gateAllMapped)) return
+             let selected=null
+-            for (const item of targetMap.mapItems) if (item.transactionId === chosen) { selected=item; break }
++            for (const item of activeItems()) if (item.transactionId === chosen) { selected=item; break }
+             if (!selected || !selected.visible || selected.z !== 1) return
+             if (!advance("selected")) return; Resales.setTown(Resales.gateOtherTown); break
+         case 8:

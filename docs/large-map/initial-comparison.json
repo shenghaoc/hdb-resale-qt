@@ -1,0 +1,2039 @@
+{
+  "baseline_commit": "bdc35e67cdff7ec52d2a9cc6cb144d9065c138df",
+  "platform": "Linux x64 / Qt6.12.0 / .NET10.0.401 / Bridge0.4.0-beta",
+  "measurement_notes": [
+    "Sequential observations with warm caches; no randomized, cold-network, isolated-GPU or cross-platform claim.",
+    "M9 and retained A use classic/extended gates. B first candidate uses the separate22-step presentation gate; matching transition states are comparable but full process totals contain different scenarios.",
+    "C# notifications include Bridge/Qt callbacks and event work, not isolated marshalling or render time.",
+    "B first measurements precede independent Qt-projection assertions; final acceptance and timings are reported separately."
+  ],
+  "runs": {
+    "baseline-classic": {
+      "seconds": 18.83,
+      "measurement_only": false,
+      "expanded_coverage": true,
+      "state_budget_ms": 10000,
+      "process_budget_seconds": 45,
+      "extended": false,
+      "reentrant": false,
+      "log_sha256": "974e9e2dc3f7856efd8142c69e5de5651a377f738f3199c476e8c1bd151b5616",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 4697,
+          "rows": 236791,
+          "delegates": 7615,
+          "created": 7615,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "filtered",
+          "ms": 1687,
+          "rows": 9441,
+          "delegates": 340,
+          "created": 0,
+          "destroyed": 7275,
+          "last-create-ms": -1,
+          "last-destroy-ms": 1672,
+          "observed-ms": 175
+        },
+        {
+          "name": "budget-filtered",
+          "ms": 542,
+          "rows": 6469,
+          "delegates": 294,
+          "created": 0,
+          "destroyed": 46,
+          "last-create-ms": -1,
+          "last-destroy-ms": 533,
+          "observed-ms": 59
+        },
+        {
+          "name": "selected",
+          "ms": 27,
+          "rows": 6469,
+          "delegates": 294,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "empty-cleared",
+          "ms": 236,
+          "rows": 0,
+          "delegates": 0,
+          "created": 0,
+          "destroyed": 294,
+          "last-create-ms": -1,
+          "last-destroy-ms": 236,
+          "observed-ms": 14
+        },
+        {
+          "name": "reset",
+          "ms": 2283,
+          "rows": 236791,
+          "delegates": 7615,
+          "created": 7615,
+          "destroyed": 0,
+          "last-create-ms": 1922,
+          "last-destroy-ms": -1,
+          "observed-ms": 1956
+        },
+        {
+          "name": "zoomed",
+          "ms": 67,
+          "rows": 236791,
+          "delegates": 7615,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "panned",
+          "ms": 18,
+          "rows": 236791,
+          "delegates": 7615,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "recentered",
+          "ms": 144,
+          "rows": 236791,
+          "delegates": 7615,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "all-prices",
+          "ms": 572,
+          "rows": 241920,
+          "delegates": 7618,
+          "created": 3,
+          "destroyed": 0,
+          "last-create-ms": 146,
+          "last-destroy-ms": -1,
+          "observed-ms": 373
+        }
+      ],
+      "map_updates": [
+        "HDB_MAP_UPDATE strategy=incremental aggregate-ms=3.986 plan-ms=4.069 notifications-ms=96.164 before=7615 after=340 removed=7275 inserted=0 changed=0",
+        "HDB_MAP_UPDATE strategy=incremental aggregate-ms=2.734 plan-ms=0.715 notifications-ms=41.676 before=340 after=294 removed=46 inserted=0 changed=233",
+        "HDB_MAP_UPDATE strategy=incremental aggregate-ms=0.069 plan-ms=0.089 notifications-ms=2.137 before=294 after=0 removed=294 inserted=0 changed=0",
+        "HDB_MAP_UPDATE strategy=incremental aggregate-ms=97.628 plan-ms=4.363 notifications-ms=1806.226 before=0 after=7615 removed=0 inserted=7615 changed=0",
+        "HDB_MAP_UPDATE strategy=incremental aggregate-ms=93.440 plan-ms=20.230 notifications-ms=206.644 before=7615 after=7618 removed=0 inserted=3 changed=695"
+      ],
+      "filter_updates": [
+        "HDB_FILTER_STAGE revision=1 list-begin-ms=11.684 filter-ms=8.377 list-end-ms=3.727 property-notify-ms=41.823 total-ms=171.911",
+        "HDB_FILTER_STAGE revision=2 list-begin-ms=0.425 filter-ms=5.389 list-end-ms=2.485 property-notify-ms=4.602 total-ms=58.105",
+        "HDB_FILTER_STAGE revision=3 list-begin-ms=0.197 filter-ms=6.324 list-end-ms=1.747 property-notify-ms=2.501 total-ms=13.137",
+        "HDB_FILTER_STAGE revision=4 list-begin-ms=0.275 filter-ms=8.408 list-end-ms=3.888 property-notify-ms=32.486 total-ms=1953.430",
+        "HDB_FILTER_STAGE revision=5 list-begin-ms=0.315 filter-ms=6.465 list-end-ms=2.957 property-notify-ms=30.830 total-ms=360.976"
+      ],
+      "max_state_ms": 4697,
+      "over_5000_ms": []
+    },
+    "baseline-extended": {
+      "seconds": 36.44,
+      "measurement_only": false,
+      "expanded_coverage": true,
+      "state_budget_ms": 10000,
+      "process_budget_seconds": 60,
+      "extended": true,
+      "reentrant": false,
+      "log_sha256": "3e53020c1c88e4125bfa9ff871c4045211052bc5cd5e796b1514a3d4cdc9ad3d",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 3671,
+          "rows": 236791,
+          "delegates": 7615,
+          "created": 7615,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "full",
+          "ms": 2397,
+          "rows": 241920,
+          "delegates": 7618,
+          "created": 3,
+          "destroyed": 0,
+          "last-create-ms": 276,
+          "last-destroy-ms": -1,
+          "observed-ms": 661
+        },
+        {
+          "name": "subset",
+          "ms": 1640,
+          "rows": 9745,
+          "delegates": 340,
+          "created": 0,
+          "destroyed": 7278,
+          "last-create-ms": -1,
+          "last-destroy-ms": 1626,
+          "observed-ms": 67
+        },
+        {
+          "name": "different",
+          "ms": 696,
+          "rows": 12620,
+          "delegates": 197,
+          "created": 197,
+          "destroyed": 340,
+          "last-create-ms": 136,
+          "last-destroy-ms": 690,
+          "observed-ms": 144
+        },
+        {
+          "name": "empty",
+          "ms": 323,
+          "rows": 0,
+          "delegates": 0,
+          "created": 0,
+          "destroyed": 197,
+          "last-create-ms": -1,
+          "last-destroy-ms": 321,
+          "observed-ms": 15
+        },
+        {
+          "name": "reset",
+          "ms": 3930,
+          "rows": 236791,
+          "delegates": 7615,
+          "created": 7615,
+          "destroyed": 0,
+          "last-create-ms": 3520,
+          "last-destroy-ms": -1,
+          "observed-ms": 3558
+        },
+        {
+          "name": "full-restored",
+          "ms": 661,
+          "rows": 241920,
+          "delegates": 7618,
+          "created": 3,
+          "destroyed": 0,
+          "last-create-ms": 128,
+          "last-destroy-ms": -1,
+          "observed-ms": 432
+        },
+        {
+          "name": "selected",
+          "ms": 251,
+          "rows": 241920,
+          "delegates": 7618,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "hidden-selection-cleared",
+          "ms": 1868,
+          "rows": 12620,
+          "delegates": 197,
+          "created": 0,
+          "destroyed": 7421,
+          "last-create-ms": -1,
+          "last-destroy-ms": 1848,
+          "observed-ms": 84
+        },
+        {
+          "name": "full-again",
+          "ms": 4566,
+          "rows": 241920,
+          "delegates": 7618,
+          "created": 7421,
+          "destroyed": 0,
+          "last-create-ms": 3936,
+          "last-destroy-ms": -1,
+          "observed-ms": 3980
+        },
+        {
+          "name": "repeat-subset",
+          "ms": 2145,
+          "rows": 9745,
+          "delegates": 340,
+          "created": 0,
+          "destroyed": 7278,
+          "last-create-ms": -1,
+          "last-destroy-ms": 2126,
+          "observed-ms": 79
+        },
+        {
+          "name": "repeat-different",
+          "ms": 714,
+          "rows": 12620,
+          "delegates": 197,
+          "created": 197,
+          "destroyed": 340,
+          "last-create-ms": 128,
+          "last-destroy-ms": 708,
+          "observed-ms": 137
+        },
+        {
+          "name": "repeat-full",
+          "ms": 4919,
+          "rows": 241920,
+          "delegates": 7618,
+          "created": 7421,
+          "destroyed": 0,
+          "last-create-ms": 4432,
+          "last-destroy-ms": -1,
+          "observed-ms": 4490
+        },
+        {
+          "name": "zoomed",
+          "ms": 128,
+          "rows": 241920,
+          "delegates": 7618,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "panned",
+          "ms": 145,
+          "rows": 241920,
+          "delegates": 7618,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "recentered",
+          "ms": 285,
+          "rows": 241920,
+          "delegates": 7618,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        }
+      ],
+      "map_updates": [
+        "HDB_MAP_UPDATE strategy=incremental aggregate-ms=220.046 plan-ms=9.613 notifications-ms=359.475 before=7615 after=7618 removed=0 inserted=3 changed=695",
+        "HDB_MAP_UPDATE strategy=incremental aggregate-ms=3.908 plan-ms=1.119 notifications-ms=25.190 before=7618 after=340 removed=7278 inserted=0 changed=0",
+        "HDB_MAP_UPDATE strategy=incremental aggregate-ms=2.307 plan-ms=0.227 notifications-ms=120.816 before=340 after=197 removed=340 inserted=197 changed=0",
+        "HDB_MAP_UPDATE strategy=incremental aggregate-ms=0.085 plan-ms=0.177 notifications-ms=2.279 before=197 after=0 removed=197 inserted=0 changed=0",
+        "HDB_MAP_UPDATE strategy=incremental aggregate-ms=129.995 plan-ms=12.609 notifications-ms=3366.107 before=0 after=7615 removed=0 inserted=7615 changed=0",
+        "HDB_MAP_UPDATE strategy=incremental aggregate-ms=79.693 plan-ms=20.840 notifications-ms=279.249 before=7615 after=7618 removed=0 inserted=3 changed=695",
+        "HDB_MAP_UPDATE strategy=incremental aggregate-ms=2.178 plan-ms=17.459 notifications-ms=31.649 before=7618 after=197 removed=7421 inserted=0 changed=0",
+        "HDB_MAP_UPDATE strategy=incremental aggregate-ms=127.639 plan-ms=15.696 notifications-ms=3782.504 before=197 after=7618 removed=0 inserted=7421 changed=0",
+        "HDB_MAP_UPDATE strategy=incremental aggregate-ms=3.337 plan-ms=1.630 notifications-ms=34.834 before=7618 after=340 removed=7278 inserted=0 changed=0",
+        "HDB_MAP_UPDATE strategy=incremental aggregate-ms=1.992 plan-ms=0.219 notifications-ms=110.646 before=340 after=197 removed=340 inserted=197 changed=0",
+        "HDB_MAP_UPDATE strategy=incremental aggregate-ms=123.606 plan-ms=1.077 notifications-ms=4294.341 before=197 after=7618 removed=0 inserted=7421 changed=0"
+      ],
+      "filter_updates": [
+        "HDB_FILTER_STAGE revision=1 list-begin-ms=7.481 filter-ms=9.415 list-end-ms=3.748 property-notify-ms=38.682 total-ms=649.649",
+        "HDB_FILTER_STAGE revision=2 list-begin-ms=1.137 filter-ms=4.739 list-end-ms=3.716 property-notify-ms=24.030 total-ms=63.918",
+        "HDB_FILTER_STAGE revision=3 list-begin-ms=0.583 filter-ms=6.600 list-end-ms=4.861 property-notify-ms=7.691 total-ms=143.220",
+        "HDB_FILTER_STAGE revision=4 list-begin-ms=0.550 filter-ms=6.442 list-end-ms=0.748 property-notify-ms=4.006 total-ms=14.422",
+        "HDB_FILTER_STAGE revision=5 list-begin-ms=0.669 filter-ms=8.316 list-end-ms=4.210 property-notify-ms=36.312 total-ms=3558.316",
+        "HDB_FILTER_STAGE revision=6 list-begin-ms=0.573 filter-ms=6.101 list-end-ms=3.804 property-notify-ms=36.140 total-ms=426.534",
+        "HDB_FILTER_STAGE revision=7 list-begin-ms=0.676 filter-ms=5.340 list-end-ms=5.116 property-notify-ms=22.314 total-ms=84.820",
+        "HDB_FILTER_STAGE revision=8 list-begin-ms=0.789 filter-ms=6.998 list-end-ms=5.363 property-notify-ms=40.575 total-ms=3979.758",
+        "HDB_FILTER_STAGE revision=9 list-begin-ms=0.989 filter-ms=6.437 list-end-ms=4.792 property-notify-ms=26.677 total-ms=78.834",
+        "HDB_FILTER_STAGE revision=10 list-begin-ms=1.149 filter-ms=9.341 list-end-ms=4.447 property-notify-ms=9.433 total-ms=137.358",
+        "HDB_FILTER_STAGE revision=11 list-begin-ms=5.016 filter-ms=8.235 list-end-ms=7.306 property-notify-ms=50.883 total-ms=4490.715"
+      ],
+      "max_state_ms": 4919,
+      "over_5000_ms": []
+    },
+    "baseline-reentrant": {
+      "seconds": 27.49,
+      "measurement_only": false,
+      "expanded_coverage": true,
+      "state_budget_ms": 10000,
+      "process_budget_seconds": 45,
+      "extended": false,
+      "reentrant": true,
+      "log_sha256": "aff720050cd7b1870717f92b83b352171d9b913b5499ed8fa8dbf5473b2287de",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 4031,
+          "rows": 236791,
+          "delegates": 7615,
+          "created": 7615,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "selected-retained-address",
+          "ms": 1077,
+          "rows": 236791,
+          "delegates": 7615,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "selected-in-town",
+          "ms": 1548,
+          "rows": 9441,
+          "delegates": 340,
+          "created": 0,
+          "destroyed": 7275,
+          "last-create-ms": -1,
+          "last-destroy-ms": 1533,
+          "observed-ms": 100
+        },
+        {
+          "name": "hidden-transaction-cleared",
+          "ms": 614,
+          "rows": 6469,
+          "delegates": 294,
+          "created": 0,
+          "destroyed": 46,
+          "last-create-ms": -1,
+          "last-destroy-ms": 606,
+          "observed-ms": 61
+        },
+        {
+          "name": "reset",
+          "ms": 2214,
+          "rows": 236791,
+          "delegates": 7615,
+          "created": 7321,
+          "destroyed": 0,
+          "last-create-ms": 1964,
+          "last-destroy-ms": -1,
+          "observed-ms": 2045
+        },
+        {
+          "name": "selected-for-burst",
+          "ms": 183,
+          "rows": 236791,
+          "delegates": 7615,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "reentrant-burst-drained",
+          "ms": 6623,
+          "rows": 241920,
+          "delegates": 7618,
+          "created": 7618,
+          "destroyed": 7615,
+          "last-create-ms": 3562,
+          "last-destroy-ms": 6384,
+          "observed-ms": 3856
+        },
+        {
+          "name": "final-reset",
+          "ms": 1349,
+          "rows": 236791,
+          "delegates": 7615,
+          "created": 0,
+          "destroyed": 3,
+          "last-create-ms": -1,
+          "last-destroy-ms": 1133,
+          "observed-ms": 534
+        }
+      ],
+      "map_updates": [
+        "HDB_MAP_UPDATE strategy=incremental aggregate-ms=3.896 plan-ms=3.781 notifications-ms=33.371 before=7615 after=340 removed=7275 inserted=0 changed=0",
+        "HDB_MAP_UPDATE strategy=incremental aggregate-ms=2.415 plan-ms=0.708 notifications-ms=42.404 before=340 after=294 removed=46 inserted=0 changed=233",
+        "HDB_MAP_UPDATE strategy=incremental aggregate-ms=112.995 plan-ms=6.042 notifications-ms=1868.780 before=294 after=7615 removed=0 inserted=7321 changed=233",
+        "HDB_MAP_UPDATE strategy=incremental aggregate-ms=13.030 plan-ms=41.747 notifications-ms=58.018 before=7615 after=340 removed=7275 inserted=0 changed=0",
+        "HDB_MAP_UPDATE strategy=incremental aggregate-ms=0.067 plan-ms=0.098 notifications-ms=6.369 before=340 after=0 removed=340 inserted=0 changed=0",
+        "HDB_MAP_UPDATE strategy=incremental aggregate-ms=115.373 plan-ms=22.868 notifications-ms=3011.230 before=0 after=7615 removed=0 inserted=7615 changed=0",
+        "HDB_MAP_UPDATE strategy=incremental aggregate-ms=79.146 plan-ms=24.585 notifications-ms=253.255 before=7615 after=7618 removed=0 inserted=3 changed=695",
+        "HDB_MAP_UPDATE strategy=incremental aggregate-ms=130.665 plan-ms=31.952 notifications-ms=318.926 before=7618 after=7615 removed=3 inserted=0 changed=695"
+      ],
+      "filter_updates": [
+        "HDB_FILTER_STAGE revision=1 list-begin-ms=4.844 filter-ms=25.115 list-end-ms=2.939 property-notify-ms=21.778 total-ms=97.255",
+        "HDB_FILTER_STAGE revision=2 list-begin-ms=0.410 filter-ms=6.341 list-end-ms=3.186 property-notify-ms=3.964 total-ms=59.503",
+        "HDB_FILTER_STAGE revision=3 list-begin-ms=0.328 filter-ms=15.806 list-end-ms=4.911 property-notify-ms=35.588 total-ms=2044.608",
+        "HDB_FILTER_STAGE revision=4 list-begin-ms=0.376 filter-ms=13.070 list-end-ms=3.567 property-notify-ms=28.748 total-ms=158.649",
+        "HDB_FILTER_STAGE revision=5 list-begin-ms=0.153 filter-ms=5.212 list-end-ms=0.523 property-notify-ms=31.952 total-ms=44.566",
+        "HDB_FILTER_STAGE revision=6 list-begin-ms=0.139 filter-ms=5.734 list-end-ms=2.078 property-notify-ms=53.826 total-ms=3211.381",
+        "HDB_FILTER_STAGE revision=7 list-begin-ms=0.199 filter-ms=7.900 list-end-ms=2.359 property-notify-ms=54.309 total-ms=421.857",
+        "HDB_FILTER_STAGE revision=8 list-begin-ms=0.895 filter-ms=8.946 list-end-ms=7.100 property-notify-ms=35.557 total-ms=534.133"
+      ],
+      "max_state_ms": 6623,
+      "over_5000_ms": [
+        "reentrant-burst-drained"
+      ]
+    },
+    "retention-classic": {
+      "seconds": 30.44,
+      "measurement_only": false,
+      "expanded_coverage": true,
+      "state_budget_ms": 10000,
+      "process_budget_seconds": 45,
+      "extended": false,
+      "reentrant": false,
+      "log_sha256": "9dffd671798d631b8bf1db28cffd13a422545127407abbf54263d63bf59f44e8",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 4327,
+          "rows": 236791,
+          "delegates": 7615,
+          "created": 7618,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "filtered",
+          "ms": 2112,
+          "rows": 9441,
+          "delegates": 340,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 174
+        },
+        {
+          "name": "budget-filtered",
+          "ms": 1983,
+          "rows": 6469,
+          "delegates": 294,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 139
+        },
+        {
+          "name": "selected",
+          "ms": 502,
+          "rows": 6469,
+          "delegates": 294,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "empty-cleared",
+          "ms": 1987,
+          "rows": 0,
+          "delegates": 0,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 51
+        },
+        {
+          "name": "reset",
+          "ms": 2454,
+          "rows": 236791,
+          "delegates": 7615,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 493
+        },
+        {
+          "name": "zoomed",
+          "ms": 531,
+          "rows": 236791,
+          "delegates": 7615,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "panned",
+          "ms": 493,
+          "rows": 236791,
+          "delegates": 7615,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "recentered",
+          "ms": 525,
+          "rows": 236791,
+          "delegates": 7615,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "all-prices",
+          "ms": 2671,
+          "rows": 241920,
+          "delegates": 7618,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 576
+        }
+      ],
+      "map_updates": [
+        "HDB_MAP_UPDATE strategy=retention aggregate-ms=166.523 plan-ms=12.811 notifications-ms=2.212 before=7618 after=7615 objects=7618 removed=0 inserted=0 changed=698",
+        "HDB_MAP_UPDATE strategy=retention aggregate-ms=3.570 plan-ms=16.521 notifications-ms=111.428 before=7615 after=340 objects=7618 removed=0 inserted=0 changed=7275",
+        "HDB_MAP_UPDATE strategy=retention aggregate-ms=2.115 plan-ms=1.174 notifications-ms=101.398 before=340 after=294 objects=7618 removed=0 inserted=0 changed=279",
+        "HDB_MAP_UPDATE strategy=retention aggregate-ms=0.048 plan-ms=0.659 notifications-ms=15.000 before=294 after=0 objects=7618 removed=0 inserted=0 changed=294",
+        "HDB_MAP_UPDATE strategy=retention aggregate-ms=132.392 plan-ms=3.791 notifications-ms=310.068 before=0 after=7615 objects=7618 removed=0 inserted=0 changed=7615",
+        "HDB_MAP_UPDATE strategy=retention aggregate-ms=84.723 plan-ms=4.205 notifications-ms=430.796 before=7615 after=7618 objects=7618 removed=0 inserted=0 changed=698"
+      ],
+      "filter_updates": [
+        "HDB_FILTER_STAGE revision=1 list-begin-ms=6.963 filter-ms=5.516 list-end-ms=2.746 property-notify-ms=25.985 total-ms=172.821",
+        "HDB_FILTER_STAGE revision=2 list-begin-ms=0.439 filter-ms=4.817 list-end-ms=2.764 property-notify-ms=24.606 total-ms=137.423",
+        "HDB_FILTER_STAGE revision=3 list-begin-ms=0.533 filter-ms=6.513 list-end-ms=0.717 property-notify-ms=25.787 total-ms=49.347",
+        "HDB_FILTER_STAGE revision=4 list-begin-ms=0.478 filter-ms=7.647 list-end-ms=2.711 property-notify-ms=34.533 total-ms=491.753",
+        "HDB_FILTER_STAGE revision=5 list-begin-ms=0.507 filter-ms=6.865 list-end-ms=3.081 property-notify-ms=36.138 total-ms=566.407"
+      ],
+      "max_state_ms": 4327,
+      "over_5000_ms": []
+    },
+    "retention-extended": {
+      "seconds": 59.36,
+      "measurement_only": false,
+      "expanded_coverage": true,
+      "state_budget_ms": 10000,
+      "process_budget_seconds": 60,
+      "extended": true,
+      "reentrant": false,
+      "log_sha256": "14723f97aa07735e859fb082689d3d902c37c114002179120f1da10ca5da98ac",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 4232,
+          "rows": 236791,
+          "delegates": 7615,
+          "created": 7618,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "full",
+          "ms": 2951,
+          "rows": 241920,
+          "delegates": 7618,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 754
+        },
+        {
+          "name": "subset",
+          "ms": 2312,
+          "rows": 9745,
+          "delegates": 340,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 315
+        },
+        {
+          "name": "different",
+          "ms": 2088,
+          "rows": 12620,
+          "delegates": 197,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 88
+        },
+        {
+          "name": "empty",
+          "ms": 2105,
+          "rows": 0,
+          "delegates": 0,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 59
+        },
+        {
+          "name": "reset",
+          "ms": 3801,
+          "rows": 236791,
+          "delegates": 7615,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 1760
+        },
+        {
+          "name": "full-restored",
+          "ms": 4087,
+          "rows": 241920,
+          "delegates": 7618,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 1246
+        },
+        {
+          "name": "selected",
+          "ms": 2713,
+          "rows": 241920,
+          "delegates": 7618,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "hidden-selection-cleared",
+          "ms": 3267,
+          "rows": 12620,
+          "delegates": 197,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 1176
+        },
+        {
+          "name": "full-again",
+          "ms": 3598,
+          "rows": 241920,
+          "delegates": 7618,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 1231
+        },
+        {
+          "name": "repeat-subset",
+          "ms": 3003,
+          "rows": 9745,
+          "delegates": 340,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 1021
+        },
+        {
+          "name": "repeat-different",
+          "ms": 2073,
+          "rows": 12620,
+          "delegates": 197,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 129
+        },
+        {
+          "name": "repeat-full",
+          "ms": 3820,
+          "rows": 241920,
+          "delegates": 7618,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": 1290
+        },
+        {
+          "name": "zoomed",
+          "ms": 587,
+          "rows": 241920,
+          "delegates": 7618,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "panned",
+          "ms": 574,
+          "rows": 241920,
+          "delegates": 7618,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        },
+        {
+          "name": "recentered",
+          "ms": 2150,
+          "rows": 241920,
+          "delegates": 7618,
+          "created": 0,
+          "destroyed": 0,
+          "last-create-ms": -1,
+          "last-destroy-ms": -1,
+          "observed-ms": -1
+        }
+      ],
+      "map_updates": [
+        "HDB_MAP_UPDATE strategy=retention aggregate-ms=173.459 plan-ms=10.187 notifications-ms=0.965 before=7618 after=7615 objects=7618 removed=0 inserted=0 changed=698",
+        "HDB_MAP_UPDATE strategy=retention aggregate-ms=101.338 plan-ms=20.925 notifications-ms=548.446 before=7615 after=7618 objects=7618 removed=0 inserted=0 changed=698",
+        "HDB_MAP_UPDATE strategy=retention aggregate-ms=5.020 plan-ms=4.024 notifications-ms=253.351 before=7618 after=340 objects=7618 removed=0 inserted=0 changed=7278",
+        "HDB_MAP_UPDATE strategy=retention aggregate-ms=3.347 plan-ms=1.760 notifications-ms=23.885 before=340 after=197 objects=7618 removed=0 inserted=0 changed=537",
+        "HDB_MAP_UPDATE strategy=retention aggregate-ms=0.086 plan-ms=1.211 notifications-ms=8.491 before=197 after=0 objects=7618 removed=0 inserted=0 changed=197",
+        "HDB_MAP_UPDATE strategy=retention aggregate-ms=139.302 plan-ms=7.656 notifications-ms=1507.633 before=0 after=7615 objects=7618 removed=0 inserted=0 changed=7615",
+        "HDB_MAP_UPDATE strategy=retention aggregate-ms=122.006 plan-ms=5.442 notifications-ms=1007.308 before=7615 after=7618 objects=7618 removed=0 inserted=0 changed=698",
+        "HDB_MAP_UPDATE strategy=retention aggregate-ms=3.469 plan-ms=5.684 notifications-ms=1085.321 before=7618 after=197 objects=7618 removed=0 inserted=0 changed=7421",
+        "HDB_MAP_UPDATE strategy=retention aggregate-ms=129.747 plan-ms=3.981 notifications-ms=1007.996 before=197 after=7618 objects=7618 removed=0 inserted=0 changed=7421",
+        "HDB_MAP_UPDATE strategy=retention aggregate-ms=3.276 plan-ms=3.708 notifications-ms=951.436 before=7618 after=340 objects=7618 removed=0 inserted=0 changed=7278",
+        "HDB_MAP_UPDATE strategy=retention aggregate-ms=2.177 plan-ms=1.146 notifications-ms=65.367 before=340 after=197 objects=7618 removed=0 inserted=0 changed=537",
+        "HDB_MAP_UPDATE strategy=retention aggregate-ms=139.229 plan-ms=5.532 notifications-ms=1068.476 before=197 after=7618 objects=7618 removed=0 inserted=0 changed=7421"
+      ],
+      "filter_updates": [
+        "HDB_FILTER_STAGE revision=1 list-begin-ms=7.136 filter-ms=8.637 list-end-ms=3.312 property-notify-ms=47.713 total-ms=737.647",
+        "HDB_FILTER_STAGE revision=2 list-begin-ms=1.534 filter-ms=15.831 list-end-ms=5.563 property-notify-ms=26.603 total-ms=312.167",
+        "HDB_FILTER_STAGE revision=3 list-begin-ms=1.636 filter-ms=16.593 list-end-ms=5.230 property-notify-ms=34.165 total-ms=86.739",
+        "HDB_FILTER_STAGE revision=4 list-begin-ms=0.549 filter-ms=9.876 list-end-ms=1.036 property-notify-ms=37.449 total-ms=58.836",
+        "HDB_FILTER_STAGE revision=5 list-begin-ms=2.536 filter-ms=33.963 list-end-ms=5.278 property-notify-ms=62.154 total-ms=1759.221",
+        "HDB_FILTER_STAGE revision=6 list-begin-ms=2.483 filter-ms=11.546 list-end-ms=10.222 property-notify-ms=66.225 total-ms=1225.516",
+        "HDB_FILTER_STAGE revision=7 list-begin-ms=3.105 filter-ms=24.088 list-end-ms=11.685 property-notify-ms=42.568 total-ms=1176.152",
+        "HDB_FILTER_STAGE revision=8 list-begin-ms=2.342 filter-ms=17.767 list-end-ms=14.197 property-notify-ms=55.077 total-ms=1231.515",
+        "HDB_FILTER_STAGE revision=9 list-begin-ms=2.126 filter-ms=14.504 list-end-ms=13.044 property-notify-ms=32.809 total-ms=1021.010",
+        "HDB_FILTER_STAGE revision=10 list-begin-ms=2.122 filter-ms=10.632 list-end-ms=10.289 property-notify-ms=36.942 total-ms=128.817",
+        "HDB_FILTER_STAGE revision=11 list-begin-ms=1.754 filter-ms=15.082 list-end-ms=9.508 property-notify-ms=50.711 total-ms=1290.461"
+      ],
+      "max_state_ms": 4232,
+      "over_5000_ms": []
+    },
+    "adaptive-first": {
+      "seconds": 13.18,
+      "expanded_coverage": true,
+      "state_budget_ms": 10000,
+      "process_budget_seconds": 60,
+      "log_sha256": "0598ece231ee2eaedfef65defa56e40a3cd18ad112b1c60a0b1140e800dc08db",
+      "steps": [
+        {
+          "name": "loaded",
+          "ms": 442,
+          "rows": 236791,
+          "mapped": 7615,
+          "in-view": 7615,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 0,
+          "zoom": 11
+        },
+        {
+          "name": "full",
+          "ms": 323,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 0,
+          "destroyed": 0,
+          "zoom": 11
+        },
+        {
+          "name": "town",
+          "ms": 157,
+          "rows": 9745,
+          "mapped": 340,
+          "in-view": 340,
+          "objects": 3,
+          "clusters": 3,
+          "created": 0,
+          "destroyed": 20,
+          "zoom": 11
+        },
+        {
+          "name": "different",
+          "ms": 128,
+          "rows": 12620,
+          "mapped": 197,
+          "in-view": 197,
+          "objects": 2,
+          "clusters": 2,
+          "created": 2,
+          "destroyed": 3,
+          "zoom": 11
+        },
+        {
+          "name": "budget",
+          "ms": 45,
+          "rows": 7750,
+          "mapped": 145,
+          "in-view": 145,
+          "objects": 2,
+          "clusters": 2,
+          "created": 0,
+          "destroyed": 0,
+          "zoom": 11
+        },
+        {
+          "name": "small-to-full",
+          "ms": 438,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 21,
+          "destroyed": 0,
+          "zoom": 11
+        },
+        {
+          "name": "empty",
+          "ms": 326,
+          "rows": 0,
+          "mapped": 0,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 23,
+          "zoom": 11
+        },
+        {
+          "name": "empty-to-full",
+          "ms": 313,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 0,
+          "zoom": 11
+        },
+        {
+          "name": "selection-only",
+          "ms": 141,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 24,
+          "clusters": 23,
+          "created": 1,
+          "destroyed": 0,
+          "zoom": 11
+        },
+        {
+          "name": "individuals",
+          "ms": 403,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 127,
+          "objects": 127,
+          "clusters": 0,
+          "created": 126,
+          "destroyed": 23,
+          "zoom": 16
+        },
+        {
+          "name": "selection-offscreen",
+          "ms": 428,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 127,
+          "zoom": 16
+        },
+        {
+          "name": "selection-returned",
+          "ms": 157,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 127,
+          "objects": 127,
+          "clusters": 0,
+          "created": 127,
+          "destroyed": 0,
+          "zoom": 16
+        },
+        {
+          "name": "domain-hidden-cleared",
+          "ms": 330,
+          "rows": 12620,
+          "mapped": 197,
+          "in-view": 0,
+          "objects": 0,
+          "clusters": 0,
+          "created": 0,
+          "destroyed": 127,
+          "zoom": 16
+        },
+        {
+          "name": "recentered",
+          "ms": 239,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 0,
+          "zoom": 11
+        },
+        {
+          "name": "zoom-twelve",
+          "ms": 425,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7240,
+          "objects": 59,
+          "clusters": 58,
+          "created": 59,
+          "destroyed": 23,
+          "zoom": 12
+        },
+        {
+          "name": "zoom-thirteen",
+          "ms": 388,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 2314,
+          "objects": 72,
+          "clusters": 65,
+          "created": 71,
+          "destroyed": 58,
+          "zoom": 13
+        },
+        {
+          "name": "zoom-fourteen",
+          "ms": 411,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 473,
+          "objects": 36,
+          "clusters": 33,
+          "created": 35,
+          "destroyed": 71,
+          "zoom": 14
+        },
+        {
+          "name": "zoom-fifteen",
+          "ms": 393,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 12,
+          "objects": 12,
+          "clusters": 0,
+          "created": 12,
+          "destroyed": 36,
+          "zoom": 15
+        },
+        {
+          "name": "before-burst",
+          "ms": 441,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 12,
+          "zoom": 11
+        },
+        {
+          "name": "rapid-reentrant",
+          "ms": 856,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 7618,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 23,
+          "zoom": 11
+        },
+        {
+          "name": "rapid-viewport",
+          "ms": 386,
+          "rows": 241920,
+          "mapped": 7618,
+          "in-view": 127,
+          "objects": 127,
+          "clusters": 0,
+          "created": 127,
+          "destroyed": 23,
+          "zoom": 16
+        },
+        {
+          "name": "reset",
+          "ms": 545,
+          "rows": 236791,
+          "mapped": 7615,
+          "in-view": 7615,
+          "objects": 23,
+          "clusters": 23,
+          "created": 23,
+          "destroyed": 127,
+          "zoom": 11
+        }
+      ],
+      "map_updates": [
+        "HDB_MAP_UPDATE strategy=adaptive reason=viewport aggregate-ms=0.000 projection-ms=24.193 plan-ms=1.134 notifications-ms=14.349 before=0 after=23 mapped=7615 in-view=7615 clusters=23 removed=0 inserted=23 changed=0",
+        "HDB_MAP_UPDATE strategy=adaptive reason=viewport aggregate-ms=0.000 projection-ms=17.226 plan-ms=0.459 notifications-ms=0.097 before=23 after=23 mapped=7615 in-view=7615 clusters=23 removed=0 inserted=0 changed=0",
+        "HDB_MAP_UPDATE strategy=adaptive reason=filter aggregate-ms=168.125 projection-ms=14.635 plan-ms=0.309 notifications-ms=12.194 before=23 after=23 mapped=7618 in-view=7618 clusters=23 removed=0 inserted=0 changed=20",
+        "HDB_MAP_UPDATE strategy=adaptive reason=filter aggregate-ms=4.716 projection-ms=0.396 plan-ms=0.045 notifications-ms=3.239 before=23 after=3 mapped=340 in-view=340 clusters=3 removed=20 inserted=0 changed=2",
+        "HDB_MAP_UPDATE strategy=adaptive reason=filter aggregate-ms=2.923 projection-ms=0.294 plan-ms=0.027 notifications-ms=1.615 before=3 after=2 mapped=197 in-view=197 clusters=2 removed=3 inserted=2 changed=0",
+        "HDB_MAP_UPDATE strategy=adaptive reason=filter aggregate-ms=1.478 projection-ms=0.202 plan-ms=0.026 notifications-ms=1.303 before=2 after=2 mapped=145 in-view=145 clusters=2 removed=0 inserted=0 changed=2",
+        "HDB_MAP_UPDATE strategy=adaptive reason=filter aggregate-ms=48.202 projection-ms=7.300 plan-ms=0.047 notifications-ms=2.830 before=2 after=23 mapped=6224 in-view=6224 clusters=23 removed=0 inserted=21 changed=2",
+        "HDB_MAP_UPDATE strategy=adaptive reason=filter aggregate-ms=209.550 projection-ms=10.133 plan-ms=0.046 notifications-ms=1.520 before=23 after=23 mapped=7618 in-view=7618 clusters=23 removed=0 inserted=0 changed=23",
+        "HDB_MAP_UPDATE strategy=adaptive reason=filter aggregate-ms=0.082 projection-ms=0.132 plan-ms=0.018 notifications-ms=1.922 before=23 after=0 mapped=0 in-view=0 clusters=0 removed=23 inserted=0 changed=0",
+        "HDB_MAP_UPDATE strategy=adaptive reason=filter aggregate-ms=109.586 projection-ms=14.544 plan-ms=0.044 notifications-ms=1.451 before=0 after=23 mapped=7618 in-view=7618 clusters=23 removed=0 inserted=23 changed=0",
+        "HDB_MAP_UPDATE strategy=adaptive reason=selection aggregate-ms=0.000 projection-ms=14.824 plan-ms=0.128 notifications-ms=2.320 before=23 after=24 mapped=7618 in-view=7618 clusters=23 removed=0 inserted=1 changed=1",
+        "HDB_MAP_UPDATE strategy=adaptive reason=viewport aggregate-ms=0.000 projection-ms=7.441 plan-ms=0.139 notifications-ms=8.229 before=24 after=127 mapped=7618 in-view=127 clusters=0 removed=23 inserted=126 changed=0",
+        "HDB_MAP_UPDATE strategy=adaptive reason=viewport aggregate-ms=0.000 projection-ms=4.747 plan-ms=0.066 notifications-ms=1.428 before=127 after=0 mapped=7618 in-view=0 clusters=0 removed=127 inserted=0 changed=0",
+        "HDB_MAP_UPDATE strategy=adaptive reason=viewport aggregate-ms=0.000 projection-ms=5.090 plan-ms=0.133 notifications-ms=2.027 before=0 after=127 mapped=7618 in-view=127 clusters=0 removed=0 inserted=127 changed=0",
+        "HDB_MAP_UPDATE strategy=adaptive reason=filter aggregate-ms=2.509 projection-ms=0.038 plan-ms=0.024 notifications-ms=0.959 before=127 after=0 mapped=197 in-view=0 clusters=0 removed=127 inserted=0 changed=0",
+        "HDB_MAP_UPDATE strategy=adaptive reason=filter aggregate-ms=94.412 projection-ms=2.175 plan-ms=0.052 notifications-ms=1.310 before=0 after=127 mapped=7618 in-view=127 clusters=0 removed=0 inserted=127 changed=0",
+        "HDB_MAP_UPDATE strategy=adaptive reason=viewport aggregate-ms=0.000 projection-ms=5.874 plan-ms=0.054 notifications-ms=0.783 before=127 after=23 mapped=7618 in-view=7618 clusters=23 removed=127 inserted=23 changed=0",
+        "HDB_MAP_UPDATE strategy=adaptive reason=viewport aggregate-ms=0.000 projection-ms=7.395 plan-ms=0.047 notifications-ms=1.566 before=23 after=59 mapped=7618 in-view=7240 clusters=58 removed=23 inserted=59 changed=0",
+        "HDB_MAP_UPDATE strategy=adaptive reason=viewport aggregate-ms=0.000 projection-ms=5.193 plan-ms=0.068 notifications-ms=2.084 before=59 after=72 mapped=7618 in-view=2314 clusters=65 removed=58 inserted=71 changed=0",
+        "HDB_MAP_UPDATE strategy=adaptive reason=viewport aggregate-ms=0.000 projection-ms=4.044 plan-ms=0.065 notifications-ms=3.081 before=72 after=36 mapped=7618 in-view=473 clusters=33 removed=71 inserted=35 changed=0",
+        "HDB_MAP_UPDATE strategy=adaptive reason=viewport aggregate-ms=0.000 projection-ms=3.792 plan-ms=0.055 notifications-ms=2.489 before=36 after=12 mapped=7618 in-view=12 clusters=0 removed=36 inserted=12 changed=0",
+        "HDB_MAP_UPDATE strategy=adaptive reason=viewport aggregate-ms=0.000 projection-ms=8.122 plan-ms=0.124 notifications-ms=1.085 before=12 after=23 mapped=7618 in-view=7618 clusters=23 removed=12 inserted=23 changed=0",
+        "HDB_MAP_UPDATE strategy=adaptive reason=filter aggregate-ms=3.779 projection-ms=0.216 plan-ms=0.052 notifications-ms=40.644 before=23 after=3 mapped=340 in-view=340 clusters=3 removed=20 inserted=0 changed=2",
+        "HDB_MAP_UPDATE strategy=adaptive reason=filter aggregate-ms=0.019 projection-ms=0.039 plan-ms=0.016 notifications-ms=0.311 before=3 after=0 mapped=0 in-view=0 clusters=0 removed=3 inserted=0 changed=0",
+        "HDB_MAP_UPDATE strategy=adaptive reason=filter aggregate-ms=112.943 projection-ms=5.652 plan-ms=0.046 notifications-ms=1.059 before=0 after=23 mapped=7615 in-view=7615 clusters=23 removed=0 inserted=23 changed=0",
+        "HDB_MAP_UPDATE strategy=adaptive reason=filter aggregate-ms=106.813 projection-ms=5.426 plan-ms=0.105 notifications-ms=0.585 before=23 after=23 mapped=7618 in-view=7618 clusters=23 removed=0 inserted=0 changed=20",
+        "HDB_MAP_UPDATE strategy=adaptive reason=viewport aggregate-ms=0.000 projection-ms=5.665 plan-ms=0.096 notifications-ms=3.228 before=23 after=127 mapped=7618 in-view=127 clusters=0 removed=23 inserted=127 changed=0",
+        "HDB_MAP_UPDATE strategy=adaptive reason=filter aggregate-ms=83.451 projection-ms=2.638 plan-ms=0.136 notifications-ms=3.510 before=127 after=127 mapped=7615 in-view=127 clusters=0 removed=0 inserted=0 changed=23",
+        "HDB_MAP_UPDATE strategy=adaptive reason=viewport aggregate-ms=0.000 projection-ms=4.385 plan-ms=0.209 notifications-ms=1.200 before=127 after=23 mapped=7615 in-view=7615 clusters=23 removed=127 inserted=23 changed=0"
+      ],
+      "filter_updates": [
+        "HDB_FILTER_STAGE revision=1 list-begin-ms=0.656 filter-ms=9.497 list-end-ms=2.714 property-notify-ms=18.119 total-ms=228.487",
+        "HDB_FILTER_STAGE revision=2 list-begin-ms=0.600 filter-ms=6.131 list-end-ms=2.688 property-notify-ms=2.791 total-ms=22.335",
+        "HDB_FILTER_STAGE revision=3 list-begin-ms=0.484 filter-ms=6.209 list-end-ms=3.269 property-notify-ms=4.538 total-ms=21.632",
+        "HDB_FILTER_STAGE revision=4 list-begin-ms=0.532 filter-ms=6.472 list-end-ms=2.849 property-notify-ms=2.485 total-ms=17.289",
+        "HDB_FILTER_STAGE revision=5 list-begin-ms=0.581 filter-ms=7.707 list-end-ms=2.391 property-notify-ms=20.075 total-ms=91.144",
+        "HDB_FILTER_STAGE revision=6 list-begin-ms=0.381 filter-ms=8.605 list-end-ms=3.103 property-notify-ms=17.602 total-ms=253.068",
+        "HDB_FILTER_STAGE revision=7 list-begin-ms=0.489 filter-ms=6.002 list-end-ms=1.038 property-notify-ms=2.960 total-ms=22.177",
+        "HDB_FILTER_STAGE revision=8 list-begin-ms=0.784 filter-ms=10.264 list-end-ms=5.283 property-notify-ms=19.514 total-ms=164.353",
+        "HDB_FILTER_STAGE revision=9 list-begin-ms=0.392 filter-ms=7.117 list-end-ms=2.559 property-notify-ms=2.649 total-ms=17.735",
+        "HDB_FILTER_STAGE revision=10 list-begin-ms=0.273 filter-ms=9.117 list-end-ms=2.380 property-notify-ms=12.901 total-ms=123.427",
+        "HDB_FILTER_STAGE revision=11 list-begin-ms=0.430 filter-ms=5.624 list-end-ms=3.388 property-notify-ms=2.619 total-ms=57.910",
+        "HDB_FILTER_STAGE revision=12 list-begin-ms=0.123 filter-ms=5.308 list-end-ms=0.435 property-notify-ms=0.985 total-ms=8.068",
+        "HDB_FILTER_STAGE revision=13 list-begin-ms=0.117 filter-ms=7.535 list-end-ms=2.481 property-notify-ms=41.590 total-ms=172.462",
+        "HDB_FILTER_STAGE revision=14 list-begin-ms=0.207 filter-ms=8.316 list-end-ms=3.579 property-notify-ms=38.395 total-ms=164.645",
+        "HDB_FILTER_STAGE revision=15 list-begin-ms=0.284 filter-ms=7.059 list-end-ms=2.740 property-notify-ms=30.958 total-ms=131.333"
+      ],
+      "max_state_ms": 856,
+      "over_5000_ms": []
+    },
+    "baseline-startup-qml-shell": {
+      "seconds": 5.131763653000235,
+      "process_exit": 0,
+      "verified": true,
+      "view": "qml-shell",
+      "iteration": 1,
+      "stages": [
+        {
+          "Operation": "property-evidence",
+          "Milliseconds": 73.4981,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 4620272,
+          "ProcessAllocatedBytes": 4620272,
+          "ManagedBytes": 5428720,
+          "WorkingSetBytes": 153718784
+        },
+        {
+          "Operation": "postal-evidence",
+          "Milliseconds": 675.8837,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 205864680,
+          "ProcessAllocatedBytes": 205874112,
+          "ManagedBytes": 162598096,
+          "WorkingSetBytes": 362893312
+        },
+        {
+          "Operation": "footprint-file-read",
+          "Milliseconds": 43.4214,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 57013400,
+          "ProcessAllocatedBytes": 57013400,
+          "ManagedBytes": 219610200,
+          "WorkingSetBytes": 419962880
+        },
+        {
+          "Operation": "footprint-json",
+          "Milliseconds": 431.2494,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 67118032,
+          "ProcessAllocatedBytes": 67119352,
+          "ManagedBytes": 218327816,
+          "WorkingSetBytes": 474738688
+        },
+        {
+          "Operation": "footprints",
+          "Milliseconds": 482.53,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 10981256,
+          "ProcessAllocatedBytes": 10981256,
+          "ManagedBytes": 229346744,
+          "WorkingSetBytes": 486641664
+        },
+        {
+          "Operation": "evidence-index",
+          "Milliseconds": 560.3194,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 79439056,
+          "ProcessAllocatedBytes": 79440424,
+          "ManagedBytes": 243824352,
+          "WorkingSetBytes": 523075584
+        },
+        {
+          "Operation": "transaction-csv",
+          "Milliseconds": 407.4311,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 219390016,
+          "ProcessAllocatedBytes": 219391360,
+          "ManagedBytes": 353173384,
+          "WorkingSetBytes": 614031360
+        },
+        {
+          "Operation": "validation-facts",
+          "Milliseconds": 313.5082,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 41860088,
+          "ProcessAllocatedBytes": 41884712,
+          "ManagedBytes": 395127792,
+          "WorkingSetBytes": 651866112
+        },
+        {
+          "Operation": "matching-resolution",
+          "Milliseconds": 1049.8611,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 185748920,
+          "ProcessAllocatedBytes": 185751608,
+          "ManagedBytes": 231081952,
+          "WorkingSetBytes": 767705088
+        },
+        {
+          "Operation": "transaction-domain",
+          "Milliseconds": 17.5221,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 35499472,
+          "ProcessAllocatedBytes": 35499472,
+          "ManagedBytes": 266675888,
+          "WorkingSetBytes": 767721472
+        },
+        {
+          "Operation": "import-return",
+          "Milliseconds": 0.092,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 976,
+          "ProcessAllocatedBytes": 976,
+          "ManagedBytes": 266684112,
+          "WorkingSetBytes": 767721472
+        },
+        {
+          "Operation": "town-labels",
+          "Milliseconds": 26.4606,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 5328,
+          "ProcessAllocatedBytes": 5328,
+          "ManagedBytes": 266692336,
+          "WorkingSetBytes": 767840256
+        },
+        {
+          "Operation": "state-construction",
+          "Milliseconds": 36.1739,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 7865272,
+          "ProcessAllocatedBytes": 7865272,
+          "ManagedBytes": 274554928,
+          "WorkingSetBytes": 767893504
+        },
+        {
+          "Operation": "map-aggregation",
+          "Milliseconds": 172.0995,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 37282816,
+          "ProcessAllocatedBytes": 37282816,
+          "ManagedBytes": 311952080,
+          "WorkingSetBytes": 768028672
+        },
+        {
+          "Operation": "map-model-population",
+          "Milliseconds": 0.2353,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 61856,
+          "ProcessAllocatedBytes": 61856,
+          "ManagedBytes": 312013072,
+          "WorkingSetBytes": 768028672
+        },
+        {
+          "Operation": "models-constructed",
+          "Milliseconds": 0.0358,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 848,
+          "ProcessAllocatedBytes": 848,
+          "ManagedBytes": 312021296,
+          "WorkingSetBytes": 768028672
+        },
+        {
+          "Operation": "qml-ready-qml-shell",
+          "Milliseconds": 146.3087,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 18320,
+          "ProcessAllocatedBytes": 18320,
+          "ManagedBytes": 312037744,
+          "WorkingSetBytes": 809156608
+        },
+        {
+          "Operation": "diagnostic-retained-native",
+          "Milliseconds": 255.5897,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 1128,
+          "ProcessAllocatedBytes": 1128,
+          "ManagedBytes": 225598976,
+          "WorkingSetBytes": 655970304
+        }
+      ],
+      "ready": [
+        "HDB_STARTUP_READY view=qml-shell rows=241920 markers=7618 sidebar-role-reads=0 map-role-reads=0"
+      ]
+    },
+    "baseline-startup-map-shell": {
+      "seconds": 5.108105300001625,
+      "process_exit": 0,
+      "verified": true,
+      "view": "map-shell",
+      "iteration": 1,
+      "stages": [
+        {
+          "Operation": "property-evidence",
+          "Milliseconds": 76.756,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 4620144,
+          "ProcessAllocatedBytes": 4620144,
+          "ManagedBytes": 5428776,
+          "WorkingSetBytes": 161419264
+        },
+        {
+          "Operation": "postal-evidence",
+          "Milliseconds": 587.1899,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 203939520,
+          "ProcessAllocatedBytes": 203949208,
+          "ManagedBytes": 160907280,
+          "WorkingSetBytes": 368951296
+        },
+        {
+          "Operation": "footprint-file-read",
+          "Milliseconds": 40.0481,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 57013400,
+          "ProcessAllocatedBytes": 57013400,
+          "ManagedBytes": 217919384,
+          "WorkingSetBytes": 426020864
+        },
+        {
+          "Operation": "footprint-json",
+          "Milliseconds": 428.3178,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 67118032,
+          "ProcessAllocatedBytes": 67119352,
+          "ManagedBytes": 218329600,
+          "WorkingSetBytes": 480796672
+        },
+        {
+          "Operation": "footprints",
+          "Milliseconds": 485.5616,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 10981256,
+          "ProcessAllocatedBytes": 10981256,
+          "ManagedBytes": 229346696,
+          "WorkingSetBytes": 491769856
+        },
+        {
+          "Operation": "evidence-index",
+          "Milliseconds": 539.0906,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 79439064,
+          "ProcessAllocatedBytes": 79440432,
+          "ManagedBytes": 241995152,
+          "WorkingSetBytes": 530018304
+        },
+        {
+          "Operation": "transaction-csv",
+          "Milliseconds": 331.4262,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 219390016,
+          "ProcessAllocatedBytes": 219391360,
+          "ManagedBytes": 352962096,
+          "WorkingSetBytes": 619696128
+        },
+        {
+          "Operation": "validation-facts",
+          "Milliseconds": 325.2213,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 41860088,
+          "ProcessAllocatedBytes": 41860088,
+          "ManagedBytes": 394900168,
+          "WorkingSetBytes": 657506304
+        },
+        {
+          "Operation": "matching-resolution",
+          "Milliseconds": 993.8744,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 185790816,
+          "ProcessAllocatedBytes": 185793480,
+          "ManagedBytes": 228717224,
+          "WorkingSetBytes": 778022912
+        },
+        {
+          "Operation": "transaction-domain",
+          "Milliseconds": 18.0864,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 35499464,
+          "ProcessAllocatedBytes": 35499464,
+          "ManagedBytes": 264315040,
+          "WorkingSetBytes": 778027008
+        },
+        {
+          "Operation": "import-return",
+          "Milliseconds": 0.0825,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 976,
+          "ProcessAllocatedBytes": 976,
+          "ManagedBytes": 264315040,
+          "WorkingSetBytes": 778027008
+        },
+        {
+          "Operation": "town-labels",
+          "Milliseconds": 28.8934,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 5328,
+          "ProcessAllocatedBytes": 5328,
+          "ManagedBytes": 264323264,
+          "WorkingSetBytes": 778158080
+        },
+        {
+          "Operation": "state-construction",
+          "Milliseconds": 36.1066,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 7865272,
+          "ProcessAllocatedBytes": 7865272,
+          "ManagedBytes": 272194080,
+          "WorkingSetBytes": 778219520
+        },
+        {
+          "Operation": "map-aggregation",
+          "Milliseconds": 186.1761,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 37282816,
+          "ProcessAllocatedBytes": 37282816,
+          "ManagedBytes": 309583128,
+          "WorkingSetBytes": 778321920
+        },
+        {
+          "Operation": "map-model-population",
+          "Milliseconds": 0.294,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 61856,
+          "ProcessAllocatedBytes": 61856,
+          "ManagedBytes": 309652344,
+          "WorkingSetBytes": 778321920
+        },
+        {
+          "Operation": "models-constructed",
+          "Milliseconds": 0.037,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 840,
+          "ProcessAllocatedBytes": 840,
+          "ManagedBytes": 309652344,
+          "WorkingSetBytes": 778321920
+        },
+        {
+          "Operation": "qml-ready-map-shell",
+          "Milliseconds": 319.2842,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 838240,
+          "ProcessAllocatedBytes": 838240,
+          "ManagedBytes": 310492816,
+          "WorkingSetBytes": 850300928
+        },
+        {
+          "Operation": "diagnostic-retained-native",
+          "Milliseconds": 260.9754,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 1184,
+          "ProcessAllocatedBytes": 1184,
+          "ManagedBytes": 225821616,
+          "WorkingSetBytes": 696725504
+        }
+      ],
+      "ready": [
+        "HDB_STARTUP_READY view=map-shell rows=241920 markers=7618 sidebar-role-reads=40 map-role-reads=0"
+      ]
+    },
+    "baseline-startup-full": {
+      "seconds": 8.585050911002327,
+      "process_exit": 0,
+      "verified": true,
+      "view": "full",
+      "iteration": 1,
+      "stages": [
+        {
+          "Operation": "property-evidence",
+          "Milliseconds": 65.0146,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 4623768,
+          "ProcessAllocatedBytes": 4623768,
+          "ManagedBytes": 5428752,
+          "WorkingSetBytes": 161054720
+        },
+        {
+          "Operation": "postal-evidence",
+          "Milliseconds": 591.2584,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 203997768,
+          "ProcessAllocatedBytes": 204007456,
+          "ManagedBytes": 160081568,
+          "WorkingSetBytes": 368070656
+        },
+        {
+          "Operation": "footprint-file-read",
+          "Milliseconds": 41.6661,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 57013400,
+          "ProcessAllocatedBytes": 57013400,
+          "ManagedBytes": 217093672,
+          "WorkingSetBytes": 425140224
+        },
+        {
+          "Operation": "footprint-json",
+          "Milliseconds": 414.1209,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 67118032,
+          "ProcessAllocatedBytes": 67119352,
+          "ManagedBytes": 218329936,
+          "WorkingSetBytes": 479866880
+        },
+        {
+          "Operation": "footprints",
+          "Milliseconds": 477.5635,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 11005880,
+          "ProcessAllocatedBytes": 11005880,
+          "ManagedBytes": 229371032,
+          "WorkingSetBytes": 490901504
+        },
+        {
+          "Operation": "evidence-index",
+          "Milliseconds": 566.7162,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 79439064,
+          "ProcessAllocatedBytes": 79440432,
+          "ManagedBytes": 242111384,
+          "WorkingSetBytes": 529297408
+        },
+        {
+          "Operation": "transaction-csv",
+          "Milliseconds": 349.3449,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 219390224,
+          "ProcessAllocatedBytes": 219391568,
+          "ManagedBytes": 352412320,
+          "WorkingSetBytes": 618053632
+        },
+        {
+          "Operation": "validation-facts",
+          "Milliseconds": 311.5344,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 41860088,
+          "ProcessAllocatedBytes": 41860088,
+          "ManagedBytes": 394342488,
+          "WorkingSetBytes": 655867904
+        },
+        {
+          "Operation": "matching-resolution",
+          "Milliseconds": 1036.7664,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 185758464,
+          "ProcessAllocatedBytes": 185761128,
+          "ManagedBytes": 224428672,
+          "WorkingSetBytes": 765718528
+        },
+        {
+          "Operation": "transaction-domain",
+          "Milliseconds": 18.2018,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 35499472,
+          "ProcessAllocatedBytes": 35499472,
+          "ManagedBytes": 260026304,
+          "WorkingSetBytes": 765722624
+        },
+        {
+          "Operation": "import-return",
+          "Milliseconds": 0.1802,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 976,
+          "ProcessAllocatedBytes": 976,
+          "ManagedBytes": 260026304,
+          "WorkingSetBytes": 765722624
+        },
+        {
+          "Operation": "town-labels",
+          "Milliseconds": 50.3995,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 5328,
+          "ProcessAllocatedBytes": 5328,
+          "ManagedBytes": 260034528,
+          "WorkingSetBytes": 765841408
+        },
+        {
+          "Operation": "state-construction",
+          "Milliseconds": 40.0604,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 7865264,
+          "ProcessAllocatedBytes": 7865264,
+          "ManagedBytes": 267905344,
+          "WorkingSetBytes": 765898752
+        },
+        {
+          "Operation": "map-aggregation",
+          "Milliseconds": 204.7029,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 37282816,
+          "ProcessAllocatedBytes": 37282816,
+          "ManagedBytes": 305294616,
+          "WorkingSetBytes": 766054400
+        },
+        {
+          "Operation": "map-model-population",
+          "Milliseconds": 0.5403,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 61856,
+          "ProcessAllocatedBytes": 61856,
+          "ManagedBytes": 305363832,
+          "WorkingSetBytes": 766054400
+        },
+        {
+          "Operation": "models-constructed",
+          "Milliseconds": 0.0473,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 848,
+          "ProcessAllocatedBytes": 848,
+          "ManagedBytes": 305363832,
+          "WorkingSetBytes": 766054400
+        },
+        {
+          "Operation": "qml-ready-full",
+          "Milliseconds": 3000.127,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 143226368,
+          "ProcessAllocatedBytes": 143227424,
+          "ManagedBytes": 344369328,
+          "WorkingSetBytes": 1226108928
+        },
+        {
+          "Operation": "diagnostic-retained-native",
+          "Milliseconds": 254.0148,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 1136,
+          "ProcessAllocatedBytes": 1136,
+          "ManagedBytes": 225847264,
+          "WorkingSetBytes": 1121075200
+        }
+      ],
+      "ready": [
+        "HDB_STARTUP_READY view=full rows=241920 markers=7618 sidebar-role-reads=45 map-role-reads=53326"
+      ]
+    },
+    "retention-startup-full": {
+      "seconds": 9.070434559995192,
+      "process_exit": 0,
+      "verified": true,
+      "view": "full",
+      "iteration": 1,
+      "stages": [
+        {
+          "Operation": "property-evidence",
+          "Milliseconds": 61.3251,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 4620272,
+          "ProcessAllocatedBytes": 4620272,
+          "ManagedBytes": 5428776,
+          "WorkingSetBytes": 161652736
+        },
+        {
+          "Operation": "postal-evidence",
+          "Milliseconds": 682.9492,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 206722192,
+          "ProcessAllocatedBytes": 206731880,
+          "ManagedBytes": 162763960,
+          "WorkingSetBytes": 371609600
+        },
+        {
+          "Operation": "footprint-file-read",
+          "Milliseconds": 42.1189,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 57013400,
+          "ProcessAllocatedBytes": 57013400,
+          "ManagedBytes": 219776064,
+          "WorkingSetBytes": 428683264
+        },
+        {
+          "Operation": "footprint-json",
+          "Milliseconds": 412.425,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 67118032,
+          "ProcessAllocatedBytes": 67119352,
+          "ManagedBytes": 218342296,
+          "WorkingSetBytes": 483450880
+        },
+        {
+          "Operation": "footprints",
+          "Milliseconds": 483.5785,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 11043984,
+          "ProcessAllocatedBytes": 11043984,
+          "ManagedBytes": 229425968,
+          "WorkingSetBytes": 494510080
+        },
+        {
+          "Operation": "evidence-index",
+          "Milliseconds": 542.7818,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 79439064,
+          "ProcessAllocatedBytes": 79440432,
+          "ManagedBytes": 244809440,
+          "WorkingSetBytes": 530108416
+        },
+        {
+          "Operation": "transaction-csv",
+          "Milliseconds": 336.6491,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 219389992,
+          "ProcessAllocatedBytes": 219391336,
+          "ManagedBytes": 353162656,
+          "WorkingSetBytes": 622501888
+        },
+        {
+          "Operation": "validation-facts",
+          "Milliseconds": 336.2158,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 41860088,
+          "ProcessAllocatedBytes": 41860088,
+          "ManagedBytes": 395100760,
+          "WorkingSetBytes": 660201472
+        },
+        {
+          "Operation": "matching-resolution",
+          "Milliseconds": 1093.0203,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 185576616,
+          "ProcessAllocatedBytes": 185579304,
+          "ManagedBytes": 231916976,
+          "WorkingSetBytes": 773410816
+        },
+        {
+          "Operation": "transaction-domain",
+          "Milliseconds": 17.3472,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 35499472,
+          "ProcessAllocatedBytes": 35499472,
+          "ManagedBytes": 267510976,
+          "WorkingSetBytes": 773419008
+        },
+        {
+          "Operation": "import-return",
+          "Milliseconds": 0.1834,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 976,
+          "ProcessAllocatedBytes": 976,
+          "ManagedBytes": 267519200,
+          "WorkingSetBytes": 773419008
+        },
+        {
+          "Operation": "town-labels",
+          "Milliseconds": 11.3858,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 5328,
+          "ProcessAllocatedBytes": 5328,
+          "ManagedBytes": 267527424,
+          "WorkingSetBytes": 773529600
+        },
+        {
+          "Operation": "state-construction",
+          "Milliseconds": 29.3453,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 7865264,
+          "ProcessAllocatedBytes": 7865264,
+          "ManagedBytes": 275390016,
+          "WorkingSetBytes": 773595136
+        },
+        {
+          "Operation": "map-aggregation",
+          "Milliseconds": 150.8596,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 37282896,
+          "ProcessAllocatedBytes": 37282896,
+          "ManagedBytes": 312787360,
+          "WorkingSetBytes": 773730304
+        },
+        {
+          "Operation": "map-model-population",
+          "Milliseconds": 1.4647,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 384632,
+          "ProcessAllocatedBytes": 384632,
+          "ManagedBytes": 313176480,
+          "WorkingSetBytes": 773730304
+        },
+        {
+          "Operation": "models-constructed",
+          "Milliseconds": 158.3313,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 38106888,
+          "ProcessAllocatedBytes": 38106888,
+          "ManagedBytes": 351393832,
+          "WorkingSetBytes": 773763072
+        },
+        {
+          "Operation": "qml-ready-full",
+          "Milliseconds": 3301.5405,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 153698488,
+          "ProcessAllocatedBytes": 153700552,
+          "ManagedBytes": 265007024,
+          "WorkingSetBytes": 1195483136
+        },
+        {
+          "Operation": "diagnostic-retained-native",
+          "Milliseconds": 199.8743,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 1144,
+          "ProcessAllocatedBytes": 1144,
+          "ManagedBytes": 226633016,
+          "WorkingSetBytes": 1121026048
+        }
+      ],
+      "ready": [
+        "HDB_STARTUP_READY view=full rows=241920 markers=7618 sidebar-role-reads=45 map-role-reads=60944"
+      ]
+    },
+    "adaptive-startup-full": {
+      "seconds": 6.138561024003138,
+      "process_exit": 0,
+      "verified": true,
+      "view": "full",
+      "iteration": 1,
+      "stages": [
+        {
+          "Operation": "property-evidence",
+          "Milliseconds": 70.6429,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 4620336,
+          "ProcessAllocatedBytes": 4620336,
+          "ManagedBytes": 5428672,
+          "WorkingSetBytes": 161423360
+        },
+        {
+          "Operation": "postal-evidence",
+          "Milliseconds": 705.495,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 205529672,
+          "ProcessAllocatedBytes": 205563984,
+          "ManagedBytes": 162826288,
+          "WorkingSetBytes": 370143232
+        },
+        {
+          "Operation": "footprint-file-read",
+          "Milliseconds": 68.7909,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 57013400,
+          "ProcessAllocatedBytes": 57013400,
+          "ManagedBytes": 219846616,
+          "WorkingSetBytes": 427212800
+        },
+        {
+          "Operation": "footprint-json",
+          "Milliseconds": 530.066,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 67118032,
+          "ProcessAllocatedBytes": 67119352,
+          "ManagedBytes": 218342848,
+          "WorkingSetBytes": 482004992
+        },
+        {
+          "Operation": "footprints",
+          "Milliseconds": 498.9767,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 10981248,
+          "ProcessAllocatedBytes": 10981248,
+          "ManagedBytes": 229361096,
+          "WorkingSetBytes": 492982272
+        },
+        {
+          "Operation": "evidence-index",
+          "Milliseconds": 582.4728,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 79439064,
+          "ProcessAllocatedBytes": 79440408,
+          "ManagedBytes": 243516776,
+          "WorkingSetBytes": 529465344
+        },
+        {
+          "Operation": "transaction-csv",
+          "Milliseconds": 427.5679,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 219390008,
+          "ProcessAllocatedBytes": 219399552,
+          "ManagedBytes": 352177320,
+          "WorkingSetBytes": 619905024
+        },
+        {
+          "Operation": "validation-facts",
+          "Milliseconds": 332.6675,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 41860088,
+          "ProcessAllocatedBytes": 41860088,
+          "ManagedBytes": 394107120,
+          "WorkingSetBytes": 657661952
+        },
+        {
+          "Operation": "matching-resolution",
+          "Milliseconds": 1197.5226,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 185749072,
+          "ProcessAllocatedBytes": 185751760,
+          "ManagedBytes": 230471376,
+          "WorkingSetBytes": 768380928
+        },
+        {
+          "Operation": "transaction-domain",
+          "Milliseconds": 21.824,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 35499472,
+          "ProcessAllocatedBytes": 35499472,
+          "ManagedBytes": 266065328,
+          "WorkingSetBytes": 768385024
+        },
+        {
+          "Operation": "import-return",
+          "Milliseconds": 0.2136,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 976,
+          "ProcessAllocatedBytes": 976,
+          "ManagedBytes": 266073552,
+          "WorkingSetBytes": 768385024
+        },
+        {
+          "Operation": "town-labels",
+          "Milliseconds": 37.2426,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 5328,
+          "ProcessAllocatedBytes": 5328,
+          "ManagedBytes": 266081776,
+          "WorkingSetBytes": 768524288
+        },
+        {
+          "Operation": "state-construction",
+          "Milliseconds": 34.4176,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 7865264,
+          "ProcessAllocatedBytes": 7865264,
+          "ManagedBytes": 273952592,
+          "WorkingSetBytes": 768581632
+        },
+        {
+          "Operation": "map-aggregation",
+          "Milliseconds": 185.0325,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 37282888,
+          "ProcessAllocatedBytes": 37282888,
+          "ManagedBytes": 311341280,
+          "WorkingSetBytes": 768724992
+        },
+        {
+          "Operation": "map-model-population",
+          "Milliseconds": 2.3811,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 960,
+          "ProcessAllocatedBytes": 960,
+          "ManagedBytes": 311349504,
+          "WorkingSetBytes": 768745472
+        },
+        {
+          "Operation": "models-constructed",
+          "Milliseconds": 0.0803,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 832,
+          "ProcessAllocatedBytes": 832,
+          "ManagedBytes": 311349504,
+          "WorkingSetBytes": 768745472
+        },
+        {
+          "Operation": "qml-ready-full",
+          "Milliseconds": 418.6306,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 2526888,
+          "ProcessAllocatedBytes": 2526888,
+          "ManagedBytes": 313881880,
+          "WorkingSetBytes": 842473472
+        },
+        {
+          "Operation": "diagnostic-retained-native",
+          "Milliseconds": 279.7153,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 1112,
+          "ProcessAllocatedBytes": 1112,
+          "ManagedBytes": 226402512,
+          "WorkingSetBytes": 690896896
+        }
+      ],
+      "ready": [
+        "HDB_STARTUP_READY view=full rows=241920 markers=7618 sidebar-role-reads=40 map-role-reads=184"
+      ]
+    }
+  }
+}
