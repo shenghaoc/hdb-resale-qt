@@ -35,7 +35,7 @@ def expectation(data):
   for r in selected_rows:
    m=re.fullmatch(r'(\d+) years?(?: (\d{1,2}) months?)?',r['remaining_lease'])
    if m:lease_observations.append(int(m[1])*12+int(m[2]or 0)-(end-month(r)))
-  result.append(dict(addressIndex=sorted({key(r)for r in g}).index(chosen) if selected else -1,leaseMinimum=min(lease_observations) if lease_observations else None,leaseMaximum=max(lease_observations) if lease_observations else None,expectedFullMapped=7618 if len(rows)==241920 else 6 if len(rows)==6 else None,name=STEPS[i],town=t,type=typ,minimum=lo,maximum=hi,months=months,rows=len(g),addresses=len({key(r)for r in g}),latest=latest,selected=selected,key=chosen))
+  result.append(dict(addressIndex=sorted({key(r)for r in g}).index(chosen) if selected else -1,leaseMinimum=min(lease_observations) if lease_observations else None,leaseMaximum=max(lease_observations) if lease_observations else None,expectedFullMapped=7618 if len(rows)==241920 and (data/'address-normalization.txt').is_file() and (data/'address-normalization.txt').read_text()=='terminal-road-types-v1\n' else 6 if len(rows)==6 else None,name=STEPS[i],town=t,type=typ,minimum=lo,maximum=hi,months=months,rows=len(g),addresses=len({key(r)for r in g}),latest=latest,selected=selected,key=chosen))
  return result
 
 def verify(code,output):
