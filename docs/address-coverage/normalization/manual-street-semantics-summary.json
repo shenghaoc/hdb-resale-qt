@@ -1,0 +1,37 @@
+{
+  "reviewed_utc": "2026-10-03",
+  "review_scope": "Direct manual reading of every one of297 HDB street→raw ACRA expanded-street pairs in street-pair-review.csv, then independent mechanical verification of every retained cited source context against pinned full CSV bytes. No manual ground-truth review of all5164 addresses is claimed.",
+  "normalization_profile": "terminal-road-types-v1",
+  "pair_count": 297,
+  "manual_semantics_pass": 297,
+  "manual_semantics_fail": 0,
+  "counts_by_alias_context": {
+    "ST": {
+      "terminal": 13,
+      "before-final-ascii-number": 122
+    },
+    "RD": {
+      "terminal": 98,
+      "before-final-ascii-number": 1
+    },
+    "DR": {
+      "terminal": 22,
+      "before-final-ascii-number": 20
+    },
+    "CRES": {
+      "terminal": 21
+    }
+  },
+  "verified_source_contexts": 891,
+  "source_pair_file_sha256": "18dfd2d0fab2bba6bb21f376214eff7f3c0b2d989fea45a89d908b2acf1c5a9a",
+  "source_manifest_sha256": "25ec3cf8cd558a5cf2e966b765ce22b9a211ce80bbb639a40d0371919bffa7d9",
+  "special_cases": [
+    "ST. GEORGE'S RD→ST. GEORGE'S ROAD changes only terminal RD; leading ST. and apostrophe remain.",
+    "QUEEN'S RD→QUEEN'S ROAD preserves the apostrophe and does not become QUEEN ST or another road.",
+    "EUNOS RD 5→EUNOS ROAD 5 supplies the sole observed pre-numeric RD context.",
+    "Terminal ST examples such as ANCHORVALE ST, BAIN ST, QUEEN ST and SMITH ST are explicitly spelled STREET in the raw ACRA source.",
+    "All21 CRES cases are terminal. CRES before a number is intentionally unsupported.",
+    "Semantic passes include roads whose every address remains conflicting or malformed (for example CHANDER RD, CHANGI VILLAGE RD, FRENCH RD, DOVER RD and OWEN RD); no contradiction is removed by this review."
+  ],
+  "independent_review": "Independent outcome review covers complete conflicts, malformed evidence, previous-match changes, negative controls and the deterministic outcome sample."
+}

@@ -1,5 +1,11 @@
 # M9 full-corpus address coverage
 
+Final expanded-profile results: **7,618 located addresses / 188,573 transactions**.
+See [normalization rules, final comparison and systematic audit](normalization/README.md).
+The unchanged-rule source-expansion stage below is preserved separately to isolate
+public-source gains from normalization gains.
+
+
 Baseline is the clean M8 commit `a27657099623c211bf207e1e4cc4b057ead4c953`,
 measured before adding evidence or geometry support. Exact pinned full input
 hashes remain in [M6 manifest](../scale/manifest.json).
@@ -94,7 +100,7 @@ attributed. Dataset-qualified source rows and historical limitations are visible
 in selection details. Historical lookup occurs once per memoized raw address,
 not per repeated transaction, without changing match semantics.
 
-## Measured current-rule results
+## Preserved unchanged-rule source-expansion stage
 
 All 241,920 transactions / 9,755 addresses remain accepted. These counts use the
 same corpus and unchanged AVE/CTRL normalization. [Complete comparison](comparison.json),

@@ -1,0 +1,290 @@
+{
+  "Profile": "terminal-road-types-v1",
+  "PerRuleContext": {
+    "STBeforeNumeric": {
+      "Applicable": {
+        "Addresses": 2741,
+        "Transactions": 56752
+      },
+      "EvidenceChanged": {
+        "Addresses": 2493,
+        "Transactions": 50548
+      },
+      "NewlyLocatedPublic": {
+        "Addresses": 2430,
+        "Transactions": 49620
+      },
+      "NewlyLocatedFinal": {
+        "Addresses": 2368,
+        "Transactions": 47945
+      },
+      "FinalAmbiguous": {
+        "Addresses": 63,
+        "Transactions": 928
+      },
+      "NewlyAmbiguous": {
+        "Addresses": 63,
+        "Transactions": 928
+      },
+      "MultipleRawPostalValues": {
+        "Addresses": 63,
+        "Transactions": 928
+      },
+      "PreviouslyMatchedOutcomeChanged": {
+        "Addresses": 3,
+        "Transactions": 59
+      }
+    },
+    "RDTerminal": {
+      "Applicable": {
+        "Addresses": 1574,
+        "Transactions": 41417
+      },
+      "EvidenceChanged": {
+        "Addresses": 1346,
+        "Transactions": 35436
+      },
+      "NewlyLocatedPublic": {
+        "Addresses": 1285,
+        "Transactions": 33854
+      },
+      "NewlyLocatedFinal": {
+        "Addresses": 1218,
+        "Transactions": 31444
+      },
+      "FinalAmbiguous": {
+        "Addresses": 61,
+        "Transactions": 1582
+      },
+      "NewlyAmbiguous": {
+        "Addresses": 61,
+        "Transactions": 1582
+      },
+      "MultipleRawPostalValues": {
+        "Addresses": 61,
+        "Transactions": 1582
+      },
+      "MalformedPostalBlocker": {
+        "Addresses": 16,
+        "Transactions": 337
+      },
+      "PreviouslyMatchedOutcomeChanged": {
+        "Addresses": 6,
+        "Transactions": 190
+      }
+    },
+    "DRTerminal": {
+      "Applicable": {
+        "Addresses": 520,
+        "Transactions": 13435
+      },
+      "EvidenceChanged": {
+        "Addresses": 485,
+        "Transactions": 12642
+      },
+      "FinalAmbiguous": {
+        "Addresses": 11,
+        "Transactions": 400
+      },
+      "NewlyAmbiguous": {
+        "Addresses": 11,
+        "Transactions": 400
+      },
+      "MultipleRawPostalValues": {
+        "Addresses": 10,
+        "Transactions": 316
+      },
+      "NewlyLocatedPublic": {
+        "Addresses": 475,
+        "Transactions": 12326
+      },
+      "NewlyLocatedFinal": {
+        "Addresses": 446,
+        "Transactions": 11359
+      },
+      "PreviouslyMatchedOutcomeChanged": {
+        "Addresses": 1,
+        "Transactions": 28
+      }
+    },
+    "STTerminal": {
+      "Applicable": {
+        "Addresses": 139,
+        "Transactions": 4029
+      },
+      "EvidenceChanged": {
+        "Addresses": 133,
+        "Transactions": 3890
+      },
+      "NewlyLocatedPublic": {
+        "Addresses": 128,
+        "Transactions": 3797
+      },
+      "NewlyLocatedFinal": {
+        "Addresses": 123,
+        "Transactions": 3659
+      },
+      "FinalAmbiguous": {
+        "Addresses": 5,
+        "Transactions": 93
+      },
+      "NewlyAmbiguous": {
+        "Addresses": 5,
+        "Transactions": 93
+      },
+      "MultipleRawPostalValues": {
+        "Addresses": 5,
+        "Transactions": 93
+      },
+      "PreviouslyMatchedOutcomeChanged": {
+        "Addresses": 1,
+        "Transactions": 6
+      }
+    },
+    "CRESTerminal": {
+      "Applicable": {
+        "Addresses": 389,
+        "Transactions": 12631
+      },
+      "EvidenceChanged": {
+        "Addresses": 363,
+        "Transactions": 11560
+      },
+      "NewlyLocatedPublic": {
+        "Addresses": 360,
+        "Transactions": 11483
+      },
+      "NewlyLocatedFinal": {
+        "Addresses": 336,
+        "Transactions": 10466
+      },
+      "FinalAmbiguous": {
+        "Addresses": 3,
+        "Transactions": 77
+      },
+      "NewlyAmbiguous": {
+        "Addresses": 3,
+        "Transactions": 77
+      },
+      "MultipleRawPostalValues": {
+        "Addresses": 3,
+        "Transactions": 77
+      },
+      "MalformedPostalBlocker": {
+        "Addresses": 1,
+        "Transactions": 34
+      },
+      "PreviouslyMatchedOutcomeChanged": {
+        "Addresses": 1,
+        "Transactions": 27
+      }
+    },
+    "RDBeforeNumeric": {
+      "Applicable": {
+        "Addresses": 8,
+        "Transactions": 101
+      },
+      "EvidenceChanged": {
+        "Addresses": 8,
+        "Transactions": 101
+      },
+      "NewlyLocatedPublic": {
+        "Addresses": 8,
+        "Transactions": 101
+      },
+      "NewlyLocatedFinal": {
+        "Addresses": 8,
+        "Transactions": 101
+      }
+    },
+    "DRBeforeNumeric": {
+      "Applicable": {
+        "Addresses": 352,
+        "Transactions": 8769
+      },
+      "EvidenceChanged": {
+        "Addresses": 336,
+        "Transactions": 8298
+      },
+      "NewlyLocatedPublic": {
+        "Addresses": 334,
+        "Transactions": 8269
+      },
+      "NewlyLocatedFinal": {
+        "Addresses": 330,
+        "Transactions": 8172
+      },
+      "FinalAmbiguous": {
+        "Addresses": 2,
+        "Transactions": 29
+      },
+      "NewlyAmbiguous": {
+        "Addresses": 2,
+        "Transactions": 29
+      },
+      "MultipleRawPostalValues": {
+        "Addresses": 2,
+        "Transactions": 29
+      }
+    }
+  },
+  "NormalizationChanges": 5164,
+  "SampleAddresses": 64,
+  "SampleCandidateAddresses": 5019,
+  "SampleCoveredTags": [
+    "Form:AtLeast100Transactions",
+    "Form:LetterSuffixBlock",
+    "Form:PunctuatedStreet",
+    "Form:RareThreeOrFewerTransactions",
+    "Period:2017-2019",
+    "Period:2020-2022",
+    "Period:2023-2025",
+    "Period:2026",
+    "Rule:CRESTerminal",
+    "Rule:DRBeforeNumeric",
+    "Rule:DRTerminal",
+    "Rule:RDBeforeNumeric",
+    "Rule:RDTerminal",
+    "Rule:STBeforeNumeric",
+    "Rule:STTerminal",
+    "Town:ANG MO KIO",
+    "Town:BEDOK",
+    "Town:BISHAN",
+    "Town:BUKIT MERAH",
+    "Town:BUKIT PANJANG",
+    "Town:BUKIT TIMAH",
+    "Town:CENTRAL AREA",
+    "Town:CHOA CHU KANG",
+    "Town:CLEMENTI",
+    "Town:GEYLANG",
+    "Town:HOUGANG",
+    "Town:JURONG EAST",
+    "Town:JURONG WEST",
+    "Town:KALLANG/WHAMPOA",
+    "Town:MARINE PARADE",
+    "Town:PASIR RIS",
+    "Town:PUNGGOL",
+    "Town:QUEENSTOWN",
+    "Town:SEMBAWANG",
+    "Town:SENGKANG",
+    "Town:TAMPINES",
+    "Town:TOA PAYOH",
+    "Town:WOODLANDS",
+    "Town:YISHUN"
+  ],
+  "SampleMethod": "SHA256 hdb-m9-normalization-outcomes-v1+NUL+town|block|street. Greedy maximize uncovered town/period/rule-context/rare-form tags with hash tie-break, then hash-fill to64, sorted output. Eligible: newly located vs unchanged-rule public stage and still located in final. No success cherry-picking within eligible outcomes.",
+  "HistoricalOnlyLocatedAddresses": 86,
+  "HistoricalOnlyLocatedTransactions": 2951,
+  "OriginalCurrentRuleReportSha256": {
+    "m9-public.json": "1faf6bab16f9f09f86371ffeab466ef69c05867a56c75c8544e8b64d8133c031",
+    "m9-full.json": "407c9e2683c2ab798334da6edb2aed381f486577896211958dc9ad58216a59e2"
+  },
+  "ArtifactsSha256": {
+    "changed-addresses.csv": "94c8082f710ff3fd611839d915a9c2d4aea047cd1ea48021733cb5a2e928dd04",
+    "historical-marginal.csv": "3ad58a53dddab2dfdfcfe0bd5d8643db526fc3bde87fcd686fc9296e901bf757",
+    "manual-required.csv": "320817dacac9a94e6a97e9d03447afd03c98f4f7ab43f661bd39ed29fa967c2f",
+    "manual-sample.csv": "3cb2b1b188fbd04a068d186871384bebdf8b40d0f4a1e7624c46c7a9d397d74f",
+    "normalization-changes.csv": "e72ae3ae11a45d1bdbe8e4712b324e17b40076e06cf35c457a1001ad454982c2",
+    "remaining-failures.csv": "bb63a1b4a4b59238707af464dcf1f850c0375035086784cc8703aa1e8d4159d0"
+  }
+}

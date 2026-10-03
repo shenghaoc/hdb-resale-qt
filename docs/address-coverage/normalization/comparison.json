@@ -1,0 +1,269 @@
+{
+  "Algorithm": "hdb-m9-independent-audit-v1",
+  "Baseline": {
+    "Addresses": 9755,
+    "Transactions": 241920,
+    "MatchQuality": {
+      "Ambiguous": {
+        "Addresses": 3,
+        "Transactions": 63
+      },
+      "ExactAddress": {
+        "Addresses": 682,
+        "Transactions": 22234
+      },
+      "NormalizedAddress": {
+        "Addresses": 1239,
+        "Transactions": 30280
+      },
+      "Unmatched": {
+        "Addresses": 7831,
+        "Transactions": 189343
+      }
+    },
+    "CoordinateQuality": {
+      "BlockApproximation": {
+        "Addresses": 1921,
+        "Transactions": 52514
+      },
+      "Missing": {
+        "Addresses": 7834,
+        "Transactions": 189406
+      }
+    },
+    "StrongestReason": {
+      "ConflictingPostals": {
+        "Addresses": 3,
+        "Transactions": 63
+      },
+      "Matched": {
+        "Addresses": 1921,
+        "Transactions": 52514
+      },
+      "NoPostalAssertionUnderCurrentNormalization": {
+        "Addresses": 7828,
+        "Transactions": 189278
+      },
+      "NoPropertyUnderCurrentNormalization": {
+        "Addresses": 1,
+        "Transactions": 3
+      },
+      "SourceFootprintRejectedNonpositiveEntityId": {
+        "Addresses": 1,
+        "Transactions": 26
+      },
+      "SourceFootprintUnsupportedMultiPolygon": {
+        "Addresses": 1,
+        "Transactions": 36
+      }
+    }
+  },
+  "PublicOnly": {
+    "Addresses": 9755,
+    "Transactions": 241920,
+    "MatchQuality": {
+      "Ambiguous": {
+        "Addresses": 208,
+        "Transactions": 4221
+      },
+      "ExactAddress": {
+        "Addresses": 897,
+        "Transactions": 28396
+      },
+      "NormalizedAddress": {
+        "Addresses": 6636,
+        "Transactions": 157310
+      },
+      "Unmatched": {
+        "Addresses": 2014,
+        "Transactions": 51993
+      }
+    },
+    "CoordinateQuality": {
+      "BlockApproximation": {
+        "Addresses": 7533,
+        "Transactions": 185706
+      },
+      "Missing": {
+        "Addresses": 2222,
+        "Transactions": 56214
+      }
+    },
+    "StrongestReason": {
+      "ConflictingPostals": {
+        "Addresses": 190,
+        "Transactions": 3759
+      },
+      "InvalidPostalAssertion": {
+        "Addresses": 18,
+        "Transactions": 462
+      },
+      "Matched": {
+        "Addresses": 7533,
+        "Transactions": 185706
+      },
+      "NoPostalAssertionUnderCurrentNormalization": {
+        "Addresses": 2012,
+        "Transactions": 51964
+      },
+      "NoPropertyUnderCurrentNormalization": {
+        "Addresses": 1,
+        "Transactions": 3
+      },
+      "SourceFootprintRejectedNonpositiveEntityId": {
+        "Addresses": 1,
+        "Transactions": 26
+      }
+    }
+  },
+  "PublicPlusHistorical": {
+    "Addresses": 9755,
+    "Transactions": 241920,
+    "MatchQuality": {
+      "Ambiguous": {
+        "Addresses": 209,
+        "Transactions": 4305
+      },
+      "ExactAddress": {
+        "Addresses": 897,
+        "Transactions": 28396
+      },
+      "NormalizedAddress": {
+        "Addresses": 6721,
+        "Transactions": 160177
+      },
+      "Unmatched": {
+        "Addresses": 1928,
+        "Transactions": 49042
+      }
+    },
+    "CoordinateQuality": {
+      "BlockApproximation": {
+        "Addresses": 7618,
+        "Transactions": 188573
+      },
+      "Missing": {
+        "Addresses": 2137,
+        "Transactions": 53347
+      }
+    },
+    "StrongestReason": {
+      "ConflictingPostals": {
+        "Addresses": 190,
+        "Transactions": 3759
+      },
+      "CrossSourcePostalConflict": {
+        "Addresses": 1,
+        "Transactions": 84
+      },
+      "InvalidPostalAssertion": {
+        "Addresses": 18,
+        "Transactions": 462
+      },
+      "Matched": {
+        "Addresses": 7618,
+        "Transactions": 188573
+      },
+      "NoPostalAssertionUnderCurrentNormalization": {
+        "Addresses": 1926,
+        "Transactions": 49013
+      },
+      "NoPropertyUnderCurrentNormalization": {
+        "Addresses": 1,
+        "Transactions": 3
+      },
+      "SourceFootprintRejectedNonpositiveEntityId": {
+        "Addresses": 1,
+        "Transactions": 26
+      }
+    }
+  },
+  "Transitions": {
+    "NormalizedAddress→NormalizedAddress": {
+      "Addresses": 1188,
+      "Transactions": 29415
+    },
+    "Unmatched→NormalizedAddress": {
+      "Addresses": 5533,
+      "Transactions": 130762
+    },
+    "NormalizedAddress→Ambiguous": {
+      "Addresses": 51,
+      "Transactions": 865
+    },
+    "Unmatched→Unmatched": {
+      "Addresses": 1928,
+      "Transactions": 49042
+    },
+    "Unmatched→Ambiguous": {
+      "Addresses": 146,
+      "Transactions": 3120
+    },
+    "ExactAddress→ExactAddress": {
+      "Addresses": 673,
+      "Transactions": 21977
+    },
+    "ExactAddress→Ambiguous": {
+      "Addresses": 9,
+      "Transactions": 257
+    },
+    "Unmatched→ExactAddress": {
+      "Addresses": 224,
+      "Transactions": 6419
+    },
+    "Ambiguous→Ambiguous": {
+      "Addresses": 3,
+      "Transactions": 63
+    }
+  },
+  "CoordinateTransitions": {
+    "BlockApproximation→BlockApproximation": {
+      "Addresses": 1861,
+      "Transactions": 51392
+    },
+    "Missing→BlockApproximation": {
+      "Addresses": 5757,
+      "Transactions": 137181
+    },
+    "BlockApproximation→Missing": {
+      "Addresses": 60,
+      "Transactions": 1122
+    },
+    "Missing→Missing": {
+      "Addresses": 2077,
+      "Transactions": 52225
+    }
+  },
+  "Mechanical": {
+    "AddressesChecked": 9755,
+    "TransactionsChecked": 241920,
+    "CompletePropertyCandidates": true,
+    "CompletePublicPostalCandidates": true,
+    "RawMalformedAssertionsRetained": true,
+    "IndependentOutcomeAndFootprintPoint": true,
+    "ExactHistoricalProjectionAssertions": true
+  },
+  "ChangedEvidenceAddresses": 7832,
+  "ProvenanceOnlyAddresses": 1869,
+  "OutcomeChangedAddresses": 5963,
+  "PreviouslyMatchedOutcomeChanges": 60,
+  "ManualRequiredAddresses": 210,
+  "ManualSampleAddresses": 64,
+  "HistoricalMarginalOutcomeAddresses": 87,
+  "HistoricalMarginalOutcomeTransactions": 3035,
+  "ManualReviewStatus": "Required final sets generated; separate reviewed ledgers required.",
+  "SampleMethod": "SHA256 hdb-m9-normalization-outcomes-v1+NUL+town|block|street. Greedy maximize uncovered town/period/rule-context/rare-form tags with hash tie-break, then hash-fill to64, sorted output. Eligible: newly located vs unchanged-rule public stage and still located in final. No success cherry-picking within eligible outcomes.",
+  "ReportSha256": {
+    "hdb-m9-baseline.json": "dfbf1b409e7b42a848e3767ee583b95e4bd8fd16332deafd6041ce4342971750",
+    "m9-expanded-public.json": "32d8e0be2de4c050398b58423935b712129d330445bb0695c7ebcd3fb0522913",
+    "m9-expanded.json": "b9d35b65f6d58463b6559a144bbadb2c0888facda5fb572681c68ff9b613ae73"
+  },
+  "ArtifactsSha256": {
+    "changed-addresses.csv": "94c8082f710ff3fd611839d915a9c2d4aea047cd1ea48021733cb5a2e928dd04",
+    "historical-marginal.csv": "3ad58a53dddab2dfdfcfe0bd5d8643db526fc3bde87fcd686fc9296e901bf757",
+    "manual-required.csv": "320817dacac9a94e6a97e9d03447afd03c98f4f7ab43f661bd39ed29fa967c2f",
+    "manual-sample.csv": "3cb2b1b188fbd04a068d186871384bebdf8b40d0f4a1e7624c46c7a9d397d74f",
+    "normalization-changes.csv": "e72ae3ae11a45d1bdbe8e4712b324e17b40076e06cf35c457a1001ad454982c2",
+    "remaining-failures.csv": "bb63a1b4a4b59238707af464dcf1f850c0375035086784cc8703aa1e8d4159d0"
+  }
+}

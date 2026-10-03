@@ -4,6 +4,12 @@ from address_coverage import strongest,summarize
 from prepare_address_coverage import generate,sha
 
 class AddressCoverageTests(unittest.TestCase):
+ def test_expanded_profile_preserves_leading_tokens_numbers_and_unobserved_cres_context(self):
+  from prepare_address_coverage import expanded_address
+  self.assertEqual(('227A','FOO STREET 03'),expanded_address(' 227a ',' foo st 03 '))
+  self.assertEqual(('1','ST JOHN ROAD'),expanded_address('1','ST JOHN RD'))
+  for value in ['ST 11','ST','FOO CRES 1','FOO ST. 11','FOO ST １１','FOO ST 11 ANNEX']:
+   self.assertEqual(('1',value),expanded_address('1',value))
  def test_failure_reason_requires_exact_asserted_postal_and_preserves_entity_rule(self):
   from collections import defaultdict
   features=defaultdict(list)

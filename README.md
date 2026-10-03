@@ -324,22 +324,24 @@ artifact, database or production forced collection is introduced. See the
 ## M9: explicit full-corpus address coverage
 
 The [M9 report](docs/address-coverage/README.md) inventories all 9,755 addresses /
-241,920 transactions before changing evidence. With unchanged conservative
-normalization, full public ACRA A–Z/Others plus HDB geometry locate 2,513 addresses /
-66,256 transactions; the bounded, explicitly weaker M5 first-hit projection adds
-288 / 9,481. Final experimental coverage is 2,801 / 75,737, while all 166,183
-unlocated transactions remain filterable/selectable.
+241,920 transactions before changing evidence. [Source-backed terminal road aliases](docs/address-coverage/normalization/README.md)
+are opt-in only in the expanded full-data input; the default six and frozen studies
+remain unchanged. Full public ACRA A–Z/Others plus validated HDB geometry locate
+7,533 addresses / 185,706 transactions. Final historical-inclusive evidence locates
+7,618 / 188,573, leaving all 53,347 unlocated transactions filterable/selectable.
 
-Additional contrary evidence withholds 60 previously located addresses / 1,122
-transactions; it never selects a majority, first candidate or nearest footprint.
-Every changed address is mechanically audited, with all conflicts/former-match
-changes and a deterministic ordinary sample manually reviewed. New sources retain
-dataset IDs and every source row; malformed public postals are retained as
-unresolved evidence. Full raw exports and generated full inputs stay local.
+The historical projection contributes 86 weaker first-hit locations / 2,951
+transactions but also exposes one public/historical conflict / 84 transactions.
+All 209 ambiguous addresses remain unlocated; 60 formerly located M8 addresses /
+1,122 transactions are correctly withheld after contrary evidence. Every assertion,
+source row and malformed postal is retained without a winner or postal repair.
+Coordinates come only from one corroborated original HDB footprint. Final coverage
+includes two MultiPolygon features / 43 transactions, without relaxing ENTITYID>0.
 
-MultiPolygon support spans all validated component exterior-ring bounds, adding
-one currently evidenced ACRA-B address without relaxing positive ENTITYID checks.
-M5's frozen experiment explicitly retains its original geometry policy. The
-[reproduction commands](docs/address-coverage/README.md#regenerating-full-data)
-produce separate public-only and public-plus-historical inputs; use an explicit
-HDB_DATA_DIRECTORY to open them. No source/evidence fetching occurs at startup.
+Every address is mechanically checked. Manual review covers all 297 literal
+street-equivalence pairs, all 210 final conflict/required cases and a deterministic
+64-address normalization sample, alongside the separately retained earlier sample.
+This is record-chain review, not a 100% manual address-accuracy claim. Full raw
+exports/projections remain local; [source hashes and reproduction](docs/address-coverage/normalization/README.md#reproduction)
+are checked in. Use an explicit HDB_DATA_DIRECTORY for the expanded workload;
+no evidence is fetched at startup and no database/renderer migration is introduced.

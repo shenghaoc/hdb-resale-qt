@@ -1,0 +1,42 @@
+{
+  "normalization_profile": "terminal-road-types-v1",
+  "manual_required_addresses": 210,
+  "manual_required_final_outcomes": {
+    "Ambiguous": 209,
+    "MissingProperty": 1
+  },
+  "manual_sample_addresses": 64,
+  "sample_classes": {
+    "STBeforeNumeric": 31,
+    "RDTerminal": 15,
+    "DRTerminal": 7,
+    "STTerminal": 2,
+    "CRESTerminal": 6,
+    "RDBeforeNumeric": 1,
+    "DRBeforeNumeric": 2
+  },
+  "sample_before_states": {
+    "Unmatched": 63,
+    "NormalizedAddress": 1
+  },
+  "sample_towns": 24,
+  "prior_unchanged_rule_sample_addresses": 238,
+  "prior_sample_towns": 26,
+  "manual_geometry_addition": "PUNGGOL / 226A / SUMANG LANE (earlier reviewed)",
+  "semantic_pairs_reviewed_by_separate_source_reviewer": 297,
+  "independent_CSharp_boundary_vectors_passed": 47,
+  "independent_block_vectors_passed": 5,
+  "review_complete": true,
+  "not_claimed": "Exhaustive manual per-address review of all5164 normalization changes or all311110 assertions; returned residential identity; exhaustive current Search; historical validity; statistical accuracy",
+  "input_hashes": {
+    "manual-required.csv": "320817dacac9a94e6a97e9d03447afd03c98f4f7ab43f661bd39ed29fa967c2f",
+    "manual-sample.csv": "3cb2b1b188fbd04a068d186871384bebdf8b40d0f4a1e7624c46c7a9d397d74f",
+    "m9-expanded.json": "b9d35b65f6d58463b6559a144bbadb2c0888facda5fb572681c68ff9b613ae73",
+    "m9-expanded-public.json": "32d8e0be2de4c050398b58423935b712129d330445bb0695c7ebcd3fb0522913",
+    "manual-street-semantics.json": "44fd186470474f69b16f5660d8c58b25d111e9df298129e3bf1b70a1b3c89f5b"
+  },
+  "output_hashes": {
+    "manual-required-reviewed.csv": "aa6c46357292ad17778b2c4ee6f584749d8e3a001492b4e7afd6116213445655",
+    "manual-sample-reviewed.csv": "8c40070766b69e012f36d715936c2a0fba92143e25fae99c66653ca0abe2a193"
+  }
+}

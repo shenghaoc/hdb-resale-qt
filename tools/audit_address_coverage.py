@@ -13,12 +13,12 @@ def usable(r):
  return bool(h and h['Status']=='HistoricalFirstHit' and h['CacheKey']==producer(r) and h['SearchValue']==' '.join((r['Block']+' '+r['Street']+' SINGAPORE').upper().split()) and re.fullmatch('[0-9]{6}',h['Postal'] or ''))
 def read(path):
  with path.open(encoding='utf-8-sig',newline='') as f:return list(csv.DictReader(f))
-def verify_rows(rows,properties,postals,features,historical=None):
+def verify_rows(rows,properties,postals,features,historical=None,normalize=address):
  pi=defaultdict(list);ai=defaultdict(list)
- for p in read(properties):pi[address(p['blk_no'],p['street'])].append({'SourceRow':int(p['source_row']),'Block':p['blk_no'],'Street':p['street']})
- for p in read(postals):ai[address(p['block'],p['street_name'])].append({'SourceRow':int(p['source_row']),'Block':p['block'],'Street':p['street_name'],'PostalCode':p['postal_code'],'SourceDataset':p['source_dataset']})
+ for p in read(properties):pi[normalize(p['blk_no'],p['street'])].append({'SourceRow':int(p['source_row']),'Block':p['blk_no'],'Street':p['street']})
+ for p in read(postals):ai[normalize(p['block'],p['street_name'])].append({'SourceRow':int(p['source_row']),'Block':p['block'],'Street':p['street_name'],'PostalCode':p['postal_code'],'SourceDataset':p['source_dataset']})
  for r in rows:
-  k=address(r['Block'],r['Street']);e=r['Evidence'];p=pi[k];a=ai[k]
+  k=normalize(r['Block'],r['Street']);e=r['Evidence'];p=pi[k];a=ai[k]
   assert e.get('HistoricalOneMap')==(historical or {}).get(producer(r)),('exact minimized historical assertion',key(r))
   assert e['PropertyCandidates']==p,('property assertions',key(r))
   assert e['PostalAssertions']==a,('complete postal assertions',key(r))
@@ -62,14 +62,14 @@ def write(path,rows):
  with path.open('w',encoding='utf-8',newline='') as f:
   w=csv.DictWriter(f,fields,lineterminator='\n');w.writeheader()
   for r in rows:w.writerow({k:json.dumps(v,separators=(',',':'),ensure_ascii=False) if isinstance(v,(list,dict)) else v for k,v in r.items()})
-def run(baseline,public,final,directory,footprints,output):
+def run(baseline,public,final,directory,footprints,output,normalize=address):
  reports=[json.loads(p.read_bytes()) for p in [baseline,public,final]];bs,ps,fs=[{key(r):r for r in j['Rows']} for j in reports]
  assert bs.keys()==ps.keys()==fs.keys()
  features=source_features(footprints)
  historical_path=directory/'historical-postal-evidence.json'
  historical={h['CacheKey']:h for h in json.loads(historical_path.read_bytes())['Entries']} if historical_path.exists() else {}
  if historical_path.exists():assert digest(historical_path)=='7d8af54d5cae591455e5161535218b66c9f85b9718d9a00d730602f72086ccd5'
- verified=verify_rows(list(fs.values()),directory/'address-evidence.csv',directory/'postal-address-evidence.csv',features,historical)
+ verified=verify_rows(list(fs.values()),directory/'address-evidence.csv',directory/'postal-address-evidence.csv',features,historical,normalize)
  periods=defaultdict(set)
  for r in read(directory/'transactions.csv'):periods[(r['town'],r['block'],r['street_name'])].add(period(r['month']))
  transitions=defaultdict(lambda:Counter());coordinate_transitions=defaultdict(lambda:Counter());changed=[];required=[];ordinary=[];provenance=[];marginal=[]
