@@ -1,5 +1,10 @@
 # HDB resale native fixture explorer
 
+Milestone 1: a runnable fixture-based native desktop slice, verified on macOS
+arm64. This is the C#/Qt sibling of the
+[web HDB resale visualizer](https://github.com/shenghaoc/hdb-resale-visualizer);
+the web project is a product and behavior reference, not a translated frontend.
+
 A small native C# / Qt Quick vertical slice. Six checked-in **synthetic** resale
 transactions have approximate Singapore coordinates. These are not real resale
 records or buying advice.
