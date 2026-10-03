@@ -1,0 +1,31 @@
+{
+  "contract_version": 2,
+  "base": "ff5cc7d1f8a61664408f35455e19a7fb8fff5227",
+  "legacy_import_sha256": "88118bdb3a9a68f59ea47cddae27568623f136cb7b7d5320a376f8f752dc6cc5",
+  "expanded_import_v2_sha256": "46ac65f199f916b78f56b388a19fa3a510617a6c0917c5d4787ef4e6cc856393",
+  "allowed_domain_sha256": {
+    "src/HdbResale.Domain/ResaleTransaction.cs": "bf48b7bf89f5e5e1bed18a4a1efbcdae660b9fb1d9e6c6888520f040f7fad506",
+    "src/HdbResale.Domain/CsvImport.cs": "c105bdb70f3db08c42b0be2c91e5fde3ceba89a67b57c5675bd18817ba7e5af3",
+    "src/HdbResale.Domain/BlockSummary.cs": "d6f04b2b05af34e3005f49e02a0fb044e2741348b87bed2af0948bc89326071e",
+    "src/HdbResale.Domain/ExplorerState.cs": "02e62cf16d3c6fedce6a07611ee58f7478a368cfec0b6f048e729dc57aa2a935"
+  },
+  "proof": "Both hashes independently executed by native Release host before chart. v2 changes only modeled fields already present in the pinned official CSV. Source/evidence/canonical/pin bytes remain unchanged. Chart series are separate presentation state and do not affect ImportResult serialization.",
+  "quality_counts": {
+    "address": {
+      "ExactAddress": 897,
+      "NormalizedAddress": 6721,
+      "Ambiguous": 209,
+      "Unmatched": 1928,
+      "mapped": 7618,
+      "missing": 2137
+    },
+    "transactions": {
+      "ExactAddress": 28396,
+      "NormalizedAddress": 160177,
+      "Ambiguous": 4305,
+      "Unmatched": 49042,
+      "mapped": 188573,
+      "missing": 53347
+    }
+  }
+}
