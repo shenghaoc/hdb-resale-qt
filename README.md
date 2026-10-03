@@ -18,6 +18,10 @@ and map navigation. Changing a filter resets the bridge model, so both
 `MapItemView` markers and the transaction list update. Selection is retained
 while visible and cleared when its transaction is filtered out.
 
+Milestone 5 development branch adds an offline OneMap evidence study and a
+user-run acquisition tool. **Real acquisition is blocked by missing authentication;
+M5 is not complete.** See [scope, legal review and acquisition command](docs/coverage/onemap/README.md).
+
 ## Verified toolchain (macOS arm64)
 
 - .NET SDK **10.0.401**, `net10.0`, runtime **10.0.12**; Microsoft macOS arm64 SDK.

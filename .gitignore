@@ -5,3 +5,8 @@ obj/
 *.user
 
 __pycache__/
+
+# Local acquisition caches and credential files are never publication inputs.
+.local/
+.env
+.env.*

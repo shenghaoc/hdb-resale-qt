@@ -16,7 +16,7 @@ public sealed record ImportResult(IReadOnlyList<ResaleTransaction> Accepted,
 public static class CsvImport
 {
     private sealed record CsvRow(long Number, Dictionary<string, string> Fields, string[] Raw);
-    public static ImportResult LoadDirectory(string directory)
+    public static ImportResult LoadDirectory(string directory, IReadOnlyDictionary<string, OneMapSearch>? oneMapSearches = null, string? buildingEvidencePath = null)
     {
         var rejected = new List<RejectedRecord>();
         var diagnostics = new List<ImportDiagnostic>();
@@ -40,7 +40,7 @@ public static class CsvImport
                 Reject("postal-address-evidence.csv", row, "Postal source row, block, street and six-digit postal code are required.", rejected, diagnostics);
             else postalAddresses.Add(new(sourceRow, f["block"], f["street_name"], f["postal_code"]));
         }
-        var footprints = ReadFootprints(Path.Combine(directory, "building-evidence.geojson"), rejected, diagnostics);
+        var footprints = ReadFootprints(buildingEvidencePath ?? Path.Combine(directory, "building-evidence.geojson"), rejected, diagnostics);
         var accepted = new List<ResaleTransaction>();
         var ids = new HashSet<int>();
         foreach (var row in Read(Path.Combine(directory, "transactions.csv"),
@@ -58,7 +58,9 @@ public static class CsvImport
             else
             {
                 var facts = new TransactionFacts(month!, f["town"], f["block"], f["street_name"], f["flat_type"], price);
-                var match = AddressMatcher.Match(facts, properties, postalAddresses, footprints);
+                OneMapSearch? search = null;
+                oneMapSearches?.TryGetValue(OneMapEvidence.AddressKey(facts.Block,facts.Street), out search);
+                var match = AddressMatcher.Match(facts, properties, postalAddresses, footprints, search);
                 var location = match.MatchedFootprint?.Location ?? new DerivedLocation(null, CoordinateQuality.Missing, match.Reason);
                 accepted.Add(new("HDB-" + sourceRow, facts, location, match));
             }

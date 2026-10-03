@@ -3,7 +3,7 @@ namespace HdbResale.Domain;
 public enum CoverageReason
 {
     Matched, MissingProperty, MultipleProperties, MissingPostalCorroboration,
-    ConflictingPostals, MissingFootprint, MultipleFootprints, MatchedWithoutGeometry
+    ConflictingPostals, MissingFootprint, MultipleFootprints, MatchedWithoutGeometry, OneMapCandidateConflict, CrossSourcePostalConflict
 }
 public sealed record CoverageCell(string Town, string Period, string Match, string Coordinates, int Count);
 public sealed record CoverageFailure(string Id, string Town, string Month, string Block, string Street,
@@ -26,9 +26,13 @@ public static class CoverageStudy
         var m = row.Match;
         if (m.PropertyCandidates.Count == 0) return CoverageReason.MissingProperty;
         if (m.PropertyCandidates.Count > 1) return CoverageReason.MultipleProperties;
-        if (m.PostalAssertions.Count == 0) return CoverageReason.MissingPostalCorroboration;
         if (m.PostalAssertions.Select(p => p.PostalCode).Distinct(StringComparer.Ordinal).Count() > 1)
             return CoverageReason.ConflictingPostals;
+        if (m.OneMap?.Outcome is OneMapOutcome.PostalConflict or OneMapOutcome.MultipleCandidates)
+            return CoverageReason.OneMapCandidateConflict;
+        if (m.OneMap?.Postal is { } postal && m.PostalAssertions.Any(p => p.PostalCode != postal))
+            return CoverageReason.CrossSourcePostalConflict;
+        if (m.PostalAssertions.Count == 0 && m.OneMap?.Postal is null) return CoverageReason.MissingPostalCorroboration;
         if (m.FootprintCandidates.Count == 0) return CoverageReason.MissingFootprint;
         if (m.FootprintCandidates.Count > 1) return CoverageReason.MultipleFootprints;
         return row.Location.Point is null ? CoverageReason.MatchedWithoutGeometry : CoverageReason.Matched;
@@ -38,7 +42,7 @@ public static class CoverageStudy
         var rows = import.Accepted;
         var matches = Enum.GetValues<MatchQuality>().ToDictionary(q => q.ToString(), q => rows.Count(r => r.Match.Quality == q));
         var coordinates = Enum.GetValues<CoordinateQuality>().ToDictionary(q => q.ToString(), q => rows.Count(r => r.Location.Quality == q));
-        var reasons = Enum.GetValues<CoverageReason>().ToDictionary(q => q.ToString(), q => rows.Count(r => Reason(r) == q));
+        var reasons = Enum.GetValues<CoverageReason>().Where(q => rows.Any(r => r.Match.OneMap is not null) || q <= CoverageReason.MatchedWithoutGeometry).ToDictionary(q => q.ToString(), q => rows.Count(r => Reason(r) == q));
         var cells = rows.GroupBy(r => (r.Town, Period: Period(r.Facts.Month), Match: r.Match.Quality.ToString(), Coordinates: r.Location.Quality.ToString()))
             .OrderBy(g => g.Key.Town, StringComparer.Ordinal).ThenBy(g => g.Key.Period, StringComparer.Ordinal)
             .ThenBy(g => g.Key.Match, StringComparer.Ordinal).ThenBy(g => g.Key.Coordinates, StringComparer.Ordinal)
