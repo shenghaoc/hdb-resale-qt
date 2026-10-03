@@ -118,3 +118,30 @@ they do not guarantee every warm run remains inside the older 2.65–2.90-second
 interval. All counts remain exact, and the entire Domain/importer source is
 unchanged. A renderer-only workload cannot justify silently changing import or
 matching semantics to make a timing number look better.
+
+## Architecture decision
+
+**Select B: retain Qt Location/OneMap and use C# viewport/grid presentation.**
+A failed the responsiveness/memory goal. C is now a credible working MapLibre
+Native Qt source-layer option, rather than the old M7 binary-loader blocker:
+a source-built plugin renders the same 7,618 points at the matched 871×529 map
+viewport. Its measured subsequent complete-source calls were 42.7–46.7 ms,
+with a narrower submission-to-settled-observer interval of 60.9–382.1 ms;
+selection-only was 332 ms, zoom 16 was 971 ms and pan was 632 ms in that run.
+These narrower renderer observations cannot be compared as if they included
+B's complete filtering/aggregation/Bridge/assertion sequence. They do not prove
+B is a faster renderer, nor establish whole-app superiority for MapLibre.
+
+B already meets the practical workload goal while preserving qualified C#
+selection, FIFO, stable identities, native controls and map accessibility.
+The isolated MapLibre host still needs in-process C#→Bridge/source integration,
+native feature hit-testing and equivalent accessibility/labels. Three edge-tile
+image warnings also require qualification. Its source build, matching data,
+viewport verification, licensing/dependency details and limitations are retained
+as separate experiment evidence; it is not added as a production dependency.
+
+The unused all-address experimental bypass was removed after review. Production
+has one projection path, avoiding an untested alternate mode that could call an
+offscreen selection “in view.” The existing reset diagnostic remains. The full
+final root build/test/native matrix and physical Release check run on this
+cleaned source, not on an earlier copied candidate runtime.

@@ -29,8 +29,13 @@ ApplicationWindow {
     }
 
     Loader {
-        active: Resales.scaleGate
+        active: Resales.scaleGate && !Resales.presentationGate
         sourceComponent: Component { ScaleGate { targetMap: map; targetList: transactionsList; townControl: townPicker; priceControl: pricePicker; attributionImage: oneMapLogo } }
+    }
+
+    Loader {
+        active: Resales.presentationGate
+        sourceComponent: Component { PresentationGate { targetMap: map; targetList: transactionsList; townControl: townPicker; priceControl: pricePicker; attributionImage: oneMapLogo } }
     }
 
     Loader {
@@ -40,9 +45,9 @@ ApplicationWindow {
                 interval: 25; repeat: true; running: true
                 property double started: Date.now()
                 onTriggered: {
-                    const expected = Resales.startupView === "full" ? Resales.mappedCount : 0
+                    const expected = Resales.startupView === "full" ? Resales.presentationCount : 0
                     const mapReady = Resales.startupView === "qml-shell" || map.mapReady
-                    if (mapReady && map.mapItems.length === expected && transactionsList.count === Resales.visibleCount
+                    if (mapReady && (Resales.startupView !== "full" || Resales.mapViewportReady) && map.mapItems.length === expected && transactionsList.count === Resales.visibleCount
                             && oneMapLogo.status === Image.Ready) {
                         stop(); Resales.startupReady(); Qt.quit()
                     } else if (Date.now() - started > 10000) {
@@ -95,6 +100,7 @@ ApplicationWindow {
             Item { Layout.fillWidth: true }
         }
         Label { text: Resales.filterSummary; font.bold: true }
+        Label { text: Resales.presentationSummary + " · Group numbers count addresses; individual numbers count transactions."; wrapMode: Text.WordWrap; Layout.fillWidth: true }
         Label {
             text: Resales.importSummary + ' <a href="https://data.gov.sg/open-data-licence">Singapore Open Data Licence</a>'
             onLinkActivated: (link) => Qt.openUrlExternally(link)
@@ -133,13 +139,27 @@ ApplicationWindow {
                     zoomLevel: 11
                     minimumZoomLevel: 11
                     maximumZoomLevel: 19
+                    property bool viewportPending: false
+                    function flushViewport() {
+                        viewportPending = false
+                        if (mapReady) Resales.setMapViewport(center.latitude, center.longitude, zoomLevel, width, height)
+                    }
+                    function scheduleViewport() {
+                        // At most one pending event-turn delivery. Read the latest
+                        // camera at flush time; no debounce sleeps or lost final input.
+                        if (!viewportPending) { viewportPending = true; Qt.callLater(flushViewport) }
+                    }
+                    onCenterChanged: scheduleViewport()
+                    onZoomLevelChanged: scheduleViewport()
+                    onWidthChanged: scheduleViewport()
+                    onHeightChanged: scheduleViewport()
+                    onMapReadyChanged: scheduleViewport()
+                    Component.onCompleted: scheduleViewport()
                     // Exact official logo/text is provided by the always-visible overlay below.
                     copyrightsVisible: false
                     MapItemView {
-                        // QML-exposed by pinned Qt 6.12 (revision 5.12), though
-                        // omitted from its public MapItemView documentation.
-                        // Bulk synchronous creation is measured; no point is culled.
-                        incubateDelegates: false
+                        // Public default incubation: viewport population is bounded.
+                        // No undocumented incubateDelegates setting is used.
                         model: window.locatedMapModel
                         delegate: MapQuickItem {
                             Component.onCompleted: if (map.traceDelegates) { map.createdDelegates++; map.lastDelegateCreatedMs = Date.now() }
@@ -151,24 +171,30 @@ ApplicationWindow {
                             required property string address
                             required property string mapKey
                             required property int transactionCount
-                            property bool selected: Resales.selectedMapKey === mapKey
+                            required property int addressCount
+                            property bool cluster: addressCount > 1
+                            property bool selected: !cluster && Resales.selectedMapKey === mapKey
                             z: selected ? 1 : 0
                             coordinate: QtPositioning.coordinate(latitude, longitude)
                             anchorPoint.x: pin.width / 2
                             anchorPoint.y: pin.height / 2
                             sourceItem: Rectangle {
                                 id: pin
-                                // Keep every address marker. Compact low-zoom pins reduce
-                                // overlap; selection is always larger, labelled and raised.
-                                width: selected ? 28 : map.zoomLevel < 13 ? 14 : 24
+                                // Groups count addresses; individual pins count transactions.
+                                // C# owns grouping and exact viewport membership.
+                                width: selected ? 28 : cluster ? 38 : 24
                                 height: width; radius: width / 2
-                                color: selected ? "#e35b19" : "#1565c0"
+                                color: selected ? "#e35b19" : cluster ? "#17574f" : "#1565c0"
                                 border.color: "white"; border.width: 2
                                 Accessible.role: Accessible.Button
                                 Accessible.name: address + ", " + priceLabel
-                                Accessible.onPressAction: Resales.selectTransaction(transactionId)
-                                Text { anchors.centerIn: parent; visible: selected || map.zoomLevel >= 13; text: transactionCount > 1 ? transactionCount : ""; color: "white"; font.pixelSize: 10 }
-                                TapHandler { onTapped: Resales.selectTransaction(transactionId) }
+                                Accessible.onPressAction: pin.activateMarker()
+                                Text { anchors.centerIn: parent; text: cluster ? addressCount : transactionCount > 1 ? transactionCount : ""; color: "white"; font.pixelSize: 10 }
+                                function activateMarker() {
+                                    if (cluster) { map.center = QtPositioning.coordinate(latitude, longitude); map.zoomLevel = Math.min(19, map.zoomLevel + 2) }
+                                    else Resales.selectTransaction(transactionId)
+                                }
+                                TapHandler { onTapped: pin.activateMarker() }
                             }
                         }
                     }
@@ -254,6 +280,9 @@ ApplicationWindow {
                 Layout.maximumWidth: 280
                 Layout.fillHeight: true
                 Label { text: "Selection"; font.bold: true }
+                Label { text: Resales.selectionMapStatus; wrapMode: Text.WordWrap; Layout.fillWidth: true }
+                Button { text: "Show selected address"; visible: Resales.selectedLocated
+                    onClicked: { map.center = QtPositioning.coordinate(Resales.selectedLatitude, Resales.selectedLongitude); map.zoomLevel = 16 } }
                 Flickable {
                     id: selectionScroll
                     contentWidth: width

@@ -29,6 +29,8 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public int GateAllTownMapped { get; }
     public int GateOtherTownCount { get; }
     public int GateOtherTownMapped { get; }
+    public int GateOtherBudgetCount { get; }
+    public int GateOtherBudgetMapped { get; }
     public string GateHiddenSelectionId { get; } = "";
     public string GateRetainedSelectionKey { get; } = "";
     public string GateOtherTown => Towns.First(t => t != "All towns" && t != GateTown);
@@ -70,7 +72,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
                 GateHiddenSelectionId = hidden?.Id ?? "";
                 GateRetainedSelectionKey = hidden is null ? "" : BlockSummaries.Key(hidden);
             }
-            if (ScaleTransitions)
+            if (ScaleTransitions || PresentationGate)
             {
                 var allTown = import.Accepted.Where(t => t.Town == GateTown).ToArray();
                 var otherTownName = GateOtherTown;
@@ -79,6 +81,9 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
                 GateAllTownMapped = BlockSummaries.Located(allTown).Count;
                 GateOtherTownCount = otherTown.Length;
                 GateOtherTownMapped = BlockSummaries.Located(otherTown).Count;
+                var otherBudget=otherTown.Where(t=>t.Price<=500_000).ToArray();
+                GateOtherBudgetCount=otherBudget.Length;
+                GateOtherBudgetMapped=BlockSummaries.Located(otherBudget).Count;
             }
             Console.WriteLine($"HDB_SCALE_ORACLE {timer.ElapsedMilliseconds}");
         }
@@ -98,7 +103,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     {
         if (!StartupProbe) return;
         MeasureStartup("qml-ready-" + StartupView);
-        Console.WriteLine($"HDB_STARTUP_READY view={StartupView} rows={VisibleCount} markers={MappedCount} sidebar-role-reads={startupRoleReads} map-role-reads={MapPoints.StartupRoleReads}");
+        Console.WriteLine($"HDB_STARTUP_READY view={StartupView} rows={VisibleCount} markers={MappedCount} sidebar-role-reads={startupRoleReads} map-role-reads={MapPoints.StartupRoleReads} presentation={PresentationCount} in-view={InViewAddressCount} clusters={ClusterCount} viewport-width={MapViewportWidth} viewport-height={MapViewportHeight} zoom={MapViewportZoom} center-latitude={MapViewportLatitude} center-longitude={MapViewportLongitude}");
         if (Environment.GetEnvironmentVariable("HDB_STARTUP_HEAP") == "1")
         {
             GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true, compacting: true);
@@ -107,6 +112,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     }
 
     // Explicit test opt-in; normal application state and fixture are unchanged.
+    public bool PresentationGate => Environment.GetEnvironmentVariable("HDB_PRESENTATION_GATE") == "1";
     public bool ScaleGate => Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1";
     public bool ScaleReentrant => ScaleGate && Environment.GetEnvironmentVariable("HDB_MAP_REENTRANT") == "1";
     public int GateMaximumQueuedMutations => mutations.MaximumPendingCount;
@@ -127,9 +133,44 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public string BasemapCacheDirectory => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "HdbResaleQt", "onemap-default-v1");
     public string MapUpdateStrategy => MapPoints.UseReset ? "reset" : "incremental";
     public int MappedCount => MapPoints.Count;
+    public int PresentationCount => MapPoints.PresentationCount;
+    public int InViewAddressCount => MapPoints.InViewCount;
+    public int ClusterCount => MapPoints.ClusterCount;
+    public bool MapViewportReady => MapPoints.ViewportReady;
+    public string PresentationSummary => $"{InViewAddressCount:N0} mapped addresses in view · {ClusterCount:N0} groups + {PresentationCount - ClusterCount:N0} individual markers";
+    public string SelectionMapStatus => state.Selected is null ? "" : state.Selected.Location.Point is null
+        ? "Selected transaction has no mapped coordinates." : MapPoints.SelectedInView
+        ? "Selected address is highlighted on this map." : "Selected address is outside this map view.";
+    public double SelectedLatitude => state.Selected?.Location.Point?.Latitude ?? 1.3521;
+    public double SelectedLongitude => state.Selected?.Location.Point?.Longitude ?? 103.8198;
+    public bool SelectedLocated => state.Selected?.Location.Point is not null;
+    public double MapViewportLatitude => MapPoints.Viewport?.Latitude ?? 0;
+    public double MapViewportLongitude => MapPoints.Viewport?.Longitude ?? 0;
+    public double MapViewportZoom => MapPoints.Viewport?.Zoom ?? 0;
+    public double MapViewportWidth => MapPoints.Viewport?.Width ?? 0;
+    public double MapViewportHeight => MapPoints.Viewport?.Height ?? 0;
+    public int PresentationRevision { get; private set; }
+    public void SetMapViewport(double latitude, double longitude, double zoom, double width, double height) =>
+        mutations.Enqueue(() => {
+            if (MapPoints.SetViewport(new(latitude, longitude, zoom, width, height))) NotifyPresentation();
+        });
+    private void NotifyPresentation()
+    {
+        PresentationRevision++;
+        Notify(nameof(PresentationCount), nameof(InViewAddressCount), nameof(ClusterCount), nameof(MapViewportReady),
+            nameof(PresentationSummary), nameof(SelectionMapStatus), nameof(SelectedLatitude), nameof(SelectedLongitude),
+            nameof(SelectedLocated), nameof(PresentationRevision), nameof(MapViewportLatitude), nameof(MapViewportLongitude),
+            nameof(MapViewportZoom), nameof(MapViewportWidth), nameof(MapViewportHeight));
+    }
     public int MapRevision { get; private set; }
     public double LastFilterStartedMs { get; private set; }
     public double LastFilterCompletedMs { get; private set; }
+    public string GateTruthRowsJson => ScaleGate ? System.Text.Json.JsonSerializer.Serialize(MapPoints.Summaries.Select(b => new {
+        mapKey=b.Key, transactionId=b.Latest.Id, transactionCount=b.Count, latitude=b.Latest.Location.Point!.Latitude,
+        longitude=b.Latest.Location.Point.Longitude, address=b.Latest.Address })) : "[]";
+    public string GateTownSelectionId => ScaleGate ? MapPoints.Summaries.FirstOrDefault(b => b.Latest.Town == GateTown)?.Latest.Id ?? "" : "";
+    public long GateInsertedCount => MapPoints.InsertedCount;
+    public long GateRemovedCount => MapPoints.RemovedCount;
     public string GateMapRowsJson => ScaleGate ? MapPoints.GateRowsJson : "[]";
     public string GateTown => import.Accepted.FirstOrDefault()?.Town ?? "All towns";
     public string FirstVisibleId => state.Visible.FirstOrDefault()?.Id ?? "";
@@ -149,7 +190,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public string SelectionDetails => state.Selected is { } t
         ? $"{t.Address}\n{t.Town} · {t.FlatType}\n{Money(t.Price)}\n{t.Facts.Month} registration · local ID {t.Id}\nIdentity: {t.Match.Quality}\nCoordinates: {t.Location.Quality}\n{t.Match.Reason}\n{MatchSources(t.Match)}\n{t.Location.Source}"
         : "Select a marker (latest transaction at that address) or a transaction below.";
-    public string FilterSummary => $"{VisibleCount} of {import.Accepted.Count} transactions · {LocatedTransactions} located in {MapPoints.Count} address markers · {VisibleCount - LocatedTransactions} unlocated · {Town} · up to {Money(MaximumPrice)}";
+    public string FilterSummary => $"{VisibleCount} of {import.Accepted.Count} transactions · {LocatedTransactions} located in {MapPoints.Count} mapped addresses · {VisibleCount - LocatedTransactions} unlocated · {Town} · up to {Money(MaximumPrice)}";
     public string ImportSummary => $"Import: {import.Accepted.Count} accepted · {import.MatchedCount} matched · {import.AmbiguousCount} ambiguous · {import.UnmatchedCount} unmatched · {import.Rejected.Count} rejected · {import.Diagnostics.Count} diagnostics.";
     public string ImportDiagnostics => string.Join("\n", import.Diagnostics.Select(d => $"{d.File}:{d.Row}: {d.Message}"));
 
@@ -167,6 +208,8 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public void SelectTransaction(string id) => mutations.Enqueue(() =>
     {
         state.Select(id);
+        MapPoints.Select(SelectedMapKey);
+        NotifyPresentation();
         Notify(nameof(SelectedId), nameof(SelectedMapKey), nameof(SelectionDetails));
     });
 
@@ -186,7 +229,8 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
         try { state.Filter(town, price); filterMs = stage.Elapsed.TotalMilliseconds; }
         finally { stage.Restart(); EndResetModel(); }
         var listEndMs = stage.Elapsed.TotalMilliseconds;
-        MapPoints.Replace(state.Visible);
+        MapPoints.Replace(state.Visible, SelectedMapKey);
+        NotifyPresentation();
         var resetMs = timer.Elapsed.TotalMilliseconds;
         stage.Restart();
         Notify(nameof(Town), nameof(TownIndex), nameof(MaximumPrice), nameof(VisibleCount), nameof(MappedCount), nameof(FirstVisibleId), nameof(FilterSummary),

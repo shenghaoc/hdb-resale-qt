@@ -1,6 +1,14 @@
 # HDB resale native fixture explorer
 
-Milestone 9 adds a complete full-corpus failure inventory, dataset-qualified
+Milestone 10 keeps all **7,618 mapped addresses** as C# truth while presenting
+low-zoom address groups and high-zoom individual addresses within the current
+viewport. Filters, selection and map changes are checked separately from map
+coverage. [Measured comparison and architecture](docs/large-map/README.md)
+records the retained-delegate experiment, the working isolated MapLibre native
+source-layer spike, and the chosen Qt Location path. No evidence or matcher
+change is introduced.
+
+Milestone 9 added a complete full-corpus failure inventory, dataset-qualified
 public ACRA address evidence, bounded historical first-hit assertions and narrowly
 validated MultiPolygon support. [Coverage, source provenance and audit](docs/address-coverage/README.md)
 separate public gains, weaker historical gains and new conflicts. The original
@@ -22,12 +30,16 @@ points from official HDB building footprints. Identity match quality and
 coordinate quality are separate; neither establishes an exact flat location. See [data provenance and derivation](data/README.md).
 
 C# owns the transactions, combined town/budget filtering, selection, summaries,
-and the Qt item model. QML owns the native window, controls, marker presentation,
-and map navigation. Filter changes update `MapItemView` by stable address key:
-remove missing rows, insert new rows and notify changed roles while retaining
-surviving delegates. The independently virtualized transaction list still uses
-its reset notifications. Selection is retained
-while visible and cleared when its transaction is filtered out.
+and the Qt item models. QML owns the native window, controls, marker presentation,
+and map navigation. C# keeps the complete filtered address summaries separate
+from viewport rows. At low zoom, every in-view address belongs to one stable
+world-grid group or individual marker; at zoom 15 and above, each in-view address
+has an individual marker. Group numbers count addresses; individual numbers count
+transactions. Updates remove missing rows, insert new rows and notify changed
+roles while retaining surviving keys/delegates. The independently virtualized
+transaction list still uses its reset notifications. Selection survives panning
+outside the view, with an explicit notice and “Show selected address” control;
+it clears when its transaction is filtered out.
 
 Milestone5 local work adds a verified [historical first-hit cache experiment](docs/coverage/onemap/historical/README.md) on the unchanged benchmark. Its410experimental HDB-footprint points depend on explicitly weaker cached postal assertions, not exhaustive candidate evidence. Fresh Search tooling is separate. Only a minimized benchmark projection is included; the full export and display names remain private.
 
@@ -351,3 +363,29 @@ use an explicit expanded-only 10-second correctness gate; canonical/smaller gate
 retain 5 seconds. Large marker rebuilds still visibly block: a final update call
 reached 7.24 seconds and completed validation reached 8.03 seconds. This limitation
 is documented rather than hidden by the larger test budget.
+
+
+## M10: responsive presentation of expanded mapped coverage
+
+The [large-map investigation](docs/large-map/README.md) reproduces exact M9,
+rejects keeping 7,618 hidden/live QML delegates, and qualifies a working isolated
+MapLibre Native Qt 6.12 source-layer renderer. The chosen C# viewport/grid
+presentation keeps the existing OneMap/Qt Location stack, complete domain truth,
+explicit wrapper lifetime anchor, stable-key notifications and FIFO UI mutations.
+It removes the undocumented synchronous-incubation override; viewport input is
+coalesced once per event-loop turn, without sleeps or an arbitrary point cap.
+
+The [presentation gate](tools/presentation_gate.py) independently projects the
+complete C# address truth through Qt to assert exact viewport membership, group
+accounting, original individual coordinates/roles, offscreen selection, filter
+selection clearing, zoom population and rapid reentrant input. Existing native
+classic/extended/reentrant checks and their 5-second normal deadlines remain;
+the expanded-only 10-second allowance is still explicit and guarded. See the
+large-map report for exact-source final verification and performance limits.
+
+```sh
+python3 tools/presentation_gate.py --executable /absolute/HdbResale.App \
+  --data /absolute/hdb-m9-expanded --expanded-coverage --log /tmp/presentation.log
+```
+
+No database, packaging, chart, buyer-workflow or M11 implementation is included.

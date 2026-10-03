@@ -10,6 +10,7 @@
     </PackageReference>
     <ProjectReference Include="../../src/HdbResale.Domain/HdbResale.Domain.csproj" />
     <Compile Include="../../src/HdbResale.App/MapRowDiff.cs" Link="MapRowDiff.cs" />
+    <Compile Include="../../src/HdbResale.App/MapPresentation.cs" Link="MapPresentation.cs" />
     <Compile Include="../../src/HdbResale.App/UiMutationQueue.cs" Link="UiMutationQueue.cs" />
     <None Include="../../docs/coverage/sample/*" Link="coverage/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../data/*" Link="data/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />

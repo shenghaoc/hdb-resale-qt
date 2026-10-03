@@ -31,6 +31,7 @@ Item {
     property var priorItems: ({})
     property int priorCreated: 0
     property int priorDestroyed: 0
+    property int priorPresentationCount: 0
     property int observedRevision: Resales.mapRevision
     property double observedMs: 0
     onObservedRevisionChanged: {
@@ -49,7 +50,7 @@ Item {
             if (!row || seen[item.mapKey]
                 || (incremental && priorItems[item.mapKey] && priorItems[item.mapKey] !== item)
                 || item.transactionId !== row.transactionId
-                || item.transactionCount !== row.transactionCount || item.address !== row.address
+                || item.transactionCount !== row.transactionCount || item.addressCount !== row.addressCount || item.address !== row.address
                 || item.priceLabel !== row.priceLabel || Math.abs(item.latitude-row.latitude)>1e-10
                 || Math.abs(item.longitude-row.longitude)>1e-10) return false
             seen[item.mapKey] = true
@@ -58,7 +59,11 @@ Item {
     }
     function ready(rows, mapped) {
         const complete = attributionImage.status === Image.Ready && Resales.visibleCount === rows && targetList.count === rows
-            && targetMap.mapItems.length === mapped
+            && Resales.mappedCount === mapped && targetMap.mapItems.length === Resales.presentationCount
+            && Resales.mapViewportReady && !targetMap.viewportPending
+            && Math.abs(Resales.mapViewportLatitude-targetMap.center.latitude)<1e-10
+            && Math.abs(Resales.mapViewportLongitude-targetMap.center.longitude)<1e-10
+            && Math.abs(Resales.mapViewportZoom-targetMap.zoomLevel)<1e-10
             && townControl.currentIndex === Resales.townIndex
             && townControl.currentText === Resales.town
             && JSON.parse(Resales.townsJson)[Resales.townIndex] === Resales.town
@@ -98,7 +103,7 @@ Item {
             + " observed-ms=" + (observedMs >= started ? observedMs-started : -1))
         if (Date.now()-started > ((Resales.scaleMeasurement || Resales.scaleExpandedCoverage) ? 10000 : 5000)) { failDeadline(Date.now()-started); return false }
         priorItems=snapshot
-        priorCreated=targetMap.createdDelegates; priorDestroyed=targetMap.destroyedDelegates
+        priorCreated=targetMap.createdDelegates; priorDestroyed=targetMap.destroyedDelegates; priorPresentationCount=targetMap.mapItems.length
         phase++; started=Date.now()
         return true
     }
@@ -110,8 +115,10 @@ Item {
             if (chosen === "") return
             if (!advance("loaded")) return; Resales.selectTransaction(chosen); break
         case 1:
-            if (Resales.selectedId !== chosen) return
-            if (!advance("selected-retained-address")) return; Resales.setTown(Resales.gateTown); break
+            if (Resales.selectedId !== chosen || !ready(Resales.gateInitialCount,Resales.gateInitialMapped)) return
+            if (!advance("selected-retained-address")) return;
+            targetMap.center=QtPositioning.coordinate(Resales.selectedLatitude,Resales.selectedLongitude); targetMap.zoomLevel=16
+            Resales.setTown(Resales.gateTown); break
         case 2:
             if (!ready(Resales.gateTownCount, Resales.gateTownMapped) || Resales.selectedId !== chosen) return
             for (const item of targetMap.mapItems) if (item.mapKey === Resales.gateRetainedSelectionKey) { retainedSelectedItem=item; break }
@@ -122,7 +129,8 @@ Item {
             let retained=false
             for (const item of targetMap.mapItems) if (item.mapKey === Resales.gateRetainedSelectionKey && item === retainedSelectedItem && item.z === 0) retained=true
             if (!retained) return
-            if (!advance("hidden-transaction-cleared")) return; Resales.resetFilters(); break
+            if (!advance("hidden-transaction-cleared")) return;
+            Resales.resetFilters(); targetMap.center=QtPositioning.coordinate(1.3521,103.8198); targetMap.zoomLevel=11; break
         case 4:
             if (!ready(Resales.gateInitialCount, Resales.gateInitialMapped)) return
             chosen=Resales.firstVisibleId
@@ -135,8 +143,10 @@ Item {
         case 6:
             if (burstFired !== 1 || Resales.gateMaximumQueuedMutations < 4
                 || !ready(Resales.gateAllCount, Resales.gateAllMapped) || Resales.selectedId !== "") return
-            if (Resales.scaleLifecycle && (targetMap.createdDelegates-priorCreated !== Resales.gateAllMapped
-                || targetMap.destroyedDelegates-priorDestroyed !== Resales.gateInitialMapped)) return
+            // Async incubation may cancel an intermediate queued creation. Every
+            // completed live object must still balance against created/destroyed events.
+            if (Resales.scaleLifecycle && targetMap.createdDelegates-priorCreated
+                - (targetMap.destroyedDelegates-priorDestroyed) !== Resales.presentationCount-priorPresentationCount) return
             if (!advance("reentrant-burst-drained")) return; Resales.resetFilters(); break
         case 7:
             if (!ready(Resales.gateInitialCount, Resales.gateInitialMapped) || Resales.selectedId !== "") return
@@ -166,8 +176,7 @@ Item {
             if (!advance("reset")) return; Resales.setMaximumPrice(Resales.maximumAvailablePrice); break
         case 6:
             if (!ready(Resales.gateAllCount, Resales.gateAllMapped)) return
-            chosen=""
-            for (const item of targetMap.mapItems) if (item.mapKey.startsWith(Resales.gateTown + "|")) { chosen=item.transactionId; break }
+            chosen=Resales.gateTownSelectionId
             if (chosen === "") return
             if (!advance("full-restored")) return; Resales.selectTransaction(chosen); break
         case 7:
@@ -192,10 +201,10 @@ Item {
             if (!ready(Resales.gateAllCount, Resales.gateAllMapped)) return
             if (!advance("repeat-full")) return; targetMap.zoomLevel=12; break
         case 13:
-            if (Math.abs(targetMap.zoomLevel-12)>0.01) return
+            if (Math.abs(targetMap.zoomLevel-12)>0.01 || !ready(Resales.gateAllCount,Resales.gateAllMapped)) return
             if (!advance("zoomed")) return; targetMap.pan(100,100); break
         case 14:
-            if (Math.abs(targetMap.center.latitude-1.3521)<0.0001) return
+            if (Math.abs(targetMap.center.latitude-1.3521)<0.0001 || !ready(Resales.gateAllCount,Resales.gateAllMapped)) return
             if (!advance("panned")) return; targetMap.center=QtPositioning.coordinate(1.3521,103.8198); targetMap.zoomLevel=11; break
         case 15:
             if (Math.abs(targetMap.center.latitude-1.3521)>0.0001 || Math.abs(targetMap.zoomLevel-11)>0.01 || !ready(Resales.gateAllCount, Resales.gateAllMapped)) return
@@ -223,7 +232,7 @@ Item {
                 if (!ready(Resales.gateBudgetCount, Resales.gateBudgetMapped)) return
                 if (!advance("budget-filtered")) return; chosen=Resales.firstVisibleId; Resales.selectTransaction(chosen); break
             case 3:
-                if (chosen === "" || Resales.selectedId !== chosen) return
+                if (chosen === "" || Resales.selectedId !== chosen || !ready(Resales.gateBudgetCount,Resales.gateBudgetMapped)) return
                 if (!advance("selected")) return; if (Resales.runtimeGateFault !== "skip-empty") Resales.setMaximumPrice(0); break
             case 4:
                 if (!ready(0,0) || Resales.selectedId !== "") return
@@ -232,13 +241,13 @@ Item {
                 if (!ready(Resales.gateInitialCount, Resales.gateInitialMapped)) return
                 if (!advance("reset")) return; targetMap.zoomLevel=12; break
             case 6:
-                if (Math.abs(targetMap.zoomLevel-12)>0.01) return
+                if (Math.abs(targetMap.zoomLevel-12)>0.01 || !ready(Resales.gateInitialCount,Resales.gateInitialMapped)) return
                 if (!advance("zoomed")) return; targetMap.pan(100,100); break
             case 7:
-                if (Math.abs(targetMap.center.latitude-1.3521)<0.0001) return
+                if (Math.abs(targetMap.center.latitude-1.3521)<0.0001 || !ready(Resales.gateInitialCount,Resales.gateInitialMapped)) return
                 if (!advance("panned")) return; targetMap.center=QtPositioning.coordinate(1.3521,103.8198); targetMap.zoomLevel=11; break
             case 8:
-                if (Math.abs(targetMap.center.latitude-1.3521)>0.0001 || Math.abs(targetMap.zoomLevel-11)>0.01) return
+                if (Math.abs(targetMap.center.latitude-1.3521)>0.0001 || Math.abs(targetMap.zoomLevel-11)>0.01 || !ready(Resales.gateInitialCount,Resales.gateInitialMapped)) return
                 if (!advance("recentered")) return; Resales.setMaximumPrice(Resales.maximumAvailablePrice); break
             case 9:
                 if (!ready(Resales.gateAllCount, Resales.gateAllMapped)) return

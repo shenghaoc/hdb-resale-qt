@@ -48,10 +48,12 @@
     <None Include="StartupShell.qml"/>
     <None Include="RuntimeGate.qml"/>
     <None Include="ScaleGate.qml"/>
+    <None Include="PresentationGate.qml"/>
     <Compile Include="Program.cs" />
     <Compile Include="ResaleMapModel.cs" />
     <Compile Include="LocatedMapModel.cs" />
     <Compile Include="MapRowDiff.cs" />
+    <Compile Include="MapPresentation.cs" />
     <Compile Include="UiMutationQueue.cs" />
     <None Include="../../data/building-evidence.geojson" Link="data/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../data/*.csv" Link="data/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />

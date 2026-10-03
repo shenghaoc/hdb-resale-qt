@@ -16,7 +16,8 @@ Item {
     visible: false
     function rows(count) {
         return Resales.visibleCount === count && targetList.count === count
-            && targetMap.mapItems.length === count
+            && Resales.mappedCount === count && targetMap.mapItems.length === Resales.presentationCount
+            && Resales.mapViewportReady && !targetMap.viewportPending
             && townControl.currentIndex === Resales.townIndex
             && townControl.currentText === Resales.town
             && JSON.parse(Resales.townsJson)[Resales.townIndex] === Resales.town
@@ -79,12 +80,12 @@ Item {
                 zoomControl.clicked()
                 break
             case 7:
-                if (Math.abs(targetMap.zoomLevel - 12) > 0.01) return
+                if (Math.abs(targetMap.zoomLevel - 12) > 0.01 || !rows(6)) return
                 advance("zoomed")
                 targetMap.pan(100, 100)
                 break
             case 8:
-                if (Math.abs(targetMap.center.latitude - 1.3521) < 0.0001) return
+                if (Math.abs(targetMap.center.latitude - 1.3521) < 0.0001 || !rows(6)) return
                 advance("panned")
                 recenterControl.clicked()
                 break
