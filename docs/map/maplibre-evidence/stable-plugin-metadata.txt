@@ -1,0 +1,15 @@
+IID "org.qt-project.qt.geoservice.serviceproviderfactory/6.0" Qt 6.7.0 (release)
+User Data: {
+    "Experimental": false,
+    "Features": [
+        "OnlineMappingFeature",
+        "OfflineMappingFeature",
+        "LocalizedMappingFeature"
+    ],
+    "Keys": [
+        "maplibre",
+        "maplibre"
+    ],
+    "Provider": "maplibre",
+    "Version": 100
+}

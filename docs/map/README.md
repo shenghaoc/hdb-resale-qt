@@ -75,8 +75,8 @@ all displayed fields; surviving keys must refer to the same QML objects.
 
 All markers remain present at low zoom. Below zoom 13 their dots are 14px and
 ordinary count labels are hidden; at zoom 13+ they are 24px with counts. The
-selected address stays orange, 28px, labelled and raised above other pins at
-all zoom levels. This is density styling, not clustering or viewport culling.
+selected address stays orange, 28px and raised above other pins at all zoom
+levels, retaining its multi-transaction count label. This is density styling, not clustering or viewport culling.
 
 The town-label array is cached from the immutable import. In the extended gate,
 the alternate-town value is evaluated once before scanning rows; an early test

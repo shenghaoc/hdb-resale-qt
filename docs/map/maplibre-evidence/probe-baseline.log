@@ -1,0 +1,2 @@
+Qt version: 6.12.0
+Available providers: QList("osm", "itemsoverlay")

@@ -1,8 +1,11 @@
 # HDB resale native fixture explorer
 
-Milestone 6: a runnable native slice with a measured full-corpus scale path, a reproducible bounded coverage study,
-verified historical first-result postal experiment and native interaction gates on macOS
-arm64 and Linux x64. This is the C#/Qt sibling of the
+Milestone 7: OneMap raster basemap, visible official attribution, compact zoom-aware
+markers and stable-address incremental map updates. The full-corpus Linux x64
+measurements and verification are in [M7 map results](docs/map/verification.md).
+Earlier milestones provide the reproducible coverage study, historical postal
+experiment and native macOS arm64/Linux x64 checkpoints. M7 does not claim a new
+macOS or Windows UI verification. This is the C#/Qt sibling of the
 [web HDB resale visualizer](https://github.com/shenghaoc/hdb-resale-visualizer);
 the web project is a product and behavior reference, not a translated frontend.
 
@@ -14,8 +17,10 @@ coordinate quality are separate; neither establishes an exact flat location. See
 
 C# owns the transactions, combined town/budget filtering, selection, summaries,
 and the Qt item model. QML owns the native window, controls, marker presentation,
-and map navigation. Changing a filter resets the bridge model, so both
-`MapItemView` markers and the transaction list update. Selection is retained
+and map navigation. Filter changes update `MapItemView` by stable address key:
+remove missing rows, insert new rows and notify changed roles while retaining
+surviving delegates. The independently virtualized transaction list still uses
+its reset notifications. Selection is retained
 while visible and cleared when its transaction is filtered out.
 
 Milestone5 local work adds a verified [historical first-hit cache experiment](docs/coverage/onemap/historical/README.md) on the unchanged benchmark. Its410experimental HDB-footprint points depend on explicitly weaker cached postal assertions, not exhaustive candidate evidence. Fresh Search tooling is separate. Only a minimized benchmark projection is included; the full export and display names remain private.
@@ -115,8 +120,8 @@ tools/                offline sample/audit scripts and bounded native gate
 
 The bridge singleton `Resales` derives from the documented `Qt.Bridge.Models.Model`,
 exposes custom model roles and `INotifyPropertyChanged` properties, and handles
-filter/selection methods called by QML. Begin/end reset notifications surround
-C# model changes. `Resales.mapPoints` is a second bridge model containing only
+filter/selection methods called by QML. Matching begin/end notifications surround
+structural C# model changes; map values use role-specific `DataChanged`. `Resales.mapPoints` is a second bridge model containing only
 located visible address summaries; the sidebar retains all visible accepted transactions.
 The model-valued property follows the official ColorPalette example.
 No business filtering or selection logic lives in QML JS;
@@ -124,23 +129,27 @@ its JavaScript only forwards UI commands and manages map gestures/presentation.
 
 ## Map provider
 
-The GeoServices plugin is still **osm**. It uses Qt's documented custom-map mode
-with `https://tile.openstreetmap.org/`, visible OSM contributor attribution, an
-identifying `HdbResaleQt/0.1` user agent, default Qt tile caching, and
-`NoPrefetching`. Only normal interactive viewing is supported; there is no bulk
-or offline downloader. Internet access is needed for uncached tiles. The public
-OSM tile service is best-effort and subject to its usage policy; choose an
-appropriate provider before a wider production rollout.
+The GeoServices plugin remains **osm**, using its documented CustomMap with
+`https://www.onemap.gov.sg/maps/tiles/Default/` (standard 256px XYZ, zoom 11–19).
+The visible official logo and linked “OneMap © contributors | Singapore Land
+Authority” attribution remain at the bottom. OneMap map services do not require
+a Search token. Provider lookup and tile prefetching are disabled; an identifying
+user agent and separate `onemap-default-v1` Qt cache are used. Existing caches
+are preserved. Internet access is needed for uncached tiles. No proxy, Search
+acquisition, bulk downloader or offline tile bundle is included.
+The unchanged official logo is bundled locally, so attribution does not depend
+on a separate image request. See [provider contract, terms and model strategy](docs/map/README.md).
 
-The default Qt remote provider returned Thunderforest tiles with an API-key
-watermark during verification. Explicit provider configuration fixes that;
-this is a provider choice, **not an upstream Qt bug**. Map attribution stays
-visible at the bottom. Drag includes movement crossing the activation threshold,
-so a single-move automation gesture can pan as well as normal pointer movement.
+At zoom 11–12, all addresses remain as 14px dots without ordinary count labels;
+at zoom 13+ they use 24px/count markers. Selection is always orange, raised and
+28px, retaining its multi-transaction count label. This reduces low-zoom overlap without culling or clustering.
+Drag includes movement crossing the activation threshold, so a single-move
+automation gesture can pan as well as normal pointer movement.
 
 ## Verification
 
-See [docs/verification.md](docs/verification.md) for executed checks and limits.
+See [M7 verification](docs/map/verification.md) for current checks and limits;
+[earlier verification](docs/verification.md) preserves the historical checkpoints.
 Supported RID package selection from the template remains for Windows x64/arm64,
 Linux x64, and macOS x64/arm64. Other desktop targets require their matching Qt
 installation and toolchain; Linux x64 is additionally verified; see [Linux setup and results](docs/linux.md).
@@ -215,10 +224,16 @@ Normal startup still loads only the original six-row fixture.
 Milestone 6 measures the pinned 241,920-row corpus with unchanged conservative
 matching and a C# address-marker projection. See [scale results and reproduction](docs/scale/README.md)
 for cardinalities, stage timings, memory, native gates, the explicit offline data-directory
-override and limitations. Default startup remains the six-row fixture. M7 should profile
-transient loading memory and the measured map-ready workload before architecture
-or renderer changes. Windows GUI validation and packaged distribution remain separate work.
+override and limitations. Default startup remains the six-row fixture. M7 separates
+aggregation, notification and QML lifecycle/readiness observations and retains
+Qt Location with smaller incremental updates. Transient loading memory, Windows
+GUI validation and packaged distribution remain separate work.
 [Linux verification](docs/linux.md) records the additional platform-specific Bridge pin.
+The [bounded MapLibre spike](docs/map/maplibre-spike.md) includes small independent
+experiment sources and a verified binary-loader blocker. It does not establish
+rendering/performance or add a production dependency. Keep Qt Location for the
+next milestone unless richer-layer requirements justify exact-Qt-6.12 plugin
+qualification and a like-for-like real-data comparison; M8 has not started.
 
 ## Native runtime gate
 
@@ -258,7 +273,8 @@ or successful network tile rendering. The gate does not certify tile pixels.
 Real Cocoa desktop inputs and screenshots were separately exercised, including
 rendered OSM, selected orange pin, wheel/drag, unlocated selection and visible
 startup diagnostics; details and limits are in [verification](docs/verification.md).
-The gate is verified on macOS arm64 and Linux x64, inspired by the sibling
+Those historical gates were verified on macOS arm64 and Linux x64; the current
+M7 code is verified on Linux x64. The gate is inspired by the sibling
 rowplay-qt runtime gate but implemented with the C# bridge and no sibling edits.
 
 ## Development workflow
@@ -282,7 +298,8 @@ This repository uses a lightweight rapid-development workflow:
 - [Published Bridge runtime](https://www.nuget.org/packages/QtGroup.Qt.Bridge.CSharp.osx-arm64/0.4.0.22-beta)
 - [Qt 6.12 Map and gesture documentation](https://doc.qt.io/qt-6.12/qml-qtlocation-map.html)
 - [Qt 6.12 OSM plugin parameters](https://doc.qt.io/qt-6.12/location-plugin-osm.html)
-- [OSM tile usage policy](https://operations.osmfoundation.org/policies/tiles/)
+- [OneMap raster tiles and attribution](https://www.onemap.gov.sg/docs/maps/)
+- [OneMap Terms of Use](https://www.onemap.gov.sg/legal/termsofuse.html)
 - [aqtinstall](https://aqtinstall.readthedocs.io/)
 
 The Bridge README's linked snapshot documentation returned HTTP 404 during

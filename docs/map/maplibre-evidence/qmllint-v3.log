@@ -1,0 +1,38 @@
+Warning: experiments/maplibre/Demo-v3.qml:: QQuickItem was not found. Did you add all imports and dependencies? [import]
+Info: Did you mean "MapQuickItem"?
+Warning: experiments/maplibre/Demo-v3.qml:30:25: Type Style is used but it is not resolved [unresolved-type]
+        MapLibre.style: Style {
+                        ^^^^^
+Warning: experiments/maplibre/Demo-v3.qml:15:32: Unqualified access [unqualified]
+    property bool usingOneMap: spikeStyleUrl.indexOf("onemap-style.json") >= 0
+                               ^^^^^^^^^^^^^
+Warning: experiments/maplibre/Demo-v3.qml:20:63: Unqualified access [unqualified]
+        PluginParameter { name: "maplibre.map.styles"; value: spikeStyleUrl }
+                                                              ^^^^^^^^^^^^^
+Warning: experiments/maplibre/Demo-v3.qml:34:36: Unqualified access [unqualified]
+                property var data: spikeData
+                                   ^^^^^^^^^
+Warning: experiments/maplibre/Demo-v3.qml:40:24: Cannot assign binding of type QVariantMap to QJsonObject [incompatible-type]
+                paint: ({
+                    "fill-color": ["interpolate", ["linear"], ["get", "price"], 300000, "#24a7a1", 700000, "#f5b454", 1100000, "#d75468"],
+                    "fill-opacity": ["interpolate", ["linear"], ["zoom"], 10, 0.3, 15, 0.8]
+                })
+Warning: experiments/maplibre/Demo-v3.qml:49:24: Cannot assign binding of type QVariantMap to QJsonObject [incompatible-type]
+                paint: ({
+                    "line-color": "#24363b",
+                    "line-width": ["interpolate", ["linear"], ["zoom"], 10, 0.25, 16, 1.5]
+                })
+Warning: experiments/maplibre/Demo-v3.qml:56:29: Unqualified access [unqualified]
+                expression: window.highPriceOnly ? [">=", "price", 700000] : []
+                            ^^^^^^
+Info: Set "pragma ComponentBehavior: Bound" in order to use IDs from outer components in nested components.
+Suggested change:
+pragma ComponentBehavior: Bound
+// API verified against official v3.0.0 sources. Runtime not verified here.
+Warning: experiments/maplibre/Demo-v3.qml:60:29: Unqualified access [unqualified]
+                expression: window.highPriceOnly ? [">=", "price", 700000] : []
+                            ^^^^^^
+Info: Set "pragma ComponentBehavior: Bound" in order to use IDs from outer components in nested components.
+Suggested change:
+pragma ComponentBehavior: Bound
+// API verified against official v3.0.0 sources. Runtime not verified here.
