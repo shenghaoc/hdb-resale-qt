@@ -43,6 +43,8 @@
     <None Include="Main.qml"/>
     <Compile Include="Program.cs" />
     <Compile Include="ResaleMapModel.cs" />
+    <Compile Include="LocatedMapModel.cs" />
+    <None Include="../../data/*.csv" Link="data/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <ProjectReference Include="../HdbResale.Domain/HdbResale.Domain.csproj" />
   </ItemGroup>
 

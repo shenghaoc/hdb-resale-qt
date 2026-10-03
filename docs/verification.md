@@ -1,3 +1,67 @@
+# Milestone 2 verification — 2026-10-03
+
+Executed on the same macOS arm64 toolchain recorded in README. Local branch:
+`milestone-2-data-pipeline`, based on published `42f1d24`. No push or PR.
+
+From repository root with toolchain PATH and QtDir exports:
+
+```sh
+dotnet build
+dotnet test --no-build
+dotnet run --project src/HdbResale.App/HdbResale.App.csproj --no-build
+```
+
+Build: **0 warnings, 0 errors**. Tests: **24 passed, 0 failed, 0 skipped**.
+Coverage includes real fixture acceptance, decimal price/quoted CSV, invalid
+month, malformed/wrong-count fields, required values, bad/nonpositive prices,
+duplicate ID, coordinate bounds/nonfinite values, missing/unknown quality,
+source consistency, missing files/structural headers, preservation of valid
+rows, imported filtering, inclusive budget, selection clearing/reset, and the
+five pinned official footprint/code/quality/derived-point matches.
+
+Desktop verification used the actual native app through accessibility actions
+and screenshots, not launch alone:
+
+- Initial Singapore OSM basemap renders with attribution and linked licence.
+  C# import summary: 6 accepted, 0 rejected, 0 diagnostics. Six sidebar rows;
+  five map delegates (close points overlap at city zoom) and one missing row.
+- Mapped selection shows orange pin and selected list row, registration month,
+  local ID, BlockApproximation and footprint OBJECTID/code/postal/inferred join.
+- Town ANG MO KIO: 2 visible, 1 mapped, 1 unlocated. Budget S$238,000: 1 visible,
+  0 mapped, 1 unlocated; previously mapped selection clears. Select HDB-1188
+  from sidebar: Missing/reason displayed, no map marker or placeholder.
+- Reset: 6 visible, 5 mapped, 1 unlocated; still-visible selection retained.
+  Budget zero: 0 visible/map rows and empty message; selection clears. Reset
+  restores all records and controls.
+- Drag changes center from 1.3521,103.8198 to 1.4211,103.7508. Singapore button
+  restores initial center/zoom. Plus/minus: 11 → 12 → 11. Wheel zoom: 11 → 14.3,
+  anchored center 1.3191,103.7720. Clementi points visibly separate; selecting
+  449 CLEMENTI AVE 3 shows OBJECTID 942992 and orange marker. Tiles resolve after
+  ordinary asynchronous loading; no retry/sleep loop.
+- Controlled error-path check modified **only ignored built-bundle copies**:
+  missing locations.csv plus one appended invalid-price transaction. UI stays
+  running and shows 6 accepted, 1 rejected, 2 diagnostics; 0 mapped, 6 unlocated.
+  File IO and transactions.csv row 8 price messages are visible. Both copies
+  were restored and byte-compared with checked-in CSVs before final normal run.
+- Normal and diagnostic runtime stdout/stderr logs were empty. Source data
+  stayed untouched by the error-path test.
+
+Limits: inferred street-code crosswalk is supported by unique complete block-set
+agreement, not an authoritative mapping; bounding-box midpoint may be outside
+an irregular footprint and never identifies a flat. Current polygons do not
+prove historical exact locations. Missing fixture entry is intentional, not a
+claim about official coverage. No live data/geocoding path or database.
+Physical multi-touch pinch and Linux/Windows remain untested. Basemap needs
+uncached network tiles. No credible upstream Bridge/Location defect was found;
+ordinary namespace/import/data-source corrections were application work. Qt
+Location remains deliberate 6.12 Technology Preview; Bridge is beta and tied
+to the external matching Qt installation. The macOS bundle is development-only,
+not packaged/signed/notarized. No dependency versions were changed for M2.
+
+---
+
+## Historical Milestone 1 verification
+
 # Verification — 2026-10-03
 
 Executed on macOS 27.0.1 arm64 with the exact toolchain in README.

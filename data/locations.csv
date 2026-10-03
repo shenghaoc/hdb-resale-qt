@@ -1,0 +1,6 @@
+town,block,street_name,latitude,longitude,quality,source
+ANG MO KIO,509,ANG MO KIO AVE 8,1.3739973579,103.8501378907,BlockApproximation,HDB footprint bbox midpoint; OBJECTID 937499; ST_COD ANA09H; postal 560509; inferred exact block-set street crosswalk
+CLEMENTI,449,CLEMENTI AVE 3,1.3135082071,103.7649958423,BlockApproximation,HDB footprint bbox midpoint; OBJECTID 942992; ST_COD CLA06H; postal 120449; inferred exact block-set street crosswalk
+CLEMENTI,461,CLEMENTI AVE 3,1.3111509290,103.7663995348,BlockApproximation,HDB footprint bbox midpoint; OBJECTID 945486; ST_COD CLA06H; postal 120461; inferred exact block-set street crosswalk
+TAMPINES,503,TAMPINES CTRL 1,1.3559079448,103.9451029545,BlockApproximation,HDB footprint bbox midpoint; OBJECTID 936585; ST_COD TAC10N; postal 520503; inferred exact block-set street crosswalk
+TAMPINES,505,TAMPINES CTRL 1,1.3555292503,103.9453506611,BlockApproximation,HDB footprint bbox midpoint; OBJECTID 937147; ST_COD TAC10N; postal 520505; inferred exact block-set street crosswalk

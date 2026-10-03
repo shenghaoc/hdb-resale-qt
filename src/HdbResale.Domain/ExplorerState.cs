@@ -6,15 +6,15 @@ public sealed class ExplorerState
     public ExplorerState(IReadOnlyList<ResaleTransaction> transactions)
     {
         this.transactions = Array.AsReadOnly(transactions.ToArray());
-        Visible = this.transactions;
+        Visible = Array.AsReadOnly(this.transactions.Where(t => t.Price <= MaximumPrice).ToArray());
     }
 
     public string Town { get; private set; } = "All towns";
-    public int MaximumPrice { get; private set; } = 1_000_000;
+    public decimal MaximumPrice { get; private set; } = 1_000_000;
     public IReadOnlyList<ResaleTransaction> Visible { get; private set; }
     public ResaleTransaction? Selected { get; private set; }
 
-    public void Filter(string town, int maximumPrice)
+    public void Filter(string town, decimal maximumPrice)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(town);
         ArgumentOutOfRangeException.ThrowIfNegative(maximumPrice);

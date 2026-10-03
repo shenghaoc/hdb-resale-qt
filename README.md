@@ -1,13 +1,15 @@
 # HDB resale native fixture explorer
 
-Milestone 1: a runnable fixture-based native desktop slice, verified on macOS
+Milestone 2: a runnable local official-data native desktop slice, verified on macOS
 arm64. This is the C#/Qt sibling of the
 [web HDB resale visualizer](https://github.com/shenghaoc/hdb-resale-visualizer);
 the web project is a product and behavior reference, not a translated frontend.
 
-A small native C# / Qt Quick vertical slice. Six checked-in **synthetic** resale
-transactions have approximate Singapore coordinates. These are not real resale
-records or buying advice.
+A small native C# / Qt Quick vertical slice. Six checked-in **real HDB** resale
+transactions cover three towns, three flat types and four registration months.
+Five have derived **BlockApproximation** points from official HDB building
+footprints; one intentionally has no local coordinate entry. The points are not
+exact flat locations. See [data provenance and derivation](data/README.md).
 
 C# owns the transactions, combined town/budget filtering, selection, summaries,
 and the Qt item model. QML owns the native window, controls, marker presentation,
@@ -84,7 +86,7 @@ From the repository root in each new terminal:
 export PATH="$HOME/.local/share/hdb-qt-toolchain/bin:$PATH"
 export QtDir="$HOME/Qt/6.12.0/macos"
 dotnet build
-dotnet test tests/HdbResale.Tests/HdbResale.Tests.csproj --no-build
+dotnet test --no-build
 dotnet run --project src/HdbResale.App/HdbResale.App.csproj --no-build
 ```
 
@@ -100,15 +102,19 @@ output stay under ignored `obj`/`bin` directories.
 ## Structure
 
 ```text
-src/HdbResale.Domain/  immutable transaction record, tiny fixture, ExplorerState
-src/HdbResale.App/     official-template csproj, Program, ResaleMapModel, Main.qml, Info.plist
-tests/HdbResale.Tests/ domain tests, independent of Qt and desktop rendering
+src/HdbResale.Domain/  immutable facts/location records, CSV importer, ExplorerState
+src/HdbResale.App/     official-template csproj, Program, ResaleMapModel, LocatedMapModel, Main.qml, Info.plist
+tests/HdbResale.Tests/ import/domain/evidence tests, independent of Qt
+data/                 tiny CSVs, source metadata, bounded official join/geometry evidence
 ```
 
 The bridge singleton `Resales` derives from the documented `Qt.Bridge.Models.Model`,
 exposes custom model roles and `INotifyPropertyChanged` properties, and handles
 filter/selection methods called by QML. Begin/end reset notifications surround
-C# model changes. No business filtering or selection logic lives in QML JS;
+C# model changes. `Resales.mapPoints` is a second bridge model containing only
+located visible transactions; the sidebar retains all visible accepted rows.
+The model-valued property follows the official ColorPalette example.
+No business filtering or selection logic lives in QML JS;
 its JavaScript only forwards UI commands and manages map gestures/presentation.
 
 ## Map provider
@@ -136,9 +142,44 @@ installation and toolchain; Linux/Windows have not been built or UI-tested here.
 Keep build/run on the same Qt installation: the bridge uses Qt private headers
 and fresh native configuration warns about coupling to that Qt build.
 
-Next useful milestone: load a small validated local CSV of real transactions,
-with explicit provenance and location quality, then validate Linux/Windows.
-Keep the same small C# model and native map before adding broader features.
+## Local import and diagnostics
+
+At startup C# reads `data/transactions.csv` and `data/locations.csv` relative to
+`AppContext.BaseDirectory`; MSBuild copies both into output and the development
+bundle. No data fetching or geocoding occurs at runtime. Only the basemap needs
+network access. Additional provenance/evidence files are documentation/test
+inputs, not app dependencies.
+
+The Qt-free domain separates official facts (valid `YearMonth`, town, block,
+street, flat type, decimal price) from derived location (immutable coordinates,
+quality, source). The importer uses .NET's BCL `TextFieldParser` for CSV quoting;
+no CSV package was added. Accepted transactions, rejected records with their
+row/fields/reason, and file/row diagnostics are structured results. Invalid
+transaction rows are rejected while readable valid rows survive. Invalid or
+absent location entries preserve valid transactions as unlocated. Missing
+files, IO errors, malformed headers and malformed quoting produce diagnostics;
+they do not silently disappear or terminate startup with an opaque exception.
+
+The UI shows import counts, mapped/unlocated counts, diagnostic messages,
+registration month, local ID, location quality and derivation evidence. It
+includes conspicuous HDB/data.gov.sg attribution and an Open Data Licence link.
+The current fixture produces **6 accepted, 0 rejected, 0 diagnostics; 5 mapped,
+1 unlocated** before filtering. The initial budget is S$1,000,000; the fixture's
+prices range from S$238,000 to S$620,000. Filters use the same C# state for both
+models; hidden selection clears and still-visible selection survives reset.
+
+The local IDs are additions derived from snapshot row numbers, not official HDB
+transaction identifiers. Registration month is not an exact sale date. The
+street-code crosswalk is **inferred from uniquely identical complete block
+sets**, not an authoritative published mapping. Footprint bounding-box
+midpoints can fall outside irregular polygons. Neither current building
+coverage nor an approximation establishes a 2017/2018 flat's exact position.
+There is no full-history pipeline, production geocoder, database or spatial
+accuracy claim.
+
+Next milestone: validate the same bounded native slice on Linux/Windows and
+improve address-join confidence with an authoritative street-code mapping
+before expanding data coverage. Keep the importer and C# domain small.
 
 ## Official references
 

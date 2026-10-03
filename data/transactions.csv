@@ -1,0 +1,7 @@
+source_row,month,town,flat_type,block,street_name,storey_range,floor_area_sqm,flat_model,lease_commence_date,remaining_lease,resale_price
+34,2017-01,ANG MO KIO,3 ROOM,509,ANG MO KIO AVE 8,01 TO 03,81,New Generation,1980,62 years 05 months,390000
+1188,2017-02,ANG MO KIO,2 ROOM,510,ANG MO KIO AVE 8,07 TO 09,44,Improved,1980,62 years 04 months,238000
+371,2017-01,CLEMENTI,3 ROOM,449,CLEMENTI AVE 3,04 TO 06,82,New Generation,1980,62 years 05 months,430000
+382,2017-01,CLEMENTI,4 ROOM,461,CLEMENTI AVE 3,07 TO 09,90,Model A,2006,88 years 10 months,620000
+7555,2017-05,TAMPINES,4 ROOM,503,TAMPINES CTRL 1,01 TO 03,103,Model A,1990,71 years 09 months,440000
+24303,2018-03,TAMPINES,4 ROOM,505,TAMPINES CTRL 1,04 TO 06,113,Model A,1989,70 years 05 months,510000

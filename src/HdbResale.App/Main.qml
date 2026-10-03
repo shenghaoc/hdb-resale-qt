@@ -31,12 +31,12 @@ ApplicationWindow {
         anchors.margins: 12
         spacing: 10
         Label { text: "Singapore HDB resale explorer"; font.pixelSize: 24; font.bold: true }
-        Label { text: "Synthetic fixture data · approximate locations · demonstration only" }
+        Label { text: "HDB via data.gov.sg · derived block approximations · partial location coverage" }
         RowLayout {
             Label { text: "Town" }
             ComboBox {
                 id: townPicker
-                model: ["All towns", "Tampines", "Clementi", "Ang Mo Kio"]
+                model: ["All towns", "ANG MO KIO", "CLEMENTI", "TAMPINES"]
                 currentIndex: model.indexOf(Resales.town)
                 onActivated: Resales.setTown(currentText)
                 Accessible.name: "Town filter"
@@ -54,6 +54,16 @@ ApplicationWindow {
             Item { Layout.fillWidth: true }
         }
         Label { text: Resales.filterSummary; font.bold: true }
+        Label {
+            text: Resales.importSummary + ' <a href="https://data.gov.sg/open-data-licence">Singapore Open Data Licence</a>'
+            onLinkActivated: (link) => Qt.openUrlExternally(link)
+        }
+        Label {
+            visible: Resales.importDiagnostics.length > 0
+            text: Resales.importDiagnostics
+            wrapMode: Text.WordWrap
+            Layout.fillWidth: true
+        }
         RowLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -71,7 +81,7 @@ ApplicationWindow {
                     zoomLevel: 11
                     maximumZoomLevel: 19
                     MapItemView {
-                        model: Resales
+                        model: Resales.mapPoints
                         delegate: MapQuickItem {
                             required property string transactionId
                             required property double latitude
@@ -170,13 +180,14 @@ ApplicationWindow {
                         required property string address
                         required property string priceLabel
                         required property string townName
+                        required property string locationLabel
                         width: ListView.view.width
-                        text: address + "\n" + townName + " · " + priceLabel
+                        text: address + "\n" + townName + " · " + priceLabel + "\n" + locationLabel
                         highlighted: Resales.selectedId === transactionId
                         onClicked: Resales.selectTransaction(transactionId)
                     }
                 }
-                Label { visible: Resales.visibleCount === 0; text: "No matching fixture transactions." }
+                Label { visible: Resales.visibleCount === 0; text: "No matching transactions." }
             }
         }
     }

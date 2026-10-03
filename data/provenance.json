@@ -1,0 +1,19 @@
+{
+  "retrieved_utc": "2026-10-03",
+  "transactions_url": "https://data.gov.sg/datasets/d_8b84c4ee58e3cfc0ece0d773c8ca6abc/view",
+  "locations_url": "https://data.gov.sg/datasets/d_16b157c52ed637edd6ba1232e026258d/view",
+  "source_rows_including_header": [
+    34,
+    1188,
+    371,
+    382,
+    7555,
+    24303
+  ],
+  "source_transaction_sha256": "3c3d8bf9b12adb88919fa74869922fe05cdb144f5f69d93a0de4345d047cc7d4",
+  "source_locations_sha256": "7c987511548de3a82da403cabca02702031e02ade8703a9e401417883dfeb702",
+  "address_evidence_url": "https://data.gov.sg/datasets/d_17f5382f26140b1fdae0ba2ef6239d2f/view",
+  "source_address_evidence_sha256": "a6e3105d02c4b59929371d1f7e4f8c0ed7939cdc081701d7e9197790bb78f4b1",
+  "missing_local_location": "HDB-1188 intentionally omitted to exercise partial coordinate coverage.",
+  "licence_url": "https://data.gov.sg/open-data-licence"
+}

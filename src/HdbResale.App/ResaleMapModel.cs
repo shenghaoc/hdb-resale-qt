@@ -10,17 +10,27 @@ namespace HdbResale.App;
 [QmlElement(Name = "Resales", Singleton = true)]
 public sealed class ResaleMapModel : Model, INotifyPropertyChanged
 {
-    private readonly ExplorerState state = new(Fixture.Transactions);
+    private readonly ImportResult import;
+    private readonly ExplorerState state;
+    public LocatedMapModel MapPoints { get; }
+    public ResaleMapModel()
+    {
+        import = CsvImport.LoadDirectory(Path.Combine(AppContext.BaseDirectory, "data"));
+        state = new(import.Accepted);
+        MapPoints = new(state.Visible);
+    }
     public event PropertyChangedEventHandler? PropertyChanged;
 
     public int VisibleCount => state.Visible.Count;
     public string Town => state.Town;
-    public int MaximumPrice => state.MaximumPrice;
+    public int MaximumPrice => (int)state.MaximumPrice;
     public string SelectedId => state.Selected?.Id ?? "";
     public string SelectionDetails => state.Selected is { } t
-        ? $"{t.Address}\n{t.Town} · {t.FlatType}\n{Money(t.Price)}\nSynthetic fixture transaction {t.Id}"
+        ? $"{t.Address}\n{t.Town} · {t.FlatType}\n{Money(t.Price)}\n{t.Facts.Month} registration · local ID {t.Id}\n{t.Location.Quality}\n{t.Location.Source}"
         : "Select a marker or a transaction below.";
-    public string FilterSummary => $"{VisibleCount} of {Fixture.Transactions.Count} fixture transactions · {Town} · up to {Money(MaximumPrice)}";
+    public string FilterSummary => $"{VisibleCount} of {import.Accepted.Count} transactions · {MapPoints.Count} mapped · {VisibleCount - MapPoints.Count} unlocated · {Town} · up to {Money(MaximumPrice)}";
+    public string ImportSummary => $"Import: {import.Accepted.Count} accepted transactions; {import.Rejected.Count} rejected records; {import.Diagnostics.Count} diagnostics.";
+    public string ImportDiagnostics => string.Join("\n", import.Diagnostics.Select(d => $"{d.File}:{d.Row}: {d.Message}"));
 
     public void SetTown(string town) => ApplyFilter(town, MaximumPrice);
     public void SetMaximumPrice(int price) => ApplyFilter(Town, price);
@@ -38,7 +48,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
         ArgumentException.ThrowIfNullOrWhiteSpace(town);
         ArgumentOutOfRangeException.ThrowIfNegative(price);
         BeginResetModel();
-        try { state.Filter(town, price); }
+        try { state.Filter(town, price); MapPoints.Replace(state.Visible); }
         finally { EndResetModel(); }
         Notify(nameof(Town), nameof(MaximumPrice), nameof(VisibleCount), nameof(FilterSummary),
             nameof(SelectedId), nameof(SelectionDetails));
@@ -47,7 +57,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     {
         foreach (var name in names) PropertyChanged?.Invoke(this, new(name));
     }
-    private static string Money(int price) => "S$" + price.ToString("N0", CultureInfo.InvariantCulture);
+    private static string Money(decimal price) => "S$" + price.ToString(price == decimal.Truncate(price) ? "N0" : "N2", CultureInfo.InvariantCulture);
 
     public override ModelIndex Parent(ModelIndex index) => ModelIndex.Empty;
     public override ModelIndex Index(int row, int column, ModelIndex parent) =>
@@ -58,7 +68,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public override Dictionary<int, string> RoleNames() => new()
     {
         [256] = "transactionId", [257] = "latitude", [258] = "longitude",
-        [259] = "address", [260] = "priceLabel", [261] = "townName"
+        [259] = "address", [260] = "priceLabel", [261] = "townName", [262] = "locationLabel"
     };
     public override object? Data(ModelIndex index, int role)
     {
@@ -66,8 +76,8 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
         var t = state.Visible[index.Row];
         return role switch
         {
-            256 => t.Id, 257 => t.Latitude, 258 => t.Longitude,
-            259 => t.Address, 260 => Money(t.Price), 261 => t.Town, _ => null
+            256 => t.Id, 257 => t.Location.Point?.Latitude, 258 => t.Location.Point?.Longitude,
+            259 => t.Address, 260 => Money(t.Price), 261 => t.Town, 262 => t.Location.Quality.ToString(), _ => null
         };
     }
 }
