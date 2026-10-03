@@ -1,0 +1,39 @@
+qt.qpa.theme.gnome: dbus reply error: [ "org.freedesktop.DBus.Error.ServiceUnknown" ] "The name org.freedesktop.portal.Desktop was not provided by any .service files"
+qt.qpa.theme.gnome: dbus reply error: [ "org.freedesktop.DBus.Error.ServiceUnknown" ] "The name org.freedesktop.portal.Desktop was not provided by any .service files"
+HDB_SCALE_CONSTRUCT 4015 rows=236791 mapped=7615 managed=308831240 working=770703360
+HDB_SCALE_ORACLE 485
+HDB_NATIVE_MODEL_DESTROY ms=1791028245476 pointer=0x7ffd69a82af0
+HDB_NATIVE_MODEL_ROLES ms=1791028245588 pointer=0x556b863210b0 parent=(nil) ownership=1
+qml: HDB_SCALE_STEP loaded ms=2153 rows=236791 delegates=7615 created=7615 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1
+HDB_MAP_UPDATE strategy=incremental aggregate-ms=10.827 plan-ms=3.768 notifications-ms=31.482 before=7615 after=340 removed=7275 inserted=0 changed=0
+qml: HDB_MAP_OBSERVED revision=1 after-csharp-ms=1
+HDB_FILTER_STAGE revision=1 list-begin-ms=7.942 filter-ms=7.935 list-end-ms=2.906 property-notify-ms=23.275 total-ms=89.538
+HDB_SCALE_RESET 66 rows=9441 mapped=340
+qml: HDB_SCALE_STEP filtered ms=1194 rows=9441 delegates=340 created=0 destroyed=7275 last-create-ms=-1 last-destroy-ms=1184 observed-ms=94
+HDB_MAP_UPDATE strategy=incremental aggregate-ms=2.572 plan-ms=0.984 notifications-ms=67.206 before=340 after=294 removed=46 inserted=0 changed=233
+qml: HDB_MAP_OBSERVED revision=2 after-csharp-ms=0
+HDB_FILTER_STAGE revision=2 list-begin-ms=0.473 filter-ms=5.009 list-end-ms=2.610 property-notify-ms=5.204 total-ms=84.232
+HDB_SCALE_RESET 79 rows=6469 mapped=294
+qml: HDB_SCALE_STEP budget-filtered ms=655 rows=6469 delegates=294 created=0 destroyed=46 last-create-ms=-1 last-destroy-ms=629 observed-ms=85
+qml: HDB_SCALE_STEP selected ms=10 rows=6469 delegates=294 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1
+HDB_MAP_UPDATE strategy=incremental aggregate-ms=0.159 plan-ms=0.116 notifications-ms=1.780 before=294 after=0 removed=294 inserted=0 changed=0
+qml: HDB_MAP_OBSERVED revision=3 after-csharp-ms=1
+HDB_FILTER_STAGE revision=3 list-begin-ms=0.215 filter-ms=9.498 list-end-ms=0.516 property-notify-ms=1.877 total-ms=14.241
+HDB_SCALE_RESET 12 rows=0 mapped=0
+qml: HDB_SCALE_STEP empty-cleared ms=391 rows=0 delegates=0 created=0 destroyed=294 last-create-ms=-1 last-destroy-ms=390 observed-ms=15
+HDB_MAP_UPDATE strategy=incremental aggregate-ms=91.708 plan-ms=4.077 notifications-ms=1756.527 before=0 after=7615 removed=0 inserted=7615 changed=0
+qml: HDB_MAP_OBSERVED revision=4 after-csharp-ms=1
+HDB_FILTER_STAGE revision=4 list-begin-ms=0.265 filter-ms=7.864 list-end-ms=6.034 property-notify-ms=34.468 total-ms=1901.163
+HDB_SCALE_RESET 1866 rows=236791 mapped=7615
+qml: HDB_SCALE_STEP reset ms=2183 rows=236791 delegates=7615 created=7615 destroyed=0 last-create-ms=1866 last-destroy-ms=-1 observed-ms=1902
+qml: HDB_SCALE_STEP zoomed ms=65 rows=236791 delegates=7615 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1
+qml: HDB_SCALE_STEP panned ms=4 rows=236791 delegates=7615 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1
+qml: HDB_SCALE_STEP recentered ms=126 rows=236791 delegates=7615 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1
+HDB_MAP_UPDATE strategy=incremental aggregate-ms=102.425 plan-ms=16.560 notifications-ms=179.871 before=7615 after=7618 removed=0 inserted=3 changed=695
+qml: HDB_MAP_OBSERVED revision=5 after-csharp-ms=1
+HDB_FILTER_STAGE revision=5 list-begin-ms=0.351 filter-ms=6.969 list-end-ms=2.509 property-notify-ms=31.945 total-ms=340.753
+HDB_SCALE_RESET 308 rows=241920 mapped=7618
+qml: HDB_SCALE_STEP all-prices ms=541 rows=241920 delegates=7618 created=3 destroyed=0 last-create-ms=147 last-destroy-ms=-1 observed-ms=349
+qml: HDB_SCALE_PASS
+HDB_GATE_EXIT
+HDB_NATIVE_MODEL_DESTROY ms=1791028256052 pointer=0x556b863210b0

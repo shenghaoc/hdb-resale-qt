@@ -1,0 +1,42 @@
+qt.qpa.theme.gnome: dbus reply error: [ "org.freedesktop.DBus.Error.ServiceUnknown" ] "The name org.freedesktop.portal.Desktop was not provided by any .service files"
+qt.qpa.theme.gnome: dbus reply error: [ "org.freedesktop.DBus.Error.ServiceUnknown" ] "The name org.freedesktop.portal.Desktop was not provided by any .service files"
+HDB_STARTUP_STAGE {"Operation":"property-evidence","Milliseconds":70.3257,"ManagedThreadId":4,"ThreadAllocatedBytes":4623960,"ProcessAllocatedBytes":4623960,"ManagedBytes":5436672,"WorkingSetBytes":159453184}
+HDB_STARTUP_STAGE {"Operation":"postal-evidence","Milliseconds":575.8284,"ManagedThreadId":4,"ThreadAllocatedBytes":203785984,"ProcessAllocatedBytes":203795672,"ManagedBytes":160514960,"WorkingSetBytes":366522368}
+HDB_STARTUP_STAGE {"Operation":"footprint-file-read","Milliseconds":47.1568,"ManagedThreadId":4,"ThreadAllocatedBytes":57013400,"ProcessAllocatedBytes":57013400,"ManagedBytes":217527064,"WorkingSetBytes":423591936}
+HDB_STARTUP_STAGE {"Operation":"footprint-json","Milliseconds":447.8836,"ManagedThreadId":4,"ThreadAllocatedBytes":67114648,"ProcessAllocatedBytes":67115968,"ManagedBytes":218339608,"WorkingSetBytes":478351360}
+HDB_STARTUP_STAGE {"Operation":"footprints","Milliseconds":481.0369,"ManagedThreadId":4,"ThreadAllocatedBytes":10981256,"ProcessAllocatedBytes":10981256,"ManagedBytes":229357640,"WorkingSetBytes":489332736}
+HDB_STARTUP_STAGE {"Operation":"evidence-index","Milliseconds":572.9241,"ManagedThreadId":4,"ThreadAllocatedBytes":79439064,"ProcessAllocatedBytes":79440432,"ManagedBytes":241867384,"WorkingSetBytes":527863808}
+HDB_STARTUP_STAGE {"Operation":"transaction-csv","Milliseconds":347.5667,"ManagedThreadId":4,"ThreadAllocatedBytes":219389992,"ProcessAllocatedBytes":219391336,"ManagedBytes":354588448,"WorkingSetBytes":616914944}
+HDB_STARTUP_STAGE {"Operation":"validation-facts","Milliseconds":322.6896,"ManagedThreadId":4,"ThreadAllocatedBytes":41860088,"ProcessAllocatedBytes":41860088,"ManagedBytes":396526488,"WorkingSetBytes":654770176}
+HDB_STARTUP_STAGE {"Operation":"matching-resolution","Milliseconds":1069.0615,"ManagedThreadId":4,"ThreadAllocatedBytes":185751648,"ProcessAllocatedBytes":185754312,"ManagedBytes":224503152,"WorkingSetBytes":775233536}
+HDB_STARTUP_STAGE {"Operation":"transaction-domain","Milliseconds":18.3328,"ManagedThreadId":4,"ThreadAllocatedBytes":35499472,"ProcessAllocatedBytes":35499472,"ManagedBytes":260099216,"WorkingSetBytes":775233536}
+HDB_STARTUP_STAGE {"Operation":"import-return","Milliseconds":0.0814,"ManagedThreadId":4,"ThreadAllocatedBytes":976,"ProcessAllocatedBytes":976,"ManagedBytes":260099216,"WorkingSetBytes":775233536}
+HDB_STARTUP_STAGE {"Operation":"town-labels","Milliseconds":25.8821,"ManagedThreadId":4,"ThreadAllocatedBytes":5328,"ProcessAllocatedBytes":5328,"ManagedBytes":260107440,"WorkingSetBytes":775348224}
+HDB_STARTUP_STAGE {"Operation":"state-construction","Milliseconds":35.5225,"ManagedThreadId":4,"ThreadAllocatedBytes":7865264,"ProcessAllocatedBytes":7865264,"ManagedBytes":267978256,"WorkingSetBytes":775409664}
+HDB_STARTUP_STAGE {"Operation":"map-aggregation","Milliseconds":197.7903,"ManagedThreadId":4,"ThreadAllocatedBytes":37282848,"ProcessAllocatedBytes":37282848,"ManagedBytes":305367248,"WorkingSetBytes":775557120}
+HDB_STARTUP_STAGE {"Operation":"map-model-population","Milliseconds":0.2723,"ManagedThreadId":4,"ThreadAllocatedBytes":61856,"ProcessAllocatedBytes":61856,"ManagedBytes":305436464,"WorkingSetBytes":775557120}
+HDB_STARTUP_STAGE {"Operation":"models-constructed","Milliseconds":0.0261,"ManagedThreadId":4,"ThreadAllocatedBytes":848,"ProcessAllocatedBytes":848,"ManagedBytes":305436464,"WorkingSetBytes":775557120}
+HDB_NATIVE_MODEL_DESTROY ms=1791027788444 pointer=0x7ffdc58a1c70
+HDB_NATIVE_MODEL_ROLES ms=1791027788556 pointer=0x55d2672e9dc0 parent=(nil) ownership=1
+HDB_MODEL_ROLES count=7 ids=256-262
+HDB_MODEL_INDEX row=0 column=0 parent-row=-1 parent-column=-1 parent-model=0 result-row=0 result-column=0 result-model=-1 valid=True
+HDB_MODEL_DATA role=260 row=0 column=0 model=94362162601408 valid=True count=7618
+HDB_MODEL_INDEX row=0 column=0 parent-row=-1 parent-column=-1 parent-model=0 result-row=0 result-column=0 result-model=-1 valid=True
+HDB_MODEL_DATA role=256 row=0 column=0 model=94362162601408 valid=True count=7618
+HDB_MODEL_INDEX row=0 column=0 parent-row=-1 parent-column=-1 parent-model=0 result-row=0 result-column=0 result-model=-1 valid=True
+HDB_MODEL_DATA role=262 row=0 column=0 model=94362162601408 valid=True count=7618
+HDB_MODEL_INDEX row=0 column=0 parent-row=-1 parent-column=-1 parent-model=0 result-row=0 result-column=0 result-model=-1 valid=True
+HDB_MODEL_DATA role=261 row=0 column=0 model=94362162601408 valid=True count=7618
+HDB_MODEL_INDEX row=0 column=0 parent-row=-1 parent-column=-1 parent-model=0 result-row=0 result-column=0 result-model=-1 valid=True
+HDB_MODEL_DATA role=258 row=0 column=0 model=94362162601408 valid=True count=7618
+HDB_MODEL_INDEX row=0 column=0 parent-row=-1 parent-column=-1 parent-model=0 result-row=0 result-column=0 result-model=-1 valid=True
+HDB_MODEL_DATA role=259 row=0 column=0 model=94362162601408 valid=True count=7618
+HDB_MODEL_INDEX row=0 column=0 parent-row=-1 parent-column=-1 parent-model=0 result-row=0 result-column=0 result-model=-1 valid=True
+HDB_MODEL_DATA role=257 row=0 column=0 model=94362162601408 valid=True count=7618
+HDB_MODEL_INDEX row=1 column=0 parent-row=-1 parent-column=-1 parent-model=0 result-row=1 result-column=0 result-model=-1 valid=True
+HDB_MODEL_DATA role=260 row=1 column=0 model=94362162601408 valid=True count=7618
+HDB_NATIVE_MODEL_DESTROY ms=1791027790748 pointer=0x55d2672e9dc0
+HDB_STARTUP_STAGE {"Operation":"qml-ready-full","Milliseconds":3270.2223,"ManagedThreadId":4,"ThreadAllocatedBytes":142672848,"ProcessAllocatedBytes":142673904,"ManagedBytes":343343952,"WorkingSetBytes":1198018560}
+HDB_STARTUP_READY view=full rows=241920 markers=7618 sidebar-role-reads=45 map-role-reads=53326
+HDB_STARTUP_STAGE {"Operation":"diagnostic-retained-native","Milliseconds":267.0194,"ManagedThreadId":4,"ThreadAllocatedBytes":1144,"ProcessAllocatedBytes":1144,"ManagedBytes":225849336,"WorkingSetBytes":1108881408}
+HDB_GATE_EXIT

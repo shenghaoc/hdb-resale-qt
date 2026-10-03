@@ -345,3 +345,9 @@ This is record-chain review, not a 100% manual address-accuracy claim. Full raw
 exports/projections remain local; [source hashes and reproduction](docs/address-coverage/normalization/README.md#reproduction)
 are checked in. Use an explicit HDB_DATA_DIRECTORY for the expanded workload;
 no evidence is fetched at startup and no database/renderer migration is introduced.
+
+M9 [Linux verification and performance](docs/address-coverage/native/README.md)
+use an explicit expanded-only 10-second correctness gate; canonical/smaller gates
+retain 5 seconds. Large marker rebuilds still visibly block: a final update call
+reached 7.24 seconds and completed validation reached 8.03 seconds. This limitation
+is documented rather than hidden by the larger test budget.

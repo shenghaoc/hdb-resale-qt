@@ -1,0 +1,49 @@
+qt.qpa.theme.gnome: dbus reply error: [ "org.freedesktop.DBus.Error.ServiceUnknown" ] "The name org.freedesktop.portal.Desktop was not provided by any .service files"
+qt.qpa.theme.gnome: dbus reply error: [ "org.freedesktop.DBus.Error.ServiceUnknown" ] "The name org.freedesktop.portal.Desktop was not provided by any .service files"
+HDB_SCALE_CONSTRUCT 4656 rows=236791 mapped=7615 managed=540808288 working=838008832
+HDB_SCALE_ORACLE 742
+qml: HDB_MODEL_LIFETIME_GC
+qml: HDB_SCALE_STEP loaded ms=2645 rows=236791 delegates=7615 created=7615 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1
+HDB_MAP_UPDATE strategy=incremental aggregate-ms=116.458 plan-ms=9.709 notifications-ms=362.875 before=7615 after=7618 removed=0 inserted=3 changed=695
+qml: HDB_MAP_OBSERVED revision=1 after-csharp-ms=2
+HDB_FILTER_STAGE revision=1 list-begin-ms=7.160 filter-ms=9.493 list-end-ms=2.653 property-notify-ms=43.001 total-ms=552.978
+HDB_SCALE_RESET 509 rows=241920 mapped=7618
+qml: HDB_SCALE_STEP full ms=1668 rows=241920 delegates=7618 created=3 destroyed=0 last-create-ms=171 last-destroy-ms=-1 observed-ms=564
+HDB_MAP_UPDATE strategy=incremental aggregate-ms=5.961 plan-ms=0.983 notifications-ms=29.177 before=7618 after=340 removed=7278 inserted=0 changed=0
+qml: HDB_MAP_OBSERVED revision=2 after-csharp-ms=2
+HDB_FILTER_STAGE revision=2 list-begin-ms=1.068 filter-ms=6.335 list-end-ms=4.891 property-notify-ms=23.428 total-ms=71.926
+HDB_SCALE_RESET 48 rows=9745 mapped=340
+qml: HDB_SCALE_STEP subset ms=1613 rows=9745 delegates=340 created=0 destroyed=7278 last-create-ms=-1 last-destroy-ms=1599 observed-ms=74
+HDB_MAP_UPDATE strategy=incremental aggregate-ms=3.123 plan-ms=0.132 notifications-ms=94.381 before=340 after=197 removed=340 inserted=197 changed=0
+qml: HDB_MAP_OBSERVED revision=3 after-csharp-ms=1
+HDB_FILTER_STAGE revision=3 list-begin-ms=0.510 filter-ms=7.024 list-end-ms=3.169 property-notify-ms=6.261 total-ms=114.699
+HDB_SCALE_RESET 108 rows=12620 mapped=197
+qml: HDB_SCALE_STEP different ms=633 rows=12620 delegates=197 created=197 destroyed=340 last-create-ms=108 last-destroy-ms=616 observed-ms=115
+HDB_MAP_UPDATE strategy=incremental aggregate-ms=0.076 plan-ms=0.086 notifications-ms=2.141 before=197 after=0 removed=197 inserted=0 changed=0
+qml: HDB_MAP_OBSERVED revision=4 after-csharp-ms=1
+HDB_FILTER_STAGE revision=4 list-begin-ms=0.850 filter-ms=8.379 list-end-ms=1.181 property-notify-ms=4.049 total-ms=16.929
+HDB_SCALE_RESET 12 rows=0 mapped=0
+qml: HDB_SCALE_STEP empty ms=224 rows=0 delegates=0 created=0 destroyed=197 last-create-ms=-1 last-destroy-ms=223 observed-ms=17
+HDB_MAP_UPDATE strategy=incremental aggregate-ms=162.526 plan-ms=1.334 notifications-ms=2764.706 before=0 after=7615 removed=0 inserted=7615 changed=0
+qml: HDB_MAP_OBSERVED revision=5 after-csharp-ms=0
+HDB_FILTER_STAGE revision=5 list-begin-ms=0.487 filter-ms=8.643 list-end-ms=3.125 property-notify-ms=40.415 total-ms=2981.323
+HDB_SCALE_RESET 2940 rows=236791 mapped=7615
+qml: HDB_SCALE_STEP reset ms=3532 rows=236791 delegates=7615 created=7615 destroyed=0 last-create-ms=2940 last-destroy-ms=-1 observed-ms=2982
+HDB_MAP_UPDATE strategy=incremental aggregate-ms=106.843 plan-ms=4.255 notifications-ms=328.877 before=7615 after=7618 removed=0 inserted=3 changed=695
+qml: HDB_MAP_OBSERVED revision=6 after-csharp-ms=1
+HDB_FILTER_STAGE revision=6 list-begin-ms=0.468 filter-ms=31.310 list-end-ms=4.667 property-notify-ms=42.772 total-ms=519.558
+HDB_SCALE_RESET 476 rows=241920 mapped=7618
+qml: HDB_SCALE_STEP full-restored ms=867 rows=241920 delegates=7618 created=3 destroyed=0 last-create-ms=187 last-destroy-ms=-1 observed-ms=548
+qml: HDB_SCALE_STEP selected ms=504 rows=241920 delegates=7618 created=0 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1
+HDB_MAP_UPDATE strategy=incremental aggregate-ms=2.206 plan-ms=1.120 notifications-ms=36.837 before=7618 after=197 removed=7421 inserted=0 changed=0
+qml: HDB_MAP_OBSERVED revision=7 after-csharp-ms=1
+HDB_FILTER_STAGE revision=7 list-begin-ms=0.897 filter-ms=7.768 list-end-ms=6.088 property-notify-ms=24.229 total-ms=79.276
+HDB_SCALE_RESET 55 rows=12620 mapped=197
+qml: HDB_SCALE_STEP hidden-selection-cleared ms=2219 rows=12620 delegates=197 created=0 destroyed=7421 last-create-ms=-1 last-destroy-ms=2195 observed-ms=79
+HDB_MAP_UPDATE strategy=incremental aggregate-ms=110.701 plan-ms=1.351 notifications-ms=4954.483 before=197 after=7618 removed=0 inserted=7421 changed=0
+qml: HDB_MAP_OBSERVED revision=8 after-csharp-ms=2
+HDB_FILTER_STAGE revision=8 list-begin-ms=0.769 filter-ms=12.634 list-end-ms=4.827 property-notify-ms=43.002 total-ms=5127.866
+HDB_SCALE_RESET 5084 rows=241920 mapped=7618
+qml: HDB_GATE_FAIL scale phase 9 mapReady=true mapError=0 rows=241920 list=241920 delegates=7618 expected=7618 identities=true town=All towns price=1728000
+qml: HDB_MAP_DIAGNOSTIC {"key":"BEDOK|101|BEDOK RESERVOIR RD","id":"HDB-198975","count":29,"address":"101 BEDOK RESERVOIR RD","price":"29 transactions · median S$485,000 · latest 2025-01","latitude":1.3285316112,"longitude":103.9097627161,"expected":{"mapKey":"BEDOK|101|BEDOK RESERVOIR RD","transactionId":"HDB-198975","transactionCount":29,"latitude":1.3285316112,"longitude":103.9097627161,"address":"101 BEDOK RESERVOIR RD","priceLabel":"29 transactions · median S$485,000 · latest 2025-01"}}
+HDB_GATE_EXIT

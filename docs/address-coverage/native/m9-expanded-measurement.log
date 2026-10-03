@@ -1,0 +1,7 @@
+qt.qpa.theme.gnome: dbus reply error: [ "org.freedesktop.DBus.Error.ServiceUnknown" ] "The name org.freedesktop.portal.Desktop was not provided by any .service files"
+qt.qpa.theme.gnome: dbus reply error: [ "org.freedesktop.DBus.Error.ServiceUnknown" ] "The name org.freedesktop.portal.Desktop was not provided by any .service files"
+HDB_SCALE_CONSTRUCT 4397 rows=236791 mapped=7615 managed=319640896 working=764284928
+HDB_SCALE_ORACLE 494
+qml: HDB_GATE_FAIL scale phase 0 mapReady=true mapError=0 rows=236791 list=236791 delegates=7615 expected=7615 identities=false town=All towns price=1000000
+qml: HDB_MAP_DIAGNOSTIC {"key":"undefined","id":"undefined","count":0,"address":"undefined","price":"undefined","latitude":null,"longitude":null}
+HDB_GATE_EXIT

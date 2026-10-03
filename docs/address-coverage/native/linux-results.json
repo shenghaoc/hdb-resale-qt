@@ -1,0 +1,2183 @@
+{
+  "platform": "Linux x64 Debian13.6 XFCE X11; .NET SDK10.0.401/runtime10.0.12; Qt6.12.0; Linux Bridge0.4.0-beta; macOS pin unchanged0.4.0.22-beta",
+  "source_commit": "06d84af",
+  "input_manifest_sha256": "2b21747c89d43b3ab9c173980703e2ee10f177e025057576f05715460b67b3dc",
+  "expanded_data": {
+    "transactions": 241920,
+    "addresses": 9755,
+    "all_price_markers": 7618,
+    "default_budget_markers": 7615,
+    "located_transactions": 188573,
+    "unlocated_transactions": 53347
+  },
+  "budget_scope": {
+    "canonical_and_original_input": "Existing5sstate; classic/reentrant25sprocess, extended45sprocess. Original fullinput now1922all-price/1921default markers due separately audited MultiPolygon support.",
+    "expanded_explicit": "User-approved --expanded-coverage only;10sstate,45sclassic/reentrant and60sextended process; manifest/profile/pinned fulltransactions guard. Every completed validation/snapshot is checked before advance.",
+    "product_warning": "Passing expanded correctness does not fix performance. Final completed state reached8030ms and synchronous update7236.253ms. UI remains subject to visible rebuild blocking.",
+    "measurement_caveats": [
+      "Sequential observations, not randomized benchmark or cross-platform guarantee. No cold-disk/tile/network or isolatedGPU/Bridge timing.",
+      "Gate forcedQMLGC is test-only; normalUI and startup countprobe never force QMLGC. Diagnosticretainedheap explicitly forces separate managedcollection.",
+      "Startup READY is cardinality-only; complete roles/identities and update correctness are established separately by strictfunctionalgates. Total startup-processseconds include collection and teardown.",
+      "Original five-second gate checked onlycallbackentry; one reportedexit0 had5523ms completedstate. This false-budget-pass is preserved and not accepted as meeting5s. Post-validation elapsed checks now reject this condition."
+    ]
+  },
+  "runs": {
+    "expanded/Debug/classic": {
+      "log_sha256": "1834e9a22a6a6b6f78827ef50c9caabf3e4f2a5965b98009589b3cae9129c08e",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 3448
+        },
+        {
+          "name": "filtered",
+          "milliseconds": 1182
+        },
+        {
+          "name": "budget-filtered",
+          "milliseconds": 547
+        },
+        {
+          "name": "selected",
+          "milliseconds": 24
+        },
+        {
+          "name": "empty-cleared",
+          "milliseconds": 219
+        },
+        {
+          "name": "reset",
+          "milliseconds": 2513
+        },
+        {
+          "name": "zoomed",
+          "milliseconds": 75
+        },
+        {
+          "name": "panned",
+          "milliseconds": 125
+        },
+        {
+          "name": "recentered",
+          "milliseconds": 116
+        },
+        {
+          "name": "all-prices",
+          "milliseconds": 654
+        }
+      ],
+      "max_state_ms": 3448,
+      "over_legacy_5000ms_states": [],
+      "max_notification_ms": 1888.686,
+      "max_synchronous_update_ms": 2098.393,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": true,
+      "clean_exit": true,
+      "failures": [],
+      "seconds": 16.79,
+      "measurement_only": false,
+      "expanded_coverage": true,
+      "state_budget_ms": 10000,
+      "process_budget_seconds": 45,
+      "extended": false,
+      "reentrant": false,
+      "exit": 0
+    },
+    "expanded/Debug/extended": {
+      "log_sha256": "ab01252656a8dab966a7bb47f21dbdc74b2d8d26212e71473e93c528264f7e61",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 3692
+        },
+        {
+          "name": "full",
+          "milliseconds": 2357
+        },
+        {
+          "name": "subset",
+          "milliseconds": 1580
+        },
+        {
+          "name": "different",
+          "milliseconds": 659
+        },
+        {
+          "name": "empty",
+          "milliseconds": 248
+        },
+        {
+          "name": "reset",
+          "milliseconds": 3248
+        },
+        {
+          "name": "full-restored",
+          "milliseconds": 688
+        },
+        {
+          "name": "selected",
+          "milliseconds": 250
+        },
+        {
+          "name": "hidden-selection-cleared",
+          "milliseconds": 2278
+        },
+        {
+          "name": "full-again",
+          "milliseconds": 6076
+        },
+        {
+          "name": "repeat-subset",
+          "milliseconds": 2167
+        },
+        {
+          "name": "repeat-different",
+          "milliseconds": 931
+        },
+        {
+          "name": "repeat-full",
+          "milliseconds": 4367
+        },
+        {
+          "name": "zoomed",
+          "milliseconds": 197
+        },
+        {
+          "name": "panned",
+          "milliseconds": 126
+        },
+        {
+          "name": "recentered",
+          "milliseconds": 335
+        }
+      ],
+      "max_state_ms": 6076,
+      "over_legacy_5000ms_states": [
+        {
+          "name": "full-again",
+          "milliseconds": 6076
+        }
+      ],
+      "max_notification_ms": 5241.818,
+      "max_synchronous_update_ms": 5509.221,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": true,
+      "clean_exit": true,
+      "failures": [],
+      "seconds": 37.48,
+      "measurement_only": false,
+      "expanded_coverage": true,
+      "state_budget_ms": 10000,
+      "process_budget_seconds": 60,
+      "extended": true,
+      "reentrant": false,
+      "exit": 0
+    },
+    "expanded/Debug/reentrant": {
+      "log_sha256": "ae610a3e5ecde8fa332bcda197425b75d811513a612ee5d7b602c83fd5c65c14",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 4138
+        },
+        {
+          "name": "selected-retained-address",
+          "milliseconds": 997
+        },
+        {
+          "name": "selected-in-town",
+          "milliseconds": 1584
+        },
+        {
+          "name": "hidden-transaction-cleared",
+          "milliseconds": 550
+        },
+        {
+          "name": "reset",
+          "milliseconds": 2626
+        },
+        {
+          "name": "selected-for-burst",
+          "milliseconds": 194
+        },
+        {
+          "name": "reentrant-burst-drained",
+          "milliseconds": 5237
+        },
+        {
+          "name": "final-reset",
+          "milliseconds": 1398
+        }
+      ],
+      "max_state_ms": 5237,
+      "over_legacy_5000ms_states": [
+        {
+          "name": "reentrant-burst-drained",
+          "milliseconds": 5237
+        }
+      ],
+      "max_notification_ms": 2476.822,
+      "max_synchronous_update_ms": 2677.893,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": true,
+      "clean_exit": true,
+      "failures": [],
+      "seconds": 24.36,
+      "measurement_only": false,
+      "expanded_coverage": true,
+      "state_budget_ms": 10000,
+      "process_budget_seconds": 45,
+      "extended": false,
+      "reentrant": true,
+      "exit": 0
+    },
+    "original-input/Debug/classic": {
+      "log_sha256": "2eb7f28067f919147ce4b71412a21995e842e16417c31b8c913fa90f15bc3160",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 599
+        },
+        {
+          "name": "filtered",
+          "milliseconds": 498
+        },
+        {
+          "name": "budget-filtered",
+          "milliseconds": 376
+        },
+        {
+          "name": "selected",
+          "milliseconds": 13
+        },
+        {
+          "name": "empty-cleared",
+          "milliseconds": 227
+        },
+        {
+          "name": "reset",
+          "milliseconds": 920
+        },
+        {
+          "name": "zoomed",
+          "milliseconds": 26
+        },
+        {
+          "name": "panned",
+          "milliseconds": 5
+        },
+        {
+          "name": "recentered",
+          "milliseconds": 43
+        },
+        {
+          "name": "all-prices",
+          "milliseconds": 152
+        }
+      ],
+      "max_state_ms": 920,
+      "over_legacy_5000ms_states": [],
+      "max_notification_ms": 455.581,
+      "max_synchronous_update_ms": 845.725,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": true,
+      "clean_exit": true,
+      "failures": [],
+      "seconds": 7.42,
+      "measurement_only": false,
+      "expanded_coverage": false,
+      "state_budget_ms": 5000,
+      "process_budget_seconds": 25,
+      "extended": false,
+      "reentrant": false,
+      "exit": 0
+    },
+    "original-input/Debug/extended": {
+      "log_sha256": "19fcddcdde0f6fa05a1ce8cc5bad9e76d9cc5a779ac9dac939129c04983b8b2e",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 662
+        },
+        {
+          "name": "full",
+          "milliseconds": 1047
+        },
+        {
+          "name": "subset",
+          "milliseconds": 560
+        },
+        {
+          "name": "different",
+          "milliseconds": 323
+        },
+        {
+          "name": "empty",
+          "milliseconds": 116
+        },
+        {
+          "name": "reset",
+          "milliseconds": 590
+        },
+        {
+          "name": "full-restored",
+          "milliseconds": 143
+        },
+        {
+          "name": "selected",
+          "milliseconds": 41
+        },
+        {
+          "name": "hidden-selection-cleared",
+          "milliseconds": 497
+        },
+        {
+          "name": "full-again",
+          "milliseconds": 830
+        },
+        {
+          "name": "repeat-subset",
+          "milliseconds": 433
+        },
+        {
+          "name": "repeat-different",
+          "milliseconds": 369
+        },
+        {
+          "name": "repeat-full",
+          "milliseconds": 948
+        },
+        {
+          "name": "zoomed",
+          "milliseconds": 22
+        },
+        {
+          "name": "panned",
+          "milliseconds": 50
+        },
+        {
+          "name": "recentered",
+          "milliseconds": 84
+        }
+      ],
+      "max_state_ms": 1047,
+      "over_legacy_5000ms_states": [],
+      "max_notification_ms": 734.846,
+      "max_synchronous_update_ms": 814.399,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": true,
+      "clean_exit": true,
+      "failures": [],
+      "seconds": 10.65,
+      "measurement_only": false,
+      "expanded_coverage": false,
+      "state_budget_ms": 5000,
+      "process_budget_seconds": 45,
+      "extended": true,
+      "reentrant": false,
+      "exit": 0
+    },
+    "original-input/Debug/reentrant": {
+      "log_sha256": "8deed2f060c8a13a1303d5accf4e8b1b06f34279e6bfc5d3f3e2e8843fd20719",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 668
+        },
+        {
+          "name": "selected-retained-address",
+          "milliseconds": 186
+        },
+        {
+          "name": "selected-in-town",
+          "milliseconds": 459
+        },
+        {
+          "name": "hidden-transaction-cleared",
+          "milliseconds": 343
+        },
+        {
+          "name": "reset",
+          "milliseconds": 956
+        },
+        {
+          "name": "selected-for-burst",
+          "milliseconds": 33
+        },
+        {
+          "name": "reentrant-burst-drained",
+          "milliseconds": 1707
+        },
+        {
+          "name": "final-reset",
+          "milliseconds": 514
+        }
+      ],
+      "max_state_ms": 1707,
+      "over_legacy_5000ms_states": [],
+      "max_notification_ms": 771.86,
+      "max_synchronous_update_ms": 911.641,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": true,
+      "clean_exit": true,
+      "failures": [],
+      "seconds": 8.44,
+      "measurement_only": false,
+      "expanded_coverage": false,
+      "state_budget_ms": 5000,
+      "process_budget_seconds": 25,
+      "extended": false,
+      "reentrant": true,
+      "exit": 0
+    },
+    "expanded/Release/classic": {
+      "log_sha256": "a7a76f5e437ec90bf94be94d39f478f4e4c1b58f64afaa81d0143d21971e1ace",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 3785
+        },
+        {
+          "name": "filtered",
+          "milliseconds": 1200
+        },
+        {
+          "name": "budget-filtered",
+          "milliseconds": 645
+        },
+        {
+          "name": "selected",
+          "milliseconds": 14
+        },
+        {
+          "name": "empty-cleared",
+          "milliseconds": 332
+        },
+        {
+          "name": "reset",
+          "milliseconds": 2246
+        },
+        {
+          "name": "zoomed",
+          "milliseconds": 66
+        },
+        {
+          "name": "panned",
+          "milliseconds": 15
+        },
+        {
+          "name": "recentered",
+          "milliseconds": 131
+        },
+        {
+          "name": "all-prices",
+          "milliseconds": 560
+        }
+      ],
+      "max_state_ms": 3785,
+      "over_legacy_5000ms_states": [],
+      "max_notification_ms": 1773.214,
+      "max_synchronous_update_ms": 1944.123,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": true,
+      "clean_exit": true,
+      "failures": [],
+      "seconds": 16.8,
+      "measurement_only": false,
+      "expanded_coverage": true,
+      "state_budget_ms": 10000,
+      "process_budget_seconds": 45,
+      "extended": false,
+      "reentrant": false,
+      "exit": 0
+    },
+    "expanded/Release/extended": {
+      "log_sha256": "e930c84f43bab727a2b15800ff5edcdd8090677a31b8cdad3301e3f6b891edfe",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 3505
+        },
+        {
+          "name": "full",
+          "milliseconds": 2530
+        },
+        {
+          "name": "subset",
+          "milliseconds": 1948
+        },
+        {
+          "name": "different",
+          "milliseconds": 701
+        },
+        {
+          "name": "empty",
+          "milliseconds": 264
+        },
+        {
+          "name": "reset",
+          "milliseconds": 3443
+        },
+        {
+          "name": "full-restored",
+          "milliseconds": 701
+        },
+        {
+          "name": "selected",
+          "milliseconds": 256
+        },
+        {
+          "name": "hidden-selection-cleared",
+          "milliseconds": 2359
+        },
+        {
+          "name": "full-again",
+          "milliseconds": 8030
+        },
+        {
+          "name": "repeat-subset",
+          "milliseconds": 2363
+        },
+        {
+          "name": "repeat-different",
+          "milliseconds": 747
+        },
+        {
+          "name": "repeat-full",
+          "milliseconds": 5033
+        },
+        {
+          "name": "zoomed",
+          "milliseconds": 103
+        },
+        {
+          "name": "panned",
+          "milliseconds": 130
+        },
+        {
+          "name": "recentered",
+          "milliseconds": 272
+        }
+      ],
+      "max_state_ms": 8030,
+      "over_legacy_5000ms_states": [
+        {
+          "name": "full-again",
+          "milliseconds": 8030
+        },
+        {
+          "name": "repeat-full",
+          "milliseconds": 5033
+        }
+      ],
+      "max_notification_ms": 6878.78,
+      "max_synchronous_update_ms": 7236.253,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": true,
+      "clean_exit": true,
+      "failures": [],
+      "seconds": 41.28,
+      "measurement_only": false,
+      "expanded_coverage": true,
+      "state_budget_ms": 10000,
+      "process_budget_seconds": 60,
+      "extended": true,
+      "reentrant": false,
+      "exit": 0
+    },
+    "expanded/Release/reentrant": {
+      "log_sha256": "2ac68bdbe939b184205a288787a6816394545432a22367dcf85ca3ca0c14e51a",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 3549
+        },
+        {
+          "name": "selected-retained-address",
+          "milliseconds": 1011
+        },
+        {
+          "name": "selected-in-town",
+          "milliseconds": 1537
+        },
+        {
+          "name": "hidden-transaction-cleared",
+          "milliseconds": 526
+        },
+        {
+          "name": "reset",
+          "milliseconds": 2369
+        },
+        {
+          "name": "selected-for-burst",
+          "milliseconds": 69
+        },
+        {
+          "name": "reentrant-burst-drained",
+          "milliseconds": 6262
+        },
+        {
+          "name": "final-reset",
+          "milliseconds": 1420
+        }
+      ],
+      "max_state_ms": 6262,
+      "over_legacy_5000ms_states": [
+        {
+          "name": "reentrant-burst-drained",
+          "milliseconds": 6262
+        }
+      ],
+      "max_notification_ms": 2753.874,
+      "max_synchronous_update_ms": 2933.808,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": true,
+      "clean_exit": true,
+      "failures": [],
+      "seconds": 25.36,
+      "measurement_only": false,
+      "expanded_coverage": true,
+      "state_budget_ms": 10000,
+      "process_budget_seconds": 45,
+      "extended": false,
+      "reentrant": true,
+      "exit": 0
+    },
+    "original-input/Release/classic": {
+      "log_sha256": "37b81b18d5e4ae218b2e7dd8efda2f7e0d7ad44f60d80794fbaa3674a2b82720",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 833
+        },
+        {
+          "name": "filtered",
+          "milliseconds": 588
+        },
+        {
+          "name": "budget-filtered",
+          "milliseconds": 374
+        },
+        {
+          "name": "selected",
+          "milliseconds": 40
+        },
+        {
+          "name": "empty-cleared",
+          "milliseconds": 242
+        },
+        {
+          "name": "reset",
+          "milliseconds": 1026
+        },
+        {
+          "name": "zoomed",
+          "milliseconds": 72
+        },
+        {
+          "name": "panned",
+          "milliseconds": 26
+        },
+        {
+          "name": "recentered",
+          "milliseconds": 37
+        },
+        {
+          "name": "all-prices",
+          "milliseconds": 233
+        }
+      ],
+      "max_state_ms": 1026,
+      "over_legacy_5000ms_states": [],
+      "max_notification_ms": 469.087,
+      "max_synchronous_update_ms": 913.006,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": true,
+      "clean_exit": true,
+      "failures": [],
+      "seconds": 8.38,
+      "measurement_only": false,
+      "expanded_coverage": false,
+      "state_budget_ms": 5000,
+      "process_budget_seconds": 25,
+      "extended": false,
+      "reentrant": false,
+      "exit": 0
+    },
+    "original-input/Release/extended": {
+      "log_sha256": "038fb19ad8d5873b7bf9d92d4634cceee161e278642f2f53474a812fc6e39190",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 706
+        },
+        {
+          "name": "full",
+          "milliseconds": 1034
+        },
+        {
+          "name": "subset",
+          "milliseconds": 552
+        },
+        {
+          "name": "different",
+          "milliseconds": 395
+        },
+        {
+          "name": "empty",
+          "milliseconds": 132
+        },
+        {
+          "name": "reset",
+          "milliseconds": 645
+        },
+        {
+          "name": "full-restored",
+          "milliseconds": 132
+        },
+        {
+          "name": "selected",
+          "milliseconds": 46
+        },
+        {
+          "name": "hidden-selection-cleared",
+          "milliseconds": 538
+        },
+        {
+          "name": "full-again",
+          "milliseconds": 1068
+        },
+        {
+          "name": "repeat-subset",
+          "milliseconds": 453
+        },
+        {
+          "name": "repeat-different",
+          "milliseconds": 360
+        },
+        {
+          "name": "repeat-full",
+          "milliseconds": 689
+        },
+        {
+          "name": "zoomed",
+          "milliseconds": 19
+        },
+        {
+          "name": "panned",
+          "milliseconds": 39
+        },
+        {
+          "name": "recentered",
+          "milliseconds": 104
+        }
+      ],
+      "max_state_ms": 1068,
+      "over_legacy_5000ms_states": [],
+      "max_notification_ms": 852.735,
+      "max_synchronous_update_ms": 917.746,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": true,
+      "clean_exit": true,
+      "failures": [],
+      "seconds": 10.56,
+      "measurement_only": false,
+      "expanded_coverage": false,
+      "state_budget_ms": 5000,
+      "process_budget_seconds": 45,
+      "extended": true,
+      "reentrant": false,
+      "exit": 0
+    },
+    "original-input/Release/reentrant": {
+      "log_sha256": "94df1c63f993a1c3acbe6688c5fd7bf0a66cb0160a3f8bbd230597c79b22f9b2",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 537
+        },
+        {
+          "name": "selected-retained-address",
+          "milliseconds": 155
+        },
+        {
+          "name": "selected-in-town",
+          "milliseconds": 429
+        },
+        {
+          "name": "hidden-transaction-cleared",
+          "milliseconds": 370
+        },
+        {
+          "name": "reset",
+          "milliseconds": 1023
+        },
+        {
+          "name": "selected-for-burst",
+          "milliseconds": 12
+        },
+        {
+          "name": "reentrant-burst-drained",
+          "milliseconds": 1360
+        },
+        {
+          "name": "final-reset",
+          "milliseconds": 495
+        }
+      ],
+      "max_state_ms": 1360,
+      "over_legacy_5000ms_states": [],
+      "max_notification_ms": 481.825,
+      "max_synchronous_update_ms": 946.733,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": true,
+      "clean_exit": true,
+      "failures": [],
+      "seconds": 8.14,
+      "measurement_only": false,
+      "expanded_coverage": false,
+      "state_budget_ms": 5000,
+      "process_budget_seconds": 25,
+      "extended": false,
+      "reentrant": true,
+      "exit": 0
+    }
+  },
+  "negative_runs": {
+    "canonical": {
+      "log_sha256": "200e2fceab49a24f1495b884f4e72c4be1d0578b21d75bed235b8c20094a2da7",
+      "steps": [],
+      "max_state_ms": 0,
+      "over_legacy_5000ms_states": [],
+      "max_notification_ms": 0,
+      "max_synchronous_update_ms": 0,
+      "forced_qml_gc_checks": 0,
+      "correctness_pass": false,
+      "clean_exit": true,
+      "failures": [
+        "HDB_GATE_FAIL state timeout phase 5"
+      ],
+      "exit": 1
+    },
+    "classic": {
+      "log_sha256": "f77c06cf84c7b131455cc520739f5a41b09b277f42218dd2e64e569e4c4ae4df",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 4231
+        },
+        {
+          "name": "filtered",
+          "milliseconds": 1436
+        },
+        {
+          "name": "budget-filtered",
+          "milliseconds": 541
+        },
+        {
+          "name": "selected",
+          "milliseconds": 15
+        }
+      ],
+      "max_state_ms": 4231,
+      "over_legacy_5000ms_states": [],
+      "max_notification_ms": 42.729,
+      "max_synchronous_update_ms": 106.907,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": false,
+      "clean_exit": true,
+      "failures": [
+        "HDB_GATE_FAIL scale phase 4 elapsed-ms=10021 budget-ms=10000 mapReady=true mapError=0 rows=6469 list=6469 delegates=294 expected=294 identities=true town=ANG MO KIO price=500000"
+      ],
+      "exit": 1
+    },
+    "extended": {
+      "log_sha256": "58a137aad87ffa9197b3c9de98578f5aaa9d0c409fce7705ecb2357ec83f373a",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 3339
+        },
+        {
+          "name": "full",
+          "milliseconds": 2436
+        },
+        {
+          "name": "subset",
+          "milliseconds": 1493
+        },
+        {
+          "name": "different",
+          "milliseconds": 588
+        }
+      ],
+      "max_state_ms": 3339,
+      "over_legacy_5000ms_states": [],
+      "max_notification_ms": 358.659,
+      "max_synchronous_update_ms": 658.288,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": false,
+      "clean_exit": true,
+      "failures": [
+        "HDB_GATE_FAIL scale phase 4 elapsed-ms=10023 budget-ms=10000 mapReady=true mapError=0 rows=12620 list=12620 delegates=197 expected=197 identities=true town=BEDOK price=1728000"
+      ],
+      "exit": 1
+    },
+    "reentrant": {
+      "log_sha256": "67cec2693d926fbad20a3c66aec1b11c1e207e06140852de279a185d346a8c46",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 3472
+        },
+        {
+          "name": "selected-retained-address",
+          "milliseconds": 1014
+        },
+        {
+          "name": "selected-in-town",
+          "milliseconds": 1523
+        },
+        {
+          "name": "hidden-transaction-cleared",
+          "milliseconds": 631
+        },
+        {
+          "name": "reset",
+          "milliseconds": 2072
+        },
+        {
+          "name": "selected-for-burst",
+          "milliseconds": 197
+        }
+      ],
+      "max_state_ms": 3472,
+      "over_legacy_5000ms_states": [],
+      "max_notification_ms": 1754.035,
+      "max_synchronous_update_ms": 1902.768,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": false,
+      "clean_exit": true,
+      "failures": [
+        "HDB_GATE_FAIL scale phase 6 elapsed-ms=10006 budget-ms=10000 mapReady=true mapError=0 rows=9441 list=9441 delegates=340 expected=340 identities=true town=ANG MO KIO price=1000000"
+      ],
+      "exit": 1
+    },
+    "old-classic": {
+      "log_sha256": "1a03558ccafb2600e1dc77109cfafaad70f78be907b0c1617505b7f4b6257f64",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 555
+        },
+        {
+          "name": "filtered",
+          "milliseconds": 490
+        },
+        {
+          "name": "budget-filtered",
+          "milliseconds": 367
+        },
+        {
+          "name": "selected",
+          "milliseconds": 14
+        }
+      ],
+      "max_state_ms": 555,
+      "over_legacy_5000ms_states": [],
+      "max_notification_ms": 39.104,
+      "max_synchronous_update_ms": 58.411,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": false,
+      "clean_exit": true,
+      "failures": [
+        "HDB_GATE_FAIL scale phase 4 elapsed-ms=5024 budget-ms=5000 mapReady=true mapError=0 rows=6469 list=6469 delegates=264 expected=264 identities=true town=ANG MO KIO price=500000"
+      ],
+      "exit": 1
+    },
+    "old-extended": {
+      "log_sha256": "da8c16b01c2da7d42eedf49131010b57e3e95a85b58bb1e95bbabca7fca2ecdb",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 608
+        },
+        {
+          "name": "full",
+          "milliseconds": 700
+        },
+        {
+          "name": "subset",
+          "milliseconds": 414
+        },
+        {
+          "name": "different",
+          "milliseconds": 355
+        }
+      ],
+      "max_state_ms": 700,
+      "over_legacy_5000ms_states": [],
+      "max_notification_ms": 369.184,
+      "max_synchronous_update_ms": 474.822,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": false,
+      "clean_exit": true,
+      "failures": [
+        "HDB_GATE_FAIL scale phase 4 elapsed-ms=5023 budget-ms=5000 mapReady=true mapError=0 rows=12620 list=12620 delegates=25 expected=25 identities=true town=BEDOK price=1728000"
+      ],
+      "exit": 1
+    },
+    "old-reentrant": {
+      "log_sha256": "ee014d2fa3e164154c0dd4ee7f3f45b7888799f9b1699497a8da839d11075f94",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 530
+        },
+        {
+          "name": "selected-retained-address",
+          "milliseconds": 141
+        },
+        {
+          "name": "selected-in-town",
+          "milliseconds": 415
+        },
+        {
+          "name": "hidden-transaction-cleared",
+          "milliseconds": 361
+        },
+        {
+          "name": "reset",
+          "milliseconds": 1055
+        },
+        {
+          "name": "selected-for-burst",
+          "milliseconds": 14
+        }
+      ],
+      "max_state_ms": 1055,
+      "over_legacy_5000ms_states": [],
+      "max_notification_ms": 460.42,
+      "max_synchronous_update_ms": 952.508,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": false,
+      "clean_exit": true,
+      "failures": [
+        "HDB_GATE_FAIL scale phase 6 elapsed-ms=5005 budget-ms=5000 mapReady=true mapError=0 rows=9441 list=9441 delegates=279 expected=279 identities=true town=ANG MO KIO price=1000000"
+      ],
+      "exit": 1
+    }
+  },
+  "startup": {
+    "qml-shell": {
+      "seconds": 4.89094915700116,
+      "process_exit": 0,
+      "verified": true,
+      "view": "qml-shell",
+      "iteration": 1,
+      "stages": [
+        {
+          "Operation": "property-evidence",
+          "Milliseconds": 68.5503,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 4620080,
+          "ProcessAllocatedBytes": 4620080,
+          "ManagedBytes": 5428264,
+          "WorkingSetBytes": 152805376
+        },
+        {
+          "Operation": "postal-evidence",
+          "Milliseconds": 571.2506,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 204464272,
+          "ProcessAllocatedBytes": 204473960,
+          "ManagedBytes": 160832560,
+          "WorkingSetBytes": 360472576
+        },
+        {
+          "Operation": "footprint-file-read",
+          "Milliseconds": 40.0229,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 57013400,
+          "ProcessAllocatedBytes": 57013400,
+          "ManagedBytes": 217852888,
+          "WorkingSetBytes": 417542144
+        },
+        {
+          "Operation": "footprint-json",
+          "Milliseconds": 408.2392,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 67118032,
+          "ProcessAllocatedBytes": 67119352,
+          "ManagedBytes": 218343096,
+          "WorkingSetBytes": 472371200
+        },
+        {
+          "Operation": "footprints",
+          "Milliseconds": 461.5314,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 10981256,
+          "ProcessAllocatedBytes": 10981256,
+          "ManagedBytes": 229364408,
+          "WorkingSetBytes": 483344384
+        },
+        {
+          "Operation": "evidence-index",
+          "Milliseconds": 534.6432,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 79439064,
+          "ProcessAllocatedBytes": 79440432,
+          "ManagedBytes": 242520720,
+          "WorkingSetBytes": 521175040
+        },
+        {
+          "Operation": "transaction-csv",
+          "Milliseconds": 346.4644,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 219390176,
+          "ProcessAllocatedBytes": 219391520,
+          "ManagedBytes": 351280848,
+          "WorkingSetBytes": 610070528
+        },
+        {
+          "Operation": "validation-facts",
+          "Milliseconds": 308.7848,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 41860088,
+          "ProcessAllocatedBytes": 41860088,
+          "ManagedBytes": 393219000,
+          "WorkingSetBytes": 647897088
+        },
+        {
+          "Operation": "matching-resolution",
+          "Milliseconds": 993.9689,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 185759032,
+          "ProcessAllocatedBytes": 185761696,
+          "ManagedBytes": 375921400,
+          "WorkingSetBytes": 777650176
+        },
+        {
+          "Operation": "transaction-domain",
+          "Milliseconds": 52.7679,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 35499464,
+          "ProcessAllocatedBytes": 35499464,
+          "ManagedBytes": 258584184,
+          "WorkingSetBytes": 761106432
+        },
+        {
+          "Operation": "import-return",
+          "Milliseconds": 0.1088,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 976,
+          "ProcessAllocatedBytes": 976,
+          "ManagedBytes": 258584184,
+          "WorkingSetBytes": 761106432
+        },
+        {
+          "Operation": "town-labels",
+          "Milliseconds": 44.4737,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 5328,
+          "ProcessAllocatedBytes": 5328,
+          "ManagedBytes": 258592408,
+          "WorkingSetBytes": 761249792
+        },
+        {
+          "Operation": "state-construction",
+          "Milliseconds": 37.1651,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 7865272,
+          "ProcessAllocatedBytes": 7865272,
+          "ManagedBytes": 266463224,
+          "WorkingSetBytes": 761307136
+        },
+        {
+          "Operation": "map-aggregation",
+          "Milliseconds": 172.1362,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 37282816,
+          "ProcessAllocatedBytes": 37282816,
+          "ManagedBytes": 303852640,
+          "WorkingSetBytes": 761405440
+        },
+        {
+          "Operation": "map-model-population",
+          "Milliseconds": 0.3104,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 61856,
+          "ProcessAllocatedBytes": 61856,
+          "ManagedBytes": 303921856,
+          "WorkingSetBytes": 761405440
+        },
+        {
+          "Operation": "models-constructed",
+          "Milliseconds": 0.0373,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 848,
+          "ProcessAllocatedBytes": 848,
+          "ManagedBytes": 303921856,
+          "WorkingSetBytes": 761405440
+        },
+        {
+          "Operation": "qml-ready-qml-shell",
+          "Milliseconds": 126.788,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 18320,
+          "ProcessAllocatedBytes": 18320,
+          "ManagedBytes": 303946528,
+          "WorkingSetBytes": 802439168
+        },
+        {
+          "Operation": "diagnostic-retained-native",
+          "Milliseconds": 308.5354,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 1128,
+          "ProcessAllocatedBytes": 1128,
+          "ManagedBytes": 225601584,
+          "WorkingSetBytes": 649981952
+        }
+      ],
+      "ready_record": "HDB_STARTUP_READY view=qml-shell rows=241920 markers=7618 sidebar-role-reads=0 map-role-reads=0",
+      "log_sha256": "2a1a62725e2051d840af807e45a3d86a9417cc909f3283b2466e83b2a7455c72"
+    },
+    "map-shell": {
+      "seconds": 5.340991944001871,
+      "process_exit": 0,
+      "verified": true,
+      "view": "map-shell",
+      "iteration": 1,
+      "stages": [
+        {
+          "Operation": "property-evidence",
+          "Milliseconds": 67.7559,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 4620016,
+          "ProcessAllocatedBytes": 4620016,
+          "ManagedBytes": 5428368,
+          "WorkingSetBytes": 161083392
+        },
+        {
+          "Operation": "postal-evidence",
+          "Milliseconds": 575.4839,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 203956464,
+          "ProcessAllocatedBytes": 203990776,
+          "ManagedBytes": 160998488,
+          "WorkingSetBytes": 368467968
+        },
+        {
+          "Operation": "footprint-file-read",
+          "Milliseconds": 47.0302,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 57013400,
+          "ProcessAllocatedBytes": 57013400,
+          "ManagedBytes": 218010592,
+          "WorkingSetBytes": 425537536
+        },
+        {
+          "Operation": "footprint-json",
+          "Milliseconds": 407.8095,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 67118032,
+          "ProcessAllocatedBytes": 67119352,
+          "ManagedBytes": 218340688,
+          "WorkingSetBytes": 480309248
+        },
+        {
+          "Operation": "footprints",
+          "Milliseconds": 466.996,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 10981256,
+          "ProcessAllocatedBytes": 10981256,
+          "ManagedBytes": 229358736,
+          "WorkingSetBytes": 491319296
+        },
+        {
+          "Operation": "evidence-index",
+          "Milliseconds": 573.4107,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 79439056,
+          "ProcessAllocatedBytes": 79440424,
+          "ManagedBytes": 242053208,
+          "WorkingSetBytes": 529604608
+        },
+        {
+          "Operation": "transaction-csv",
+          "Milliseconds": 338.8023,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 219389992,
+          "ProcessAllocatedBytes": 219391336,
+          "ManagedBytes": 352667480,
+          "WorkingSetBytes": 618917888
+        },
+        {
+          "Operation": "validation-facts",
+          "Milliseconds": 298.7725,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 41860088,
+          "ProcessAllocatedBytes": 41860088,
+          "ManagedBytes": 394597336,
+          "WorkingSetBytes": 656605184
+        },
+        {
+          "Operation": "matching-resolution",
+          "Milliseconds": 1026.1199,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 185750752,
+          "ProcessAllocatedBytes": 185753416,
+          "ManagedBytes": 224751864,
+          "WorkingSetBytes": 769638400
+        },
+        {
+          "Operation": "transaction-domain",
+          "Milliseconds": 16.7002,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 35499472,
+          "ProcessAllocatedBytes": 35499472,
+          "ManagedBytes": 260351984,
+          "WorkingSetBytes": 769634304
+        },
+        {
+          "Operation": "import-return",
+          "Milliseconds": 0.0945,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 976,
+          "ProcessAllocatedBytes": 976,
+          "ManagedBytes": 260351984,
+          "WorkingSetBytes": 769634304
+        },
+        {
+          "Operation": "town-labels",
+          "Milliseconds": 23.0433,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 5328,
+          "ProcessAllocatedBytes": 5328,
+          "ManagedBytes": 260360208,
+          "WorkingSetBytes": 769757184
+        },
+        {
+          "Operation": "state-construction",
+          "Milliseconds": 32.1413,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 7865272,
+          "ProcessAllocatedBytes": 7865272,
+          "ManagedBytes": 268231024,
+          "WorkingSetBytes": 769814528
+        },
+        {
+          "Operation": "map-aggregation",
+          "Milliseconds": 163.7895,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 37282816,
+          "ProcessAllocatedBytes": 37282816,
+          "ManagedBytes": 305620072,
+          "WorkingSetBytes": 769953792
+        },
+        {
+          "Operation": "map-model-population",
+          "Milliseconds": 0.2339,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 61856,
+          "ProcessAllocatedBytes": 61856,
+          "ManagedBytes": 305689288,
+          "WorkingSetBytes": 769953792
+        },
+        {
+          "Operation": "models-constructed",
+          "Milliseconds": 0.0335,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 848,
+          "ProcessAllocatedBytes": 848,
+          "ManagedBytes": 305689288,
+          "WorkingSetBytes": 769953792
+        },
+        {
+          "Operation": "qml-ready-map-shell",
+          "Milliseconds": 334.7427,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 834368,
+          "ProcessAllocatedBytes": 834368,
+          "ManagedBytes": 306529488,
+          "WorkingSetBytes": 840921088
+        },
+        {
+          "Operation": "diagnostic-retained-native",
+          "Milliseconds": 467.2477,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 1136,
+          "ProcessAllocatedBytes": 1136,
+          "ManagedBytes": 225822784,
+          "WorkingSetBytes": 688562176
+        }
+      ],
+      "ready_record": "HDB_STARTUP_READY view=map-shell rows=241920 markers=7618 sidebar-role-reads=40 map-role-reads=0",
+      "log_sha256": "366ce5c7f098ab59b36bf940cd291edb2410564c57b80443576635f0efa398e7"
+    },
+    "full": {
+      "seconds": 8.436546080003609,
+      "process_exit": 0,
+      "verified": true,
+      "view": "full",
+      "iteration": 1,
+      "stages": [
+        {
+          "Operation": "property-evidence",
+          "Milliseconds": 66.6202,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 4619696,
+          "ProcessAllocatedBytes": 4619696,
+          "ManagedBytes": 5428528,
+          "WorkingSetBytes": 160952320
+        },
+        {
+          "Operation": "postal-evidence",
+          "Milliseconds": 571.9787,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 203707472,
+          "ProcessAllocatedBytes": 203717160,
+          "ManagedBytes": 160071832,
+          "WorkingSetBytes": 367689728
+        },
+        {
+          "Operation": "footprint-file-read",
+          "Milliseconds": 42.1282,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 57013400,
+          "ProcessAllocatedBytes": 57013400,
+          "ManagedBytes": 217083936,
+          "WorkingSetBytes": 424751104
+        },
+        {
+          "Operation": "footprint-json",
+          "Milliseconds": 417.9983,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 67118032,
+          "ProcessAllocatedBytes": 67119352,
+          "ManagedBytes": 218343384,
+          "WorkingSetBytes": 479506432
+        },
+        {
+          "Operation": "footprints",
+          "Milliseconds": 471.0291,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 11040584,
+          "ProcessAllocatedBytes": 11040584,
+          "ManagedBytes": 229425880,
+          "WorkingSetBytes": 490590208
+        },
+        {
+          "Operation": "evidence-index",
+          "Milliseconds": 504.1249,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 79439064,
+          "ProcessAllocatedBytes": 79440432,
+          "ManagedBytes": 241851808,
+          "WorkingSetBytes": 529117184
+        },
+        {
+          "Operation": "transaction-csv",
+          "Milliseconds": 341.5275,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 219390008,
+          "ProcessAllocatedBytes": 219391352,
+          "ManagedBytes": 351711264,
+          "WorkingSetBytes": 617988096
+        },
+        {
+          "Operation": "validation-facts",
+          "Milliseconds": 304.2393,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 41860088,
+          "ProcessAllocatedBytes": 41860088,
+          "ManagedBytes": 393641184,
+          "WorkingSetBytes": 655765504
+        },
+        {
+          "Operation": "matching-resolution",
+          "Milliseconds": 1081.9131,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 185579072,
+          "ProcessAllocatedBytes": 185581736,
+          "ManagedBytes": 276302744,
+          "WorkingSetBytes": 774041600
+        },
+        {
+          "Operation": "transaction-domain",
+          "Milliseconds": 20.0853,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 35499472,
+          "ProcessAllocatedBytes": 35499472,
+          "ManagedBytes": 260137240,
+          "WorkingSetBytes": 771600384
+        },
+        {
+          "Operation": "import-return",
+          "Milliseconds": 0.1419,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 976,
+          "ProcessAllocatedBytes": 976,
+          "ManagedBytes": 260137240,
+          "WorkingSetBytes": 771600384
+        },
+        {
+          "Operation": "town-labels",
+          "Milliseconds": 29.7271,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 5328,
+          "ProcessAllocatedBytes": 5328,
+          "ManagedBytes": 260145464,
+          "WorkingSetBytes": 771719168
+        },
+        {
+          "Operation": "state-construction",
+          "Milliseconds": 35.3915,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 7865264,
+          "ProcessAllocatedBytes": 7865264,
+          "ManagedBytes": 268016280,
+          "WorkingSetBytes": 771776512
+        },
+        {
+          "Operation": "map-aggregation",
+          "Milliseconds": 176.6074,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 37282816,
+          "ProcessAllocatedBytes": 37282816,
+          "ManagedBytes": 305405320,
+          "WorkingSetBytes": 771883008
+        },
+        {
+          "Operation": "map-model-population",
+          "Milliseconds": 0.2698,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 61856,
+          "ProcessAllocatedBytes": 61856,
+          "ManagedBytes": 305474536,
+          "WorkingSetBytes": 771883008
+        },
+        {
+          "Operation": "models-constructed",
+          "Milliseconds": 0.043,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 848,
+          "ProcessAllocatedBytes": 848,
+          "ManagedBytes": 305474536,
+          "WorkingSetBytes": 771883008
+        },
+        {
+          "Operation": "qml-ready-full",
+          "Milliseconds": 2896.2079,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 143236240,
+          "ProcessAllocatedBytes": 143237296,
+          "ManagedBytes": 343811168,
+          "WorkingSetBytes": 1188954112
+        },
+        {
+          "Operation": "diagnostic-retained-native",
+          "Milliseconds": 241.9485,
+          "ManagedThreadId": 4,
+          "ThreadAllocatedBytes": 1144,
+          "ProcessAllocatedBytes": 1144,
+          "ManagedBytes": 225847784,
+          "WorkingSetBytes": 1083478016
+        }
+      ],
+      "ready_record": "HDB_STARTUP_READY view=full rows=241920 markers=7618 sidebar-role-reads=40 map-role-reads=53326",
+      "log_sha256": "eab1dbec1c684ce6e9b5c1138f2ea215f86e1d755b093a05f40539a384e90a3d"
+    }
+  },
+  "files": {
+    "m9-accepted-build-Debug.exit": {
+      "exit": 0,
+      "log_sha256": "7b86bb60db064fd0ae524d256c498b5e914c672b51f1a4c0f4787efa02c6585e"
+    },
+    "m9-accepted-tests-Debug.exit": {
+      "exit": 0,
+      "log_sha256": "4900c653ff12e949bb044ab261dc2c56d33c37e2c4f0606895d6bee5675715bf"
+    },
+    "m9-accepted-canonical-Debug.exit": {
+      "exit": 0,
+      "log_sha256": "33db14e6bbec79e9d28dea84151675aee6595c2aeb289c1e4d225e32cb767d8b"
+    },
+    "m9-accepted-build-Release.exit": {
+      "exit": 0,
+      "log_sha256": "158921d083afbae701390a82d184de77b58169e13e4464a678c7c14f09146a76"
+    },
+    "m9-accepted-tests-Release.exit": {
+      "exit": 0,
+      "log_sha256": "8883b2a630164f4030bae5f1b16c406fdb5a08aaabd5a44f600e8b115c1491c2"
+    },
+    "m9-accepted-canonical-Release.exit": {
+      "exit": 0,
+      "log_sha256": "33db14e6bbec79e9d28dea84151675aee6595c2aeb289c1e4d225e32cb767d8b"
+    },
+    "m9-accepted-416.exit": {
+      "exit": 0
+    },
+    "m9-accepted-m5.exit": {
+      "exit": 0
+    },
+    "m9-accepted-full.exit": {
+      "exit": 0
+    },
+    "m9-accepted-preservation.exit": {
+      "exit": 0
+    },
+    "m9-accepted-python.exit": {
+      "exit": 0
+    },
+    "m9-accepted-native-profile.exit": {
+      "exit": 0
+    },
+    "m9-accepted-startup-suite.exit": {
+      "exit": 0
+    },
+    "m9-accepted-import-digest.exit": {
+      "exit": 0
+    }
+  },
+  "frozen_m5_report_sha256": "d76614762c351eb121d3dd11ed03658e53daae1a5feeae36809a029b7e62d4be",
+  "complete_import_digest": "88118bdb3a9a68f59ea47cddae27568623f136cb7b7d5320a376f8f752dc6cc5",
+  "calibration": {
+    "m9-cost-extended-Debug-1": {
+      "log_sha256": "edd4fb0f32f4a043c408e7c5e6c5042f941d24d9a7c03424b6fbbce9dcde14f5",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 2817
+        },
+        {
+          "name": "full",
+          "milliseconds": 1692
+        },
+        {
+          "name": "subset",
+          "milliseconds": 1583
+        },
+        {
+          "name": "different",
+          "milliseconds": 615
+        },
+        {
+          "name": "empty",
+          "milliseconds": 205
+        },
+        {
+          "name": "reset",
+          "milliseconds": 3529
+        },
+        {
+          "name": "full-restored",
+          "milliseconds": 777
+        },
+        {
+          "name": "selected",
+          "milliseconds": 393
+        },
+        {
+          "name": "hidden-selection-cleared",
+          "milliseconds": 2089
+        },
+        {
+          "name": "full-again",
+          "milliseconds": 5638
+        },
+        {
+          "name": "repeat-subset",
+          "milliseconds": 2156
+        },
+        {
+          "name": "repeat-different",
+          "milliseconds": 758
+        },
+        {
+          "name": "repeat-full",
+          "milliseconds": 4840
+        },
+        {
+          "name": "zoomed",
+          "milliseconds": 190
+        },
+        {
+          "name": "panned",
+          "milliseconds": 135
+        },
+        {
+          "name": "recentered",
+          "milliseconds": 509
+        }
+      ],
+      "max_state_ms": 5638,
+      "over_legacy_5000ms_states": [
+        {
+          "name": "full-again",
+          "milliseconds": 5638
+        }
+      ],
+      "max_notification_ms": 4655.546,
+      "max_synchronous_update_ms": 4831.304,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": true,
+      "clean_exit": true,
+      "failures": [],
+      "seconds": 38.09,
+      "measurement_only": true,
+      "extended": true,
+      "reentrant": false
+    },
+    "m9-cost-extended-Debug-2": {
+      "log_sha256": "cfcb64ecd690bb076872fed712c16509a7bd4c12a82620830a1692aafe4694f0",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 2685
+        },
+        {
+          "name": "full",
+          "milliseconds": 1883
+        },
+        {
+          "name": "subset",
+          "milliseconds": 1506
+        },
+        {
+          "name": "different",
+          "milliseconds": 691
+        },
+        {
+          "name": "empty",
+          "milliseconds": 185
+        },
+        {
+          "name": "reset",
+          "milliseconds": 5249
+        },
+        {
+          "name": "full-restored",
+          "milliseconds": 1104
+        },
+        {
+          "name": "selected",
+          "milliseconds": 565
+        },
+        {
+          "name": "hidden-selection-cleared",
+          "milliseconds": 2359
+        },
+        {
+          "name": "full-again",
+          "milliseconds": 4621
+        },
+        {
+          "name": "repeat-subset",
+          "milliseconds": 2217
+        },
+        {
+          "name": "repeat-different",
+          "milliseconds": 765
+        },
+        {
+          "name": "repeat-full",
+          "milliseconds": 4397
+        },
+        {
+          "name": "zoomed",
+          "milliseconds": 71
+        },
+        {
+          "name": "panned",
+          "milliseconds": 101
+        },
+        {
+          "name": "recentered",
+          "milliseconds": 500
+        }
+      ],
+      "max_state_ms": 5249,
+      "over_legacy_5000ms_states": [
+        {
+          "name": "reset",
+          "milliseconds": 5249
+        }
+      ],
+      "max_notification_ms": 4375.576,
+      "max_synchronous_update_ms": 4620.328,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": true,
+      "clean_exit": true,
+      "failures": [],
+      "seconds": 39.57,
+      "measurement_only": true,
+      "extended": true,
+      "reentrant": false
+    },
+    "m9-cost-extended-Release-1": {
+      "log_sha256": "f5abd266cbd7e1a3edbfc49ac4a1d6f824626f2f8423113813f0bde1517973c9",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 3261
+        },
+        {
+          "name": "full",
+          "milliseconds": 2266
+        },
+        {
+          "name": "subset",
+          "milliseconds": 1578
+        },
+        {
+          "name": "different",
+          "milliseconds": 609
+        },
+        {
+          "name": "empty",
+          "milliseconds": 213
+        },
+        {
+          "name": "reset",
+          "milliseconds": 3258
+        },
+        {
+          "name": "full-restored",
+          "milliseconds": 728
+        },
+        {
+          "name": "selected",
+          "milliseconds": 459
+        },
+        {
+          "name": "hidden-selection-cleared",
+          "milliseconds": 2248
+        },
+        {
+          "name": "full-again",
+          "milliseconds": 4906
+        },
+        {
+          "name": "repeat-subset",
+          "milliseconds": 2373
+        },
+        {
+          "name": "repeat-different",
+          "milliseconds": 759
+        },
+        {
+          "name": "repeat-full",
+          "milliseconds": 3831
+        },
+        {
+          "name": "zoomed",
+          "milliseconds": 66
+        },
+        {
+          "name": "panned",
+          "milliseconds": 100
+        },
+        {
+          "name": "recentered",
+          "milliseconds": 464
+        }
+      ],
+      "max_state_ms": 4906,
+      "over_legacy_5000ms_states": [],
+      "max_notification_ms": 3987.849,
+      "max_synchronous_update_ms": 4143.284,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": true,
+      "clean_exit": true,
+      "failures": [],
+      "seconds": 37.97,
+      "measurement_only": true,
+      "extended": true,
+      "reentrant": false
+    },
+    "m9-cost-extended-Release-2": {
+      "log_sha256": "44be7f079d83987a1312012726f6aef37efdc9ae948efbd9bfdc983b2707e363",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 4210
+        },
+        {
+          "name": "full",
+          "milliseconds": 2671
+        },
+        {
+          "name": "subset",
+          "milliseconds": 1956
+        },
+        {
+          "name": "different",
+          "milliseconds": 908
+        },
+        {
+          "name": "empty",
+          "milliseconds": 255
+        },
+        {
+          "name": "reset",
+          "milliseconds": 3496
+        },
+        {
+          "name": "full-restored",
+          "milliseconds": 842
+        },
+        {
+          "name": "selected",
+          "milliseconds": 410
+        },
+        {
+          "name": "hidden-selection-cleared",
+          "milliseconds": 2566
+        },
+        {
+          "name": "full-again",
+          "milliseconds": 6531
+        },
+        {
+          "name": "repeat-subset",
+          "milliseconds": 2274
+        },
+        {
+          "name": "repeat-different",
+          "milliseconds": 742
+        },
+        {
+          "name": "repeat-full",
+          "milliseconds": 7155
+        },
+        {
+          "name": "zoomed",
+          "milliseconds": 91
+        },
+        {
+          "name": "panned",
+          "milliseconds": 96
+        },
+        {
+          "name": "recentered",
+          "milliseconds": 444
+        }
+      ],
+      "max_state_ms": 7155,
+      "over_legacy_5000ms_states": [
+        {
+          "name": "full-again",
+          "milliseconds": 6531
+        },
+        {
+          "name": "repeat-full",
+          "milliseconds": 7155
+        }
+      ],
+      "max_notification_ms": 6257.386,
+      "max_synchronous_update_ms": 6510.367,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": true,
+      "clean_exit": true,
+      "failures": [],
+      "seconds": 45.26,
+      "measurement_only": true,
+      "extended": true,
+      "reentrant": false
+    },
+    "m9-cost-reentrant-Debug": {
+      "log_sha256": "1f6881bb069f690c59512696b467cc780c5f76f175358db8f5ab61b52d2db272",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 3469
+        },
+        {
+          "name": "selected-retained-address",
+          "milliseconds": 449
+        },
+        {
+          "name": "selected-in-town",
+          "milliseconds": 2301
+        },
+        {
+          "name": "hidden-transaction-cleared",
+          "milliseconds": 595
+        },
+        {
+          "name": "reset",
+          "milliseconds": 2353
+        },
+        {
+          "name": "selected-for-burst",
+          "milliseconds": 143
+        },
+        {
+          "name": "reentrant-burst-drained",
+          "milliseconds": 5562
+        },
+        {
+          "name": "final-reset",
+          "milliseconds": 1526
+        }
+      ],
+      "max_state_ms": 5562,
+      "over_legacy_5000ms_states": [
+        {
+          "name": "reentrant-burst-drained",
+          "milliseconds": 5562
+        }
+      ],
+      "max_notification_ms": 2351.842,
+      "max_synchronous_update_ms": 2558.834,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": true,
+      "clean_exit": true,
+      "failures": [],
+      "seconds": 27.83,
+      "measurement_only": true,
+      "extended": false,
+      "reentrant": true
+    },
+    "m9-cost-reentrant-Release": {
+      "log_sha256": "68a937a94dc9cb8124fbfb7e4dc5b931a2ee030537b5a8fcfb6b5209c6cbd659",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 4052
+        },
+        {
+          "name": "selected-retained-address",
+          "milliseconds": 235
+        },
+        {
+          "name": "selected-in-town",
+          "milliseconds": 1679
+        },
+        {
+          "name": "hidden-transaction-cleared",
+          "milliseconds": 601
+        },
+        {
+          "name": "reset",
+          "milliseconds": 2533
+        },
+        {
+          "name": "selected-for-burst",
+          "milliseconds": 34
+        },
+        {
+          "name": "reentrant-burst-drained",
+          "milliseconds": 6498
+        },
+        {
+          "name": "final-reset",
+          "milliseconds": 1610
+        }
+      ],
+      "max_state_ms": 6498,
+      "over_legacy_5000ms_states": [
+        {
+          "name": "reentrant-burst-drained",
+          "milliseconds": 6498
+        }
+      ],
+      "max_notification_ms": 3233.734,
+      "max_synchronous_update_ms": 3498.04,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": true,
+      "clean_exit": true,
+      "failures": [],
+      "seconds": 29.24,
+      "measurement_only": true,
+      "extended": false,
+      "reentrant": true
+    },
+    "m9-cost-strict-Release": {
+      "log_sha256": "476a7be45a2b0feb09202e5c0ef48ce88e0cccdf999894f887139306e3ac7d9f",
+      "steps": [
+        {
+          "name": "loaded",
+          "milliseconds": 3185
+        },
+        {
+          "name": "full",
+          "milliseconds": 1685
+        },
+        {
+          "name": "subset",
+          "milliseconds": 1459
+        },
+        {
+          "name": "different",
+          "milliseconds": 604
+        },
+        {
+          "name": "empty",
+          "milliseconds": 197
+        },
+        {
+          "name": "reset",
+          "milliseconds": 3449
+        },
+        {
+          "name": "full-restored",
+          "milliseconds": 796
+        },
+        {
+          "name": "selected",
+          "milliseconds": 424
+        },
+        {
+          "name": "hidden-selection-cleared",
+          "milliseconds": 1982
+        },
+        {
+          "name": "full-again",
+          "milliseconds": 5523
+        },
+        {
+          "name": "repeat-subset",
+          "milliseconds": 3133
+        },
+        {
+          "name": "repeat-different",
+          "milliseconds": 814
+        },
+        {
+          "name": "repeat-full",
+          "milliseconds": 4464
+        },
+        {
+          "name": "zoomed",
+          "milliseconds": 65
+        },
+        {
+          "name": "panned",
+          "milliseconds": 4
+        },
+        {
+          "name": "recentered",
+          "milliseconds": 454
+        }
+      ],
+      "max_state_ms": 5523,
+      "over_legacy_5000ms_states": [
+        {
+          "name": "full-again",
+          "milliseconds": 5523
+        }
+      ],
+      "max_notification_ms": 4233.559,
+      "max_synchronous_update_ms": 4396.934,
+      "forced_qml_gc_checks": 1,
+      "correctness_pass": true,
+      "clean_exit": true,
+      "failures": [],
+      "seconds": 38.59,
+      "measurement_only": false,
+      "extended": true,
+      "reentrant": false
+    }
+  }
+}

@@ -1,0 +1,10 @@
+qt.qpa.theme.gnome: dbus reply error: [ "org.freedesktop.DBus.Error.ServiceUnknown" ] "The name org.freedesktop.portal.Desktop was not provided by any .service files"
+qt.qpa.theme.gnome: dbus reply error: [ "org.freedesktop.DBus.Error.ServiceUnknown" ] "The name org.freedesktop.portal.Desktop was not provided by any .service files"
+HDB_SCALE_CONSTRUCT 4039 rows=236791 mapped=7615 managed=302828904 working=770633728
+HDB_SCALE_ORACLE 591
+HDB_NATIVE_MODEL_DESTROY ms=1791028089765 pointer=0x7ffce8b0a080
+HDB_NATIVE_MODEL_ROLES ms=1791028089898 pointer=0x7f7124059650 parent=(nil) ownership=1
+qml: HDB_GATE_FAIL scale phase 0 mapReady=true mapError=0 rows=236791 list=236791 delegates=3790 expected=7615 identities=false town=All towns price=1000000
+qml: HDB_MAP_DIAGNOSTIC {"key":"YISHUN|935|YISHUN CTRL 1","id":"HDB-221844","count":8,"address":"935 YISHUN CTRL 1","price":"8 transactions · median S$534,400 · latest 2025-06","latitude":1.4252874863,"longitude":103.8365963188,"expected":{"mapKey":"YISHUN|935|YISHUN CTRL 1","transactionId":"HDB-221844","transactionCount":8,"latitude":1.4252874863,"longitude":103.8365963188,"address":"935 YISHUN CTRL 1","priceLabel":"8 transactions · median S$534,400 · latest 2025-06"}}
+HDB_GATE_EXIT
+HDB_NATIVE_MODEL_DESTROY ms=1791028095600 pointer=0x7f7124059650

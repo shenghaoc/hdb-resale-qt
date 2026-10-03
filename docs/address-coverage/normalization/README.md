@@ -200,3 +200,9 @@ Completed review evidence: [review report](review.md), [required ledger](manual-
 [independent exact sample reproduction](sample-verification.json). The earlier
 238-address ordinary sample remains a separate record; it is not counted as64
 additional normalization cases or as exhaustive manual address validation.
+
+
+[Final Linux verification and measured responsiveness limits](../native/README.md)
+include the explicit 10-second expanded-only correctness budget, original strict
+small-workload gates, full startup/memory observations and the retained map-model
+ownership correction. A passing larger budget is not a performance fix.

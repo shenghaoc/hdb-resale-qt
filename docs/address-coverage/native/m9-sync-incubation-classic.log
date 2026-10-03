@@ -1,0 +1,12 @@
+qt.qpa.theme.gnome: dbus reply error: [ "org.freedesktop.DBus.Error.ServiceUnknown" ] "The name org.freedesktop.portal.Desktop was not provided by any .service files"
+qt.qpa.theme.gnome: dbus reply error: [ "org.freedesktop.DBus.Error.ServiceUnknown" ] "The name org.freedesktop.portal.Desktop was not provided by any .service files"
+HDB_SCALE_CONSTRUCT 4143 rows=236791 mapped=7615 managed=302454008 working=771579904
+HDB_SCALE_ORACLE 557
+qml: HDB_SCALE_STEP loaded ms=1804 rows=236791 delegates=7615 created=7615 destroyed=0 last-create-ms=-1 last-destroy-ms=-1 observed-ms=-1
+HDB_MAP_UPDATE strategy=incremental aggregate-ms=3.079 plan-ms=3.681 notifications-ms=0.190 before=7615 after=340 removed=7275 inserted=0 changed=0
+qml: HDB_MAP_OBSERVED revision=1 after-csharp-ms=3
+HDB_FILTER_STAGE revision=1 list-begin-ms=8.531 filter-ms=6.756 list-end-ms=3.204 property-notify-ms=25.844 total-ms=52.610
+HDB_SCALE_RESET 26 rows=9441 mapped=340
+qml: HDB_GATE_FAIL scale phase 1 mapReady=true mapError=0 rows=9441 list=9441 delegates=7615 expected=340 identities=false town=ANG MO KIO price=1000000
+qml: HDB_MAP_DIAGNOSTIC {"key":"ANG MO KIO|101|ANG MO KIO AVE 3","id":"HDB-222666","count":19,"address":"101 ANG MO KIO AVE 3","price":"19 transactions · median S$550,000 · latest 2026-08","latitude":1.3702454096,"longitude":103.8394651188,"expected":{"mapKey":"ANG MO KIO|101|ANG MO KIO AVE 3","transactionId":"HDB-222666","transactionCount":19,"latitude":1.3702454096,"longitude":103.8394651188,"address":"101 ANG MO KIO AVE 3","priceLabel":"19 transactions · median S$550,000 · latest 2026-08"}}
+HDB_GATE_EXIT
