@@ -1,3 +1,5 @@
+M6 full-corpus timings, memory and latest verification are recorded in [scale verification](scale/verification.md); the record below preserves the earlier milestone checks.
+
 # Milestone5 final history/publication check — 2026-10-03
 
 [Reachable-history audit](coverage/onemap/historical/history-audit.md) examined all

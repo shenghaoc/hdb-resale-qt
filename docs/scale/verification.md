@@ -92,6 +92,20 @@ unreachability of the previously excluded local object. Reviewed immutable
 HDB source-street substring collisions are narrowly pinned to their exact blobs.
 No raw cache data or matching private values are printed by the audit.
 
-Publication and exact-head Actions status are pending; no remote success is
-claimed in this record until verified. No tags, release, PR or history rewrite
-is part of this milestone.
+The implementation checkpoint `e9ddfe1c0ed3df222f4fe1af248d2fd68c12c15e`
+was pushed to `origin/milestone-6-scale` and fetched back with matching SHA.
+The complete pre-push audit covered 13 commits / 151 unique blobs / 91 paths,
+with zero issues and the excluded object unreachable. Exact-head
+[Actions run 37105028317](https://github.com/shenghaoc/hdb-resale-qt/actions/runs/37105028317)
+completed successfully: scoped Release domain/test build, all 46 C# tests, and
+all 13 Python tests. This proves Linux Qt-free checks, not Linux GUI support.
+
+The final documentation checkpoint will undergo the same audit and exact-head
+CI verification. Main remains at M5 `2a4a1e99429e1d9b83b3b827443df971c77a2409`
+while the required final desktop wrapping/budget recheck is blocked by the
+locked Mac. After manual unlock, physically verify the final Release app and
+budget above S$1m, close it cleanly, update this record, audit/push the branch,
+verify exact-head CI, then fetch and fast-forward main only if origin/main is
+still an ancestor. Audit again before main push and verify local main,
+origin/main and GitHub default HEAD match the final commit. No force push,
+tags, release, PR or unrelated history rewrite is part of this milestone.
