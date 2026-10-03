@@ -32,14 +32,15 @@ ApplicationWindow {
     Plugin {
         id: osm
         name: "osm"
-        // Qt's default remote provider currently selects key-gated Thunderforest tiles.
-        // Use the documented CustomMap endpoint for this small interactive fixture.
-        PluginParameter { name: "osm.mapping.custom.host"; value: "https://tile.openstreetmap.org/" }
-        PluginParameter { name: "osm.mapping.custom.datacopyright"; value: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'  }
-        PluginParameter { name: "osm.mapping.custom.mapcopyright"; value: "© OpenStreetMap" }
+        // OneMap's public 256px XYZ basemap. Qt appends %z/%x/%y.png to this prefix.
+        // Search/geocoding evidence and authentication are separate and unchanged.
+        PluginParameter { name: "osm.mapping.custom.host"; value: "https://www.onemap.gov.sg/maps/tiles/Default/" }
+        PluginParameter { name: "osm.mapping.custom.datacopyright"; value: "Singapore Land Authority" }
+        PluginParameter { name: "osm.mapping.custom.mapcopyright"; value: "OneMap" }
         PluginParameter { name: "osm.useragent"; value: "HdbResaleQt/0.1 (native fixture explorer)" }
         PluginParameter { name: "osm.mapping.providersrepository.disabled"; value: true }
         PluginParameter { name: "osm.mapping.prefetching_style"; value: "NoPrefetching" }
+        PluginParameter { name: "osm.mapping.cache.directory"; value: Resales.basemapCacheDirectory }
     }
 
     ColumnLayout {
@@ -96,15 +97,25 @@ ApplicationWindow {
                 Layout.preferredWidth: 800
                 Map {
                     id: map
+                    property int createdDelegates: 0
+                    property int destroyedDelegates: 0
+                    property double lastDelegateCreatedMs: 0
+                    property double lastDelegateDestroyedMs: 0
+                    property bool traceDelegates: Resales.scaleLifecycle
                     anchors.fill: parent
                     plugin: osm
                     activeMapType: supportedMapTypes[supportedMapTypes.length - 1]
                     center: QtPositioning.coordinate(1.3521, 103.8198)
                     zoomLevel: 11
+                    minimumZoomLevel: 11
                     maximumZoomLevel: 19
+                    // Exact official logo/text is provided by the always-visible overlay below.
+                    copyrightsVisible: false
                     MapItemView {
                         model: Resales.mapPoints
                         delegate: MapQuickItem {
+                            Component.onCompleted: if (map.traceDelegates) { map.createdDelegates++; map.lastDelegateCreatedMs = Date.now() }
+                            Component.onDestruction: if (map.traceDelegates) { map.destroyedDelegates++; map.lastDelegateDestroyedMs = Date.now() }
                             required property string transactionId
                             required property double latitude
                             required property double longitude
@@ -156,6 +167,27 @@ ApplicationWindow {
                             map.zoomLevel += event.angleDelta.y !== 0
                                 ? event.angleDelta.y / 960 : event.pixelDelta.y / 240
                             map.alignCoordinateToPoint(coordinate, point)
+                        }
+                    }
+                }
+                Rectangle {
+                    anchors.left: parent.left; anchors.bottom: parent.bottom
+                    width: attributionRow.implicitWidth + 12; height: 30
+                    color: "#f2ffffff"
+                    Row {
+                        id: attributionRow
+                        anchors.centerIn: parent
+                        spacing: 5
+                        Image {
+                            width: 43; height: 24; fillMode: Image.PreserveAspectFit
+                            source: "https://www.onemap.gov.sg/web-assets/images/logo/om_logo.png"
+                            Accessible.name: "OneMap logo"
+                        }
+                        Label {
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: '<a href="https://www.onemap.gov.sg/">OneMap</a> © contributors | <a href="https://www.sla.gov.sg/">Singapore Land Authority</a>'
+                            font.pixelSize: 11
+                            onLinkActivated: (link) => Qt.openUrlExternally(link)
                         }
                     }
                 }

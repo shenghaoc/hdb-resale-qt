@@ -9,25 +9,59 @@ Item {
     property int phase: 0
     property double started: Date.now()
     property string chosen: ""
+    property int priorCreated: 0
+    property int priorDestroyed: 0
+    property int observedRevision: Resales.mapRevision
+    property double observedMs: 0
+    onObservedRevisionChanged: {
+        observedMs = Date.now()
+        console.log("HDB_MAP_OBSERVED revision=" + observedRevision + " after-csharp-ms=" + (observedMs - Resales.lastFilterCompletedMs))
+    }
     visible: false
+    function identitiesAgree() {
+        const expected = JSON.parse(Resales.gateMapRowsJson)
+        const byKey = {}
+        for (const row of expected) byKey[row.mapKey] = row
+        const seen = {}
+        for (const item of targetMap.mapItems) {
+            const row = byKey[item.mapKey]
+            if (!row || seen[item.mapKey] || item.transactionId !== row.transactionId
+                || item.transactionCount !== row.transactionCount || item.address !== row.address
+                || item.priceLabel !== row.priceLabel || Math.abs(item.latitude-row.latitude)>1e-10
+                || Math.abs(item.longitude-row.longitude)>1e-10) return false
+            seen[item.mapKey] = true
+        }
+        return targetMap.mapItems.length === expected.length
+    }
     function ready(rows, mapped) {
         return Resales.visibleCount === rows && targetList.count === rows
             && targetMap.mapItems.length === mapped
             && townControl.currentIndex === Resales.townIndex
             && townControl.currentText === Resales.town
             && JSON.parse(Resales.townsJson)[Resales.townIndex] === Resales.town
-            && priceControl.value === Resales.maximumPrice
+            && priceControl.value === Resales.maximumPrice && identitiesAgree()
     }
     function advance(name) {
         console.log("HDB_SCALE_STEP " + name + " ms=" + (Date.now()-started)
-            + " rows=" + Resales.visibleCount + " delegates=" + targetMap.mapItems.length)
+            + " rows=" + Resales.visibleCount + " delegates=" + targetMap.mapItems.length
+            + " created=" + (targetMap.createdDelegates-priorCreated)
+            + " destroyed=" + (targetMap.destroyedDelegates-priorDestroyed)
+            + " last-create-ms=" + (targetMap.lastDelegateCreatedMs ? targetMap.lastDelegateCreatedMs-started : -1)
+            + " last-destroy-ms=" + (targetMap.lastDelegateDestroyedMs ? targetMap.lastDelegateDestroyedMs-started : -1)
+            + " observed-ms=" + (observedMs ? observedMs-started : -1))
+        priorCreated=targetMap.createdDelegates; priorDestroyed=targetMap.destroyedDelegates
         phase++; started=Date.now()
     }
     Timer {
         interval: 25; repeat: true; running: true
         onTriggered: {
-            if (Date.now()-started > 5000) {
-                console.error("HDB_GATE_FAIL scale phase " + phase); stop(); Qt.quit(); return
+            if (Date.now()-started > (Resales.scaleMeasurement ? 10000 : 5000)) {
+                console.error("HDB_GATE_FAIL scale phase " + phase + " mapReady=" + targetMap.mapReady + " mapError=" + targetMap.error + " rows=" + Resales.visibleCount + " list=" + targetList.count + " delegates=" + targetMap.mapItems.length + " expected=" + Resales.mappedCount + " identities=" + identitiesAgree() + " town=" + townControl.currentText + " price=" + priceControl.value)
+                if (targetMap.mapItems.length) {
+                    const item=targetMap.mapItems[0]; const rows=JSON.parse(Resales.gateMapRowsJson)
+                    console.log("HDB_MAP_DIAGNOSTIC " + JSON.stringify({key:item.mapKey,id:item.transactionId,count:item.transactionCount,address:item.address,price:item.priceLabel,latitude:item.latitude,longitude:item.longitude,expected:rows.find(r=>r.mapKey===item.mapKey)}))
+                }
+                targetMap.traceDelegates=false; stop(); Qt.quit(); return
             }
             switch (phase) {
             case 0:
@@ -59,7 +93,7 @@ Item {
                 advance("recentered"); Resales.setMaximumPrice(Resales.maximumAvailablePrice); break
             case 9:
                 if (!ready(Resales.gateAllCount, Resales.gateAllMapped)) return
-                advance("all-prices"); Resales.measureScaleHeap(); console.log("HDB_SCALE_PASS"); stop(); Qt.quit(); break
+                advance("all-prices"); Resales.measureScaleHeap(); console.log("HDB_SCALE_PASS"); targetMap.traceDelegates=false; stop(); Qt.quit(); break
             }
         }
     }
