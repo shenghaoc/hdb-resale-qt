@@ -24,6 +24,11 @@ ApplicationWindow {
         }
     }
 
+    Loader {
+        active: Resales.scaleGate
+        sourceComponent: Component { ScaleGate { targetMap: map; targetList: transactionsList } }
+    }
+
     Plugin {
         id: osm
         name: "osm"
@@ -47,15 +52,15 @@ ApplicationWindow {
             Label { text: "Town" }
             ComboBox {
                 id: townPicker
-                model: ["All towns", "ANG MO KIO", "CLEMENTI", "TAMPINES"]
-                currentIndex: model.indexOf(Resales.town)
+                model: JSON.parse(Resales.townsJson)
+                currentIndex: Resales.townIndex
                 onActivated: Resales.setTown(currentText)
                 Accessible.name: "Town filter"
             }
             Label { text: "Maximum price (S$)" }
             SpinBox {
                 id: pricePicker
-                from: 0; to: 1000000; stepSize: 50000
+                from: 0; to: Resales.maximumAvailablePrice; stepSize: 50000
                 value: Resales.maximumPrice
                 editable: true
                 onValueModified: Resales.setMaximumPrice(value)
@@ -69,11 +74,17 @@ ApplicationWindow {
             text: Resales.importSummary + ' <a href="https://data.gov.sg/open-data-licence">Singapore Open Data Licence</a>'
             onLinkActivated: (link) => Qt.openUrlExternally(link)
         }
-        Label {
+        Flickable {
+            id: diagnosticScroll
+            contentWidth: width
+            contentHeight: diagnosticText.implicitHeight
+            ScrollBar.vertical: ScrollBar {}
             visible: Resales.importDiagnostics.length > 0
-            text: Resales.importDiagnostics
-            wrapMode: Text.WordWrap
             Layout.fillWidth: true
+            Layout.preferredHeight: 72
+            Layout.maximumHeight: 72
+            clip: true
+            Label { id: diagnosticText; width: diagnosticScroll.width; text: Resales.importDiagnostics; wrapMode: Text.WordWrap }
         }
         RowLayout {
             Layout.fillWidth: true
@@ -99,17 +110,21 @@ ApplicationWindow {
                             required property double longitude
                             required property string priceLabel
                             required property string address
+                            required property string mapKey
+                            required property int transactionCount
+                            z: Resales.selectedMapKey === mapKey ? 1 : 0
                             coordinate: QtPositioning.coordinate(latitude, longitude)
                             anchorPoint.x: pin.width / 2
                             anchorPoint.y: pin.height / 2
                             sourceItem: Rectangle {
                                 id: pin
                                 width: 24; height: 24; radius: 12
-                                color: Resales.selectedId === transactionId ? "#e35b19" : "#1565c0"
+                                color: Resales.selectedMapKey === mapKey ? "#e35b19" : "#1565c0"
                                 border.color: "white"; border.width: 2
                                 Accessible.role: Accessible.Button
                                 Accessible.name: address + ", " + priceLabel
                                 Accessible.onPressAction: Resales.selectTransaction(transactionId)
+                                Text { anchors.centerIn: parent; text: transactionCount > 1 ? transactionCount : ""; color: "white"; font.pixelSize: 10 }
                                 TapHandler { onTapped: Resales.selectTransaction(transactionId) }
                             }
                         }
@@ -174,11 +189,16 @@ ApplicationWindow {
                 Layout.maximumWidth: 280
                 Layout.fillHeight: true
                 Label { text: "Selection"; font.bold: true }
-                Label {
-                    text: Resales.selectionDetails
-                    wrapMode: Text.WordWrap
+                Flickable {
+                    id: selectionScroll
+                    contentWidth: width
+                    contentHeight: selectionText.implicitHeight
+                    ScrollBar.vertical: ScrollBar {}
                     Layout.fillWidth: true
-                    Layout.minimumHeight: 90
+                    Layout.preferredHeight: 160
+                    Layout.maximumHeight: 160
+                    clip: true
+                    Label { id: selectionText; width: selectionScroll.width; text: Resales.selectionDetails; wrapMode: Text.WordWrap }
                 }
                 Label { text: "Visible transactions"; font.bold: true }
                 ListView {

@@ -1,0 +1,46 @@
+{
+  "algorithm": "hdb-m6-source-order-v1",
+  "retrieved_utc": "2026-10-03",
+  "transactions": 241920,
+  "limit": null,
+  "source_counts": {
+    "resales": 241920,
+    "properties": 13357,
+    "postals": 94785,
+    "buildings": 13436
+  },
+  "derived_bytes": {
+    "address-evidence.csv": 236846,
+    "building-evidence.geojson": 57012074,
+    "postal-address-evidence.csv": 165848,
+    "transactions.csv": 25511111
+  },
+  "sources": {
+    "resales": {
+      "dataset_id": "d_8b84c4ee58e3cfc0ece0d773c8ca6abc",
+      "url": "https://data.gov.sg/datasets/d_8b84c4ee58e3cfc0ece0d773c8ca6abc/view",
+      "sha256": "3c3d8bf9b12adb88919fa74869922fe05cdb144f5f69d93a0de4345d047cc7d4"
+    },
+    "properties": {
+      "dataset_id": "d_17f5382f26140b1fdae0ba2ef6239d2f",
+      "url": "https://data.gov.sg/datasets/d_17f5382f26140b1fdae0ba2ef6239d2f/view",
+      "sha256": "a6e3105d02c4b59929371d1f7e4f8c0ed7939cdc081701d7e9197790bb78f4b1"
+    },
+    "postals": {
+      "dataset_id": "d_3a3807c023c61ddfba947dc069eb53f2",
+      "url": "https://data.gov.sg/datasets/d_3a3807c023c61ddfba947dc069eb53f2/view",
+      "sha256": "a790f1a5082afcd6b5bad133f3949e3977e59cc8e33552897206b1e5f90cdab7"
+    },
+    "buildings": {
+      "dataset_id": "d_16b157c52ed637edd6ba1232e026258d",
+      "url": "https://data.gov.sg/datasets/d_16b157c52ed637edd6ba1232e026258d/view",
+      "sha256": "7c987511548de3a82da403cabca02702031e02ade8703a9e401417883dfeb702"
+    }
+  },
+  "derived_sha256": {
+    "address-evidence.csv": "dbca1d985aa1aee6108b995306368bb8948c0b3f6731e8570c831156403b9932",
+    "building-evidence.geojson": "7c987511548de3a82da403cabca02702031e02ade8703a9e401417883dfeb702",
+    "postal-address-evidence.csv": "71012996b5871fc3f234afa8a0f413c3f5dfac4f2b03dc1cc044dbbd2520f136",
+    "transactions.csv": "a0bad19233f321d3d045ea6f4fbad8d4b84432f1db8b4dc90f2e2d676c5217bb"
+  }
+}

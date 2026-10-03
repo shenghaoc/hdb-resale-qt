@@ -1,6 +1,6 @@
 # HDB resale native fixture explorer
 
-Milestone 5: a runnable native slice with a reproducible bounded coverage study,
+Milestone 6: a runnable native slice with a measured full-corpus scale path, a reproducible bounded coverage study,
 verified historical first-result postal experiment and native interaction gate on macOS
 arm64. This is the C#/Qt sibling of the
 [web HDB resale visualizer](https://github.com/shenghaoc/hdb-resale-visualizer);
@@ -117,7 +117,7 @@ The bridge singleton `Resales` derives from the documented `Qt.Bridge.Models.Mod
 exposes custom model roles and `INotifyPropertyChanged` properties, and handles
 filter/selection methods called by QML. Begin/end reset notifications surround
 C# model changes. `Resales.mapPoints` is a second bridge model containing only
-located visible transactions; the sidebar retains all visible accepted rows.
+located visible address summaries; the sidebar retains all visible accepted transactions.
 The model-valued property follows the official ColorPalette example.
 No business filtering or selection logic lives in QML JS;
 its JavaScript only forwards UI commands and manages map gestures/presentation.
@@ -199,7 +199,7 @@ Local transaction IDs and CSV source rows identify pinned snapshots only.
 Registration month is not an exact sale date. Polygon bounding-box midpoints
 may fall outside irregular shapes and never locate a flat. Current registered
 addresses/buildings can change; no historical certainty or full-data coverage
-is claimed. No full-history pipeline, online geocoder or database exists.
+is claimed. The full-corpus path is an explicit offline experiment; no online geocoder or database exists.
 
 The [bounded coverage study](docs/coverage/README.md) runs 416 stratified real
 transactions through unchanged M3 matching: 22 ExactAddress, 48
@@ -211,10 +211,13 @@ all failure source references were mechanically checked, with detailed manual
 review of 24 fixed-ranked missing representatives plus the one postal conflict.
 Normal startup still loads only the original six-row fixture.
 
-Next milestone: investigate an authoritative address/postal source and narrowly
-audited spelling rules against the fixed sample, preserving conflict handling
-and reporting before/after results. Linux/Windows validation and packaged
-distribution remain separate work.
+Milestone 6 measures the pinned 241,920-row corpus with unchanged conservative
+matching and a C# address-marker projection. See [scale results and reproduction](docs/scale/README.md)
+for cardinalities, stage timings, memory, native gates, the explicit offline data-directory
+override and limitations. Default startup remains the six-row fixture. M7 should profile
+transient loading memory and the measured map-ready workload before architecture
+or renderer changes. Linux/Windows GUI validation and packaged distribution remain
+separate work.
 
 ## Native runtime gate
 

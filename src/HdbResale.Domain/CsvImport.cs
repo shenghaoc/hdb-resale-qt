@@ -16,7 +16,7 @@ public sealed record ImportResult(IReadOnlyList<ResaleTransaction> Accepted,
 public static class CsvImport
 {
     private sealed record CsvRow(long Number, Dictionary<string, string> Fields, string[] Raw);
-    public static ImportResult LoadDirectory(string directory, IReadOnlyDictionary<string, OneMapSearch>? oneMapSearches = null, string? buildingEvidencePath = null, IReadOnlyDictionary<string, HistoricalPostalAssertion>? historicalAssertions = null)
+    public static ImportResult LoadDirectory(string directory, IReadOnlyDictionary<string, OneMapSearch>? oneMapSearches = null, string? buildingEvidencePath = null, IReadOnlyDictionary<string, HistoricalPostalAssertion>? historicalAssertions = null, Action<string>? stage = null, bool indexed = true)
     {
         var rejected = new List<RejectedRecord>();
         var diagnostics = new List<ImportDiagnostic>();
@@ -30,6 +30,7 @@ public static class CsvImport
                 Reject("address-evidence.csv", row, "Property source row, block and street are required.", rejected, diagnostics);
             else properties.Add(new(sourceRow, f["blk_no"], f["street"]));
         }
+        stage?.Invoke("property-evidence");
         var postalAddresses = new List<PostalAddress>();
         foreach (var row in Read(Path.Combine(directory, "postal-address-evidence.csv"),
             ["source_row", "block", "street_name", "postal_code"], rejected, diagnostics))
@@ -40,11 +41,21 @@ public static class CsvImport
                 Reject("postal-address-evidence.csv", row, "Postal source row, block, street and six-digit postal code are required.", rejected, diagnostics);
             else postalAddresses.Add(new(sourceRow, f["block"], f["street_name"], f["postal_code"]));
         }
+        stage?.Invoke("postal-evidence");
         var footprints = ReadFootprints(buildingEvidencePath ?? Path.Combine(directory, "building-evidence.geojson"), rejected, diagnostics);
+        stage?.Invoke("footprints");
+        var propertyIndex = properties.ToLookup(p => (AddressNormalizer.Block(p.Block), AddressNormalizer.Street(p.Street)));
+        var postalIndex = postalAddresses.ToLookup(p => (AddressNormalizer.Block(p.Block), AddressNormalizer.Street(p.Street)));
+        var footprintIndex = footprints.ToLookup(p => AddressNormalizer.Block(p.Identity.Block));
+        var matches = new Dictionary<(string Town, string Block, string Street), AddressMatch>();
+        stage?.Invoke("evidence-index");
         var accepted = new List<ResaleTransaction>();
         var ids = new HashSet<int>();
-        foreach (var row in Read(Path.Combine(directory, "transactions.csv"),
-            ["source_row", "month", "town", "flat_type", "block", "street_name", "resale_price"], rejected, diagnostics))
+        var transactionRows = Read(Path.Combine(directory, "transactions.csv"),
+            ["source_row", "month", "town", "flat_type", "block", "street_name", "resale_price"], rejected, diagnostics);
+        stage?.Invoke("transaction-csv");
+        var parsed = new List<(int SourceRow, TransactionFacts Facts)>();
+        foreach (var row in transactionRows)
         {
             var f = row.Fields;
             string? error = null;
@@ -58,16 +69,34 @@ public static class CsvImport
             else
             {
                 var facts = new TransactionFacts(month!, f["town"], f["block"], f["street_name"], f["flat_type"], price);
-                OneMapSearch? search = null;
-                oneMapSearches?.TryGetValue(OneMapEvidence.AddressKey(facts.Block,facts.Street), out search);
-                HistoricalPostalAssertion? historical = null;
-                historicalAssertions?.TryGetValue(HistoricalOneMap.Key(facts),out historical);
-                var match = AddressMatcher.Match(facts, properties, postalAddresses, footprints, search, historical);
-                var location = match.MatchedFootprint?.Location ?? new DerivedLocation(null, CoordinateQuality.Missing, match.Reason);
-                accepted.Add(new("HDB-" + sourceRow, facts, location, match));
+                parsed.Add((sourceRow, facts));
             }
             if (error is not null) Reject("transactions.csv", row, error, rejected, diagnostics);
         }
+        stage?.Invoke("validation-facts");
+        var resolved = new List<(int SourceRow, TransactionFacts Facts, DerivedLocation Location, AddressMatch Match)>();
+        foreach (var (sourceRow, facts) in parsed)
+        {
+            OneMapSearch? search = null;
+            oneMapSearches?.TryGetValue(OneMapEvidence.AddressKey(facts.Block,facts.Street), out search);
+            HistoricalPostalAssertion? historical = null;
+            historicalAssertions?.TryGetValue(HistoricalOneMap.Key(facts),out historical);
+            var key = (facts.Town, facts.Block, facts.Street);
+            if (!indexed || !matches.TryGetValue(key, out var match))
+            {
+                var addressKey = (AddressNormalizer.Block(facts.Block), AddressNormalizer.Street(facts.Street));
+                match = AddressMatcher.Match(facts,
+                    indexed ? propertyIndex[addressKey].ToArray() : properties,
+                    indexed ? postalIndex[addressKey].ToArray() : postalAddresses,
+                    indexed ? footprintIndex[addressKey.Item1].ToArray() : footprints, search, historical);
+                if (indexed) matches.Add(key, match);
+            }
+            var location = match.MatchedFootprint?.Location ?? new DerivedLocation(null, CoordinateQuality.Missing, match.Reason);
+            resolved.Add((sourceRow, facts, location, match));
+        }
+        stage?.Invoke("matching-resolution");
+        foreach (var row in resolved) accepted.Add(new("HDB-" + row.SourceRow, row.Facts, row.Location, row.Match));
+        stage?.Invoke("transaction-domain");
         return new(accepted.AsReadOnly(), rejected.AsReadOnly(), diagnostics.AsReadOnly());
     }
     private static bool PostalCode(string value) => value.Length == 6 && value.All(char.IsAsciiDigit);

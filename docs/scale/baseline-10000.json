@@ -1,0 +1,314 @@
+[
+  {
+    "Iteration": 0,
+    "Transactions": 10000,
+    "Addresses": 5276,
+    "Blocks": 1800,
+    "Towns": 26,
+    "FlatTypes": 6,
+    "Located": 2062,
+    "Ambiguous": 1,
+    "Unlocated": 7938,
+    "Rejected": 11,
+    "Diagnostics": 11,
+    "TransactionsPerAddress": {
+      "1": 2673,
+      "2": 1437,
+      "3": 676,
+      "4": 271,
+      "5": 114,
+      "6": 48,
+      "7": 23,
+      "8": 15,
+      "9": 8,
+      "10": 4,
+      "11": 2,
+      "12": 1,
+      "13": 2,
+      "14": 1,
+      "16": 1
+    },
+    "Measurements": [
+      {
+        "Operation": "property-evidence",
+        "Milliseconds": 19.7,
+        "ManagedBytes": 10554056,
+        "WorkingSetBytes": 115720192
+      },
+      {
+        "Operation": "postal-evidence",
+        "Milliseconds": 8.6,
+        "ManagedBytes": 15252728,
+        "WorkingSetBytes": 127418368
+      },
+      {
+        "Operation": "footprints",
+        "Milliseconds": 616.7,
+        "ManagedBytes": 162431040,
+        "WorkingSetBytes": 451149824
+      },
+      {
+        "Operation": "transaction-csv",
+        "Milliseconds": 292.4,
+        "ManagedBytes": 190252656,
+        "WorkingSetBytes": 104448000
+      },
+      {
+        "Operation": "validation-domain-matching",
+        "Milliseconds": 1536.8,
+        "ManagedBytes": 199299416,
+        "WorkingSetBytes": 144015360
+      },
+      {
+        "Operation": "state-construction",
+        "Milliseconds": 0.7,
+        "ManagedBytes": 199598872,
+        "WorkingSetBytes": 144326656
+      },
+      {
+        "Operation": "town-filter",
+        "Milliseconds": 0.9,
+        "ManagedBytes": 199598872,
+        "WorkingSetBytes": 144441344
+      },
+      {
+        "Operation": "budget-filter",
+        "Milliseconds": 0.2,
+        "ManagedBytes": 199658440,
+        "WorkingSetBytes": 144506880
+      },
+      {
+        "Operation": "combined-filter",
+        "Milliseconds": 0.1,
+        "ManagedBytes": 199666664,
+        "WorkingSetBytes": 144523264
+      },
+      {
+        "Operation": "selection",
+        "Milliseconds": 0.1,
+        "ManagedBytes": 199666664,
+        "WorkingSetBytes": 144539648
+      },
+      {
+        "Operation": "empty-hidden-selection",
+        "Milliseconds": 0.2,
+        "ManagedBytes": 199666664,
+        "WorkingSetBytes": 144572416
+      },
+      {
+        "Operation": "reset",
+        "Milliseconds": 0.2,
+        "ManagedBytes": 199746552,
+        "WorkingSetBytes": 144654336
+      }
+    ]
+  },
+  {
+    "Iteration": 1,
+    "Transactions": 10000,
+    "Addresses": 5276,
+    "Blocks": 1800,
+    "Towns": 26,
+    "FlatTypes": 6,
+    "Located": 2062,
+    "Ambiguous": 1,
+    "Unlocated": 7938,
+    "Rejected": 11,
+    "Diagnostics": 11,
+    "TransactionsPerAddress": {
+      "1": 2673,
+      "2": 1437,
+      "3": 676,
+      "4": 271,
+      "5": 114,
+      "6": 48,
+      "7": 23,
+      "8": 15,
+      "9": 8,
+      "10": 4,
+      "11": 2,
+      "12": 1,
+      "13": 2,
+      "14": 1,
+      "16": 1
+    },
+    "Measurements": [
+      {
+        "Operation": "property-evidence",
+        "Milliseconds": 28.7,
+        "ManagedBytes": 205159064,
+        "WorkingSetBytes": 151109632
+      },
+      {
+        "Operation": "postal-evidence",
+        "Milliseconds": 15.6,
+        "ManagedBytes": 209324880,
+        "WorkingSetBytes": 152928256
+      },
+      {
+        "Operation": "footprints",
+        "Milliseconds": 366.8,
+        "ManagedBytes": 533809512,
+        "WorkingSetBytes": 501989376
+      },
+      {
+        "Operation": "transaction-csv",
+        "Milliseconds": 40.5,
+        "ManagedBytes": 560976160,
+        "WorkingSetBytes": 508411904
+      },
+      {
+        "Operation": "validation-domain-matching",
+        "Milliseconds": 758.4,
+        "ManagedBytes": 569859168,
+        "WorkingSetBytes": 513179648
+      },
+      {
+        "Operation": "state-construction",
+        "Milliseconds": 0.4,
+        "ManagedBytes": 570019104,
+        "WorkingSetBytes": 513196032
+      },
+      {
+        "Operation": "town-filter",
+        "Milliseconds": 0.3,
+        "ManagedBytes": 570027328,
+        "WorkingSetBytes": 513196032
+      },
+      {
+        "Operation": "budget-filter",
+        "Milliseconds": 0.1,
+        "ManagedBytes": 570086896,
+        "WorkingSetBytes": 513196032
+      },
+      {
+        "Operation": "combined-filter",
+        "Milliseconds": 0.1,
+        "ManagedBytes": 570086896,
+        "WorkingSetBytes": 513212416
+      },
+      {
+        "Operation": "selection",
+        "Milliseconds": 0,
+        "ManagedBytes": 570086896,
+        "WorkingSetBytes": 513212416
+      },
+      {
+        "Operation": "empty-hidden-selection",
+        "Milliseconds": 0.1,
+        "ManagedBytes": 570086896,
+        "WorkingSetBytes": 513212416
+      },
+      {
+        "Operation": "reset",
+        "Milliseconds": 0.1,
+        "ManagedBytes": 570166784,
+        "WorkingSetBytes": 513212416
+      }
+    ]
+  },
+  {
+    "Iteration": 2,
+    "Transactions": 10000,
+    "Addresses": 5276,
+    "Blocks": 1800,
+    "Towns": 26,
+    "FlatTypes": 6,
+    "Located": 2062,
+    "Ambiguous": 1,
+    "Unlocated": 7938,
+    "Rejected": 11,
+    "Diagnostics": 11,
+    "TransactionsPerAddress": {
+      "1": 2673,
+      "2": 1437,
+      "3": 676,
+      "4": 271,
+      "5": 114,
+      "6": 48,
+      "7": 23,
+      "8": 15,
+      "9": 8,
+      "10": 4,
+      "11": 2,
+      "12": 1,
+      "13": 2,
+      "14": 1,
+      "16": 1
+    },
+    "Measurements": [
+      {
+        "Operation": "property-evidence",
+        "Milliseconds": 12.5,
+        "ManagedBytes": 574469912,
+        "WorkingSetBytes": 515719168
+      },
+      {
+        "Operation": "postal-evidence",
+        "Milliseconds": 5.2,
+        "ManagedBytes": 578539512,
+        "WorkingSetBytes": 517373952
+      },
+      {
+        "Operation": "footprints",
+        "Milliseconds": 261.4,
+        "ManagedBytes": 513849360,
+        "WorkingSetBytes": 527466496
+      },
+      {
+        "Operation": "transaction-csv",
+        "Milliseconds": 49.9,
+        "ManagedBytes": 310008848,
+        "WorkingSetBytes": 521486336
+      },
+      {
+        "Operation": "validation-domain-matching",
+        "Milliseconds": 712.6,
+        "ManagedBytes": 206812664,
+        "WorkingSetBytes": 411680768
+      },
+      {
+        "Operation": "state-construction",
+        "Milliseconds": 0.3,
+        "ManagedBytes": 206972600,
+        "WorkingSetBytes": 411680768
+      },
+      {
+        "Operation": "town-filter",
+        "Milliseconds": 0.3,
+        "ManagedBytes": 206972600,
+        "WorkingSetBytes": 411680768
+      },
+      {
+        "Operation": "budget-filter",
+        "Milliseconds": 0.1,
+        "ManagedBytes": 207032168,
+        "WorkingSetBytes": 411680768
+      },
+      {
+        "Operation": "combined-filter",
+        "Milliseconds": 0.1,
+        "ManagedBytes": 207040392,
+        "WorkingSetBytes": 411680768
+      },
+      {
+        "Operation": "selection",
+        "Milliseconds": 0,
+        "ManagedBytes": 207040392,
+        "WorkingSetBytes": 411680768
+      },
+      {
+        "Operation": "empty-hidden-selection",
+        "Milliseconds": 0.1,
+        "ManagedBytes": 207040392,
+        "WorkingSetBytes": 411680768
+      },
+      {
+        "Operation": "reset",
+        "Milliseconds": 0.1,
+        "ManagedBytes": 207120280,
+        "WorkingSetBytes": 411680768
+      }
+    ]
+  }
+]

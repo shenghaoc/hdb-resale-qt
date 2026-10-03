@@ -32,9 +32,14 @@ internal static class Program
             WriteReport(args[4],HistoricalOneMap.Load(args[1],args[2],args[3]));
             return;
         }
+        if (args.Length == 3 && args[0] == "--scale")
+        {
+            WriteReport(args[2], ScaleStudy.Run(args[1]));
+            return;
+        }
         Qml.LoadFromRootModule("Main");
         Qml.WaitForExit();
-        if (Environment.GetEnvironmentVariable("HDB_RUNTIME_GATE") == "1") Console.WriteLine("HDB_GATE_EXIT");
+        if (Environment.GetEnvironmentVariable("HDB_RUNTIME_GATE") == "1" || Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1") Console.WriteLine("HDB_GATE_EXIT");
     }
     private static void WriteReport<T>(string path, T value)
     {

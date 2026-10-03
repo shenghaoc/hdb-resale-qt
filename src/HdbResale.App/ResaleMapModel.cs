@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using HdbResale.Domain;
 using Qt.Bridge.Models;
@@ -13,25 +14,67 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     private readonly ImportResult import;
     private readonly ExplorerState state;
     public LocatedMapModel MapPoints { get; }
+    public int GateTownCount { get; }
+    public int GateTownMapped { get; }
+    public int GateBudgetCount { get; }
+    public int GateBudgetMapped { get; }
+    public int GateInitialCount { get; }
+    public int GateInitialMapped { get; }
     public ResaleMapModel()
     {
-        import = CsvImport.LoadDirectory(Path.Combine(AppContext.BaseDirectory, "data"));
+        var timer = Stopwatch.StartNew();
+        import = CsvImport.LoadDirectory(Environment.GetEnvironmentVariable("HDB_DATA_DIRECTORY") ?? Path.Combine(AppContext.BaseDirectory, "data"));
         state = new(import.Accepted);
         MapPoints = new(state.Visible);
+        if (ScaleGate) Console.WriteLine($"HDB_SCALE_CONSTRUCT {timer.ElapsedMilliseconds} rows={VisibleCount} mapped={MapPoints.Count} managed={GC.GetTotalMemory(false)} working={Environment.WorkingSet}");
+        if (ScaleGate)
+        {
+            timer.Restart();
+            var expectedInitial = import.Accepted.Where(t => t.Price <= 1_000_000).ToArray();
+            var expectedTown = expectedInitial.Where(t => t.Town == GateTown).ToArray();
+            GateInitialCount = expectedInitial.Length;
+            GateInitialMapped = BlockSummaries.Located(expectedInitial).Count;
+            GateTownCount = expectedTown.Length;
+            GateTownMapped = BlockSummaries.Located(expectedTown).Count;
+            var budget = expectedTown.Where(t => t.Price <= 500_000).ToArray();
+            GateBudgetCount = budget.Length;
+            GateBudgetMapped = BlockSummaries.Located(budget).Count;
+            Console.WriteLine($"HDB_SCALE_ORACLE {timer.ElapsedMilliseconds}");
+        }
     }
     public event PropertyChangedEventHandler? PropertyChanged;
 
     // Explicit test opt-in; normal application state and fixture are unchanged.
+    public bool ScaleGate => Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1";
+    public bool ScaleHeap => ScaleGate && Environment.GetEnvironmentVariable("HDB_SCALE_HEAP") == "1";
+    public void MeasureScaleHeap()
+    {
+        if (!ScaleHeap) return;
+        Console.WriteLine($"HDB_SCALE_HEAP before managed={GC.GetTotalMemory(false)} working={Environment.WorkingSet}");
+        var timer = Stopwatch.StartNew();
+        // Diagnostic opt-in after measured UI transitions; never a runtime memory policy.
+        GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true, compacting: true);
+        Console.WriteLine($"HDB_SCALE_HEAP after managed={GC.GetTotalMemory(false)} working={Environment.WorkingSet} collection-ms={timer.ElapsedMilliseconds}");
+    }
+    public int MappedCount => MapPoints.Count;
+    public string GateTown => import.Accepted.FirstOrDefault()?.Town ?? "All towns";
+    public string FirstVisibleId => state.Visible.FirstOrDefault()?.Id ?? "";
+    private string[] Towns => new[] { "All towns" }.Concat(import.Accepted.Select(t => t.Town).Distinct().Order(StringComparer.Ordinal)).ToArray();
+    public string TownsJson => System.Text.Json.JsonSerializer.Serialize(Towns);
+    public int TownIndex => Array.IndexOf(Towns, Town);
     public bool RuntimeGate => Environment.GetEnvironmentVariable("HDB_RUNTIME_GATE") == "1";
-    public string RuntimeGateFault => RuntimeGate ? Environment.GetEnvironmentVariable("HDB_GATE_FAULT") ?? "" : "";
+    public string RuntimeGateFault => (RuntimeGate || ScaleGate) ? Environment.GetEnvironmentVariable("HDB_GATE_FAULT") ?? "" : "";
     public int VisibleCount => state.Visible.Count;
     public string Town => state.Town;
+    public int MaximumAvailablePrice => checked((int)Math.Max(1_000_000, decimal.Ceiling(import.Accepted.Select(t => t.Price).DefaultIfEmpty(1_000_000).Max())));
     public int MaximumPrice => (int)state.MaximumPrice;
+    public string SelectedMapKey => state.Selected is { } t ? BlockSummaries.Key(t) : "";
+    public int LocatedTransactions => state.Visible.Count(t => t.Location.Point is not null);
     public string SelectedId => state.Selected?.Id ?? "";
     public string SelectionDetails => state.Selected is { } t
         ? $"{t.Address}\n{t.Town} · {t.FlatType}\n{Money(t.Price)}\n{t.Facts.Month} registration · local ID {t.Id}\nIdentity: {t.Match.Quality}\nCoordinates: {t.Location.Quality}\n{t.Match.Reason}\n{MatchSources(t.Match)}\n{t.Location.Source}"
-        : "Select a marker or a transaction below.";
-    public string FilterSummary => $"{VisibleCount} of {import.Accepted.Count} transactions · {MapPoints.Count} mapped · {VisibleCount - MapPoints.Count} unlocated · {Town} · up to {Money(MaximumPrice)}";
+        : "Select a marker (latest transaction at that address) or a transaction below.";
+    public string FilterSummary => $"{VisibleCount} of {import.Accepted.Count} transactions · {LocatedTransactions} located in {MapPoints.Count} address markers · {VisibleCount - LocatedTransactions} unlocated · {Town} · up to {Money(MaximumPrice)}";
     public string ImportSummary => $"Import: {import.Accepted.Count} accepted · {import.MatchedCount} matched · {import.AmbiguousCount} ambiguous · {import.UnmatchedCount} unmatched · {import.Rejected.Count} rejected · {import.Diagnostics.Count} diagnostics.";
     public string ImportDiagnostics => string.Join("\n", import.Diagnostics.Select(d => $"{d.File}:{d.Row}: {d.Message}"));
 
@@ -41,7 +84,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public void SelectTransaction(string id)
     {
         state.Select(id);
-        Notify(nameof(SelectedId), nameof(SelectionDetails));
+        Notify(nameof(SelectedId), nameof(SelectedMapKey), nameof(SelectionDetails));
     }
 
     private void ApplyFilter(string town, int price)
@@ -50,11 +93,13 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
         // Validate before opening the Qt model reset transaction.
         ArgumentException.ThrowIfNullOrWhiteSpace(town);
         ArgumentOutOfRangeException.ThrowIfNegative(price);
+        var timer = Stopwatch.StartNew();
         BeginResetModel();
         try { state.Filter(town, price); MapPoints.Replace(state.Visible); }
         finally { EndResetModel(); }
-        Notify(nameof(Town), nameof(MaximumPrice), nameof(VisibleCount), nameof(FilterSummary),
-            nameof(SelectedId), nameof(SelectionDetails));
+        if (ScaleGate) Console.WriteLine($"HDB_SCALE_RESET {timer.ElapsedMilliseconds} rows={VisibleCount} mapped={MappedCount}");
+        Notify(nameof(Town), nameof(TownIndex), nameof(MaximumPrice), nameof(VisibleCount), nameof(MappedCount), nameof(FirstVisibleId), nameof(FilterSummary),
+            nameof(SelectedId), nameof(SelectedMapKey), nameof(SelectionDetails));
     }
     private void Notify(params string[] names)
     {
