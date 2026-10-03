@@ -4418,5 +4418,27 @@
     "full_counts_and_frozen_preservation_exit": 0,
     "frozen_M5_sha256": "d76614762c351eb121d3dd11ed03658e53daae1a5feeae36809a029b7e62d4be",
     "quality_count_basis": "Unchanged complete import digest, unchanged Domain/evidence bytes and final full scale checks preserve the exact M9 inventory."
+  },
+  "physical": {
+    "source_commit": "567e608ddcf708cfb0d2a0d5a293a974b32ec36d",
+    "exit": 0,
+    "screenshot_bytes": 316195,
+    "screenshot_sha256": "1adbd93b06731004d5d57c6b5ccd7c92077b452f977f3841c87d67e1c9be10e7",
+    "log_sha256": "2618062f16681d8242e5ffec366844aaa349025ca8a5c9b7feb0a8f7b6fe712c",
+    "checks": [
+      "OneMap tiles/logo/full attribution",
+      "full coverage truth and group labels",
+      "group click11to13",
+      "show selected address16",
+      "individual latest transaction selection",
+      "offscreen selected address survives and returns",
+      "domain-hidden selection clears",
+      "empty/reset",
+      "rapid zoom/recenter",
+      "clean exit"
+    ],
+    "observed_limit": "Brief asynchronous marker overlap/removal after rapid changes settles; instantaneous visual state is not claimed.",
+    "runtime_errors": false,
+    "known_portal_notices": 2
   }
 }

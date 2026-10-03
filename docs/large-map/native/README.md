@@ -168,3 +168,30 @@ The stable captured full view shows all 7,618 addresses accounted for by 23 grou
 plus the selected individual address, with the exact selected HDB-2 transaction
 and source-quality details. No new hardware wheel/pinch or other-platform result
 is inferred from these tests.
+
+
+## Reachable history and publication scope
+
+The [all-ref generic audit](history-audit.json) at documentation checkpoint
+`8e4d07c84eb3a486c516f41f38dc327376b132f9` traversed **43 commits, 436 unique blobs
+and 267 paths**, including all **83 new blobs** since exact M9, with zero issues.
+It checks excluded raw-export hash/header, credential-shaped content, prohibited
+local/build/binary paths, oversized blobs, minimized historical fields, unchanged
+Domain/canonical/frozen evidence, source pins and excluded `843df64` reachability.
+The source/evidence MapLibre pack contains no native binaries, dependency trees
+or generated GeoJSON. Its local path/editorial adaptations have regenerated
+`SHA256SUMS`; all 54 listed files verify.
+
+The scanner is reproducible as `tools/audit_reachable_history.py`. A new exact
+private display-name/full-precision-coordinate-pair rescan is **not available or
+claimed**: the private raw reference was never transferred, read, fetched or
+reconstructed. This deliberately inherits M9/M8 and earlier exact-reference
+limits. All newly used coordinates remain the original approved public-derived
+HDB points; no coordinate source or private cache was introduced.
+
+The same generic all-ref scan is rerun after this audit-record commit and its
+final result accompanies the handoff. Prior milestone branches, remote-tracking
+refs and ancestry are preserved. No push or authentication retry occurred.
+Full-history bundle creation, fresh restoration/fsck and Library delivery are
+recorded separately. No M11, buyer-workflow, database, chart or packaging work
+was started.

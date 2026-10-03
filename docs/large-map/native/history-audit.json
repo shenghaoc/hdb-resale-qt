@@ -1,0 +1,267 @@
+{
+  "head": "8e4d07c84eb3a486c516f41f38dc327376b132f9",
+  "base": "bdc35e67cdff7ec52d2a9cc6cb144d9065c138df",
+  "reachable_commits": 43,
+  "reachable_unique_blobs": 436,
+  "reachable_paths": 267,
+  "new_unique_blobs": 83,
+  "new_blobs": {
+    "b557f0f8031a9f3cd73c662f3b020626e63d8866": [
+      "README.md"
+    ],
+    "a76c7a82343f7f4724565d425555d7d2b4ac5137": [
+      "docs/large-map/README.md"
+    ],
+    "7f68163d35bf0b82530fc86bd914488e5ecd071b": [
+      "docs/large-map/candidate-verification.json"
+    ],
+    "8fd87e389aa0eefde32a6adc321df525470cf679": [
+      "docs/large-map/initial-comparison.json"
+    ],
+    "938bef8ad2abdeffdc761abd806218113c197f51": [
+      "docs/large-map/native/README.md"
+    ],
+    "0de7975d05718cf260eebb07be08d45759fe86d4": [
+      "docs/large-map/native/managed-profile.json"
+    ],
+    "ceeefbc18e60717a43fe2ce7a278f3a77773c739": [
+      "docs/large-map/native/results.json"
+    ],
+    "8dd2a8f95fdb8823274b6251415957da2b7b6789": [
+      "docs/large-map/native/scale-profile.json"
+    ],
+    "ed970658425eb3fdc7a0144bad225dadd58d8caa": [
+      "docs/map/maplibre-spike.md"
+    ],
+    "1326dbd5943befad33e837e7cad8387ecf1a9ab4": [
+      "experiments/large-map/README.md"
+    ],
+    "773192080f5f97329ff03a4b0c319c6a2513af86": [
+      "experiments/large-map/export/Export.csproj"
+    ],
+    "c566d8df55d1882c48bc41752ceb30cac2bf05b8": [
+      "experiments/large-map/export/Program.cs"
+    ],
+    "250f1afa369ca99f6b3863eca9835e72527ed1b1": [
+      "experiments/large-map/retention.patch"
+    ],
+    "33055c85243283f52d512976ce129bafa5630a4d": [
+      "experiments/maplibre-m10/README.md"
+    ],
+    "e8ba0c33b448c68f470cdce31ab299820f55e5e6": [
+      "experiments/maplibre-m10/SHA256SUMS"
+    ],
+    "3d1a506cf610ddee3494ee13ea8407f6a31f55e1": [
+      "experiments/maplibre-m10/build.sh"
+    ],
+    "a829feea36fdbc3ad2fdbfc5c2e186507e3348f5": [
+      "experiments/maplibre-m10/configure.sh"
+    ],
+    "89ca28e9d5418e5853c6372be10b666ae3301a5f": [
+      "experiments/maplibre-m10/evidence/build-manifest.json"
+    ],
+    "d70f30e8d26be583079ccc9f60b71ca20bb80f78": [
+      "experiments/maplibre-m10/evidence/build-segments.json"
+    ],
+    "bc437ea751d5f35c50d0dffe32316bc434d9c570": [
+      "experiments/maplibre-m10/evidence/current-binary-needed.txt"
+    ],
+    "12fe5ecf2aced53dffd714e2cf673bd1f4016d18": [
+      "experiments/maplibre-m10/evidence/native-dependency-licenses.txt"
+    ],
+    "5b546f8d65d866d1fe92eceba46d6fd1367ce86f": [
+      "experiments/maplibre-m10/evidence/onemap-tile-probe.json"
+    ],
+    "4d5dc7e3e06e7cee9fe1abaef15da0e61f7956c8": [
+      "experiments/maplibre-m10/evidence/packages.sha256"
+    ],
+    "4f0a3b6a639559693ea0294e1685846baf5c1045": [
+      "experiments/maplibre-m10/evidence/producer-manifest.json"
+    ],
+    "868a1fa4d6c4c0a567d47ccfd8b49dc91c5d1a6b": [
+      "experiments/maplibre-m10/evidence/result-summary.json"
+    ],
+    "1b2aeca6629f8b5fc26715ef8fc2ebf7a7c9bf2f": [
+      "experiments/maplibre-m10/evidence/scoped-stage-comparison.json"
+    ],
+    "1e59e5aaa62e75c8f592ae5133a625672e95e8c6": [
+      "experiments/maplibre-m10/evidence/stable-binary-icu56-symbols.txt"
+    ],
+    "0ef4ec0fbd91faa13bc4cdd3974af7774a85eb08": [
+      "experiments/maplibre-m10/evidence/stable-binary-needed.txt"
+    ],
+    "125568286ec3cd49aa62b984cbe299b98bf994bb": [
+      "experiments/maplibre-m10/experiment/CMakeLists.txt"
+    ],
+    "5cf2138e7f2f5cdd77fad31138c70b57285cbfb0": [
+      "experiments/maplibre-m10/experiment/Main.qml"
+    ],
+    "53d13b9a8f3dd81b49c38afba7f86f0836167769": [
+      "experiments/maplibre-m10/experiment/main.cpp"
+    ],
+    "5f709b03499d5120c302725724c91aa7ae5ee0fd": [
+      "experiments/maplibre-m10/experiment/onemap-style.json"
+    ],
+    "07814165c56bf694f22af0ec18db241f967bc995": [
+      "experiments/maplibre-m10/exporter/Program.cs"
+    ],
+    "1d09a92d3ea42c46b1371858f2d4ba9bd2079c0a": [
+      "experiments/maplibre-m10/exporter/export.csproj"
+    ],
+    "fb26c61cb28bd1a8d441e829133cd386942807a3": [
+      "experiments/maplibre-m10/fetch-current-source.sh"
+    ],
+    "a4a3a07571c379ed2f2b4e450d2ef962d58c44a4": [
+      "experiments/maplibre-m10/instrumentation.patch"
+    ],
+    "7dd5639258131c1b16e4f322448ef5f5bde3813c": [
+      "experiments/maplibre-m10/logs/build-current-part1.log"
+    ],
+    "5b3d98e8f0c16f28d96561d2b4571f4f6341f9fb": [
+      "experiments/maplibre-m10/logs/build-current-part2.log"
+    ],
+    "d8445e19eef455b74d2f06e160f1ffb448e5bfbf": [
+      "experiments/maplibre-m10/logs/build-current-part3.log"
+    ],
+    "6987444a1e66a250864408a1aac0694bb04cf3d5": [
+      "experiments/maplibre-m10/logs/build-current.log"
+    ],
+    "d9d484857fd1d08d2520e51a44c7f4547d509bb6": [
+      "experiments/maplibre-m10/logs/configure-current-sixth.log"
+    ],
+    "e6faa8e11cd346fcf530e91fa5c309a191e327a1": [
+      "experiments/maplibre-m10/logs/configure-stable-qt612-patched.log"
+    ],
+    "6b3b7daa207a0a3657af2b18b4e2099f4760690a": [
+      "experiments/maplibre-m10/logs/configure-stable-second.log"
+    ],
+    "7714a6ff3e45dac9b24ad194b82596d9b3386024": [
+      "experiments/maplibre-m10/logs/experiment-qmllint-installed.log"
+    ],
+    "71b907d8181a3fa4d7aaa199fd69f81defd5ad18": [
+      "experiments/maplibre-m10/logs/host-data-selfcheck.json"
+    ],
+    "49d07d2a47e860243a00ec51fdaf9586b05e3c1a": [
+      "experiments/maplibre-m10/logs/host-final-build.log",
+      "experiments/maplibre-m10/logs/host-viewport-build.log"
+    ],
+    "01231e091af27aa18dd2885162f146b92c072626": [
+      "experiments/maplibre-m10/logs/install-current.log"
+    ],
+    "189d55b6fbc1ac8ea1a18b53aa00d089d4bc5bd5": [
+      "experiments/maplibre-m10/logs/ldd-current.log"
+    ],
+    "8d6a52d09be43103716cb1398749b990fd8fadab": [
+      "experiments/maplibre-m10/logs/probe-current.log"
+    ],
+    "103fcd504abb84d2063fd7cebd5f206392233942": [
+      "experiments/maplibre-m10/logs/stable-private-api-syntax.log"
+    ],
+    "3b6d85f326a62536a988364e0bfeb79e1e7f0efe": [
+      "experiments/maplibre-m10/measure_command.py"
+    ],
+    "fa7b914bd259ab916904e177d98a675907c334f8": [
+      "experiments/maplibre-m10/native-library-only.patch"
+    ],
+    "d10b21d319cb086797908fdf75342fa8eaa8c033": [
+      "experiments/maplibre-m10/prepare-local-dependencies.sh"
+    ],
+    "573541ac9702dd3969c9bc859d2b91ec1f7e6e56": [
+      "experiments/maplibre-m10/results/manual.exit",
+      "experiments/maplibre-m10/results/matched-final.exit",
+      "experiments/maplibre-m10/results/matched.exit"
+    ],
+    "a13b6db693ea29bf8ea3c525d1c8af3c398724e5": [
+      "experiments/maplibre-m10/results/manual.json"
+    ],
+    "79889869d952c88b93811ed783e8a692a546b541": [
+      "experiments/maplibre-m10/results/manual.log"
+    ],
+    "b0ca3b30753acbeece183faecfa06f9c40763fef": [
+      "experiments/maplibre-m10/results/matched-final.full.png"
+    ],
+    "451931b03d21b9f9001750e200f834ab1f4ec183": [
+      "experiments/maplibre-m10/results/matched-final.json"
+    ],
+    "c926291d976fdab977c04f62f9ac50af236f30d8": [
+      "experiments/maplibre-m10/results/matched-final.log"
+    ],
+    "8aee29378b8f42abda049008a96facf0c213639b": [
+      "experiments/maplibre-m10/results/matched.json"
+    ],
+    "f88e466e7a2442908e899c44da644c34f46c0d06": [
+      "experiments/maplibre-m10/results/matched.log"
+    ],
+    "c6f0cb10a812446ff35cfa4cedb367f01722d020": [
+      "experiments/maplibre-m10/run-native.sh"
+    ],
+    "a3d14ded93ed45c66dade80dcbee5f83d4009054": [
+      "experiments/maplibre-m10/stable-no-implicit-fetch.patch"
+    ],
+    "8abeff7b081aed5dbbc53891e9b3ae035771aa66": [
+      "experiments/maplibre-m10/stable-qt612-cmake.patch"
+    ],
+    "e0f23873eace5ce435a2932cef45c7749b10d8ee": [
+      "src/HdbResale.App/HdbResale.App.csproj"
+    ],
+    "ca3b3df8971f4192c39bffd4b3ec6158bd4583d5": [
+      "src/HdbResale.App/LocatedMapModel.cs"
+    ],
+    "5042226ae115ba6b5346af76b412311db4802468": [
+      "src/HdbResale.App/Main.qml"
+    ],
+    "9edd337f84392e98e20cb6966bcdb36072f83d26": [
+      "src/HdbResale.App/MapPresentation.cs"
+    ],
+    "35ee50ea00d588a5d1d5487d3b4bb1a5a3854afc": [
+      "src/HdbResale.App/PresentationGate.qml"
+    ],
+    "83629991b1755e9fd938cdac03a946c09046ccfe": [
+      "src/HdbResale.App/ResaleMapModel.cs"
+    ],
+    "8f782678a887da8e868a7b945cef70728753d0b2": [
+      "src/HdbResale.App/RuntimeGate.qml"
+    ],
+    "3889f94f465540adaa5ecd3c5f5974198cb4ef60": [
+      "src/HdbResale.App/ScaleGate.qml"
+    ],
+    "5ca63c0d92302510833ed0e500f178fc779ab86e": [
+      "tests/HdbResale.Tests/HdbResale.Tests.csproj"
+    ],
+    "d1e13433d9d9f0e4a0c737d766b09d222259f7f7": [
+      "tests/HdbResale.Tests/MapPresentationTests.cs"
+    ],
+    "215e4dce5c44045dfb539926f78a3388ae0101ff": [
+      "tools/audit_reachable_history.py"
+    ],
+    "739f55ead2ae0bb0ceb88b42a4382156da398089": [
+      "tools/presentation_gate.py"
+    ],
+    "a8b764b4ff6c6db62ad1f258002c61579ab02d51": [
+      "tools/test_audit_reachable_history.py"
+    ],
+    "06b648c45150458de480bac96a669e1f8898171c": [
+      "tools/test_presentation_gate.py"
+    ],
+    "bc768db7d3379b33f195cb8c4b096e1b2519b27a": [
+      "tools/test_scale_gate.py"
+    ],
+    "86446bc4314b22f98d2c1cf35e280018f1dac506": [
+      "docs/large-map/README.md"
+    ],
+    "b571ec6cfb15fa845a3d1dc2b0bb222200041fb4": [
+      "docs/large-map/README.md"
+    ],
+    "c18fb8e97d3912b1d47c83e7832cc5046cdd5c25": [
+      "docs/large-map/README.md"
+    ],
+    "c34043700d6f711ff399ed3fc8e2db161f628692": [
+      "docs/large-map/README.md"
+    ]
+  },
+  "excluded_commit_reachable": false,
+  "protected_content_unchanged": true,
+  "issues": [],
+  "exact_private_reference_rescan": false,
+  "scope": "All-ref generic hash/header, credential-shaped-content, excluded-path/size, minimized-historical-field and unchanged-M9-evidence checks. Inherits M9 and earlier exact-reference evidence. Private raw reference was not available, transferred, read, fetched or reconstructed; exact private display-name/coordinate-pair absence is not newly certified."
+}
