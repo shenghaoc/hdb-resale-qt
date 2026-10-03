@@ -1,4 +1,8 @@
-# Historical OneMap first-hit experiment — 2026-10-03
+# Historical OneMap first-result postal experiment — 2026-10-03
+
+The final acceptance audit follows the [revised32-row stratified review](revised-audit.md):
+all340mechanical checks,every conflict/cachegap,and32distinct newly-resolved
+addresses across26towns/all4periods. Returned identity/uniqueness remains unverified.
 
 Actual user-supplied historical D1 export, kept unchanged outside Git at
 `/Users/shenghaochen/Documents/Codex/2026-10-03/task-2/private-onemap/hdb-resale-geocode-cache.csv`:

@@ -1,0 +1,33 @@
+Id,Town,Period,Block,Street,RoadCase,BlockSuffix,StreetPunctuation,CacheKey,HistoricalPostal,HdbPropertySourceRows,FootprintObjectId,FootprintEntityId,FirstHitFlag,PreservedChainReview,ReturnedIdentityReview,CandidateUniquenessReview
+HDB-222433,ANG MO KIO,2026,543,ANG MO KIO AVE 10,NumericAVE,False,False,ang-mo-kio-543-ang-mo-kio-ave-10,560543,9161,937501,8648,NamedFirstHitOnly,Consistent,Unverified,Unverified
+HDB-145185,BEDOK,2023-2025,170,BEDOK STH RD,OtherRoad,False,False,bedok-170-bedok-sth-rd,460170,2213,945064,3429,PreschoolFirstHit,Consistent,Unverified,Unverified
+HDB-52687,BISHAN,2017-2019,137,BISHAN ST 12,OtherRoad,False,False,bishan-137-bishan-st-12,570137,1472,939195,7728,NamedFirstHitOnly,Consistent,Unverified,Unverified
+HDB-223905,BISHAN,2026,178,BISHAN ST 13,OtherRoad,False,False,bishan-178-bishan-st-13,570178,2358,939894,12582,NoReturnedName,Consistent,Unverified,Unverified
+HDB-114563,BUKIT BATOK,2020-2022,120,BT BATOK CTRL,OtherRoad,False,False,bukit-batok-120-bt-batok-ctrl,650120,931,938333,10725,NoReturnedName,Consistent,Unverified,Unverified
+HDB-225562,BUKIT MERAH,2026,6B,BOON TIONG RD,OtherRoad,True,False,bukit-merah-6b-boon-tiong-rd,165006,9652,946026,8208,NamedFirstHitOnly,Consistent,Unverified,Unverified
+HDB-80901,BUKIT PANJANG,2020-2022,532,JELAPANG RD,OtherRoad,False,False,bukit-panjang-532-jelapang-rd,670532,9018,944538,3760,NamedFirstHitOnly,Consistent,Unverified,Unverified
+HDB-175028,BUKIT PANJANG,2023-2025,452,FAJAR RD,OtherRoad,False,False,bukit-panjang-452-fajar-rd,670452,7652,946266,9441,NoReturnedName,Consistent,Unverified,Unverified
+HDB-149295,BUKIT TIMAH,2023-2025,17,TOH YI DR,OtherRoad,False,False,bukit-timah-17-toh-yi-dr,590017,2204,935728,11057152,NamedFirstHitOnly,Consistent,Unverified,Unverified
+HDB-23235,CENTRAL AREA,2017-2019,1G,CANTONMENT RD,OtherRoad,True,False,central-area-1g-cantonment-rd,085701,53,942044,3083,NamedFirstHitOnly,Consistent,Unverified,Unverified
+HDB-227097,CHOA CHU KANG,2026,680,CHOA CHU KANG CRES,OtherRoad,False,False,choa-chu-kang-680-choa-chu-kang-cres,680680,11005,937864,11731,NoReturnedName,Consistent,Unverified,Unverified
+HDB-44059,CLEMENTI,2017-2019,712,CLEMENTI WEST ST 2,OtherRoad,False,False,clementi-712-clementi-west-st-2,120712,11402,944280,12221,NoReturnedName,Consistent,Unverified,Unverified
+HDB-151408,GEYLANG,2023-2025,53,PIPIT RD,OtherRoad,False,False,geylang-53-pipit-rd,370053,8975,944242,11091,NoReturnedName,Consistent,Unverified,Unverified
+HDB-12159,HOUGANG,2017-2019,986B,BUANGKOK CRES,OtherRoad,True,False,hougang-986b-buangkok-cres,532986,13280,946303,9750,NamedFirstHitOnly,Consistent,Unverified,Unverified
+HDB-99891,JURONG EAST,2020-2022,288C,JURONG EAST ST 21,OtherRoad,True,False,jurong-east-288c-jurong-east-st-21,603288,4721,939370,3137,NoReturnedName,Consistent,Unverified,Unverified
+HDB-180959,JURONG WEST,2023-2025,347,KANG CHING RD,OtherRoad,False,False,jurong-west-347-kang-ching-rd,610347,5952,948819,8106,NoReturnedName,Consistent,Unverified,Unverified
+HDB-97951,KALLANG/WHAMPOA,2020-2022,8,BOON KENG RD,OtherRoad,False,False,kallang-whampoa-8-boon-keng-rd,330008,12054,936373,4409,NamedFirstHitOnly,Consistent,Unverified,Unverified
+HDB-231136,KALLANG/WHAMPOA,2026,805,KING GEORGE'S AVE,OtherRoad,False,True,kallang-whampoa-805-king-george-s-ave,200805,12152,947351,12214,NoReturnedName,Consistent,Unverified,Unverified
+HDB-231807,MARINE PARADE,2026,79,MARINE DR,OtherRoad,False,False,marine-parade-79-marine-dr,440079,12012,936831,4651,NamedFirstHitOnly,Consistent,Unverified,Unverified
+HDB-183961,PASIR RIS,2023-2025,767,PASIR RIS ST 71,OtherRoad,False,False,pasir-ris-767-pasir-ris-st-71,510767,11839,944183,6460,NoReturnedName,Consistent,Unverified,Unverified
+HDB-93519,PUNGGOL,2020-2022,256B,SUMANG WALK,OtherRoad,True,False,punggol-256b-sumang-walk,822256,4135,937598,10218,NamedFirstHitOnly,Consistent,Unverified,Unverified
+HDB-158125,PUNGGOL,2023-2025,326C,SUMANG WALK,OtherRoad,True,False,punggol-326c-sumang-walk,823326,5584,947661,11053517,NamedFirstHitOnly,Consistent,Unverified,Unverified
+HDB-41515,QUEENSTOWN,2017-2019,2,GHIM MOH RD,OtherRoad,False,False,queenstown-2-ghim-moh-rd,270002,2734,936691,5375,NamedFirstHitOnly,Consistent,Unverified,Unverified
+HDB-9149,SEMBAWANG,2017-2019,469B,ADMIRALTY DR,OtherRoad,True,False,sembawang-469b-admiralty-dr,752469,7976,938877,748,NamedFirstHitOnly,Consistent,Unverified,Unverified
+HDB-236278,SENGKANG,2026,123D,RIVERVALE DR,OtherRoad,True,False,sengkang-123d-rivervale-dr,544123,1075,944933,4456,NamedFirstHitOnly,Consistent,Unverified,Unverified
+HDB-236706,SERANGOON,2026,114,SERANGOON NTH AVE 1,NumericAVE,False,False,serangoon-114-serangoon-nth-ave-1,550114,682,938622,11056856,NamedFirstHitOnly,Consistent,Unverified,Unverified
+HDB-38284,TAMPINES,2017-2019,817,TAMPINES ST 81,OtherRoad,False,False,tampines-817-tampines-st-81,520817,12264,940590,9206,OrganisationFirstHit,Consistent,Unverified,Unverified
+HDB-65676,TAMPINES,2020-2022,522A,TAMPINES CTRL 7,NumericCTRL,True,False,tampines-522a-tampines-ctrl-7,521522,8863,938695,11055739,NamedFirstHitOnly,Consistent,Unverified,Unverified
+HDB-29880,TOA PAYOH,2017-2019,56,LOR 4 TOA PAYOH,OtherRoad,False,False,toa-payoh-56-lor-4-toa-payoh,310056,9349,935875,4271,NamedFirstHitOnly,Consistent,Unverified,Unverified
+HDB-114052,WOODLANDS,2020-2022,636,WOODLANDS RING RD,OtherRoad,False,False,woodlands-636-woodlands-ring-rd,730636,10293,947481,1963,NoReturnedName,Consistent,Unverified,Unverified
+HDB-240502,WOODLANDS,2026,861,WOODLANDS ST 83,OtherRoad,False,False,woodlands-861-woodlands-st-83,730861,12583,947875,12795,NoReturnedName,Consistent,Unverified,Unverified
+HDB-221289,YISHUN,2023-2025,449,YISHUN RING RD,OtherRoad,False,False,yishun-449-yishun-ring-rd,760449,7584,942311,6123,NamedFirstHitOnly,Consistent,Unverified,Unverified
