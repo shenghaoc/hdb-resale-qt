@@ -1,3 +1,82 @@
+# Milestone 3 verification — 2026-10-03
+
+Executed on the unchanged macOS arm64 toolchain in README. Branch
+`milestone-3-address-matching`, based on clean M2 SHA
+`48bcb75143abf24b174eb2e0e2c5dc9afbee6a0a`. No push or PR.
+
+From repository root with toolchain PATH and QtDir exports:
+
+```sh
+dotnet build
+dotnet test --no-build
+dotnet run --project src/HdbResale.App/HdbResale.App.csproj --no-build
+```
+
+Build: **0 warnings, 0 errors**. Tests: **25 passed, 0 failed, 0 skipped**.
+Tests pin the six direct official resale/property matches, every expected
+postal/assertion count and original footprint IDs, source provenance and
+polygon midpoints; preserve the original M2 point; check conservative aliases
+and distinct similar addresses; reject postal conflicts/multiple candidates
+without a winner; retain unmatched/ambiguous transactions; distinguish matched
+identity from missing coordinates. Parser regressions cover quoted fields,
+decimal prices, invalid month/price/required fields, malformed quoting/header,
+field count, duplicate IDs, file IO, malformed GeoJSON/geometry and invalid
+postals, with readable valid records surviving. C# state tests exercise combined
+inclusive town/budget filters, clearing hidden selection, retaining visible
+selection/reset, empty results and invalid-budget integrity.
+
+Final offline audit verified all four full-source hashes, the six unchanged
+resale rows, 76 property row references, all 30 ACRA assertions with actual CSV
+line numbers, and six original polygon feature objects. Each canonical address
+also has one property record and one block/postal footprint in the full source,
+not merely in the bounded extract.
+
+Actual native desktop accessibility actions and screenshots verified:
+
+- Singapore OSM basemap and attribution render. Canonical import: **6 accepted,
+  6 matched (NormalizedAddress), 0 ambiguous/unmatched/rejected/diagnostics**;
+  six rows and six map delegates, with close pairs overlapping at city zoom.
+- Selecting 509 shows its matching HDB property row, all five ACRA B source
+  rows, OBJECTID 937499 / ENTITYID 7861 / postal 560509, independent qualities
+  and approximate-point/corroboration wording.
+- ANG MO KIO gives 2 visible / 2 mapped. S$238,000 gives 1 visible / 1 mapped
+  and clears selected 509. Selecting remaining 510 displays property row 8652,
+  ACRA row 49610, OBJECTID 946126 / ENTITYID 4194 / postal 560510.
+- Reset restores 6 mapped and retains visible 510. Budget zero gives empty
+  map/list, no-matches message and cleared selection; reset restores controls.
+- Drag changes center 1.3521,103.8198 → 1.4211,103.7508. Singapore recenters;
+  plus/minus change zoom 11 → 12 → 11. Wheel zoom reaches 14.3 with anchored
+  center 1.3191,103.7720; screenshot shows two separated Clementi pins and
+  resolved OSM tiles. No arbitrary sleeps/retry loops were used.
+- Controlled error run changed **only ignored built-bundle copies**: duplicate
+  509 footprint, null 510 geometry, remove 461 postal assertions, append one
+  invalid-price transaction. UI showed **6 accepted, 4 matched, 1 ambiguous,
+  1 unmatched, 1 rejected, 1 diagnostic; 3 mapped, 3 unlocated** and the visible
+  transactions.csv:8 price error. Selectable 509 shows Ambiguous / Missing and
+  no winner; 510 shows NormalizedAddress / Missing plus the original footprint
+  identity; 461 shows Unmatched / Missing and lack of ACRA corroboration.
+  Screenshots show rendered basemap and selected unlocated row with no
+  placeholder marker. Stale ignored M2 locations.csv was present during this
+  check but supplied no fallback. Canonical copies were restored and
+  byte-compared to source before final build/test/normal launch.
+- Canonical and diagnostic runtime stdout/stderr logs were empty. Source data
+  remained unchanged by controlled UI testing. Final normal run restored the
+  canonical zero-diagnostic six-point state.
+
+Limitations: the official ACRA register supplies corroborating registered
+addresses, not authoritative HDB IDs or historical identity certainty. All
+assertions in this one pinned B extract were retained; expanding coverage needs
+fresh scrutiny of conflicts/coverage. Approximate bbox points may be exterior
+and never locate a flat. Physical pinch, Linux/Windows and packaged distribution
+remain untested. Qt Location 6.12 is deliberate Technology Preview; Bridge
+0.4.0.22-beta uses the matching external Qt installation. No credible upstream
+Qt Bridge/Location defect was found or externally reported. No dependency
+versions changed for M3.
+
+---
+
+## Historical Milestone 2 and Milestone 1 verification
+
 # Milestone 2 verification — 2026-10-03
 
 Executed on the same macOS arm64 toolchain recorded in README. Local branch:

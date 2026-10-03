@@ -1,11 +1,17 @@
 using System.Globalization;
+using System.Text.Json;
 using Microsoft.VisualBasic.FileIO;
 namespace HdbResale.Domain;
 
 public sealed record ImportDiagnostic(string File, long Row, string Message);
 public sealed record RejectedRecord(string File, long Row, IReadOnlyList<string> Fields, string Reason);
 public sealed record ImportResult(IReadOnlyList<ResaleTransaction> Accepted,
-    IReadOnlyList<RejectedRecord> Rejected, IReadOnlyList<ImportDiagnostic> Diagnostics);
+    IReadOnlyList<RejectedRecord> Rejected, IReadOnlyList<ImportDiagnostic> Diagnostics)
+{
+    public int MatchedCount => Accepted.Count(t => t.Match.IsMatched);
+    public int AmbiguousCount => Accepted.Count(t => t.Match.Quality == MatchQuality.Ambiguous);
+    public int UnmatchedCount => Accepted.Count(t => t.Match.Quality == MatchQuality.Unmatched);
+}
 
 public static class CsvImport
 {
@@ -14,32 +20,27 @@ public static class CsvImport
     {
         var rejected = new List<RejectedRecord>();
         var diagnostics = new List<ImportDiagnostic>();
-        var locations = new Dictionary<string, DerivedLocation>(StringComparer.Ordinal);
-        foreach (var row in Read(Path.Combine(directory, "locations.csv"),
-            ["town", "block", "street_name", "latitude", "longitude", "quality", "source"], rejected, diagnostics))
+        var properties = new List<PropertyAddress>();
+        foreach (var row in Read(Path.Combine(directory, "address-evidence.csv"),
+            ["source_row", "blk_no", "street"], rejected, diagnostics))
         {
             var f = row.Fields;
-            var key = Key(f);
-            string? error = null;
-            DerivedLocation? location = null;
-            if (string.IsNullOrWhiteSpace(f["town"]) || string.IsNullOrWhiteSpace(f["block"]) ||
-                string.IsNullOrWhiteSpace(f["street_name"])) error = "Location address is required.";
-            else if (!Enum.TryParse<LocationQuality>(f["quality"], out var quality) || !Enum.IsDefined(quality) || f["quality"] != quality.ToString())
-                error = "Unknown location quality.";
-            else if (string.IsNullOrWhiteSpace(f["source"])) error = "Location source is required.";
-            else if (quality == LocationQuality.Missing)
-            {
-                if (f["latitude"] != "" || f["longitude"] != "") error = "Missing quality cannot carry coordinates.";
-                else location = new(null, quality, f["source"]);
-            }
-            else if (!double.TryParse(f["latitude"], NumberStyles.Float, CultureInfo.InvariantCulture, out var lat) ||
-                !double.TryParse(f["longitude"], NumberStyles.Float, CultureInfo.InvariantCulture, out var lon) ||
-                !double.IsFinite(lat) || !double.IsFinite(lon) || lat is < -90 or > 90 || lon is < -180 or > 180)
-                error = "Coordinates must be finite latitude [-90,90] / longitude [-180,180].";
-            else location = new(new(lat, lon), quality, f["source"]);
-            if (error is null && !locations.TryAdd(key, location!)) error = "Duplicate location address.";
-            if (error is not null) Reject("locations.csv", row, error, rejected, diagnostics);
+            if (!long.TryParse(f["source_row"], out var sourceRow) || sourceRow < 2 ||
+                string.IsNullOrWhiteSpace(f["blk_no"]) || string.IsNullOrWhiteSpace(f["street"]))
+                Reject("address-evidence.csv", row, "Property source row, block and street are required.", rejected, diagnostics);
+            else properties.Add(new(sourceRow, f["blk_no"], f["street"]));
         }
+        var postalAddresses = new List<PostalAddress>();
+        foreach (var row in Read(Path.Combine(directory, "postal-address-evidence.csv"),
+            ["source_row", "block", "street_name", "postal_code"], rejected, diagnostics))
+        {
+            var f = row.Fields;
+            if (!long.TryParse(f["source_row"], out var sourceRow) || sourceRow < 2 ||
+                string.IsNullOrWhiteSpace(f["block"]) || string.IsNullOrWhiteSpace(f["street_name"]) || !PostalCode(f["postal_code"]))
+                Reject("postal-address-evidence.csv", row, "Postal source row, block, street and six-digit postal code are required.", rejected, diagnostics);
+            else postalAddresses.Add(new(sourceRow, f["block"], f["street_name"], f["postal_code"]));
+        }
+        var footprints = ReadFootprints(Path.Combine(directory, "building-evidence.geojson"), rejected, diagnostics);
         var accepted = new List<ResaleTransaction>();
         var ids = new HashSet<int>();
         foreach (var row in Read(Path.Combine(directory, "transactions.csv"),
@@ -56,16 +57,102 @@ public static class CsvImport
                 error = "Source row must be unique and at least 2.";
             else
             {
-                var location = locations.GetValueOrDefault(Key(f)) ??
-                    new DerivedLocation(null, LocationQuality.Missing, "No accepted entry in local location table.");
-                accepted.Add(new("HDB-" + sourceRow, new(month!, f["town"], f["block"],
-                    f["street_name"], f["flat_type"], price), location));
+                var facts = new TransactionFacts(month!, f["town"], f["block"], f["street_name"], f["flat_type"], price);
+                var match = AddressMatcher.Match(facts, properties, postalAddresses, footprints);
+                var location = match.MatchedFootprint?.Location ?? new DerivedLocation(null, CoordinateQuality.Missing, match.Reason);
+                accepted.Add(new("HDB-" + sourceRow, facts, location, match));
             }
             if (error is not null) Reject("transactions.csv", row, error, rejected, diagnostics);
         }
         return new(accepted.AsReadOnly(), rejected.AsReadOnly(), diagnostics.AsReadOnly());
     }
-    private static string Key(Dictionary<string, string> f) => $"{f["town"]}|{f["block"]}|{f["street_name"]}";
+    private static bool PostalCode(string value) => value.Length == 6 && value.All(char.IsAsciiDigit);
+    private static IReadOnlyList<FootprintRecord> ReadFootprints(string path,
+        List<RejectedRecord> rejected, List<ImportDiagnostic> diagnostics)
+    {
+        var result = new List<FootprintRecord>();
+        var file = Path.GetFileName(path);
+        try
+        {
+            using var document = JsonDocument.Parse(File.ReadAllText(path));
+            var root = document.RootElement;
+            if (root.ValueKind != JsonValueKind.Object || !root.TryGetProperty("type", out var type) ||
+                type.ValueKind != JsonValueKind.String || type.GetString() != "FeatureCollection" ||
+                !root.TryGetProperty("features", out var features) || features.ValueKind != JsonValueKind.Array)
+            {
+                diagnostics.Add(new(file, 0, "Expected GeoJSON FeatureCollection with features array."));
+                return result;
+            }
+            long featureNumber = 0;
+            foreach (var feature in features.EnumerateArray())
+            {
+                featureNumber++;
+                string? error = null;
+                if (feature.ValueKind != JsonValueKind.Object || !feature.TryGetProperty("properties", out var p) ||
+                    p.ValueKind != JsonValueKind.Object || !Integer(p, "OBJECTID", out var objectId) || objectId <= 0 ||
+                    !Integer(p, "ENTITYID", out var entityId) || entityId <= 0 ||
+                    !Text(p, "BLK_NO", out var block) || string.IsNullOrWhiteSpace(block) ||
+                    !Text(p, "POSTAL_COD", out var postal) || !PostalCode(postal))
+                    error = "Footprint OBJECTID, ENTITYID, block and six-digit postal code are required.";
+                else if (!feature.TryGetProperty("geometry", out var geometry)) error = "Geometry member is required (null explicitly means missing).";
+                else
+                {
+                    GeoPoint? point = null;
+                    if (geometry.ValueKind != JsonValueKind.Null) error = Midpoint(geometry, out point);
+                    if (error is null)
+                    {
+                        var identity = new FootprintIdentity(objectId, entityId, block, postal);
+                        var source = $"HDB Existing Building OBJECTID {objectId}; ENTITYID {entityId}; postal {postal}; " +
+                            (point is null ? "no geometry in local evidence." : "exterior-ring bounding-box midpoint (not exact/interior guaranteed).");
+                        result.Add(new(identity, new(point, point is null ? CoordinateQuality.Missing : CoordinateQuality.BlockApproximation, source)));
+                    }
+                }
+                if (error is not null)
+                {
+                    rejected.Add(new(file, featureNumber, Array.AsReadOnly(new[] { feature.GetRawText() }), error));
+                    diagnostics.Add(new(file, featureNumber, error));
+                }
+            }
+        }
+        catch (IOException e) { diagnostics.Add(new(file, 0, e.Message)); }
+        catch (UnauthorizedAccessException e) { diagnostics.Add(new(file, 0, e.Message)); }
+        catch (JsonException e) { diagnostics.Add(new(file, 0, $"Malformed GeoJSON: {e.Message}")); }
+        return result.AsReadOnly();
+    }
+    private static bool Integer(JsonElement element, string name, out int value)
+    {
+        value = 0;
+        return element.TryGetProperty(name, out var p) && p.ValueKind == JsonValueKind.Number && p.TryGetInt32(out value);
+    }
+    private static bool Text(JsonElement element, string name, out string value)
+    {
+        value = "";
+        if (!element.TryGetProperty(name, out var p) || p.ValueKind != JsonValueKind.String) return false;
+        value = p.GetString()!;
+        return true;
+    }
+    private static string? Midpoint(JsonElement geometry, out GeoPoint? point)
+    {
+        point = null;
+        if (geometry.ValueKind != JsonValueKind.Object || !Text(geometry, "type", out var type) || type != "Polygon" ||
+            !geometry.TryGetProperty("coordinates", out var rings) || rings.ValueKind != JsonValueKind.Array ||
+            rings.GetArrayLength() == 0 || rings[0].ValueKind != JsonValueKind.Array || rings[0].GetArrayLength() < 4)
+            return "Expected Polygon with an exterior ring of at least four positions.";
+        var positions = new List<(double Longitude, double Latitude)>();
+        foreach (var position in rings[0].EnumerateArray())
+        {
+            if (position.ValueKind != JsonValueKind.Array || position.GetArrayLength() < 2 ||
+                position[0].ValueKind != JsonValueKind.Number || position[1].ValueKind != JsonValueKind.Number ||
+                !position[0].TryGetDouble(out var lon) || !position[1].TryGetDouble(out var lat) ||
+                !double.IsFinite(lon) || !double.IsFinite(lat) || lon is < -180 or > 180 || lat is < -90 or > 90)
+                return "Polygon positions must contain finite longitude [-180,180] / latitude [-90,90].";
+            positions.Add((lon, lat));
+        }
+        if (positions[0] != positions[^1]) return "Polygon exterior ring must be closed.";
+        point = new(Math.Round((positions.Min(p => p.Latitude) + positions.Max(p => p.Latitude)) / 2, 10),
+            Math.Round((positions.Min(p => p.Longitude) + positions.Max(p => p.Longitude)) / 2, 10));
+        return null;
+    }
     private static void Reject(string file, CsvRow row, string error, List<RejectedRecord> rejected,
         List<ImportDiagnostic> diagnostics)
     {

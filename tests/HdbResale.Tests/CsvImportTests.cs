@@ -1,28 +1,44 @@
 using HdbResale.Domain;
+using System.Text.Json.Nodes;
 using Xunit;
 namespace HdbResale.Tests;
 public sealed class CsvImportTests : IDisposable
 {
     private readonly string directory = Path.Combine(Path.GetTempPath(), "hdb-test-" + Guid.NewGuid());
     private const string Header = "source_row,month,town,flat_type,block,street_name,resale_price\n";
-    private const string LocationHeader = "town,block,street_name,latitude,longitude,quality,source\n";
+    private const string PropertyHeader = "source_row,blk_no,street\n";
+    private const string PostalHeader = "source_row,block,street_name,postal_code\n";
     public CsvImportTests() { Directory.CreateDirectory(directory); }
     public void Dispose() => Directory.Delete(directory, true);
-    private ImportResult Load(string transactions, string locations = LocationHeader)
+    private static JsonObject Feature(int id, JsonNode? geometry) => new()
+    {
+        ["type"] = "Feature",
+        ["properties"] = new JsonObject { ["OBJECTID"] = id, ["ENTITYID"] = 77, ["BLK_NO"] = "1", ["POSTAL_COD"] = "123456" },
+        ["geometry"] = geometry
+    };
+    private static JsonNode Polygon() => JsonNode.Parse("""
+        {"type":"Polygon","coordinates":[[[103.7,1.2],[103.9,1.2],[103.9,1.4],[103.7,1.4],[103.7,1.2]]]}
+        """)!;
+    private ImportResult Load(string transactions, string properties = PropertyHeader,
+        string postals = PostalHeader, params JsonObject[] features)
     {
         File.WriteAllText(Path.Combine(directory, "transactions.csv"), transactions);
-        File.WriteAllText(Path.Combine(directory, "locations.csv"), locations);
+        File.WriteAllText(Path.Combine(directory, "address-evidence.csv"), properties);
+        File.WriteAllText(Path.Combine(directory, "postal-address-evidence.csv"), postals);
+        File.WriteAllText(Path.Combine(directory, "building-evidence.geojson"),
+            new JsonObject { ["type"] = "FeatureCollection", ["features"] = new JsonArray(features.Select(f => (JsonNode)f).ToArray()) }.ToJsonString());
         return CsvImport.LoadDirectory(directory);
     }
     [Fact]
     public void QuotedFieldsAndDecimalPricesKeepFactsSeparateFromDerivedCoordinates()
     {
         var result = Load(Header + "2,2024-02,T,3 ROOM,1,\"STREET, ONE\",123.45\n",
-            LocationHeader + "T,1,\"STREET, ONE\",1.3,103.8,StreetApproximation,official anchor\n");
+            PropertyHeader + "2,1,\"STREET, ONE\"\n", PostalHeader + "2,1,\"STREET, ONE\",123456\n", Feature(42, Polygon()));
         var row = Assert.Single(result.Accepted);
         Assert.Equal(123.45m, row.Price);
         Assert.Equal("2024-02", row.Facts.Month.ToString());
         Assert.Equal("STREET, ONE", row.Facts.Street);
+        Assert.Equal(MatchQuality.ExactAddress, row.Match.Quality);
         Assert.Equal(1.3, row.Location.Point!.Latitude);
         Assert.Empty(result.Rejected);
     }
@@ -46,28 +62,43 @@ public sealed class CsvImportTests : IDisposable
         Assert.Contains(reason, rejection.Reason);
         Assert.NotEmpty(rejection.Fields);
     }
-    [Theory]
-    [InlineData("91,103,StreetApproximation,source")]
-    [InlineData("1,181,BlockApproximation,source")]
-    [InlineData("NaN,103,StreetApproximation,source")]
-    [InlineData("1,103,Missing,source")]
-    [InlineData(",,Authoritative,source")]
-    [InlineData("1,103,StreetApproximation,")]
-    [InlineData("1,103,Exact,source")]
-    public void BadLocationIsRejectedButValidTransactionRemainsUnlocated(string fields)
+    [Fact]
+    public void InvalidGeometryDoesNotDiscardOtherReadableFootprintsOrTransaction()
     {
-        var result = Load(Header + "2,2024-01,T,3 ROOM,1,ST,100\n", LocationHeader + "T,1,ST," + fields + "\n");
+        var bad = Polygon(); bad["coordinates"]![0]![0]![1] = 91;
+        var result = Load(Header + "2,2024-01,T,3 ROOM,1,ST,100\n",
+            PropertyHeader + "2,1,ST\n", PostalHeader + "2,1,ST,123456\n", Feature(99, bad), Feature(42, Polygon()));
         var row = Assert.Single(result.Accepted);
-        Assert.Equal(LocationQuality.Missing, row.Location.Quality);
-        Assert.Null(row.Location.Point);
-        Assert.Equal("locations.csv", Assert.Single(result.Rejected).File);
+        Assert.Equal(42, row.Match.MatchedFootprint!.Identity.ObjectId);
+        Assert.Equal(CoordinateQuality.BlockApproximation, row.Location.Quality);
+        Assert.Equal("building-evidence.geojson", Assert.Single(result.Rejected).File);
+        Assert.Contains("finite", Assert.Single(result.Diagnostics).Message);
     }
     [Fact]
-    public void MissingLocationWithReasonIsAccepted()
+    public void MatchedIdentityCanHaveMissingCoordinatesWithoutLosingItsProvenance()
     {
-        var result = Load(Header + "2,2024-01,T,3 ROOM,1,ST,100\n", LocationHeader + "T,1,ST,,,Missing,no coverage\n");
+        var result = Load(Header + "2,2024-01,T,3 ROOM,1,ST,100\n",
+            PropertyHeader + "2,1,ST\n", PostalHeader + "2,1,ST,123456\n", Feature(42, null));
+        var row = Assert.Single(result.Accepted);
+        Assert.True(row.Match.IsMatched);
+        Assert.Equal(CoordinateQuality.Missing, row.Location.Quality);
+        Assert.Null(row.Location.Point);
+        Assert.Contains("OBJECTID 42", row.Location.Source);
         Assert.Empty(result.Diagnostics);
-        Assert.Equal("no coverage", Assert.Single(result.Accepted).Location.Source);
+    }
+    [Fact]
+    public void AmbiguousIdentityIsRetainedInImportCountsWithoutCoordinates()
+    {
+        var result = Load(Header + "2,2024-01,T,3 ROOM,1,ST,100\n",
+            PropertyHeader + "2,1,ST\n", PostalHeader + "2,1,ST,123456\n",
+            Feature(42, Polygon()), Feature(99, Polygon()));
+        var row = Assert.Single(result.Accepted);
+        Assert.Equal(MatchQuality.Ambiguous, row.Match.Quality);
+        Assert.Equal(1, result.AmbiguousCount);
+        Assert.Equal(0, result.MatchedCount);
+        Assert.Equal(0, result.UnmatchedCount);
+        Assert.Null(row.Location.Point);
+        Assert.Empty(result.Rejected);
     }
     [Fact]
     public void StructuralAndIoFailuresAreVisibleDiagnostics()
@@ -78,9 +109,14 @@ public sealed class CsvImportTests : IDisposable
         File.Delete(Path.Combine(directory, "transactions.csv"));
         result = CsvImport.LoadDirectory(directory);
         Assert.Contains(result.Diagnostics, d => d.File == "transactions.csv" && d.Row == 0);
+        Load(Header + "2,2024-01,T,3 ROOM,1,ST,100\n");
+        File.WriteAllText(Path.Combine(directory, "building-evidence.geojson"), "{bad");
+        result = CsvImport.LoadDirectory(directory);
+        Assert.Single(result.Accepted);
+        Assert.Contains(result.Diagnostics, d => d.Message.Contains("Malformed GeoJSON"));
     }
     [Fact]
-    public void MalformedQuotedRowAndDuplicateSourceIdAreDiagnosed()
+    public void MalformedCsvAndCanonicalDuplicateIdAreDiagnosed()
     {
         var result = Load(Header + "2,2024-01,T,3 ROOM,1,ST,100,extra\n" +
             "3,2024-01,T,3 ROOM,1,ST,100\n003,2024-01,T,3 ROOM,1,ST,100\n");
@@ -91,10 +127,20 @@ public sealed class CsvImportTests : IDisposable
         Assert.Contains(result.Diagnostics, d => d.Message.Contains("quoting"));
     }
     [Fact]
-    public void InvalidGeoPointsAndContradictoryQualityCannotBeConstructed()
+    public void BadPostalRecordIsRejectedWhileValidTransactionRemainsUnmatched()
+    {
+        var result = Load(Header + "2,2024-01,T,3 ROOM,1,ST,100\n", PropertyHeader + "2,1,ST\n",
+            PostalHeader + "2,1,ST,12345\n");
+        Assert.Equal(MatchQuality.Unmatched, Assert.Single(result.Accepted).Match.Quality);
+        Assert.Equal("postal-address-evidence.csv", Assert.Single(result.Rejected).File);
+        Assert.Equal(1, result.UnmatchedCount);
+    }
+    [Fact]
+    public void InvalidCoordinatesAndContradictoryQualityCannotBeConstructed()
     {
         Assert.Throws<ArgumentOutOfRangeException>(() => new GeoPoint(double.PositiveInfinity, 103));
-        Assert.Throws<ArgumentException>(() => new DerivedLocation(new(1, 103), LocationQuality.Missing, "source"));
-        Assert.Throws<ArgumentException>(() => new DerivedLocation(null, LocationQuality.Authoritative, "source"));
+        Assert.Throws<ArgumentException>(() => new DerivedLocation(new(1, 103), CoordinateQuality.Missing, "source"));
+        Assert.Throws<ArgumentException>(() => new DerivedLocation(null, CoordinateQuality.BlockApproximation, "source"));
+        Assert.Throws<ArgumentException>(() => new DerivedLocation(new(1, 103), CoordinateQuality.BlockApproximation, ""));
     }
 }

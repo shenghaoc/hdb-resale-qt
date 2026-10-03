@@ -16,7 +16,7 @@ public sealed record YearMonth
     }
     public override string ToString() => $"{Year:D4}-{Month:D2}";
 }
-public enum LocationQuality { Missing, StreetApproximation, BlockApproximation, Authoritative }
+public enum CoordinateQuality { Missing, BlockApproximation }
 public sealed record GeoPoint
 {
     public GeoPoint(double latitude, double longitude)
@@ -32,20 +32,20 @@ public sealed record GeoPoint
 }
 public sealed record DerivedLocation
 {
-    public DerivedLocation(GeoPoint? point, LocationQuality quality, string source)
+    public DerivedLocation(GeoPoint? point, CoordinateQuality quality, string source)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(source);
-        if (!Enum.IsDefined(quality) || (quality == LocationQuality.Missing) != (point is null))
+        if (!Enum.IsDefined(quality) || (quality == CoordinateQuality.Missing) != (point is null))
             throw new ArgumentException("Location quality must agree with coordinate presence.");
         Point = point; Quality = quality; Source = source;
     }
     public GeoPoint? Point { get; }
-    public LocationQuality Quality { get; }
+    public CoordinateQuality Quality { get; }
     public string Source { get; }
 }
 public sealed record TransactionFacts(YearMonth Month, string Town, string Block, string Street,
     string FlatType, decimal Price);
-public sealed record ResaleTransaction(string Id, TransactionFacts Facts, DerivedLocation Location)
+public sealed record ResaleTransaction(string Id, TransactionFacts Facts, DerivedLocation Location, AddressMatch Match)
 {
     public string Town => Facts.Town;
     public string Address => $"{Facts.Block} {Facts.Street}";

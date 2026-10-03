@@ -1,91 +1,98 @@
-# Official-data fixture provenance
+# Official-record fixture provenance
 
-Housing & Development Board (HDB), via data.gov.sg. Adapted under the
+HDB and ACRA, via data.gov.sg. Adapted under the
 [Singapore Open Data Licence](https://data.gov.sg/open-data-licence).
-Retrieved 2026-10-03. Source URLs and full downloaded-source SHA-256 hashes
-are pinned in [provenance.json](provenance.json). The app visibly credits HDB /
-data.gov.sg and links this licence. No endorsement or exact-location claim.
+Retrieved 2026-10-03. Full downloaded-source SHA-256 hashes and URLs are pinned
+in [provenance.json](provenance.json). The app credits HDB / ACRA / data.gov.sg
+and links the licence. No endorsement or exact-location claim.
 
-- [Resale flat prices based on registration date from Jan-2017 onwards](https://data.gov.sg/datasets/d_8b84c4ee58e3cfc0ece0d773c8ca6abc/view):
-  `transactions.csv` preserves all 11 official columns for six records. Added
-  `source_row` is the 1-based CSV line including the header: 34, 1188, 371,
-  382, 7555, 24303. Local app IDs `HDB-<source_row>` identify this snapshot only;
-  upstream has no transaction-ID or coordinate column. Month is registration
-  month. No unit number is provided. The checked-in facts are real, not synthetic.
-- [HDB Existing Building](https://data.gov.sg/datasets/d_16b157c52ed637edd6ba1232e026258d/view):
-  `building-evidence.geojson` preserves five selected original polygon features
-  with block, street code, postal code, OBJECTID and geometry. This is current
-  building coverage, not historical flat-level geometry.
+- [HDB resale registration prices since Jan-2017](https://data.gov.sg/datasets/d_8b84c4ee58e3cfc0ece0d773c8ca6abc/view):
+  `transactions.csv` preserves all 11 official columns for the same six M2 rows.
+  Added `source_row` is the 1-based CSV line including header: 34, 1188, 371,
+  382, 7555, 24303. Local `HDB-<source_row>` IDs are snapshot references, not
+  official transaction IDs. The source supplies no coordinates or unit numbers.
 - [HDB Property Information](https://data.gov.sg/datasets/d_17f5382f26140b1fdae0ba2ef6239d2f/view):
-  `address-evidence.csv` retains the official `blk_no` and `street` columns for
-  all 76 blocks on the three selected streets. This dataset has no coordinates
-  or postal codes; it is address-join evidence only.
+  `address-evidence.csv` retains all 76 `blk_no` / `street` records on the three
+  selected streets and adds their original CSV `source_row`. No postal or
+  footprint ID occurs in this source. All six resale/property addresses match
+  directly, before any normalization.
+- [ACRA Information on Corporate Entities ('B')](https://data.gov.sg/datasets/d_3a3807c023c61ddfba947dc069eb53f2/view):
+  `postal-address-evidence.csv` retains **all 30** assertions found for the six
+  normalized addresses in this pinned source. Only `block`, `street_name`,
+  `postal_code` are projected; added `source_row` means the original CSV line
+  including header, not an entity/address ID. No company/person/unit/UEN fields
+  are retained. Metadata reported last update 2026-09-16T10:00:35+08:00.
+  These are registrant-supplied registered addresses in an official register,
+  useful corroboration rather than authoritative HDB identity.
+- [HDB Existing Building](https://data.gov.sg/datasets/d_16b157c52ed637edd6ba1232e026258d/view):
+  `building-evidence.geojson` retains six complete original polygon features,
+  including OBJECTID, ENTITYID, BLK_NO, POSTAL_COD and geometry. ST_COD remains
+  an untouched raw field but **is not used**. Coverage is current, not a
+  historical flat-level address source.
 
-## Explicit inferred join
+## Conservative C# linkage
 
-Existing Building's `ST_COD` is not the resale street name. Block alone is
-ambiguous and was never used alone. During offline fixture preparation, group
-**all** downloaded building features by `ST_COD` and collect their `BLK_NO`
-sets; group property records by `street` and collect `blk_no` sets. For each of
-these three streets, exactly one code group has a completely identical set
-across the full building dataset:
+For each valid resale, require exactly one explicit HDB property block/street
+record. Find all ACRA assertions on that normalized block/street. Require them
+to agree on one distinct six-digit postal code, then require exactly one HDB
+footprint matching **both block and postal**. No entity is chosen from agreeing
+corporate assertions; preserve them all. Conflicting postals or multiple
+property/footprint records, including duplicate candidates, yield `Ambiguous`;
+missing evidence yields `Unmatched`. Neither gets an arbitrary point. Accepted
+transactions survive all identity outcomes and remain filterable/selectable.
 
-| Resale/property street | Inferred building code | Exact block-set equality |
-| --- | --- | --- |
-| ANG MO KIO AVE 8 | ANA09H | 21 / 21 |
-| CLEMENTI AVE 3 | CLA06H | 43 / 43 |
-| TAMPINES CTRL 1 | TAC10N | 12 / 12 |
+Block normalization trims outer whitespace and uppercases only. Street
+normalization uppercases and collapses whitespace, and expands `AVE` to
+`AVENUE` / `CTRL` to `CENTRAL` only immediately before a final ASCII numeric
+road suffix. These aliases are observed in the actual retained HDB/ACRA rows.
+Leading zeroes, punctuation, block suffixes, road numbers and other
+abbreviations are preserved. No fuzzy, spatial or street-code fallback exists.
+`ExactAddress` requires the raw input fields to agree; all six real chains are
+`NormalizedAddress` because ACRA spells out AVENUE/CENTRAL.
 
-[street-code-evidence.json](street-code-evidence.json) pins the matching sets
-and explicitly labels this inference. The complete set agreement strongly
-supports the crosswalk; it is **not an authoritative code dictionary** and is
-not generalized to other streets. Each fixture address also occurs exactly
-once in the official property table. Join street through that crosswalk, then
-require exactly one polygon matching both code and block. Ambiguous or
-unmatched addresses must stay unlocated.
+| Resale/property address | ACRA street | Postal | Assertions | OBJECTID / ENTITYID |
+| --- | --- | --- | --- | --- |
+| 509 ANG MO KIO AVE 8 | ANG MO KIO AVENUE 8 | 560509 | 5 | 937499 / 7861 |
+| 510 ANG MO KIO AVE 8 | ANG MO KIO AVENUE 8 | 560510 | 1 | 946126 / 4194 |
+| 449 CLEMENTI AVE 3 | CLEMENTI AVENUE 3 | 120449 | 9 | 942992 / 2806 |
+| 461 CLEMENTI AVE 3 | CLEMENTI AVENUE 3 | 120461 | 6 | 945486 / 2850 |
+| 503 TAMPINES CTRL 1 | TAMPINES CENTRAL 1 | 520503 | 3 | 936585 / 9869 |
+| 505 TAMPINES CTRL 1 | TAMPINES CENTRAL 1 | 520505 | 6 | 937147 / 9870 |
 
-## Deterministic derived coordinates
-
-For the exterior WGS84 ring of each matched polygon:
+Identity match quality and coordinate quality are independent. Explicit null
+geometry keeps the unique identity matched but coordinates `Missing`.
+Malformed geometry produces a rejected feature and visible diagnostic; valid
+resales remain accepted. For each valid matched exterior WGS84 polygon ring,
+C# calculates and rounds to 10 decimal places:
 
 ```text
 longitude = (minimum vertex longitude + maximum vertex longitude) / 2
 latitude  = (minimum vertex latitude  + maximum vertex latitude)  / 2
 ```
 
-Round each coordinate to 10 decimal places in `locations.csv`. This is a
-bounding-box midpoint, not an area centroid, interior-point guarantee, unit
-location or authoritative address point. It may lie outside an irregular
-footprint. Its quality is **BlockApproximation**; source text pins OBJECTID,
-street code, postal code and inferred join method. Tests recompute these points
-from the checked-in original geometries and check the address/code/quality.
+This is `BlockApproximation`, a bounding-box midpoint, not an area centroid,
+interior guarantee, unit location or authoritative address point. Provenance
+includes the original OBJECTID, ENTITYID and postal. The original five M2
+midpoints remain unchanged; the legitimate sixth polygon now supplies block
+510. Missing-coordinate behavior is tested without artificially omitting this
+canonical official evidence.
 
-| Local transaction ID | Address | Polygon OBJECTID | Quality |
-| --- | --- | --- | --- |
-| HDB-34 | 509 ANG MO KIO AVE 8 | 937499 | BlockApproximation |
-| HDB-371 | 449 CLEMENTI AVE 3 | 942992 | BlockApproximation |
-| HDB-382 | 461 CLEMENTI AVE 3 | 945486 | BlockApproximation |
-| HDB-7555 | 503 TAMPINES CTRL 1 | 936585 | BlockApproximation |
-| HDB-24303 | 505 TAMPINES CTRL 1 | 937147 | BlockApproximation |
-| HDB-1188 | 510 ANG MO KIO AVE 8 | omitted intentionally | Missing |
+## Bounded reproduction and limits
 
-HDB-1188 intentionally has no coordinate-table entry to exercise partial local
-coverage. This does not assert that the official building dataset lacks that
-block. It remains a valid, filterable/selectable transaction in the sidebar;
-only located rows enter the map model. No placeholder coordinate is generated.
-No `Authoritative` or `StreetApproximation` entries are claimed by this fixture.
+Full sources were downloaded during development through the official
+`api-open.data.gov.sg/v1/public/api/datasets/<id>/poll-download` endpoint.
+Full source files and expiring signed URLs are not checked in. Against those
+pinned source bytes, verify SHA-256; select the six transaction source lines;
+select all property records on the three streets; normalize and scan the entire
+ACRA B CSV for the six block/street keys, retaining every assertion; then select
+unique block/postal building features and recompute midpoints. Later source
+updates may reorder rows or change coverage. Do not use snapshot row numbers
+as durable global keys. No broader ACRA coverage or conflict-free production
+join is claimed.
 
-## Bounded offline reproduction
-
-Full sources were downloaded only during development using the official
-`api-open.data.gov.sg/v1/public/api/datasets/<id>/poll-download` endpoint's
-returned download URL. Full source files and expiring signed URLs are not
-checked in. To reproduce against those pinned snapshots, verify their SHA-256,
-select the documented transaction rows, perform the set-equality/unique
-address+polygon joins above, and recompute the midpoint formula. Later source
-updates can reorder resale rows or change coverage; do not treat row numbers
-or inferred codes as durable global keys.
-
-The application reads only the two tiny CSVs locally. Evidence files are small
-bounded extracts needed for review and tests, not generated build output or a
-production ingestion pipeline. No live geocoding was used.
+M2's block-set inferred street-code crosswalk and precomputed coordinate table
+are preserved only in [docs/milestone-2](../docs/milestone-2/README.md) and Git
+history. They are not packaged, loaded or used as fallback. The app reads only
+these tiny local CSV/GeoJSON inputs, not the full sources. ACRA records and
+current footprints do not prove an exact 2017/2018 location. No online geocoding
+or invented fixture coordinates were used.

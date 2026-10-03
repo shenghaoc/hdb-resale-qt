@@ -14,6 +14,18 @@
   "source_locations_sha256": "7c987511548de3a82da403cabca02702031e02ade8703a9e401417883dfeb702",
   "address_evidence_url": "https://data.gov.sg/datasets/d_17f5382f26140b1fdae0ba2ef6239d2f/view",
   "source_address_evidence_sha256": "a6e3105d02c4b59929371d1f7e4f8c0ed7939cdc081701d7e9197790bb78f4b1",
-  "missing_local_location": "HDB-1188 intentionally omitted to exercise partial coordinate coverage.",
-  "licence_url": "https://data.gov.sg/open-data-licence"
+  "licence_url": "https://data.gov.sg/open-data-licence",
+  "postal_address_evidence_url": "https://data.gov.sg/datasets/d_3a3807c023c61ddfba947dc069eb53f2/view",
+  "postal_address_dataset_title": "ACRA Information on Corporate Entities ('B')",
+  "postal_address_retrieved_utc": "2026-10-03",
+  "source_postal_address_sha256": "a790f1a5082afcd6b5bad133f3949e3977e59cc8e33552897206b1e5f90cdab7",
+  "postal_projection_fields": [
+    "block",
+    "street_name",
+    "postal_code"
+  ],
+  "added_postal_source_row": "1-based source CSV row including header; not an official entity/address ID",
+  "identity_linkage": "Explicit HDB property block/street; conservative AVE/AVENUE and CTRL/CENTRAL address normalization; agreeing ACRA block/street/postal assertions; unique HDB footprint block/postal. ACRA registered addresses are corroboration, not authoritative HDB ID.",
+  "coordinate_method": "Exterior-ring bounding-box midpoint in WGS84, rounded to 10 decimal places; BlockApproximation, not guaranteed interior or flat-level.",
+  "retired_m2_inference": "docs/milestone-2; not an input or fallback"
 }

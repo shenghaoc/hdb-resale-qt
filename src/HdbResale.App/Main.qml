@@ -31,7 +31,7 @@ ApplicationWindow {
         anchors.margins: 12
         spacing: 10
         Label { text: "Singapore HDB resale explorer"; font.pixelSize: 24; font.bold: true }
-        Label { text: "HDB via data.gov.sg · derived block approximations · partial location coverage" }
+        Label { text: "HDB / ACRA via data.gov.sg · corroborated addresses · approximate footprint points" }
         RowLayout {
             Label { text: "Town" }
             ComboBox {

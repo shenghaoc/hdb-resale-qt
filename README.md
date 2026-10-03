@@ -1,15 +1,15 @@
 # HDB resale native fixture explorer
 
-Milestone 2: a runnable local official-data native desktop slice, verified on macOS
+Milestone 3: a runnable local official-record address-matching native slice, verified on macOS
 arm64. This is the C#/Qt sibling of the
 [web HDB resale visualizer](https://github.com/shenghaoc/hdb-resale-visualizer);
 the web project is a product and behavior reference, not a translated frontend.
 
 A small native C# / Qt Quick vertical slice. Six checked-in **real HDB** resale
 transactions cover three towns, three flat types and four registration months.
-Five have derived **BlockApproximation** points from official HDB building
-footprints; one intentionally has no local coordinate entry. The points are not
-exact flat locations. See [data provenance and derivation](data/README.md).
+All six have corroborated address matches and derived **BlockApproximation**
+points from official HDB building footprints. Identity match quality and
+coordinate quality are separate; neither establishes an exact flat location. See [data provenance and derivation](data/README.md).
 
 C# owns the transactions, combined town/budget filtering, selection, summaries,
 and the Qt item model. QML owns the native window, controls, marker presentation,
@@ -102,7 +102,7 @@ output stay under ignored `obj`/`bin` directories.
 ## Structure
 
 ```text
-src/HdbResale.Domain/  immutable facts/location records, CSV importer, ExplorerState
+src/HdbResale.Domain/  immutable facts/match/location records, CSV/GeoJSON importer, ExplorerState
 src/HdbResale.App/     official-template csproj, Program, ResaleMapModel, LocatedMapModel, Main.qml, Info.plist
 tests/HdbResale.Tests/ import/domain/evidence tests, independent of Qt
 data/                 tiny CSVs, source metadata, bounded official join/geometry evidence
@@ -144,42 +144,61 @@ and fresh native configuration warns about coupling to that Qt build.
 
 ## Local import and diagnostics
 
-At startup C# reads `data/transactions.csv` and `data/locations.csv` relative to
-`AppContext.BaseDirectory`; MSBuild copies both into output and the development
+At startup C# reads three small CSVs (`transactions.csv`, `address-evidence.csv`,
+`postal-address-evidence.csv`) and `building-evidence.geojson` relative to
+`AppContext.BaseDirectory`. MSBuild copies them into output and the development
 bundle. No data fetching or geocoding occurs at runtime. Only the basemap needs
-network access. Additional provenance/evidence files are documentation/test
-inputs, not app dependencies.
+network access. See [data/README.md](data/README.md) for pinned source hashes,
+row provenance, the exact linkage and normalization rules.
 
-The Qt-free domain separates official facts (valid `YearMonth`, town, block,
-street, flat type, decimal price) from derived location (immutable coordinates,
-quality, source). The importer uses .NET's BCL `TextFieldParser` for CSV quoting;
-no CSV package was added. Accepted transactions, rejected records with their
-row/fields/reason, and file/row diagnostics are structured results. Invalid
-transaction rows are rejected while readable valid rows survive. Invalid or
-absent location entries preserve valid transactions as unlocated. Missing
-files, IO errors, malformed headers and malformed quoting produce diagnostics;
-they do not silently disappear or terminate startup with an opaque exception.
+The Qt-free domain separates official facts from identity evidence
+(`ExactAddress`, `NormalizedAddress`, `Ambiguous`, `Unmatched`) and coordinate
+quality (`Missing`, `BlockApproximation`). Matching requires a unique explicit
+HDB property block/street, agreeing official ACRA address/postal assertions,
+and a unique HDB footprint on **both block and postal code**. Every agreeing
+ACRA source row is retained; corporate entities are assertions, not building
+candidates. Conflicting postals or multiple property/footprint records are
+ambiguous with no winner. Unmatched and ambiguous valid transactions remain
+filterable/selectable; they do not receive placeholder coordinates.
 
-The UI shows import counts, mapped/unlocated counts, diagnostic messages,
-registration month, local ID, location quality and derivation evidence. It
-includes conspicuous HDB/data.gov.sg attribution and an Open Data Licence link.
-The current fixture produces **6 accepted, 0 rejected, 0 diagnostics; 5 mapped,
-1 unlocated** before filtering. The initial budget is S$1,000,000; the fixture's
-prices range from S$238,000 to S$620,000. Filters use the same C# state for both
-models; hidden selection clears and still-visible selection survives reset.
+Only case/outer-space normalization, street whitespace collapsing and the
+observed road aliases `AVE → AVENUE` / `CTRL → CENTRAL` immediately before a
+numeric final suffix are allowed. No punctuation stripping, block-suffix
+collapse, number rewriting, fuzzy matching or street-code inference occurs.
+The retired M2 crosswalk and point table live in
+[docs/milestone-2](docs/milestone-2/README.md); they are neither app inputs nor
+fallbacks. C# computes approximate points from the retained original polygons.
 
-The local IDs are additions derived from snapshot row numbers, not official HDB
-transaction identifiers. Registration month is not an exact sale date. The
-street-code crosswalk is **inferred from uniquely identical complete block
-sets**, not an authoritative published mapping. Footprint bounding-box
-midpoints can fall outside irregular polygons. Neither current building
-coverage nor an approximation establishes a 2017/2018 flat's exact position.
-There is no full-history pipeline, production geocoder, database or spatial
-accuracy claim.
+The importer uses BCL `TextFieldParser` and `System.Text.Json`; no import or
+spatial dependency was added. Structured results retain accepted transactions,
+rejected records and file/row diagnostics. Invalid input rows are rejected
+while readable valid rows survive. Explicit null geometry preserves a matched
+identity with missing coordinates. Malformed geometry is rejected with a
+feature-number diagnostic. Missing files, IO errors, malformed headers and
+quoting are visible diagnostics.
 
-Next milestone: validate the same bounded native slice on Linux/Windows and
-improve address-join confidence with an authoritative street-code mapping
-before expanding data coverage. Keep the importer and C# domain small.
+The UI shows import and matching counts, mapped/unlocated counts, diagnostics,
+registration month, local ID, both qualities and HDB/ACRA source references.
+The canonical fixture produces **6 accepted, 6 matched (NormalizedAddress),
+0 ambiguous, 0 unmatched, 0 rejected, 0 diagnostics; 6 mapped, 0 unlocated**.
+The six original resale rows are unchanged. The formerly omitted block 510 now
+uses its legitimate official polygon, not a manufactured missing case. Missing,
+ambiguous and unmatched paths are covered by unit tests and controlled native
+checks using only ignored bundle copies. The initial budget is S$1,000,000;
+prices range from S$238,000 to S$620,000. Hidden selection clears and visible
+selection survives reset.
+
+ACRA registered addresses are official-record **corroboration**, not an
+authoritative HDB identifier or proof of a historical transaction's building.
+Local transaction IDs and CSV source rows identify pinned snapshots only.
+Registration month is not an exact sale date. Polygon bounding-box midpoints
+may fall outside irregular shapes and never locate a flat. Current registered
+addresses/buildings can change; no historical certainty or full-data coverage
+is claimed. No full-history pipeline, online geocoder or database exists.
+
+Next milestone: obtain an authoritative HDB address-to-building link or assess
+bounded linkage coverage/conflicts before expanding the fixture. Linux/Windows
+validation and packaged distribution remain separate work.
 
 ## Official references
 
