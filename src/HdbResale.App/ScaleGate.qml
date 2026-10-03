@@ -2,6 +2,7 @@ import QtQuick
 import QtLocation
 import QtPositioning
 Item {
+    required property var attributionImage
     required property var targetMap
     required property var townControl
     required property var priceControl
@@ -9,6 +10,23 @@ Item {
     property int phase: 0
     property double started: Date.now()
     property string chosen: ""
+    property bool burstArmed: false
+    property int burstFired: 0
+    property var retainedSelectedItem: null
+    Connections {
+        target: Resales.mapPoints
+        enabled: Resales.scaleReentrant
+        function onRowsAboutToBeRemoved(parent, first, last) {
+            if (!burstArmed || Resales.runtimeGateFault === "skip-burst") return
+            burstArmed=false; burstFired++
+            // Deliberately reenter while Bridge is synchronizing BeginRemoveRows.
+            Resales.setMaximumPrice(0)
+            Resales.selectTransaction(chosen)
+            Resales.resetFilters()
+            Resales.setMaximumPrice(Resales.maximumAvailablePrice)
+            console.log("HDB_MAP_BURST fired=" + burstFired + " queued=" + Resales.gateMaximumQueuedMutations)
+        }
+    }
     property var priorItems: ({})
     property int priorCreated: 0
     property int priorDestroyed: 0
@@ -38,7 +56,7 @@ Item {
         return targetMap.mapItems.length === expected.length
     }
     function ready(rows, mapped) {
-        return Resales.visibleCount === rows && targetList.count === rows
+        return attributionImage.status === Image.Ready && Resales.visibleCount === rows && targetList.count === rows
             && targetMap.mapItems.length === mapped
             && townControl.currentIndex === Resales.townIndex
             && townControl.currentText === Resales.town
@@ -58,6 +76,48 @@ Item {
         priorItems=snapshot
         priorCreated=targetMap.createdDelegates; priorDestroyed=targetMap.destroyedDelegates
         phase++; started=Date.now()
+    }
+    function reentrantStep() {
+        switch (phase) {
+        case 0:
+            if (!targetMap.mapReady || targetMap.error !== Map.NoError || !ready(Resales.gateInitialCount, Resales.gateInitialMapped)) return
+            chosen=Resales.gateHiddenSelectionId
+            if (chosen === "") return
+            advance("loaded"); Resales.selectTransaction(chosen); break
+        case 1:
+            if (Resales.selectedId !== chosen) return
+            advance("selected-retained-address"); Resales.setTown(Resales.gateTown); break
+        case 2:
+            if (!ready(Resales.gateTownCount, Resales.gateTownMapped) || Resales.selectedId !== chosen) return
+            for (const item of targetMap.mapItems) if (item.mapKey === Resales.gateRetainedSelectionKey) { retainedSelectedItem=item; break }
+            if (!retainedSelectedItem) return
+            advance("selected-in-town"); Resales.setMaximumPrice(500000); break
+        case 3:
+            if (!ready(Resales.gateBudgetCount, Resales.gateBudgetMapped) || Resales.selectedId !== "" || Resales.selectedMapKey !== "") return
+            let retained=false
+            for (const item of targetMap.mapItems) if (item.mapKey === Resales.gateRetainedSelectionKey && item === retainedSelectedItem && item.z === 0) retained=true
+            if (!retained) return
+            advance("hidden-transaction-cleared"); Resales.resetFilters(); break
+        case 4:
+            if (!ready(Resales.gateInitialCount, Resales.gateInitialMapped)) return
+            chosen=Resales.firstVisibleId
+            advance("reset"); Resales.selectTransaction(chosen); break
+        case 5:
+            if (chosen === "" || Resales.selectedId !== chosen) return
+            advance("selected-for-burst")
+            // Queued empty intentionally destroys all keys before restoring them.
+            priorItems=({}); burstArmed=true; Resales.setTown(Resales.gateTown); break
+        case 6:
+            if (burstFired !== 1 || Resales.gateMaximumQueuedMutations < 4
+                || !ready(Resales.gateAllCount, Resales.gateAllMapped) || Resales.selectedId !== "") return
+            if (Resales.scaleLifecycle && (targetMap.createdDelegates-priorCreated !== Resales.gateAllMapped
+                || targetMap.destroyedDelegates-priorDestroyed !== Resales.gateInitialMapped)) return
+            advance("reentrant-burst-drained"); Resales.resetFilters(); break
+        case 7:
+            if (!ready(Resales.gateInitialCount, Resales.gateInitialMapped) || Resales.selectedId !== "") return
+            advance("final-reset"); console.log("HDB_SCALE_PASS"); targetMap.traceDelegates=false; return true
+        }
+        return false
     }
     function extendedStep() {
         switch (phase) {
@@ -129,6 +189,7 @@ Item {
                 }
                 targetMap.traceDelegates=false; stop(); Qt.quit(); return
             }
+            if (Resales.scaleReentrant) { if (reentrantStep()) { stop(); Qt.quit() }; return }
             if (Resales.scaleTransitions) { if (extendedStep()) { stop(); Qt.quit() }; return }
             switch (phase) {
             case 0:

@@ -19,14 +19,14 @@ ApplicationWindow {
             RuntimeGate {
                 targetMap: map; targetList: transactionsList
                 townControl: townPicker; priceControl: pricePicker
-                zoomControl: zoomIn; recenterControl: recenter
+                zoomControl: zoomIn; recenterControl: recenter; attributionImage: oneMapLogo
             }
         }
     }
 
     Loader {
         active: Resales.scaleGate
-        sourceComponent: Component { ScaleGate { targetMap: map; targetList: transactionsList; townControl: townPicker; priceControl: pricePicker } }
+        sourceComponent: Component { ScaleGate { targetMap: map; targetList: transactionsList; townControl: townPicker; priceControl: pricePicker; attributionImage: oneMapLogo } }
     }
 
     Plugin {
@@ -183,8 +183,9 @@ ApplicationWindow {
                         anchors.centerIn: parent
                         spacing: 5
                         Image {
-                            width: 43; height: 24; fillMode: Image.PreserveAspectFit
-                            source: "https://www.onemap.gov.sg/web-assets/images/logo/om_logo.png"
+                            id: oneMapLogo
+                            width: 24; height: 24; fillMode: Image.PreserveAspectFit
+                            source: "qrc:/hdb-resale/onemap-logo.png"
                             Accessible.name: "OneMap logo"
                         }
                         Label {

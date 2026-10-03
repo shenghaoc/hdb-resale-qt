@@ -11,16 +11,24 @@ namespace HdbResale.App;
 public sealed class LocatedMapModel : Model
 {
     private readonly List<BlockSummary> rows;
+    private IReadOnlyList<BlockSummary> gateExpectedRows = [];
     // Diagnostic baseline only; ordinary UI always uses the incremental model.
     internal bool UseReset => Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1"
         && Environment.GetEnvironmentVariable("HDB_MAP_UPDATE") == "reset";
-    internal LocatedMapModel(IReadOnlyList<ResaleTransaction> transactions) => rows = BlockSummaries.Located(transactions).ToList();
+    internal LocatedMapModel(IReadOnlyList<ResaleTransaction> transactions)
+    {
+        rows = BlockSummaries.Located(transactions).ToList();
+        if (Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1") gateExpectedRows = rows.ToArray();
+    }
     internal int Count => rows.Count;
     internal void Replace(IReadOnlyList<ResaleTransaction> transactions)
     {
         var timer = Stopwatch.StartNew();
         var next = BlockSummaries.Located(transactions);
         var aggregateMs = timer.Elapsed.TotalMilliseconds;
+        // The gate compares delegates to the complete target projection, never the
+        // partially mutated backing list while Bridge pumps events during an update.
+        if (Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1") gateExpectedRows = next;
         var previous = rows.Count;
         timer.Restart();
         IReadOnlyList<MapRowEdit> edits = UseReset ? [] : MapRowDiff.Plan(rows, next);
@@ -63,7 +71,7 @@ public sealed class LocatedMapModel : Model
         if (Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1")
             Console.WriteLine(FormattableString.Invariant($"HDB_MAP_UPDATE strategy={(UseReset ? "reset" : "incremental")} aggregate-ms={aggregateMs:F3} plan-ms={planMs:F3} notifications-ms={timer.Elapsed.TotalMilliseconds:F3} before={previous} after={rows.Count} removed={removed} inserted={inserted} changed={changed}"));
     }
-    internal string GateRowsJson => System.Text.Json.JsonSerializer.Serialize(rows.Select(block => new
+    internal string GateRowsJson => System.Text.Json.JsonSerializer.Serialize(gateExpectedRows.Select(block => new
     {
         mapKey = block.Key, transactionId = block.Latest.Id, transactionCount = block.Count,
         latitude = block.Latest.Location.Point!.Latitude, longitude = block.Latest.Location.Point!.Longitude,

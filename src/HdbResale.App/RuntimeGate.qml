@@ -4,6 +4,7 @@ import QtLocation
 // Isolated test scenario, loaded only with HDB_RUNTIME_GATE=1. Assertions are
 // test logic; application filtering/selection still belongs to the C# model.
 Item {
+    required property var attributionImage
     required property var targetMap
     required property var targetList
     required property var townControl
@@ -37,7 +38,7 @@ Item {
             }
             switch (phase) {
             case 0:
-                if (!targetMap.mapReady || targetMap.error !== Map.NoError
+                if (attributionImage.status !== Image.Ready || !targetMap.mapReady || targetMap.error !== Map.NoError
                         || !rows(6) || targetMap.width <= 0 || targetMap.height <= 0) return
                 if (Resales.importDiagnostics !== "" || Resales.selectedId !== "") {
                     console.error("HDB_GATE_FAIL canonical startup"); stop(); Qt.quit(); return

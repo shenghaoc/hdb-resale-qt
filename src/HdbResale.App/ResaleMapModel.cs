@@ -13,6 +13,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
 {
     private readonly ImportResult import;
     private readonly ExplorerState state;
+    private readonly UiMutationQueue mutations = new();
     public LocatedMapModel MapPoints { get; }
     public int GateTownCount { get; }
     public int GateTownMapped { get; }
@@ -26,6 +27,8 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public int GateAllTownMapped { get; }
     public int GateOtherTownCount { get; }
     public int GateOtherTownMapped { get; }
+    public string GateHiddenSelectionId { get; } = "";
+    public string GateRetainedSelectionKey { get; } = "";
     public string GateOtherTown => Towns.First(t => t != "All towns" && t != GateTown);
     public ResaleMapModel()
     {
@@ -48,7 +51,15 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
             GateTownMapped = BlockSummaries.Located(expectedTown).Count;
             var budget = expectedTown.Where(t => t.Price <= 500_000).ToArray();
             GateBudgetCount = budget.Length;
-            GateBudgetMapped = BlockSummaries.Located(budget).Count;
+            var budgetBlocks = BlockSummaries.Located(budget);
+            GateBudgetMapped = budgetBlocks.Count;
+            if (ScaleReentrant)
+            {
+                var retainedKeys = budgetBlocks.Select(b => b.Key).ToHashSet(StringComparer.Ordinal);
+                var hidden = expectedTown.FirstOrDefault(t => t.Price > 500_000 && t.Location.Point is not null && retainedKeys.Contains(BlockSummaries.Key(t)));
+                GateHiddenSelectionId = hidden?.Id ?? "";
+                GateRetainedSelectionKey = hidden is null ? "" : BlockSummaries.Key(hidden);
+            }
             if (ScaleTransitions)
             {
                 var allTown = import.Accepted.Where(t => t.Town == GateTown).ToArray();
@@ -66,6 +77,8 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
 
     // Explicit test opt-in; normal application state and fixture are unchanged.
     public bool ScaleGate => Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1";
+    public bool ScaleReentrant => ScaleGate && Environment.GetEnvironmentVariable("HDB_MAP_REENTRANT") == "1";
+    public int GateMaximumQueuedMutations => mutations.MaximumPendingCount;
     public bool ScaleTransitions => ScaleGate && Environment.GetEnvironmentVariable("HDB_MAP_TRANSITIONS") == "1";
     public bool ScaleLifecycle => ScaleGate && Environment.GetEnvironmentVariable("HDB_MAP_LIFECYCLE") != "0";
     public bool ScaleMeasurement => ScaleGate && Environment.GetEnvironmentVariable("HDB_MAP_MEASUREMENT") == "1";
@@ -108,14 +121,22 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public string ImportSummary => $"Import: {import.Accepted.Count} accepted · {import.MatchedCount} matched · {import.AmbiguousCount} ambiguous · {import.UnmatchedCount} unmatched · {import.Rejected.Count} rejected · {import.Diagnostics.Count} diagnostics.";
     public string ImportDiagnostics => string.Join("\n", import.Diagnostics.Select(d => $"{d.File}:{d.Row}: {d.Message}"));
 
-    public void SetTown(string town) => ApplyFilter(town, MaximumPrice);
-    public void SetMaximumPrice(int price) => ApplyFilter(Town, price);
-    public void ResetFilters() => ApplyFilter("All towns", 1_000_000);
-    public void SelectTransaction(string id)
+    public void SetTown(string town)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(town);
+        mutations.Enqueue(() => ApplyFilter(town, MaximumPrice));
+    }
+    public void SetMaximumPrice(int price)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(price);
+        mutations.Enqueue(() => ApplyFilter(Town, price));
+    }
+    public void ResetFilters() => mutations.Enqueue(() => ApplyFilter("All towns", 1_000_000));
+    public void SelectTransaction(string id) => mutations.Enqueue(() =>
     {
         state.Select(id);
         Notify(nameof(SelectedId), nameof(SelectedMapKey), nameof(SelectionDetails));
-    }
+    });
 
     private void ApplyFilter(string town, int price)
     {

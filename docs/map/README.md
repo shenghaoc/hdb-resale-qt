@@ -83,3 +83,22 @@ the alternate-town value is evaluated once before scanning rows; an early test
 mistakenly evaluated that derived label in the per-row predicate, causing an
 O(n²) oracle startup timeout. That introduced test bug was fixed without changing
 any deadline or production filtering rule.
+
+## Reentrant input and offline attribution
+
+Bridge's synchronous model notification helpers may process QML events while
+waiting for native acknowledgement. `UiMutationQueue` therefore serializes the
+complete public UI mutation intents, including selection and property
+notifications. Queued Town/Price inputs are evaluated when executed; FIFO order
+preserves intermediate empty-state selection clearing. No event or exception is
+silently swallowed. A focused regression reproduced the previously stale
+removal range, and the native `--reentrant` gate injects four queued inputs from
+`rowsAboutToBeRemoved` itself. It also checks selection clearing when an address
+survives with a different visible transaction. Its negative fault is `skip-burst`.
+
+The mandatory logo is bundled unchanged as a Qt resource, with
+[official source/hash provenance](../../src/HdbResale.App/assets/README.md).
+The logo therefore does not depend on a separate network image request when
+cached tiles are displayed. Both native gates require `Image.Ready`, and a Python
+test checks the exact PNG and local resource wiring. The linked text stays
+visible; no raster tiles are bundled.

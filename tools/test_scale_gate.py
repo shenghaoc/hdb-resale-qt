@@ -1,7 +1,11 @@
 import unittest
-from scale_gate import verify, STEPS, EXTENDED_STEPS
+from scale_gate import verify, STEPS, EXTENDED_STEPS, REENTRANT_STEPS
 class ScaleGateTests(unittest.TestCase):
  def log(self):return ''.join('qml: HDB_SCALE_STEP '+s+' ms=1 rows=0 delegates=0\n' for s in STEPS)+'qml: HDB_SCALE_PASS\nHDB_GATE_EXIT\n'
+ def test_reentrant_sequence_cannot_be_substituted_with_classic(self):
+  log=''.join('qml: HDB_SCALE_STEP '+s+'\n' for s in REENTRANT_STEPS)+'HDB_SCALE_PASS\nHDB_GATE_EXIT\n'
+  verify(0,log,reentrant=True)
+  with self.assertRaises(RuntimeError):verify(0,log)
  def test_extended_sequence_cannot_be_substituted_with_classic(self):
   log=''.join('qml: HDB_SCALE_STEP '+s+'\n' for s in EXTENDED_STEPS)+'HDB_SCALE_PASS\nHDB_GATE_EXIT\n'
   verify(0,log,extended=True)

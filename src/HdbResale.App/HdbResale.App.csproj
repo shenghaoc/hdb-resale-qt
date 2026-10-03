@@ -43,6 +43,7 @@
   </Target>
 
   <ItemGroup>
+    <QtResource Include="assets/onemap-logo.png" Alias="hdb-resale/onemap-logo.png" />
     <None Include="Main.qml"/>
     <None Include="RuntimeGate.qml"/>
     <None Include="ScaleGate.qml"/>
@@ -50,6 +51,7 @@
     <Compile Include="ResaleMapModel.cs" />
     <Compile Include="LocatedMapModel.cs" />
     <Compile Include="MapRowDiff.cs" />
+    <Compile Include="UiMutationQueue.cs" />
     <None Include="../../data/building-evidence.geojson" Link="data/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../data/*.csv" Link="data/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <ProjectReference Include="../HdbResale.Domain/HdbResale.Domain.csproj" />
