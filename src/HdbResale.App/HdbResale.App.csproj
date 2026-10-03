@@ -41,6 +41,7 @@
 
   <ItemGroup>
     <None Include="Main.qml"/>
+    <None Include="RuntimeGate.qml"/>
     <Compile Include="Program.cs" />
     <Compile Include="ResaleMapModel.cs" />
     <Compile Include="LocatedMapModel.cs" />

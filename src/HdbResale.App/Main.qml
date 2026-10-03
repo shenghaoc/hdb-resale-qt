@@ -13,6 +13,17 @@ ApplicationWindow {
     minimumHeight: 600
     title: "HDB Resale · Native fixture explorer"
 
+    Loader {
+        active: Resales.runtimeGate
+        sourceComponent: Component {
+            RuntimeGate {
+                targetMap: map; targetList: transactionsList
+                townControl: townPicker; priceControl: pricePicker
+                zoomControl: zoomIn; recenterControl: recenter
+            }
+        }
+    }
+
     Plugin {
         id: osm
         name: "osm"
@@ -135,9 +146,10 @@ ApplicationWindow {
                 }
                 Row {
                     anchors.top: parent.top; anchors.right: parent.right; anchors.margins: 8; spacing: 6
-                    Button { text: "+"; Accessible.name: "Zoom in"; onClicked: map.zoomLevel += 1 }
+                    Button { id: zoomIn; text: "+"; Accessible.name: "Zoom in"; onClicked: map.zoomLevel += 1 }
                     Button { text: "−"; Accessible.name: "Zoom out"; onClicked: map.zoomLevel -= 1 }
                     Button {
+                        id: recenter
                         text: "Singapore"
                         onClicked: { map.center = QtPositioning.coordinate(1.3521, 103.8198); map.zoomLevel = 11 }
                     }
@@ -170,6 +182,7 @@ ApplicationWindow {
                 }
                 Label { text: "Visible transactions"; font.bold: true }
                 ListView {
+                    id: transactionsList
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     clip: true

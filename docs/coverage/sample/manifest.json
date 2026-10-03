@@ -1,0 +1,86 @@
+{
+  "algorithm": "hdb-m4-coverage-v1",
+  "selection": "Four address-distinct rows per town/period; SHA-256 seed+NUL+source_row rank within flat type; flat types seed-ranked per stratum and round-robin; final source-row ascending. No matching evidence consulted.",
+  "retrieved_utc": "2026-10-03",
+  "source_count": 241920,
+  "sample_count": 416,
+  "periods": [
+    "2017-2019",
+    "2020-2022",
+    "2023-2025",
+    "2026"
+  ],
+  "towns": {
+    "ANG MO KIO": 16,
+    "BEDOK": 16,
+    "BISHAN": 16,
+    "BUKIT BATOK": 16,
+    "BUKIT MERAH": 16,
+    "BUKIT PANJANG": 16,
+    "BUKIT TIMAH": 16,
+    "CENTRAL AREA": 16,
+    "CHOA CHU KANG": 16,
+    "CLEMENTI": 16,
+    "GEYLANG": 16,
+    "HOUGANG": 16,
+    "JURONG EAST": 16,
+    "JURONG WEST": 16,
+    "KALLANG/WHAMPOA": 16,
+    "MARINE PARADE": 16,
+    "PASIR RIS": 16,
+    "PUNGGOL": 16,
+    "QUEENSTOWN": 16,
+    "SEMBAWANG": 16,
+    "SENGKANG": 16,
+    "SERANGOON": 16,
+    "TAMPINES": 16,
+    "TOA PAYOH": 16,
+    "WOODLANDS": 16,
+    "YISHUN": 16
+  },
+  "flat_types": {
+    "1 ROOM": 4,
+    "2 ROOM": 73,
+    "3 ROOM": 85,
+    "4 ROOM": 89,
+    "5 ROOM": 86,
+    "EXECUTIVE": 71,
+    "MULTI-GENERATION": 8
+  },
+  "unique_addresses": 378,
+  "unique_blocks": 315,
+  "unique_streets": 239,
+  "evidence_counts": {
+    "properties": 378,
+    "postal_assertions": 214,
+    "footprints": 63
+  },
+  "sources": {
+    "resales": {
+      "dataset_id": "d_8b84c4ee58e3cfc0ece0d773c8ca6abc",
+      "url": "https://data.gov.sg/datasets/d_8b84c4ee58e3cfc0ece0d773c8ca6abc/view",
+      "sha256": "3c3d8bf9b12adb88919fa74869922fe05cdb144f5f69d93a0de4345d047cc7d4"
+    },
+    "properties": {
+      "dataset_id": "d_17f5382f26140b1fdae0ba2ef6239d2f",
+      "url": "https://data.gov.sg/datasets/d_17f5382f26140b1fdae0ba2ef6239d2f/view",
+      "sha256": "a6e3105d02c4b59929371d1f7e4f8c0ed7939cdc081701d7e9197790bb78f4b1"
+    },
+    "postals": {
+      "dataset_id": "d_3a3807c023c61ddfba947dc069eb53f2",
+      "url": "https://data.gov.sg/datasets/d_3a3807c023c61ddfba947dc069eb53f2/view",
+      "sha256": "a790f1a5082afcd6b5bad133f3949e3977e59cc8e33552897206b1e5f90cdab7"
+    },
+    "buildings": {
+      "dataset_id": "d_16b157c52ed637edd6ba1232e026258d",
+      "url": "https://data.gov.sg/datasets/d_16b157c52ed637edd6ba1232e026258d/view",
+      "sha256": "7c987511548de3a82da403cabca02702031e02ade8703a9e401417883dfeb702"
+    }
+  },
+  "derived_sha256": {
+    "address-evidence.csv": "081dcef1cd2c78d14f6c7267406687d7d972f4e4deac3c6fb6d124c816723c3b",
+    "building-evidence.geojson": "bec377696e750b49d450b591930b69c24edbdb69a22db9c56628d19e576a541c",
+    "postal-address-evidence.csv": "8ff0b4bfdd85be8d3f639c353eed2ee4a715c2c0ea8f650e69cfe258ff74edaa",
+    "transactions.csv": "875aceb10230d4a52ea6159397cd40a69cbe81346094f6bb1a81423c6e1b5b76"
+  }
+}

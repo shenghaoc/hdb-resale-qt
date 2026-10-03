@@ -1,0 +1,271 @@
+{
+  "audited_failures": 346,
+  "missing_under_current_normalization": 345,
+  "all_failure_evidence_checked_against_full_sources": true,
+  "manual_representative_rule": "six smallest SHA-256(seed+NUL+local ID) per period; 24 missing cases, plus every conflict",
+  "representatives": [
+    {
+      "id": "HDB-30584",
+      "month": "2018-07",
+      "town": "BUKIT MERAH",
+      "block": "7",
+      "street": "TELOK BLANGAH CRES",
+      "property_rows": [
+        11247
+      ]
+    },
+    {
+      "id": "HDB-10022",
+      "month": "2017-07",
+      "town": "BUKIT MERAH",
+      "block": "36",
+      "street": "BEO CRES",
+      "property_rows": [
+        6166
+      ]
+    },
+    {
+      "id": "HDB-12001",
+      "month": "2017-08",
+      "town": "CHOA CHU KANG",
+      "block": "761",
+      "street": "CHOA CHU KANG NTH 5",
+      "property_rows": [
+        11791
+      ]
+    },
+    {
+      "id": "HDB-38284",
+      "month": "2018-10",
+      "town": "TAMPINES",
+      "block": "817",
+      "street": "TAMPINES ST 81",
+      "property_rows": [
+        12264
+      ]
+    },
+    {
+      "id": "HDB-58603",
+      "month": "2019-10",
+      "town": "BUKIT BATOK",
+      "block": "287",
+      "street": "BT BATOK EAST AVE 3",
+      "property_rows": [
+        4692
+      ]
+    },
+    {
+      "id": "HDB-48942",
+      "month": "2019-05",
+      "town": "BUKIT PANJANG",
+      "block": "612",
+      "street": "SENJA RD",
+      "property_rows": [
+        9873
+      ]
+    },
+    {
+      "id": "HDB-102286",
+      "month": "2021-07",
+      "town": "HOUGANG",
+      "block": "306",
+      "street": "HOUGANG AVE 5",
+      "property_rows": [
+        5083
+      ]
+    },
+    {
+      "id": "HDB-142543",
+      "month": "2022-08",
+      "town": "YISHUN",
+      "block": "233",
+      "street": "YISHUN ST 21",
+      "property_rows": [
+        3742
+      ]
+    },
+    {
+      "id": "HDB-127665",
+      "month": "2022-05",
+      "town": "JURONG WEST",
+      "block": "560A",
+      "street": "JURONG WEST ST 42",
+      "property_rows": [
+        9364
+      ]
+    },
+    {
+      "id": "HDB-71836",
+      "month": "2020-06",
+      "town": "PASIR RIS",
+      "block": "527B",
+      "street": "PASIR RIS ST 51",
+      "property_rows": [
+        8938
+      ]
+    },
+    {
+      "id": "HDB-117532",
+      "month": "2022-10",
+      "town": "ANG MO KIO",
+      "block": "302",
+      "street": "ANG MO KIO AVE 3",
+      "property_rows": [
+        4986
+      ]
+    },
+    {
+      "id": "HDB-104798",
+      "month": "2021-08",
+      "town": "GEYLANG",
+      "block": "45",
+      "street": "JLN TIGA",
+      "property_rows": [
+        7593
+      ]
+    },
+    {
+      "id": "HDB-187640",
+      "month": "2024-11",
+      "town": "SEMBAWANG",
+      "block": "362C",
+      "street": "SEMBAWANG CRES",
+      "property_rows": [
+        6208
+      ]
+    },
+    {
+      "id": "HDB-159143",
+      "month": "2023-04",
+      "town": "QUEENSTOWN",
+      "block": "51",
+      "street": "STRATHMORE AVE",
+      "property_rows": [
+        8648
+      ]
+    },
+    {
+      "id": "HDB-174995",
+      "month": "2024-05",
+      "town": "BUKIT PANJANG",
+      "block": "616",
+      "street": "SENJA RD",
+      "property_rows": [
+        9942
+      ]
+    },
+    {
+      "id": "HDB-192947",
+      "month": "2024-10",
+      "town": "TOA PAYOH",
+      "block": "79C",
+      "street": "TOA PAYOH CTRL",
+      "property_rows": [
+        12018
+      ]
+    },
+    {
+      "id": "HDB-149464",
+      "month": "2023-08",
+      "town": "CENTRAL AREA",
+      "block": "1C",
+      "street": "CANTONMENT RD",
+      "property_rows": [
+        48
+      ]
+    },
+    {
+      "id": "HDB-221289",
+      "month": "2025-03",
+      "town": "YISHUN",
+      "block": "449",
+      "street": "YISHUN RING RD",
+      "property_rows": [
+        7584
+      ]
+    },
+    {
+      "id": "HDB-231115",
+      "month": "2026-01",
+      "town": "JURONG WEST",
+      "block": "332",
+      "street": "TAH CHING RD",
+      "property_rows": [
+        5693
+      ]
+    },
+    {
+      "id": "HDB-229787",
+      "month": "2026-07",
+      "town": "JURONG EAST",
+      "block": "22",
+      "street": "TEBAN GDNS RD",
+      "property_rows": [
+        3378
+      ]
+    },
+    {
+      "id": "HDB-239217",
+      "month": "2026-02",
+      "town": "WOODLANDS",
+      "block": "182A",
+      "street": "WOODLANDS ST 13",
+      "property_rows": [
+        2481
+      ]
+    },
+    {
+      "id": "HDB-226730",
+      "month": "2026-08",
+      "town": "CENTRAL AREA",
+      "block": "637",
+      "street": "VEERASAMY RD",
+      "property_rows": [
+        10314
+      ]
+    },
+    {
+      "id": "HDB-231710",
+      "month": "2026-02",
+      "town": "KALLANG/WHAMPOA",
+      "block": "105",
+      "street": "JLN RAJAH",
+      "property_rows": [
+        281
+      ]
+    },
+    {
+      "id": "HDB-226870",
+      "month": "2026-04",
+      "town": "CHOA CHU KANG",
+      "block": "10",
+      "street": "TECK WHYE AVE",
+      "property_rows": [
+        73
+      ]
+    }
+  ],
+  "conflicts": [
+    {
+      "id": "HDB-6769",
+      "assertion_count": 74,
+      "postal_counts": {
+        "530446": 73,
+        "530836": 1
+      },
+      "footprints_at_conflicting_postals": [
+        {
+          "objectid": 937921,
+          "block": "836",
+          "postal": "530836"
+        },
+        {
+          "objectid": 937680,
+          "block": "446",
+          "postal": "530446"
+        }
+      ]
+    }
+  ],
+  "limit": "Absence is only under current conservative normalization in the pinned ACRA B snapshot. No wrong-address, historical-difference, broader-register absence or unapproved alias equivalence is proved."
+}
