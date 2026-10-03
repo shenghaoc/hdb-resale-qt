@@ -12,6 +12,8 @@ namespace HdbResale.App;
 public sealed class ResaleMapModel : Model, INotifyPropertyChanged
 {
     private readonly ImportResult import;
+    private readonly StartupProfiler? startupProfile;
+    private long startupRoleReads;
     private readonly ExplorerState state;
     private readonly UiMutationQueue mutations = new();
     public LocatedMapModel MapPoints { get; }
@@ -33,10 +35,18 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public ResaleMapModel()
     {
         var timer = Stopwatch.StartNew();
-        import = CsvImport.LoadDirectory(Environment.GetEnvironmentVariable("HDB_DATA_DIRECTORY") ?? Path.Combine(AppContext.BaseDirectory, "data"));
+        if (Environment.GetEnvironmentVariable("HDB_STARTUP_PROFILE") == "1") startupProfile = new();
+        import = CsvImport.LoadDirectory(Environment.GetEnvironmentVariable("HDB_DATA_DIRECTORY") ?? Path.Combine(AppContext.BaseDirectory, "data"),
+            stage: startupProfile is null ? null : MeasureStartup);
+        MeasureStartup("import-return");
         Towns = new[] { "All towns" }.Concat(import.Accepted.Select(t => t.Town).Distinct().Order(StringComparer.Ordinal)).ToArray();
+        MeasureStartup("town-labels");
         state = new(import.Accepted);
-        MapPoints = new(state.Visible);
+        // The startup-only probe uses all prices to exercise all 1,921 markers.
+        if (StartupProbe) state.Filter("All towns", MaximumAvailablePrice);
+        MeasureStartup("state-construction");
+        MapPoints = new(state.Visible, startupProfile is null ? null : MeasureStartup);
+        MeasureStartup("models-constructed");
         if (ScaleGate) Console.WriteLine($"HDB_SCALE_CONSTRUCT {timer.ElapsedMilliseconds} rows={VisibleCount} mapped={MapPoints.Count} managed={GC.GetTotalMemory(false)} working={Environment.WorkingSet}");
         if (ScaleGate)
         {
@@ -74,6 +84,27 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
         }
     }
     public event PropertyChangedEventHandler? PropertyChanged;
+    public bool StartupProbe => startupProfile is not null && StartupView != "normal";
+    public string StartupView => Environment.GetEnvironmentVariable("HDB_STARTUP_VIEW") switch
+    {
+        "qml-shell" => "qml-shell", "map-shell" => "map-shell", "full" => "full", _ => "normal"
+    };
+    private void MeasureStartup(string name)
+    {
+        if (startupProfile is not null)
+            Console.WriteLine("HDB_STARTUP_STAGE " + System.Text.Json.JsonSerializer.Serialize(startupProfile.Measure(name)));
+    }
+    public void StartupReady()
+    {
+        if (!StartupProbe) return;
+        MeasureStartup("qml-ready-" + StartupView);
+        Console.WriteLine($"HDB_STARTUP_READY view={StartupView} rows={VisibleCount} markers={MappedCount} sidebar-role-reads={startupRoleReads} map-role-reads={MapPoints.StartupRoleReads}");
+        if (Environment.GetEnvironmentVariable("HDB_STARTUP_HEAP") == "1")
+        {
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true, compacting: true);
+            MeasureStartup("diagnostic-retained-native");
+        }
+    }
 
     // Explicit test opt-in; normal application state and fixture are unchanged.
     public bool ScaleGate => Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1";
@@ -194,6 +225,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public override object? Data(ModelIndex index, int role)
     {
         if (index is not { IsValid: true } || index.Row < 0 || index.Row >= VisibleCount) return null;
+        if (startupProfile is not null) startupRoleReads++;
         var t = state.Visible[index.Row];
         return role switch
         {

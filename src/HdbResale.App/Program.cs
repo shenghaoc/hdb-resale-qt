@@ -37,9 +37,14 @@ internal static class Program
             WriteReport(args[2], ScaleStudy.Run(args[1]));
             return;
         }
+        if (args.Length == 3 && args[0] == "--startup-profile")
+        {
+            WriteReport(args[2], StartupStudy.Run(args[1]));
+            return;
+        }
         Qml.LoadFromRootModule("Main");
         Qml.WaitForExit();
-        if (Environment.GetEnvironmentVariable("HDB_RUNTIME_GATE") == "1" || Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1") Console.WriteLine("HDB_GATE_EXIT");
+        if (Environment.GetEnvironmentVariable("HDB_RUNTIME_GATE") == "1" || Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1" || Environment.GetEnvironmentVariable("HDB_STARTUP_PROFILE") == "1") Console.WriteLine("HDB_GATE_EXIT");
     }
     private static void WriteReport<T>(string path, T value)
     {

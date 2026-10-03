@@ -15,9 +15,14 @@ public sealed class LocatedMapModel : Model
     // Diagnostic baseline only; ordinary UI always uses the incremental model.
     internal bool UseReset => Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1"
         && Environment.GetEnvironmentVariable("HDB_MAP_UPDATE") == "reset";
-    internal LocatedMapModel(IReadOnlyList<ResaleTransaction> transactions)
+    internal long StartupRoleReads { get; private set; }
+    private readonly bool startupProfile = Environment.GetEnvironmentVariable("HDB_STARTUP_PROFILE") == "1";
+    internal LocatedMapModel(IReadOnlyList<ResaleTransaction> transactions, Action<string>? stage = null)
     {
-        rows = BlockSummaries.Located(transactions).ToList();
+        var summaries = BlockSummaries.Located(transactions);
+        stage?.Invoke("map-aggregation");
+        rows = summaries.ToList();
+        stage?.Invoke("map-model-population");
         if (Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1") gateExpectedRows = rows.ToArray();
     }
     internal int Count => rows.Count;
@@ -93,6 +98,7 @@ public sealed class LocatedMapModel : Model
     public override object? Data(ModelIndex index, int role)
     {
         if (index is not { IsValid: true } || index.Row < 0 || index.Row >= rows.Count) return null;
+        if (startupProfile) StartupRoleReads++;
         var block = rows[index.Row];
         var t = block.Latest;
         return role switch

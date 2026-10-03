@@ -29,6 +29,26 @@ ApplicationWindow {
         sourceComponent: Component { ScaleGate { targetMap: map; targetList: transactionsList; townControl: townPicker; priceControl: pricePicker; attributionImage: oneMapLogo } }
     }
 
+    Loader {
+        active: Resales.startupProbe
+        sourceComponent: Component {
+            Timer {
+                interval: 25; repeat: true; running: true
+                property double started: Date.now()
+                onTriggered: {
+                    const expected = Resales.startupView === "full" ? Resales.mappedCount : 0
+                    const mapReady = Resales.startupView === "qml-shell" || map.mapReady
+                    if (mapReady && map.mapItems.length === expected && transactionsList.count === Resales.visibleCount
+                            && oneMapLogo.status === Image.Ready) {
+                        stop(); Resales.startupReady(); Qt.quit()
+                    } else if (Date.now() - started > 10000) {
+                        console.error("HDB_STARTUP_TIMEOUT"); stop(); Qt.quit()
+                    }
+                }
+            }
+        }
+    }
+
     Plugin {
         id: osm
         name: "osm"
@@ -103,8 +123,8 @@ ApplicationWindow {
                     property double lastDelegateDestroyedMs: 0
                     property bool traceDelegates: Resales.scaleLifecycle
                     anchors.fill: parent
-                    plugin: osm
-                    activeMapType: supportedMapTypes[supportedMapTypes.length - 1]
+                    plugin: Resales.startupProbe && Resales.startupView === "qml-shell" ? null : osm
+                    activeMapType: supportedMapTypes.length > 0 ? supportedMapTypes[supportedMapTypes.length - 1] : null
                     center: QtPositioning.coordinate(1.3521, 103.8198)
                     zoomLevel: 11
                     minimumZoomLevel: 11
@@ -112,7 +132,7 @@ ApplicationWindow {
                     // Exact official logo/text is provided by the always-visible overlay below.
                     copyrightsVisible: false
                     MapItemView {
-                        model: Resales.mapPoints
+                        model: Resales.startupProbe && Resales.startupView !== "full" ? null : Resales.mapPoints
                         delegate: MapQuickItem {
                             Component.onCompleted: if (map.traceDelegates) { map.createdDelegates++; map.lastDelegateCreatedMs = Date.now() }
                             Component.onDestruction: if (map.traceDelegates) { map.destroyedDelegates++; map.lastDelegateDestroyedMs = Date.now() }

@@ -42,7 +42,7 @@ public static class CsvImport
             else postalAddresses.Add(new(sourceRow, f["block"], f["street_name"], f["postal_code"]));
         }
         stage?.Invoke("postal-evidence");
-        var footprints = ReadFootprints(buildingEvidencePath ?? Path.Combine(directory, "building-evidence.geojson"), rejected, diagnostics);
+        var footprints = ReadFootprints(buildingEvidencePath ?? Path.Combine(directory, "building-evidence.geojson"), rejected, diagnostics, stage);
         stage?.Invoke("footprints");
         var propertyIndex = properties.ToLookup(p => (AddressNormalizer.Block(p.Block), AddressNormalizer.Street(p.Street)));
         var postalIndex = postalAddresses.ToLookup(p => (AddressNormalizer.Block(p.Block), AddressNormalizer.Street(p.Street)));
@@ -101,13 +101,16 @@ public static class CsvImport
     }
     private static bool PostalCode(string value) => value.Length == 6 && value.All(char.IsAsciiDigit);
     private static IReadOnlyList<FootprintRecord> ReadFootprints(string path,
-        List<RejectedRecord> rejected, List<ImportDiagnostic> diagnostics)
+        List<RejectedRecord> rejected, List<ImportDiagnostic> diagnostics, Action<string>? stage)
     {
         var result = new List<FootprintRecord>();
         var file = Path.GetFileName(path);
         try
         {
-            using var document = JsonDocument.Parse(File.ReadAllText(path));
+            var text = File.ReadAllText(path);
+            stage?.Invoke("footprint-file-read");
+            using var document = JsonDocument.Parse(text);
+            stage?.Invoke("footprint-json");
             var root = document.RootElement;
             if (root.ValueKind != JsonValueKind.Object || !root.TryGetProperty("type", out var type) ||
                 type.ValueKind != JsonValueKind.String || type.GetString() != "FeatureCollection" ||
