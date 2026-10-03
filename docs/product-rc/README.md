@@ -52,7 +52,7 @@ The generic all-ref audit checks excluded cache/build/binary paths, raw-export h
 
 ## Final Linux native acceptance
 
-Production source is `82e6e99` (full hash in [verification.json](verification.json)); subsequent commits add audit/documentation evidence only. Source, Debug and Release Main.qml all have SHA-256 `1d0cb863e7a8daa4cc70e71206ffd6722122892a7dd6b9fe6cc362350c1770ca`. Both root configurations build with zero warnings/errors and each passes 191 C# tests. The Python suite passes 39 tests with no skip.
+Production source is `82e6e99` (full hash in [verification.json](verification.json)); subsequent commits add audit/documentation evidence only. Source, Debug and Release Main.qml all have SHA-256 `1d0cb863e7a8daa4cc70e71206ffd6722122892a7dd6b9fe6cc362350c1770ca`. Both root configurations build with zero warnings/errors and each passes 191 C# tests. The final Python suite passes 40 tests with no skip after the package-only ICU/metadata repair (39 at the native matrix checkpoint).
 
 All **22 native positive cases** pass: canonical plus classic/extended/reentrant, presentation and buyer scenarios across the original strict workload and expanded M9 workload in both Debug and Release. The normal five-second state budgets and explicitly validated expanded-corpus ten-second acceptance budgets are unchanged. No completed positive state exceeded five seconds. The slowest complete state was the original-workload Release reentrant burst at **2,239 ms**; expanded Debug presentation peaked at 2,148 ms.
 
@@ -80,4 +80,14 @@ The final native host reproduces the old-field digest `88118bdb3a9a68f59ea47cdda
 
 Address qualities remain **897 Exact / 6,721 Normalized / 209 Ambiguous / 1,928 Unmatched**. Transaction qualities remain **28,396 / 160,177 / 4,305 / 49,042** respectively. There are **7,618 mapped and 2,137 missing-coordinate addresses**, and **188,573 mapped and 53,347 missing-coordinate transactions**. The six-row default, 416-row benchmark, source hashes, evidence grammar and coordinates are unchanged.
 
-The separate clean, relocated private Linux package check follows the final documentation checkpoint. Its result does not broaden verification to another distribution, macOS, Windows, human wheel zoom, signing, notarization or official publication. Source/notices obligations for redistribution remain open even when technical launch passes.
+The separate clean, relocated private Linux package check passes as recorded below. Its result does not broaden verification to another distribution, macOS, Windows, human wheel zoom, signing, notarization or official publication. Source/notices obligations for redistribution remain open even when technical launch passes.
+
+## Final bounded Linux package
+
+The final tar is **88,616,918 bytes**, SHA-256 `0e03054d1a3df1268a3d7ef194b19b8831071d8b2d054dcc94d104dec2bb2cc8`, produced from clean commit `a5c5ca610e921917dd5a5c474e9f298c13647b91`. It includes 1,948 files, 44 Qt/ICU libraries and 30 QML modules, with runtime-only .NET 10.0.12 and the canonical six-row data. All 33 application source hashes and native input bytes equal the accepted chart checkpoint. [Machine-readable package evidence](package-verification.json) records hashes, monitored library paths and limitations. The tar stays outside Git history.
+
+A fresh extraction to a path containing spaces, unrelated working directory, fresh HOME/XDG state and cleared developer loader environment passes in **2.005 seconds** with native/.NET exit 0. The shell, six-row data, map engine, actual GraphsView/LineSeries and final teardown produce all five ordered markers with no warning. Actual process mappings prove monitored Qt, Graphs, .NET, ICU and OSM libraries are inside the package. This is canonical launch readiness, not a full-corpus startup, fresh tile-pixel or network-success claim.
+
+The first relocation test correctly failed: .NET chose host ICU 76 although Qt used bundled ICU 73, and Bridge metadata had been omitted. The package-only repair retains the metadata and uses Microsoft's documented app-local ICU mode with relative internal links to the existing, unmodified Qt ICU 73.2 files. No system library was installed and no mapping assertion was relaxed. The fixed packaged runtime also reproduces the exact expanded-profile legacy digest.
+
+Host OpenSSL 3/TLS, glibc, X11/graphics and other inventoried system dependencies remain. Optional LTTng tracing is unavailable on this host; ordinary launch does not need it. The original application is GPL-3.0-or-later, but complete corresponding source/notices and other component-specific redistribution obligations remain a public-shipping blocker. No signing, notarization, installer publication, push or tag occurred. macOS/Windows remain unverified for M11.

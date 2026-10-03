@@ -61,18 +61,17 @@
     },
     "python": {
       "exit": 0,
-      "log_sha256": "d19965add5b467337b7522c7c277ad1c25673e4186f376870c99eb9239882139",
-      "steps": [],
-      "max_state_ms": null,
-      "over_5000_ms_states": [],
+      "log_sha256": "6c7e08866ef04bae97731b43ac56db853a18a49932d39813b3d511bdffe4e15e",
+      "test_count": 40,
       "tail": [
         "test_reentrant_sequence_cannot_be_substituted_with_classic (test_scale_gate.ScaleGateTests.test_reentrant_sequence_cannot_be_substituted_with_classic) ... ok",
         "",
         "----------------------------------------------------------------------",
-        "Ran 39 tests in 2.826s",
+        "Ran 40 tests in 3.412s",
         "",
         "OK"
-      ]
+      ],
+      "note": "Final full Python rerun after the package-only app-local ICU/metadata repair; the earlier native matrix had39tests."
     }
   },
   "native_positive_runs": {
@@ -6997,5 +6996,6 @@
     },
     "full_startup_seconds": 5.95,
     "scope": "Sequential same-host observations, different product layouts; no isolated renderer/paint or statistical speedup claim."
-  }
+  },
+  "package_verification": "package-verification.json"
 }
