@@ -77,7 +77,7 @@ Item {
             case 6:
                 if (!rows(6) || townControl.currentText !== "All towns" || priceControl.value !== 1000000) return
                 advance("reset")
-                zoomControl.clicked()
+                zoomControl.action.trigger()
                 break
             case 7:
                 if (Math.abs(targetMap.zoomLevel - 12) > 0.01 || !rows(6)) return
@@ -87,7 +87,7 @@ Item {
             case 8:
                 if (Math.abs(targetMap.center.latitude - 1.3521) < 0.0001 || !rows(6)) return
                 advance("panned")
-                recenterControl.clicked()
+                recenterControl.action.trigger()
                 break
             case 9:
                 if (Math.abs(targetMap.zoomLevel - 11) > 0.01

@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtCore
 import QtLocation
 import QtPositioning
 
@@ -9,9 +10,103 @@ ApplicationWindow {
     visible: true
     width: 1360
     height: 900
-    minimumWidth: 1120
-    minimumHeight: 760
+    minimumWidth: 640
+    minimumHeight: 600
     title: "HDB Resale Explorer · 0.1.0 RC"
+    Component.onCompleted: {
+        // Match the existing macOS bundle identity on portable Qt desktops.
+        Qt.application.name = "io.github.shenghaoc.hdb-resale-qt"
+        Qt.application.displayName = "HDB Resale Explorer"
+        Qt.application.organization = "shenghaoc"
+        Qt.application.domain = "io.github.shenghaoc"
+    }
+
+    readonly property real unit: textMetrics.height
+    readonly property bool compact: width < 70 * unit
+    property var dialogFocusItem
+    property alias mapView: map
+    property alias resultView: transactionsList
+    property alias detailsView: detailsScroll
+    property alias filterGrid: filters
+    property alias viewTabs: viewTabs
+    property alias commands: commands
+    property alias aboutPopup: aboutDialog
+    property alias settingsPopup: settingsDialog
+    readonly property bool modalOpen: aboutDialog.visible || settingsDialog.visible || dataDialog.visible
+    FontMetrics { id: textMetrics; font: window.font }
+    Settings {
+        id: preferences
+        location: Resales.uiSettingsFile
+        property bool showMapCoordinates: false
+    }
+    function showDialog(dialog) {
+        dialogFocusItem = window.activeFocusItem
+        dialog.open()
+    }
+    function restoreDialogFocus() {
+        if (dialogFocusItem && dialogFocusItem.visible && dialogFocusItem.enabled)
+            dialogFocusItem.forceActiveFocus(Qt.OtherFocusReason)
+        else townPicker.forceActiveFocus(Qt.OtherFocusReason)
+    }
+    // Native menu dismissal can restore old focus after onTriggered returns.
+    // Focus the newly visible pane on the following event turn.
+    function focusMap() { viewTabs.currentIndex = 0; Qt.callLater(() => map.forceActiveFocus(Qt.ShortcutFocusReason)) }
+    function focusResults() { viewTabs.currentIndex = 1; Qt.callLater(() => transactionsList.forceActiveFocus(Qt.ShortcutFocusReason)) }
+    function focusWithin(item) {
+        for (let focused = window.activeFocusItem; focused; focused = focused.parent)
+            if (focused === item) return true
+        return false
+    }
+    onCompactChanged: {
+        if (compact && focusWithin(addressesPane)) viewTabs.currentIndex = 1
+    }
+    DesktopActions {
+        id: commands
+        targetWindow: window; targetMap: map
+        onResetRequested: Resales.resetFilters()
+        onFiltersRequested: Qt.callLater(() => townPicker.forceActiveFocus(Qt.ShortcutFocusReason))
+        onMapRequested: window.focusMap()
+        onResultsRequested: window.focusResults()
+        onSelectedRequested: {
+            viewTabs.currentIndex = 0
+            map.center = QtPositioning.coordinate(Resales.selectedLatitude, Resales.selectedLongitude)
+            map.zoomLevel = 16
+            window.focusMap()
+        }
+        onAboutRequested: window.showDialog(aboutDialog)
+        onSettingsRequested: window.showDialog(settingsDialog)
+    }
+    Loader {
+        active: Qt.platform.os === "osx"
+        sourceComponent: Component { MacMenuBar { commands: window.commands } }
+    }
+    menuBar: Loader {
+        active: Qt.platform.os !== "osx"
+        height: item ? item.implicitHeight : 0
+        sourceComponent: Component { MenuBar {
+        Menu {
+            title: qsTr("&File")
+            MenuItem { action: commands.settings }
+            MenuSeparator {}
+            MenuItem { action: commands.quit }
+        }
+        Menu {
+            title: qsTr("&View")
+            MenuItem { action: commands.filters }
+            MenuItem { action: commands.results }
+            MenuItem { action: commands.map }
+            MenuItem { action: commands.showSelected }
+            MenuItem { action: commands.recenter }
+            MenuSeparator {}
+            MenuItem { action: commands.reset }
+        }
+        Menu { title: qsTr("&Help"); MenuItem { action: commands.about } }
+        } }
+    }
+    Loader {
+        active: Resales.desktopUiGate
+        sourceComponent: Component { DesktopUiGate { targetWindow: window; townControl: townPicker; typeControl: typePicker; minimumControl: minimumPicker; priceControl: pricePicker; recencyControl: recencyPicker } }
+    }
 
     // The pinned Bridge creates a parentless, JavaScript-owned model wrapper.
     // Keep its JS reference alive across QML GC, including all filter updates.
@@ -99,70 +194,71 @@ ApplicationWindow {
         anchors.margins: 12
         spacing: 10
         RowLayout {
-            Label { text: "HDB Resale Explorer"; font.pixelSize: 25; font.bold: true }
-            Label { text: "0.1.0 RC"; color: "#536775" }
-            Item { Layout.fillWidth: true }
-            Button { text: "About"; Accessible.name: "About HDB Resale Explorer"; onClicked: aboutDialog.open() }
+            Layout.fillWidth: true
+            Label { text: qsTr("HDB Resale Explorer"); font.pointSize: window.font.pointSize * 1.4; font.bold: true; Layout.fillWidth: true; wrapMode: Text.WordWrap }
+            ToolButton { text: qsTr("Data and import…"); onClicked: window.showDialog(dataDialog); Accessible.name: text }
         }
-        Label { text: "Explore historical registrations by address. Approximate block locations; not current listings."; color: "#455a64" }
-        RowLayout {
-            spacing: 12
+        Label { text: Resales.dataModeLabel; Layout.fillWidth: true; wrapMode: Text.WordWrap }
+        GridLayout {
+            id: filters
+            Layout.fillWidth: true
+            columns: width >= 78 * window.unit ? 6 : width >= 44 * window.unit ? 3 : 2
+            columnSpacing: 12; rowSpacing: 6
             ColumnLayout {
+                Layout.fillWidth: true
                 spacing: 2
-                Label { text: "Town" }
+                Label { text: qsTr("Town"); Layout.fillWidth: true; wrapMode: Text.WordWrap }
                 ComboBox {
-                    id: townPicker; Layout.preferredWidth: 210
+                    id: townPicker; Layout.fillWidth: true
                     model: JSON.parse(Resales.townsJson); currentIndex: Resales.townIndex
                     onActivated: Resales.setTown(currentText); Accessible.name: "Town filter"
                 }
             }
             ColumnLayout {
+                Layout.fillWidth: true
                 spacing: 2
-                Label { text: "Flat type" }
+                Label { text: qsTr("Flat type"); Layout.fillWidth: true; wrapMode: Text.WordWrap }
                 ComboBox {
-                    id: typePicker; Layout.preferredWidth: 180
+                    id: typePicker; Layout.fillWidth: true
                     model: JSON.parse(Resales.flatTypesJson); currentIndex: Resales.flatTypeIndex
                     onActivated: Resales.setFlatType(currentText); Accessible.name: "Flat type filter"
                 }
             }
             ColumnLayout {
+                Layout.fillWidth: true
                 spacing: 2
-                Label { text: "Minimum price (S$)" }
+                Label { text: qsTr("Minimum price (S$)"); Layout.fillWidth: true; wrapMode: Text.WordWrap }
                 SpinBox {
-                    id: minimumPicker; from: 0; to: Resales.maximumAvailablePrice; stepSize: 50000
+                    id: minimumPicker; Layout.fillWidth: true; from: 0; to: Resales.maximumAvailablePrice; stepSize: 50000
                     value: Resales.minimumPrice; editable: true
                     onValueModified: Resales.setMinimumPrice(value); Accessible.name: "Minimum resale price"
                 }
             }
             ColumnLayout {
+                Layout.fillWidth: true
                 spacing: 2
-                Label { text: "Maximum price (S$)" }
+                Label { text: qsTr("Maximum price (S$)"); Layout.fillWidth: true; wrapMode: Text.WordWrap }
                 SpinBox {
-                    id: pricePicker; from: 0; to: Resales.maximumAvailablePrice; stepSize: 50000
+                    id: pricePicker; Layout.fillWidth: true; from: 0; to: Resales.maximumAvailablePrice; stepSize: 50000
                     value: Resales.maximumPrice; editable: true
                     onValueModified: Resales.setMaximumPrice(value); Accessible.name: "Maximum resale price"
                 }
             }
             ColumnLayout {
+                Layout.fillWidth: true
                 spacing: 2
-                Label { text: "Registration window" }
+                Label { text: qsTr("Registration window"); Layout.fillWidth: true; wrapMode: Text.WordWrap }
                 ComboBox {
-                    id: recencyPicker; Layout.minimumWidth: 174; model: ["All months", "Latest 12 months", "Latest 24 months"]
+                    id: recencyPicker; Layout.fillWidth: true; model: ["All months", "Latest 12 months", "Latest 24 months"]
                     currentIndex: Resales.recencyMonths === 12 ? 1 : Resales.recencyMonths === 24 ? 2 : 0
                     onActivated: Resales.setRecencyMonths(currentIndex === 1 ? 12 : currentIndex === 2 ? 24 : 0)
                     Accessible.name: "Registration month window"
                 }
             }
-            Button { text: "Reset"; Layout.alignment: Qt.AlignBottom; Accessible.name: "Reset all filters"; onClicked: Resales.resetFilters() }
-            Item { Layout.fillWidth: true }
+            Button { action: commands.reset; Layout.alignment: Qt.AlignBottom; Accessible.name: qsTr("Reset all filters") }
         }
-        Label { text: "Inclusive price bounds · all statistics use matching transactions · time windows end at source month " + Resales.datasetLatestMonth + " (may be partial)"; font.pixelSize: 12; color: "#455a64" }
-        Label { visible: Resales.minimumPrice > Resales.maximumPrice; text: "Minimum exceeds maximum. Adjust either bound to show results."; color: "#9b3b00" }
-        Label { text: Resales.filterSummary; font.bold: true; Accessible.name: text }
-        RowLayout {
-            Label { text: Resales.presentationSummary; Layout.fillWidth: true; wrapMode: Text.WordWrap }
-            Label { text: "Map groups count addresses. Individual pins count sales."; font.pixelSize: 12 }
-        }
+        Label { visible: Resales.minimumPrice > Resales.maximumPrice; text: qsTr("Minimum exceeds maximum. Adjust either bound to show results."); Layout.fillWidth: true; wrapMode: Text.WordWrap }
+        Label { text: Resales.filterSummary; font.bold: true; Accessible.name: text; Layout.fillWidth: true; wrapMode: Text.WordWrap }
         Flickable {
             id: diagnosticScroll; contentWidth: width; contentHeight: diagnosticText.implicitHeight
             ScrollBar.vertical: ScrollBar {}
@@ -170,16 +266,39 @@ ApplicationWindow {
             Layout.fillWidth: true; Layout.preferredHeight: 60; Layout.maximumHeight: 60; clip: true
             Label { id: diagnosticText; width: diagnosticScroll.width; text: Resales.importDiagnostics; wrapMode: Text.WordWrap }
         }
-        RowLayout {
+        TabBar {
+            id: viewTabs; visible: window.compact; Layout.fillWidth: true
+            TabButton { text: qsTr("Map") }
+            TabButton { text: qsTr("Addresses and details") }
+        }
+        SplitView {
+            id: workspace
             Layout.fillWidth: true
             Layout.fillHeight: true
             Item {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.minimumWidth: 480
-                Layout.preferredWidth: 800
+                visible: !window.compact || viewTabs.currentIndex === 0
+                SplitView.fillWidth: true
+                SplitView.minimumWidth: window.compact ? 0 : 24 * window.unit
+                SplitView.preferredWidth: 800
                 Map {
                     id: map
+                    focusPolicy: Qt.StrongFocus
+                    Accessible.role: Accessible.Pane
+                    Accessible.name: qsTr("Resale map. Arrow keys pan, plus and minus zoom, Home returns to Singapore. Address results provide keyboard access to every address.")
+                    Keys.onPressed: (event) => {
+                        const shiftedPlus = event.key === Qt.Key_Plus && event.modifiers === Qt.ShiftModifier
+                        if (!activeFocus || (event.modifiers !== Qt.NoModifier && !shiftedPlus)) return
+                        if (event.key === Qt.Key_Left) pan(-80, 0)
+                        else if (event.key === Qt.Key_Right) pan(80, 0)
+                        else if (event.key === Qt.Key_Up) pan(0, -80)
+                        else if (event.key === Qt.Key_Down) pan(0, 80)
+                        else if (event.key === Qt.Key_Plus || event.key === Qt.Key_Equal) commands.zoomIn.trigger()
+                        else if (event.key === Qt.Key_Minus) commands.zoomOut.trigger()
+                        else if (event.key === Qt.Key_Home) commands.recenter.trigger()
+                        else return
+                        event.accepted = true
+                    }
+                    TapHandler { onTapped: map.forceActiveFocus(Qt.MouseFocusReason) }
                     property int createdDelegates: 0
                     property int destroyedDelegates: 0
                     property double lastDelegateCreatedMs: 0
@@ -235,14 +354,14 @@ ApplicationWindow {
                                 id: pin
                                 // Groups count addresses; individual pins count transactions.
                                 // C# owns grouping and exact viewport membership.
-                                width: selected ? 28 : cluster ? 38 : 24
+                                width: (selected ? 28 : cluster ? 38 : 24) * Math.max(1, window.unit / 16)
                                 height: width; radius: width / 2
                                 color: selected ? "#e35b19" : cluster ? "#17574f" : "#1565c0"
                                 border.color: "white"; border.width: 2
                                 Accessible.role: Accessible.Button
                                 Accessible.name: address + ", " + priceLabel
                                 Accessible.onPressAction: pin.activateMarker()
-                                Text { anchors.centerIn: parent; text: cluster ? addressCount : transactionCount > 1 ? transactionCount : ""; color: "white"; font.pixelSize: 10 }
+                                Text { anchors.centerIn: parent; text: cluster ? addressCount : transactionCount > 1 ? transactionCount : ""; color: "white"; font.pointSize: window.font.pointSize * 0.85 }
                                 function activateMarker() {
                                     if (cluster) { map.center = QtPositioning.coordinate(latitude, longitude); map.zoomLevel = Math.min(19, map.zoomLevel + 2) }
                                     else Resales.selectAddress(mapKey)
@@ -282,62 +401,83 @@ ApplicationWindow {
                     }
                 }
                 Rectangle {
+                    id: attributionPanel
                     anchors.left: parent.left; anchors.bottom: parent.bottom
-                    width: attributionRow.implicitWidth + 12; height: 30
+                    width: Math.min(parent.width, attributionRow.implicitWidth + 12); height: attributionRow.implicitHeight + 8
                     color: "#f2ffffff"
-                    Row {
+                    RowLayout {
                         id: attributionRow
+                        width: parent.width - 12
                         anchors.centerIn: parent
                         spacing: 5
                         Image {
                             id: oneMapLogo
-                            width: 24; height: 24; fillMode: Image.PreserveAspectFit
+                            Layout.preferredWidth: 24; Layout.preferredHeight: 24; sourceSize: Qt.size(24, 24); fillMode: Image.PreserveAspectFit
                             source: "qrc:/hdb-resale/onemap-logo.png"
                             Accessible.name: "OneMap logo"
                         }
                         Label {
-                            anchors.verticalCenter: parent.verticalCenter
+                            Layout.fillWidth: true; wrapMode: Text.WordWrap
                             text: '<a href="https://www.onemap.gov.sg/">OneMap</a> © contributors | <a href="https://www.sla.gov.sg/">Singapore Land Authority</a>'
-                            font.pixelSize: 11
+                            color: "#111111"; linkColor: "#0645ad"
                             onLinkActivated: (link) => Qt.openUrlExternally(link)
                         }
                     }
                 }
-                Row {
-                    anchors.top: parent.top; anchors.right: parent.right; anchors.margins: 8; spacing: 6
-                    Button { id: zoomIn; text: "+"; Accessible.name: "Zoom in"; onClicked: map.zoomLevel += 1 }
-                    Button { text: "−"; Accessible.name: "Zoom out"; onClicked: map.zoomLevel -= 1 }
-                    Button {
-                        id: recenter
-                        text: "Singapore"
-                        onClicked: { map.center = QtPositioning.coordinate(1.3521, 103.8198); map.zoomLevel = 11 }
+                Pane {
+                    anchors.top: parent.top; anchors.right: parent.right; anchors.margins: 8
+                    padding: 4
+                    Row {
+                        spacing: 6
+                        Button { id: zoomIn; action: commands.zoomIn; text: "+"; Accessible.name: qsTr("Zoom in") }
+                        Button { action: commands.zoomOut; text: "−"; Accessible.name: qsTr("Zoom out") }
+                        Button { id: recenter; action: commands.recenter; text: qsTr("Singapore") }
                     }
                 }
                 Label {
                     anchors.left: parent.left; anchors.top: parent.top; anchors.margins: 8
+                    visible: preferences.showMapCoordinates
                     text: "Zoom " + map.zoomLevel.toFixed(1) + " · " + map.center.latitude.toFixed(4) + ", " + map.center.longitude.toFixed(4)
-                    padding: 5
-                    background: Rectangle { color: "white"; opacity: 0.85 }
+                    padding: 5; color: window.palette.windowText
+                    background: Rectangle { color: window.palette.window }
+                }
+                Label {
+                    anchors.left: parent.left; anchors.bottom: attributionPanel.top; anchors.margins: 8
+                    width: Math.min(implicitWidth, parent.width - 16); wrapMode: Text.WordWrap
+                    text: Resales.presentationSummary + qsTr("\nGroups: addresses · Pins: matching sales")
+                    padding: 6; color: window.palette.windowText
+                    background: Rectangle { color: window.palette.window }
+                }
+                Rectangle {
+                    anchors.fill: parent; color: "transparent"
+                    border.width: 2; border.color: window.palette.highlight
+                    visible: map.activeFocus; Accessible.ignored: true
                 }
                 Label {
                     anchors.centerIn: parent
-                    visible: map.error !== Map.NoError
-                    text: "Map error: " + map.errorString
-                    padding: 12
-                    background: Rectangle { color: "white" }
+                    visible: !map.mapReady || map.error !== Map.NoError
+                    text: map.error !== Map.NoError ? qsTr("Map error: %1").arg(map.errorString) : qsTr("Preparing map…")
+                    width: Math.min(implicitWidth, parent.width - 24); wrapMode: Text.WordWrap
+                    padding: 12; color: window.palette.windowText
+                    background: Rectangle { color: window.palette.window }
                 }
             }
             ColumnLayout {
-                Layout.minimumWidth: 410; Layout.preferredWidth: 410; Layout.maximumWidth: 410
-                Layout.fillHeight: true; spacing: 6
+                id: addressesPane
+                visible: !window.compact || viewTabs.currentIndex === 1
+                SplitView.minimumWidth: window.compact ? 0 : 22 * window.unit
+                SplitView.preferredWidth: 27 * window.unit
+                spacing: 6
                 RowLayout {
-                    Label { text: "Addresses"; font.bold: true; font.pixelSize: 17 }
+                    Label { text: "Addresses"; font.bold: true; font.pointSize: window.font.pointSize * 1.15 }
                     Item { Layout.fillWidth: true }
-                    Label { text: "↑ ↓ navigate · Enter select"; font.pixelSize: 11; color: "#455a64" }
+                    Label { text: "↑ ↓ navigate · Enter select"; color: window.palette.windowText }
                 }
                 ListView {
                     id: transactionsList
-                    Layout.fillWidth: true; Layout.preferredHeight: Resales.selectedMapKey !== "" ? 140 : 220; Layout.minimumHeight: 120
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: Resales.selectedMapKey !== "" ? (window.compact ? 4 : 6) * window.unit : 10 * window.unit
+                    Layout.minimumHeight: (window.compact ? 3.5 : 4) * window.unit
                     clip: true; spacing: 3; model: Resales
                     activeFocusOnTab: true; keyNavigationEnabled: true
                     currentIndex: -1
@@ -363,6 +503,7 @@ ApplicationWindow {
                     Keys.onEnterPressed: Resales.selectAddressAt(currentIndex)
                     Keys.onSpacePressed: Resales.selectAddressAt(currentIndex)
                     delegate: ItemDelegate {
+                        id: addressDelegate
                         required property int index
                         required property string addressKey
                         required property string transactionId
@@ -372,31 +513,41 @@ ApplicationWindow {
                         required property string locationLabel
                         required property string summaryLabel
                         width: ListView.view.width
+                        height: Math.max(implicitHeight, rowLabel.implicitHeight + topPadding + bottomPadding)
+                        contentItem: Label {
+                            id: rowLabel; text: addressDelegate.text; font: addressDelegate.font
+                            wrapMode: Text.WordWrap
+                            color: addressDelegate.highlighted ? addressDelegate.palette.highlightedText : addressDelegate.palette.text
+                        }
                         text: address + "\n" + townName + " · " + summaryLabel
-                        font.pixelSize: 12
                         highlighted: Resales.selectedMapKey === addressKey
+                        Accessible.role: Accessible.Button
                         Accessible.name: text + ". " + locationLabel
+                        Accessible.onPressAction: { transactionsList.forceActiveFocus(); Resales.selectAddress(addressKey) }
                         onClicked: { transactionsList.forceActiveFocus(); Resales.selectAddress(addressKey) }
                         Rectangle {
                             anchors.fill: parent; color: "transparent"; radius: 3
-                            border.width: 2; border.color: "#1565c0"
+                            border.width: 2; border.color: window.palette.highlight
                             visible: transactionsList.activeFocus && transactionsList.currentIndex === index
                         }
                     }
                 }
                 Label { visible: Resales.addressCount === 0; text: "No matching addresses. Adjust the filters or reset."; wrapMode: Text.WordWrap; Layout.fillWidth: true }
-                Rectangle { Layout.fillWidth: true; height: 1; color: "#ccd5da" }
-                Label { text: Resales.selectedHeading; font.bold: true; font.pixelSize: 17; wrapMode: Text.WordWrap; Layout.fillWidth: true }
-                Label { text: Resales.selectionMapStatus; font.pixelSize: 12; wrapMode: Text.WordWrap; Layout.fillWidth: true }
-                Button { text: "Show selected address"; visible: Resales.selectedLocated; Accessible.name: text
-                    onClicked: { map.center = QtPositioning.coordinate(Resales.selectedLatitude, Resales.selectedLongitude); map.zoomLevel = 16 } }
+                Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; color: window.palette.mid }
+                RowLayout {
+                    Layout.fillWidth: true
+                    Label { text: Resales.selectedHeading; font.bold: true; font.pointSize: window.font.pointSize * 1.15; wrapMode: Text.WordWrap; Layout.fillWidth: true }
+                    Button { action: commands.showSelected; text: qsTr("Show on map"); visible: window.compact && Resales.selectedMapKey !== ""; Accessible.name: commands.showSelected.text }
+                }
+                Label { text: Resales.selectionMapStatus; wrapMode: Text.WordWrap; Layout.fillWidth: true }
+                Button { action: commands.showSelected; visible: !window.compact && Resales.selectedMapKey !== ""; Accessible.name: text }
                 ScrollView {
                     id: detailsScroll; Layout.fillWidth: true; Layout.fillHeight: true; clip: true
                     contentWidth: availableWidth; activeFocusOnTab: true; Accessible.name: "Selected address details and recent transactions"
                     Column {
                         width: detailsScroll.availableWidth; spacing: 8
-                        Label { width: parent.width; text: Resales.selectedMetrics; wrapMode: Text.WordWrap; font.pixelSize: 13 }
-                        Label { width: parent.width; text: Resales.selectedLease; wrapMode: Text.WordWrap; font.pixelSize: 12; color: "#455a64" }
+                        Label { width: parent.width; text: Resales.selectedMetrics; wrapMode: Text.WordWrap }
+                        Label { width: parent.width; text: Resales.selectedLease; wrapMode: Text.WordWrap; color: window.palette.windowText }
                         Loader {
                             id: trendLoader; width: parent.width
                             active: Resales.selectedMapKey !== ""
@@ -408,30 +559,61 @@ ApplicationWindow {
                             delegate: Column {
                                 required property var modelData
                                 width: detailsScroll.availableWidth; spacing: 3
-                                Label { width: parent.width; text: modelData.heading; font.bold: true; wrapMode: Text.WordWrap; font.pixelSize: 12 }
-                                Label { width: parent.width; text: modelData.details; wrapMode: Text.WordWrap; font.pixelSize: 12 }
-                                Rectangle { width: parent.width; height: 1; color: "#e3e8eb" }
+                                Label { width: parent.width; text: modelData.heading; font.bold: true; wrapMode: Text.WordWrap }
+                                Label { width: parent.width; text: modelData.details; wrapMode: Text.WordWrap }
+                                Rectangle { width: parent.width; height: 1; color: window.palette.mid }
                             }
                         }
                         Label { width: parent.width; text: "Address evidence"; visible: Resales.selectedMapKey !== ""; font.bold: true }
-                        Label { width: parent.width; text: Resales.selectedEvidence; wrapMode: Text.WordWrap; font.pixelSize: 11 }
+                        Label { width: parent.width; text: Resales.selectedEvidence; wrapMode: Text.WordWrap }
                     }
                 }
             }
         }
         Label {
-            text: 'Independent research tool · HDB / ACRA via data.gov.sg · <a href="https://data.gov.sg/open-data-licence">Singapore Open Data Licence</a>'
-            font.pixelSize: 11; onLinkActivated: (link) => Qt.openUrlExternally(link)
+            Layout.fillWidth: true; wrapMode: Text.WordWrap
+            linkColor: window.palette.link
+            text: 'Independent research tool · HDB / ACRA via data.gov.sg · <a href="https://data.gov.sg/open-data-licence">Singapore Open Data Licence</a>'; onLinkActivated: (link) => Qt.openUrlExternally(link)
+        }
+    }
+    Dialog {
+        id: dataDialog; title: qsTr("Data and import"); modal: true; anchors.centerIn: parent
+        width: Math.min(window.width - 32, 38 * window.unit); height: Math.min(implicitHeight, window.height - 40)
+        standardButtons: Dialog.Close; onClosed: window.restoreDialogFocus()
+        contentItem: ScrollView {
+            id: dataScroll
+            contentWidth: availableWidth; clip: true
+            Column {
+                width: dataScroll.availableWidth; spacing: 12
+                Label { width: parent.width; text: Resales.dataModeLabel; wrapMode: Text.WordWrap; font.bold: true }
+                Label { width: parent.width; text: Resales.importSummary; wrapMode: Text.WordWrap }
+                Label { width: parent.width; text: qsTr("Inclusive price bounds. All statistics use matching transactions. Time windows end at source month %1 (may be partial). Approximate block coordinates are separate from address match quality. Unmapped addresses remain in the list.").arg(Resales.datasetLatestMonth); wrapMode: Text.WordWrap }
+                Label { width: parent.width; text: qsTr("Historical registrations are not current listings, valuations or eligibility decisions."); wrapMode: Text.WordWrap }
+            }
+        }
+    }
+    Dialog {
+        id: settingsDialog; title: qsTr("Settings"); modal: true; anchors.centerIn: parent
+        width: Math.min(window.width - 32, 32 * window.unit); standardButtons: Dialog.Close
+        onClosed: window.restoreDialogFocus()
+        contentItem: ColumnLayout {
+            Label { text: qsTr("Appearance and text use your system preferences."); Layout.fillWidth: true; wrapMode: Text.WordWrap }
+            CheckBox { text: qsTr("Show map coordinates and zoom"); checked: preferences.showMapCoordinates; onToggled: preferences.showMapCoordinates = checked; Accessible.name: text }
         }
     }
     Dialog {
         id: aboutDialog; title: "About HDB Resale Explorer"; modal: true; anchors.centerIn: parent
-        width: 590; standardButtons: Dialog.Close
-        contentItem: Column {
+        width: Math.min(window.width - 32, 38 * window.unit); height: Math.min(implicitHeight, window.height - 40); standardButtons: Dialog.Close
+        onClosed: window.restoreDialogFocus()
+        contentItem: ScrollView {
+            id: aboutScroll; contentWidth: availableWidth; clip: true
+            Column {
+            width: aboutScroll.availableWidth
             spacing: 12
             Label { width: parent.width; text: Resales.aboutText; wrapMode: Text.WordWrap }
             Label { width: parent.width; text: Resales.importSummary; wrapMode: Text.WordWrap }
-            Label { text: '<a href="https://github.com/shenghaoc/hdb-resale-qt">Source and licence notices</a>'; onLinkActivated: (link) => Qt.openUrlExternally(link) }
+            Label { text: '<a href="https://github.com/shenghaoc/hdb-resale-qt">Source and licence notices</a>'; linkColor: window.palette.link; onLinkActivated: (link) => Qt.openUrlExternally(link) }
+            }
         }
     }
 }

@@ -68,7 +68,7 @@ internal static class Program
         Qml.LoadFromRootModule(Environment.GetEnvironmentVariable("HDB_STARTUP_PROFILE") == "1" &&
             Environment.GetEnvironmentVariable("HDB_STARTUP_VIEW") == "qml-shell" ? "StartupShell" : "Main");
         Qml.WaitForExit();
-        if (Environment.GetEnvironmentVariable("HDB_RUNTIME_GATE") == "1" || Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1" || Environment.GetEnvironmentVariable("HDB_STARTUP_PROFILE") == "1" || Environment.GetEnvironmentVariable("HDB_BUYER_GATE") == "1") Console.WriteLine("HDB_GATE_EXIT");
+        if (Environment.GetEnvironmentVariable("HDB_RUNTIME_GATE") == "1" || Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1" || Environment.GetEnvironmentVariable("HDB_STARTUP_PROFILE") == "1" || Environment.GetEnvironmentVariable("HDB_BUYER_GATE") == "1" || Environment.GetEnvironmentVariable("HDB_DESKTOP_UI_GATE") == "1") Console.WriteLine("HDB_GATE_EXIT");
         if (Environment.GetEnvironmentVariable("HDB_PACKAGE_SMOKE") == "1") Console.WriteLine("HDB_PACKAGE_EXIT");
     }
     private static void WriteReport<T>(string path, T value)

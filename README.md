@@ -15,6 +15,7 @@ Actual Linux Release capture with the locally prepared expanded corpus and defau
 - Inspect a compact monthly-median price trend for the latest 24 source months. Dots mean observed months; gaps mean no matching sale.
 - Inspect address match quality separately from approximate block coordinates. Unmapped addresses remain in the list and details.
 - Navigate the list by keyboard, use native controls, and inspect provenance in the details and About dialog.
+- Resize or tile the window: filters reflow and narrow windows offer Map and Addresses and details tabs. Use Command/Ctrl+1 or +2 to focus a pane, Command/Ctrl+L for filters, and Command/Ctrl+Shift+R to reset. Map arrows, plus/minus and Home work only with map focus. See [native UI choices and verification](docs/native-ui.md).
 
 Statistics describe **exactly the transactions matching the filters**, not listings or asking prices. The default maximum is S$1,000,000. Reset restores all towns/types, minimum zero, that maximum and all source months. If minimum exceeds maximum, the result is empty until corrected.
 
