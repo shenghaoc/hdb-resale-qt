@@ -121,7 +121,6 @@ public static class CsvImport
             if (error is not null) Reject(file, row, error, rejected, diagnostics);
         }
         stage?.Invoke("validation-facts");
-        var resolved = new List<(string Id, TransactionProvenance? Provenance, TransactionFacts Facts, DerivedLocation Location, AddressMatch Match)>();
         foreach (var (id, provenance, facts) in parsed)
         {
             var key = (facts.Town, facts.Block, facts.Street);
@@ -139,10 +138,9 @@ public static class CsvImport
                 if (indexed) matches.Add(key, match);
             }
             var location = match.MatchedFootprint?.Location ?? new DerivedLocation(null, CoordinateQuality.Missing, match.Reason);
-            resolved.Add((id, provenance, facts, location, match));
+            accepted.Add(new(id, facts, location, match) { Provenance = provenance });
         }
         stage?.Invoke("matching-resolution");
-        foreach (var row in resolved) accepted.Add(new(row.Id, row.Facts, row.Location, row.Match) { Provenance = row.Provenance });
         stage?.Invoke("transaction-domain");
         return new(accepted.AsReadOnly(), rejected.AsReadOnly(), diagnostics.AsReadOnly());
     }
