@@ -32,6 +32,8 @@ ApplicationWindow {
     property alias commands: commands
     property alias aboutPopup: aboutDialog
     property alias settingsPopup: settingsDialog
+    property alias dataPopup: dataDialog
+    property alias grabRoot: shellRoot
     readonly property bool modalOpen: aboutDialog.visible || settingsDialog.visible || dataDialog.visible
     FontMetrics { id: textMetrics; font: window.font }
     Settings {
@@ -102,6 +104,10 @@ ApplicationWindow {
         }
         Menu { title: qsTr("&Help"); MenuItem { action: commands.about } }
         } }
+    }
+    Loader {
+        active: Resales.screenshotDirectory !== ""
+        sourceComponent: Component { ScreenshotGate { targetWindow: window; townControl: townPicker; typeControl: typePicker; priceControl: pricePicker } }
     }
     Loader {
         active: Resales.desktopUiGate
@@ -189,7 +195,12 @@ ApplicationWindow {
         PluginParameter { name: "osm.mapping.cache.directory"; value: Resales.basemapCacheDirectory }
     }
 
+    Item {
+    id: shellRoot
+    anchors.fill: parent
+    Rectangle { anchors.fill: parent; color: window.palette.window }
     ColumnLayout {
+        id: shell
         anchors.fill: parent
         anchors.margins: 12
         spacing: 10
@@ -575,6 +586,7 @@ ApplicationWindow {
             linkColor: window.palette.link
             text: 'Independent research tool · HDB / ACRA via data.gov.sg · <a href="https://data.gov.sg/open-data-licence">Singapore Open Data Licence</a>'; onLinkActivated: (link) => Qt.openUrlExternally(link)
         }
+    }
     }
     Dialog {
         id: dataDialog; title: qsTr("Data and import"); modal: true; anchors.centerIn: parent

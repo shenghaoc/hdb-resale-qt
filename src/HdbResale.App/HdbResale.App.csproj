@@ -56,6 +56,7 @@
     <None Include="DesktopActions.qml"/>
     <None Include="MacMenuBar.qml"/>
     <None Include="DesktopUiGate.qml"/>
+    <None Include="ScreenshotGate.qml"/>
     <None Include="StartupShell.qml"/>
     <None Include="RuntimeGate.qml"/>
     <None Include="ScaleGate.qml"/>

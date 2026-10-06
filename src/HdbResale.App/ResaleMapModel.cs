@@ -138,6 +138,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public string DataModeLabel => Environment.GetEnvironmentVariable("HDB_DATA_DIRECTORY") is null
         ? $"Bundled development sample · {import.Accepted.Count:N0} registrations · not the full dataset"
         : $"Local import · {import.Accepted.Count:N0} registrations · source coverage and omissions in Data and import";
+    public string ScreenshotDirectory => Environment.GetEnvironmentVariable("HDB_SCREENSHOT_DIR") ?? "";
     public bool DesktopUiGate => Environment.GetEnvironmentVariable("HDB_DESKTOP_UI_GATE") == "1";
     public string DesktopUiFault => DesktopUiGate ? Environment.GetEnvironmentVariable("HDB_DESKTOP_UI_FAULT") ?? "" : "";
     public string MapUpdateStrategy => MapPoints.UseReset ? "reset" : "incremental";
