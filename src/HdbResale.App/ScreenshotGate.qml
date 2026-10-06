@@ -154,6 +154,8 @@ Item {
                 else if (Math.abs(win.font.pointSize - gate.baseFont * want) > 0.01) reason = "font " + win.font.pointSize
                 else if (s.dialog && !gate.dialogFor(s.dialog).opened) reason = "dialog not open"
                 else if (!s.dialog && gate.popups.some(p => p.visible)) reason = "unexpected dialog"
+                // `spectacle -a` captures the *active* window: never capture unless it is this one.
+                else if (nativeMode && !win.active) { win.requestActivate(); reason = "window not active; a native capture would show another window" }
                 else if (!win.mapView.mapReady) reason = "map not ready"
                 else if (Resales.screenshotColorScheme !== "" && Qt.styleHints.colorScheme !== (Resales.screenshotColorScheme === "dark" ? Qt.Dark : Qt.Light)) reason = "requested colour scheme not applied (" + Qt.styleHints.colorScheme + ")"
                 else reason = s.expect ? s.expect() : ""
@@ -172,7 +174,7 @@ Item {
     }
     function capture() {
         const s = scenario
-        const reason = s.expect ? s.expect() : ""
+        const reason = (nativeMode && !win.active) ? "window lost focus" : s.expect ? s.expect() : ""
         if (reason !== "") { fail("state changed before capture: " + reason); return }
         const dir = Resales.screenshotDirectory
         console.log("HDB_SHOT_META " + meta(s.name))
