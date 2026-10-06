@@ -100,3 +100,81 @@ Raw local evidence is preserved outside the source checkout in the task's
 individual native logs, preparation receipts, two import reports and resource
 statistics. The probe and native orchestration scripts remain there as
 measurement artifacts; they are not extra production projects or dependencies.
+
+## Occurrence reconciliation checkpoint, 2026-10-06
+
+The retained local audit proves **988,123 captured source occurrences + five
+explicitly approved unresolved retentions = 988,128 recorded Neon candidate
+rows**. All declared transaction rows in this Qt reconstruction were accepted.
+The audited difference contains five candidate-only occurrences and zero
+Qt-only occurrences. No data was dropped in this audited import/comparison and
+no counts were forced to agree. These are different source and retained-storage
+cohorts; this is not a fresh query or serving acceptance of the live candidate.
+
+| Recorded retained ID | Candidate multiplicity | Captured source multiplicity |
+| --- | ---: | ---: |
+| 550818 | 1 | 0 |
+| 601171 | 1 | 0 |
+| 934839 | 1 | 0 |
+| 955489 | 1 | 0 |
+| 959788 | 1 | 0 |
+
+The reviewed candidate was reconstructed from the 985,533-row retained August
+baseline plus 2,595 staged insertions, with zero transaction updates/deletions.
+The exact source fact-multiset SHA-256 is
+`90b8d365c031da247c5a41966afd1b0f6be5dcf5c95fb8598b37bf095165d9d3`;
+the reconstructed 988,128-row candidate digest is
+`21b2fb88e3f6c025a54fd09996450a0327ed1281f250659082896f4eb8457787`.
+The five-retention multiset digest is
+`44c13d42f9277d1b4e9a86f2b36e69b79b50bf287b2ad0953e9f2f5592878276`.
+None of these hashes is an official physical-sale identity.
+
+The two 2017+ captures each contain 241,920 rows and 23,928,760 bytes:
+
+| Capture | Raw SHA-256 |
+| --- | --- |
+| Qt/M11 recovery pin | `3c3d8bf9b12adb88919fa74869922fe05cdb144f5f69d93a0de4345d047cc7d4` |
+| Web capture saved 2026-10-04T06:03:06.149Z | `9835dfe6cd92a46a1302fabf3a692bf893ee5b86ec95638d10dfce61dbfbdb9a` |
+
+Their exact raw CSV-line and parsed-field multisets are equal, including every
+duplicate occurrence and remaining-lease string. **39 data positions differ
+only by ordering**; header bytes and LF endings agree. Their distinct byte
+hashes and source-local row locators must stay separate. The Qt recovery pin
+does not prove an acquisition date; original Web HTTP response headers were
+not retained. The four historical October 6 captures total 746,203 rows and
+match the retained August baseline's normalized historical fact multiset;
+original August raw byte identity is unproven. The exact prepared source versions
+are pinned below, with descriptor SHA-256
+`ea36ce53fd727cb7bf76e4b90a9af572f59a86aae58323cb4752c133b6f96f5a`.
+This remains a mixed-date reconstruction with approval and registration month
+meanings preserved, not a uniformly timed publication.
+
+| Source identity | Rows | Original SHA-256 |
+| --- | ---: | --- |
+| d_ebc5ab87086db484f88045b47411ebc5 | 287,196 | `2e064923f41cc96536db04c978901695aa0191022829895cf4ce177e42afad57` |
+| d_43f493c6c50d54243cc1eab0df142d6a | 369,651 | `5f6a72bd7b9120281863beb1fc4c89aa5f4923f00b0f6c52494c4347363f2c36` |
+| d_2d5ff9ea31397b66239f245f57751537 | 52,203 | `6a16e2dc78f70048ec1a522b59a9727581c36e45e02022641c53e755a7657c72` |
+| d_ea9ed51da2787afaf8e51f827c304208 | 37,153 | `4ff7ce4a4f642fb384d2b75a42e75b0477e50005f4aaa9989591a7a92507d185` |
+| d_8b84c4ee58e3cfc0ece0d773c8ca6abc | 241,920 | `3c3d8bf9b12adb88919fa74869922fe05cdb144f5f69d93a0de4345d047cc7d4` |
+
+Duplicate grain explains **Qt 1,929 versus D1 2,014 extra duplicate-looking
+occurrences**. Qt `TransactionFacts` retains exact optional source text,
+including remaining lease. The common D1 tuple contains month, town, block,
+street, address key, flat type, storey range, area, lease commencement year,
+price and model; it excludes raw remaining lease, source identity and location.
+There are exactly **85 groups with differing remaining-lease strings** and
+otherwise equal common tuples. Those variants account for the entire difference.
+The common tuple is sorted and byte-length framed for multiset hashing; every
+occurrence contributes separately. Neither policy deduplicated any input row.
+
+Evidence is the read-only sibling repository's
+`docs/proposals/transaction-occurrence-reconciliation-2026-10-06.md`
+(SHA-256 `6ebf524dd8450baf2b6debd354b801f3268b09eb5a5a6109b4f5e910a9d47bd3`)
+and `docs/evidence/transaction-occurrence-reconciliation-2026-10-06.json`
+(SHA-256 `993b62b8acf9e8d856ee030f361e11e7a3afcdb20b163d77ff2fb63f36d74383`).
+That audit used read-only SQLite, local captures, staged insertions and recorded
+publication receipts; it made zero provider calls or database writes. Its input
+preservation checks passed. The desktop checkpoint independently rechecked the
+report hashes, descriptor and five original/prepared source pairs before
+recording these conclusions. The web repository remains under its own owner;
+no web code or database was changed here.
