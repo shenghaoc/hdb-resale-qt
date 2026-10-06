@@ -75,8 +75,9 @@ def main():
     parser.add_argument('--scale', help='QT_SCALE_FACTOR process-local override')
     parser.add_argument('--data-directory', type=Path, help='HDB_DATA_DIRECTORY for a synthetic or local import')
     parser.add_argument('--color-scheme', choices=['light', 'dark'], help='process-local Qt.styleHints.colorScheme request')
+    parser.add_argument('--profile', choices=['sample', 'stress'], default='sample', help='stress = synthetic UI fixture via --data-directory')
     parser.add_argument('--label', default='')
-    parser.add_argument('--timeout', type=int, default=240)
+    parser.add_argument('--timeout', type=int, default=0, help='seconds; default 240 (600 for the stress profile)')
     args = parser.parse_args()
 
     root = args.executable.resolve().parent
@@ -92,6 +93,9 @@ def main():
     platform = args.platform or ('offscreen' if args.mode == 'grab' else None)
     if platform:
         env['QT_QPA_PLATFORM'] = platform
+    env['HDB_SCREENSHOT_PROFILE'] = args.profile
+    if args.profile == 'stress' and not (args.data_directory and (args.data_directory / 'SYNTHETIC_UI_FIXTURE.txt').exists()):
+        sys.exit('--profile stress requires --data-directory pointing at tools/make_ui_fixture.py output')
     if args.color_scheme:
         env['HDB_SCREENSHOT_COLOR_SCHEME'] = args.color_scheme
     if args.scale:
@@ -104,7 +108,7 @@ def main():
         env['HDB_SYNTHETIC_BASEMAP_HOST'] = f'http://127.0.0.1:{server.server_port}/'
 
     metas, ready, failed, done, popups = [], [], [], False, {}
-    deadline = time.time() + args.timeout
+    deadline = time.time() + (args.timeout or (600 if args.profile == 'stress' else 240))
     child = subprocess.Popen([str(args.executable.resolve())], cwd=args.executable.resolve().parent, env=env,
                              stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1)
     log = []
@@ -157,7 +161,7 @@ def main():
         ack.unlink()
     manifest = {'label': args.label, 'mode': args.mode, 'scale_factor_env': args.scale or '',
                 'head_sha': git(root, 'rev-parse', 'HEAD'), 'branch': git(root, 'rev-parse', '--abbrev-ref', 'HEAD'),
-                'uncommitted_changes': bool(git(root, 'status', '--porcelain')), 'data': 'local import' if args.data_directory else 'bundled six-row development sample',
+                'uncommitted_changes': bool(git(root, 'status', '--porcelain')), 'data': 'SYNTHETIC UI stress fixture (not real data)' if args.profile == 'stress' else 'local import' if args.data_directory else 'bundled six-row development sample',
                 'basemap': 'synthetic' if args.synthetic_basemap else 'OneMap (unmodified; not for publication)',
                 'scenarios': metas,
                 'note': 'Generated images are not visual acceptance; inspect them.'}

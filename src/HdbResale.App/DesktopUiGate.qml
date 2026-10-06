@@ -30,10 +30,14 @@ Item {
             if (dispatching) return
             dispatching = true
             try {
-            if (Date.now() - started > 5000) { fail("deadline"); return }
+            if (Date.now() - started > 5000) {
+                if (phase === 0) console.error("HDB_DESKTOP_DIAG mapReady=" + targetWindow.mapView.mapReady + " viewport=" + Resales.mapViewportReady + " count=" + targetWindow.resultView.count + " active=" + targetWindow.active)
+                fail("deadline"); return
+            }
             const map = targetWindow.mapView, list = targetWindow.resultView, commands = targetWindow.commands
             switch (phase) {
             case 0:
+                if (!targetWindow.active) targetWindow.requestActivate()
                 if (!map.mapReady || !Resales.mapViewportReady || list.count !== 6 || !targetWindow.active) return
                 originalFont = targetWindow.font.pointSize
                 targetWindow.width = 640; targetWindow.height = 600
@@ -49,12 +53,12 @@ Item {
                 if (!list.activeFocus || !list.visible || targetWindow.viewTabs.currentIndex !== 1) return
                 probedRow = list.itemAtIndex(0)
                 if (!probedRow) return
-                originalRowText = probedRow.text; originalRowHeight = probedRow.height
-                probedRow.text = "A long address and town label that must remain readable in a narrow native window. ".repeat(4)
+                originalRowText = probedRow.displayAddress; originalRowHeight = probedRow.height
+                probedRow.displayAddress = "A long address that must remain readable in a narrow native window. ".repeat(4)
                 advance("long-label"); break
             case 3:
-                if (probedRow.height <= originalRowHeight || probedRow.width > list.width || probedRow.contentItem.truncated) { fail("long row clipped"); return }
-                probedRow.text = originalRowText
+                if (probedRow.height <= originalRowHeight || probedRow.width > list.width || probedRow.addressLabel.truncated) { fail("long row clipped"); return }
+                probedRow.displayAddress = originalRowText
                 key(Qt.Key_Down); key(Qt.Key_Return); advance("list-keyboard"); break
             case 4:
                 if (Resales.selectedMapKey === "") return

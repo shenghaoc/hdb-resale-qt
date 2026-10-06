@@ -19,35 +19,46 @@ Item {
     readonly property var win: targetWindow
     readonly property var popups: [win.settingsPopup, win.aboutPopup, win.dataPopup]
     Button { id: styleProbe; visible: false }
+    // "stress" runs against the synthetic UI fixture (tools/make_ui_fixture.py): many results,
+    // long addresses, ambiguous/unmatched rows. Never a data or coverage claim.
+    readonly property bool stress: Resales.screenshotProfile === "stress"
+    readonly property string fTown: stress ? "TOA PAYOH" : "ANG MO KIO"
+    readonly property string fType: stress ? "4 ROOM" : "3 ROOM"
 
     // Each scenario fully specifies window size, font scale, pane, dialog and filters
     // so that every state is independent of the previous one. `expect` returns an
     // empty string when its preconditions hold, otherwise the reason they do not.
-    readonly property var scenarios: [
-        { name: "default-wide", w: 1360, h: 900, settle: 2500, expect: () => selected(false) || compact(false) || filters("All towns", "All flat types") || count(6) },
-        { name: "default", w: 1100, h: 760, settle: 1200, expect: () => selected(false) || compact(false) || filters("All towns", "All flat types") || count(6) },
+    readonly property var allScenarios: [
+        { name: "default-wide", w: 1360, h: 900, settle: 2500, expect: () => selected(false) || compact(false) || filters("All towns", "All flat types") || countAll() },
+        { name: "default", w: 1100, h: 760, settle: 1200, expect: () => selected(false) || compact(false) || filters("All towns", "All flat types") || countAll() },
         { name: "compact-map", w: 640, h: 600, settle: 1200, tab: 0, expect: () => compact(true) || tab(0) || selected(false) },
         { name: "filtered", w: 1100, h: 760, settle: 1500,
-          setup: () => { Resales.setTown("ANG MO KIO"); Resales.setFlatType("3 ROOM") },
-          expect: () => selected(false) || filters("ANG MO KIO", "3 ROOM") || count(1) },
+          setup: () => { Resales.setTown(fTown); Resales.setFlatType(fType) },
+          expect: () => selected(false) || filters(fTown, fType) || countFiltered() },
         { name: "empty", w: 1100, h: 760, settle: 1200,
-          setup: () => { Resales.setMinimumPrice(900000) },
+          setup: () => { Resales.setMinimumPrice(1000000) },
           expect: () => selected(false) || count(0) },
         { name: "reset", w: 1100, h: 760, settle: 1200,
           setup: () => Resales.resetFilters(),
-          expect: () => selected(false) || filters("All towns", "All flat types") || count(6) },
+          expect: () => selected(false) || filters("All towns", "All flat types") || countAll() },
         { name: "price-invalid", w: 1100, h: 760, settle: 1200,
           setup: () => { Resales.setMinimumPrice(600000); Resales.setMaximumPrice(300000) },
           expect: () => selected(false) || (win.filterBar.priceInvalid ? "" : "price range not invalid") || count(0) },
         { name: "compact-filters-open", w: 640, h: 600, settle: 1200, tab: 0,
-          setup: () => { Resales.setTown("ANG MO KIO"); win.filterBar.expanded = true },
-          expect: () => compact(true) || tab(0) || (win.filterBar.showFields ? "" : "filters not shown") || filters("ANG MO KIO", "All flat types") },
+          setup: () => { Resales.setTown(fTown); win.filterBar.expanded = true },
+          expect: () => compact(true) || tab(0) || (win.filterBar.showFields ? "" : "filters not shown") || filters(fTown, "All flat types") },
         { name: "compact-filters-active", w: 640, h: 600, settle: 1200, tab: 0,
-          setup: () => { Resales.setTown("ANG MO KIO"); Resales.setFlatType("3 ROOM") },
-          expect: () => compact(true) || (win.filterBar.showFields ? "filters shown" : "") || filters("ANG MO KIO", "3 ROOM") },
+          setup: () => { Resales.setTown(fTown); Resales.setFlatType(fType) },
+          expect: () => compact(true) || (win.filterBar.showFields ? "filters shown" : "") || filters(fTown, fType) },
         { name: "selected", w: 1100, h: 760, settle: 2200,
           setup: () => Resales.selectAddressAt(0),
-          expect: () => selected(true) || compact(false) || count(6) },
+          expect: () => selected(true) || compact(false) || countAll() },
+        { name: "selected-ambiguous", stressOnly: true, w: 1100, h: 760, settle: 1800,
+          setup: () => Resales.selectAddress("PASIR RIS|107|TEST PASIR STREET 8"),
+          expect: () => selected(true) || (Resales.selectedMapKey === "PASIR RIS|107|TEST PASIR STREET 8" ? "" : "wrong selection") },
+        { name: "selected-unmatched", stressOnly: true, w: 1100, h: 760, settle: 1800,
+          setup: () => Resales.selectAddress("CLEMENTI|105|TEST CLEMENTI STREET 6"),
+          expect: () => selected(true) || (Resales.selectedMapKey === "CLEMENTI|105|TEST CLEMENTI STREET 6" ? "" : "wrong selection") },
         { name: "selected-compact-details", w: 700, h: 700, settle: 1500, tab: 1,
           setup: () => Resales.selectAddressAt(0),
           expect: () => selected(true) || compact(true) || tab(1) },
@@ -61,8 +72,11 @@ Item {
           expect: () => selected(true) }
     ]
 
+    readonly property var scenarios: allScenarios.filter(s => !s.stressOnly || stress)
     function selected(want) { return (Resales.selectedMapKey !== "") === want ? "" : "selection is " + (want ? "empty" : "set") }
     function compact(want) { return win.compact === want ? "" : "compact is " + win.compact }
+    function countAll() { return stress ? (win.resultView.count > 100 ? "" : "stress list too short: " + win.resultView.count) : count(6) }
+    function countFiltered() { return stress ? (win.resultView.count > 0 && win.resultView.count < 100 ? "" : "filtered stress list " + win.resultView.count) : count(1) }
     function count(n) { return win.resultView.count === n ? "" : "list count " + win.resultView.count + " != " + n }
     function tab(i) { return win.viewTabs.currentIndex === i ? "" : "tab index " + win.viewTabs.currentIndex }
     function filters(town, type) {

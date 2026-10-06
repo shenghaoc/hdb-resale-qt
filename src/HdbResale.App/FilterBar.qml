@@ -17,7 +17,7 @@ ToolBar {
     readonly property alias pricePicker: maximumSpin
     readonly property alias recencyPicker: recencyCombo
     readonly property alias resetButton: resetButton
-    FontMetrics { id: captionMetrics; font.pointSize: Window.window.font.pointSize * theme.captionScale }
+    FontMetrics { id: captionMetrics; font.pointSize: root.font.pointSize * root.theme.captionScale }
     readonly property alias disclosure: disclosure
     readonly property var recencyLabels: [qsTr("All months"), qsTr("Latest 12 months"), qsTr("Latest 24 months")]
     readonly property bool priceInvalid: Resales.minimumPrice > Resales.maximumPrice

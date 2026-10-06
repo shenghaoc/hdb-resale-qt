@@ -38,6 +38,12 @@ Item {
     readonly property color separator: Qt.rgba(sample.palette.windowText.r, sample.palette.windowText.g, sample.palette.windowText.b, 0.2)
     readonly property color accent: sample.palette.highlight
     readonly property color accentText: sample.palette.highlightedText
+    // Selection must not rely on the palette's saturated highlight: white text on Breeze's
+    // #3daee9 is 2.4:1. A light tint keeps text contrast; a leading bar and bold type mark it.
+    readonly property bool dark: sample.palette.window.hslLightness < 0.5
+    readonly property color selectedFill: Qt.tint(sample.palette.base, Qt.rgba(sample.palette.highlight.r, sample.palette.highlight.g, sample.palette.highlight.b, 0.2))
+    readonly property color hoverFill: Qt.tint(sample.palette.base, Qt.rgba(sample.palette.highlight.r, sample.palette.highlight.g, sample.palette.highlight.b, 0.08))
+    readonly property color accentBar: dark ? sample.palette.highlight : Qt.darker(sample.palette.highlight, 1.7)
     // Warning text must stay legible on the chrome colour in light and dark appearances.
     readonly property color warning: sample.palette.window.hslLightness > 0.5 ? "#8a3200" : "#ffb070"
     // Floating map overlays: mostly opaque window colour with a hairline edge.

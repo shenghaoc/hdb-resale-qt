@@ -121,6 +121,29 @@ Decisions and why:
   glyph, bold text and a ≥ 7:1 colour, so it never relies on colour alone.
 * No filtering semantics changed: the same `Resales.set*` calls and defaults.
 
+## Results layer (PR 4)
+
+* **Row hierarchy.** Address and median price first (bold, tabular figures); town and
+  flat types second; sales count, latest month and location reliability last, in the
+  caption role. Previously one four-line text block with no emphasis.
+* **Location reliability in plain words** (`LocationPresentation`, presentation only):
+  *Block-level location* (every mapped address — the pin is a block footprint, never a
+  flat), *Location ambiguous* (several buildings/postal codes fit), *Not on map*
+  (no matching building record, or records disagree). The raw match/coordinate
+  strings stay available as the row's accessible description and in the evidence section.
+* **Selection** is a light tint + 4 px leading bar + bold type. The palette's saturated
+  highlight was not used because white text on Breeze's `#3daee9` is 2.4:1. **Keyboard
+  focus** is a separate 2 px ring in the text colour, so a focused unselected row,
+  a selected row and a focused selected row are all distinguishable without colour.
+* **Space.** The list and the details are a vertical `SplitView` (user-resizable).
+  With nothing selected the list owns the whole pane; the details appear on selection.
+  The fixed `10 × text height` list is gone.
+* **Empty state** explains why (including the min > max case) and offers Reset.
+* **Stress fixture.** `tools/make_ui_fixture.py` writes a clearly synthetic corpus
+  (450 addresses, 3,492 rows, `TEST` streets, matched/ambiguous/unmatched, clustered
+  and sparse blocks, long histories). `ui_screenshots.py --profile stress` uses it.
+  It supports UI review only — it is not real data and not the expanded-data gate.
+
 ## Skills and references actually applied
 
 No Qt, QML, product-design, accessibility or screenshot-audit skill is installed in

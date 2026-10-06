@@ -446,13 +446,18 @@ ApplicationWindow {
                     title: qsTr("Addresses")
                     caption: Resales.addressCount.toLocaleString()
                 }
+                SplitView {
+                    id: paneSplit
+                    orientation: Qt.Vertical
+                    Layout.fillWidth: true; Layout.fillHeight: true
+                    Item {
+                        id: listArea
+                        SplitView.fillHeight: true
+                        SplitView.minimumHeight: 7 * window.unit
                 ListView {
                     id: transactionsList
-                    Layout.fillWidth: true
-                    Layout.margins: theme.s
-                    Layout.preferredHeight: Resales.selectedMapKey !== "" ? (window.compact ? 4 : 6) * window.unit : 10 * window.unit
-                    Layout.minimumHeight: (window.compact ? 3.5 : 4) * window.unit
-                    clip: true; spacing: 3; model: Resales
+                    anchors.fill: parent
+                    clip: true; spacing: 0; model: Resales
                     activeFocusOnTab: true; keyNavigationEnabled: true
                     currentIndex: -1
                     Connections {
@@ -476,38 +481,24 @@ ApplicationWindow {
                     Keys.onReturnPressed: Resales.selectAddressAt(currentIndex)
                     Keys.onEnterPressed: Resales.selectAddressAt(currentIndex)
                     Keys.onSpacePressed: Resales.selectAddressAt(currentIndex)
-                    delegate: ItemDelegate {
-                        id: addressDelegate
-                        required property int index
-                        required property string addressKey
-                        required property string transactionId
-                        required property string address
-                        required property string priceLabel
-                        required property string townName
-                        required property string locationLabel
-                        required property string summaryLabel
-                        width: ListView.view.width
-                        height: Math.max(implicitHeight, rowLabel.implicitHeight + topPadding + bottomPadding)
-                        contentItem: Label {
-                            id: rowLabel; text: addressDelegate.text; font: addressDelegate.font
-                            wrapMode: Text.WordWrap
-                            color: addressDelegate.highlighted ? addressDelegate.palette.highlightedText : addressDelegate.palette.text
-                        }
-                        text: address + "\n" + townName + " · " + summaryLabel
-                        highlighted: Resales.selectedMapKey === addressKey
-                        Accessible.role: Accessible.Button
-                        Accessible.name: text + ". " + locationLabel
-                        Accessible.onPressAction: { transactionsList.forceActiveFocus(); Resales.selectAddress(addressKey) }
-                        onClicked: { transactionsList.forceActiveFocus(); Resales.selectAddress(addressKey) }
-                        Rectangle {
-                            anchors.fill: parent; color: "transparent"; radius: 3
-                            border.width: 2; border.color: window.palette.highlight
-                            visible: transactionsList.activeFocus && transactionsList.currentIndex === index
+                    delegate: AddressRow { theme: window.theme }
+                }
+                        ColumnLayout {
+                            visible: Resales.addressCount === 0
+                            anchors.centerIn: parent
+                            width: Math.min(parent.width - theme.l * 2, 26 * window.unit)
+                            spacing: theme.s
+                            Label { text: qsTr("No matching addresses"); font.bold: true; font.pointSize: window.font.pointSize * theme.titleScale; Layout.fillWidth: true; horizontalAlignment: Text.AlignHCenter; wrapMode: Text.WordWrap }
+                            Label { text: filterBar.priceInvalid ? qsTr("The minimum price is above the maximum. Adjust either price to see results.") : qsTr("No registrations match these filters. Widen the price range, choose another town or flat type, or reset the filters."); color: theme.secondaryText; Layout.fillWidth: true; horizontalAlignment: Text.AlignHCenter; wrapMode: Text.WordWrap }
+                            Button { action: commands.reset; text: qsTr("Reset filters"); Layout.alignment: Qt.AlignHCenter; Accessible.name: qsTr("Reset all filters") }
                         }
                     }
-                }
-                Label { visible: Resales.addressCount === 0; text: "No matching addresses. Adjust the filters or reset."; wrapMode: Text.WordWrap; Layout.fillWidth: true }
-                Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; color: theme.separator }
+                    ColumnLayout {
+                    id: detailsArea
+                    visible: Resales.selectedMapKey !== ""
+                    SplitView.preferredHeight: paneSplit.height * 0.58
+                    SplitView.minimumHeight: 9 * window.unit
+                    spacing: 0
                 RowLayout {
                     Layout.fillWidth: true
                     Layout.margins: theme.m
@@ -541,6 +532,8 @@ ApplicationWindow {
                         }
                         Label { width: parent.width; text: "Address evidence"; visible: Resales.selectedMapKey !== ""; font.bold: true }
                         Label { width: parent.width; text: Resales.selectedEvidence; wrapMode: Text.WordWrap }
+                    }
+                }
                     }
                 }
                 }

@@ -56,6 +56,7 @@
     <None Include="Theme.qml"/>
     <None Include="Section.qml"/>
     <None Include="FilterBar.qml"/>
+    <None Include="AddressRow.qml"/>
     <None Include="FilterField.qml"/>
     <None Include="MapOverlay.qml"/>
     <None Include="DesktopActions.qml"/>
@@ -70,6 +71,7 @@
     <None Include="BuyerTrendChart.qml"/>
     <Compile Include="Program.cs" />
     <Compile Include="BuyerPresentation.cs" />
+    <Compile Include="LocationPresentation.cs" />
     <Compile Include="BuyerTrend.cs" />
     <Compile Include="LegacyFactsJsonConverter.cs" />
     <Compile Include="ResaleMapModel.cs" />

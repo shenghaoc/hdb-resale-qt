@@ -144,6 +144,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
         ? $"Bundled development sample · {import.Accepted.Count:N0} registrations · not the full dataset"
         : $"Local import · {import.Accepted.Count:N0} registrations · source coverage and omissions in Data and import";
     public string ScreenshotColorScheme => Environment.GetEnvironmentVariable("HDB_SCREENSHOT_COLOR_SCHEME") ?? "";
+    public string ScreenshotProfile => Environment.GetEnvironmentVariable("HDB_SCREENSHOT_PROFILE") ?? "sample";
     public string ScreenshotMode => Environment.GetEnvironmentVariable("HDB_SCREENSHOT_MODE") ?? "grab";
     public string ScreenshotDirectory => Environment.GetEnvironmentVariable("HDB_SCREENSHOT_DIR") ?? "";
     public bool DesktopUiGate => Environment.GetEnvironmentVariable("HDB_DESKTOP_UI_GATE") == "1";
@@ -333,7 +334,8 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     {
         [256] = "transactionId", [257] = "latitude", [258] = "longitude",
         [259] = "address", [260] = "priceLabel", [261] = "townName", [262] = "locationLabel",
-        [263] = "addressKey", [264] = "summaryLabel"
+        [263] = "addressKey", [264] = "summaryLabel", [265] = "saleCount", [266] = "flatTypes",
+        [267] = "latestMonth", [268] = "locationState", [269] = "locationShort"
     };
     public override object? Data(ModelIndex index, int role)
     {
@@ -346,7 +348,9 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
             256 => t.Id, 257 => t.Location.Point?.Latitude, 258 => t.Location.Point?.Longitude,
             259 => t.Address, 260 => Money(b.MedianPrice), 261 => t.Town,
             262 => $"Identity: {string.Join(", ", b.MatchQualities)} · Coordinates: {string.Join(", ", b.CoordinateQualities)}",
-            263 => b.Key, 264 => $"{b.Count:N0} sales · median {Money(b.MedianPrice)}\n{string.Join(", ", b.FlatTypes)} · latest {b.Latest.Facts.Month}", _ => null
+            263 => b.Key, 264 => $"{b.Count:N0} sales · median {Money(b.MedianPrice)}\n{string.Join(", ", b.FlatTypes)} · latest {b.Latest.Facts.Month}",
+            265 => b.Count, 266 => string.Join(", ", b.FlatTypes), 267 => b.Latest.Facts.Month.ToString(),
+            268 => LocationPresentation.State(b), 269 => LocationPresentation.Short(b), _ => null
         };
     }
 }
