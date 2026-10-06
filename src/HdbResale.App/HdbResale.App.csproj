@@ -53,6 +53,9 @@
     <QtResource Include="qtquickcontrols2.conf" Alias="qtquickcontrols2.conf" />
     <QtResource Include="styles/windows/qtquickcontrols2.conf" Alias="+windows/qtquickcontrols2.conf" />
     <None Include="Main.qml"/>
+    <None Include="Theme.qml"/>
+    <None Include="Section.qml"/>
+    <None Include="MapOverlay.qml"/>
     <None Include="DesktopActions.qml"/>
     <None Include="MacMenuBar.qml"/>
     <None Include="DesktopUiGate.qml"/>

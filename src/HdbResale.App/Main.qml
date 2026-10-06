@@ -22,7 +22,10 @@ ApplicationWindow {
     }
 
     readonly property real unit: textMetrics.height
-    readonly property bool compact: width < 70 * unit
+    // A usable map (22 text heights) beside a usable inspector (24) plus margins.
+    readonly property bool compact: width < 50 * unit
+    readonly property alias theme: theme
+    Theme { id: theme; palette: window.palette; unit: window.unit }
     property var dialogFocusItem
     property alias mapView: map
     property alias resultView: transactionsList
@@ -198,18 +201,17 @@ ApplicationWindow {
     Item {
     id: shellRoot
     anchors.fill: parent
-    Rectangle { anchors.fill: parent; color: window.palette.window }
+    Rectangle { anchors.fill: parent; color: theme.chrome }
     ColumnLayout {
         id: shell
         anchors.fill: parent
-        anchors.margins: 12
-        spacing: 10
-        RowLayout {
+        spacing: 0
+        ToolBar {
+            id: filterBar
             Layout.fillWidth: true
-            Label { text: qsTr("HDB Resale Explorer"); font.pointSize: window.font.pointSize * 1.4; font.bold: true; Layout.fillWidth: true; wrapMode: Text.WordWrap }
-            ToolButton { text: qsTr("Data and import…"); onClicked: window.showDialog(dataDialog); Accessible.name: text }
-        }
-        Label { text: Resales.dataModeLabel; Layout.fillWidth: true; wrapMode: Text.WordWrap }
+            leftPadding: theme.m; rightPadding: theme.m; topPadding: theme.s; bottomPadding: theme.s
+            contentItem: ColumnLayout {
+                spacing: theme.s
         GridLayout {
             id: filters
             Layout.fillWidth: true
@@ -269,7 +271,6 @@ ApplicationWindow {
             Button { action: commands.reset; Layout.alignment: Qt.AlignBottom; Accessible.name: qsTr("Reset all filters") }
         }
         Label { visible: Resales.minimumPrice > Resales.maximumPrice; text: qsTr("Minimum exceeds maximum. Adjust either bound to show results."); Layout.fillWidth: true; wrapMode: Text.WordWrap }
-        Label { text: Resales.filterSummary; font.bold: true; Accessible.name: text; Layout.fillWidth: true; wrapMode: Text.WordWrap }
         Flickable {
             id: diagnosticScroll; contentWidth: width; contentHeight: diagnosticText.implicitHeight
             ScrollBar.vertical: ScrollBar {}
@@ -277,6 +278,9 @@ ApplicationWindow {
             Layout.fillWidth: true; Layout.preferredHeight: 60; Layout.maximumHeight: 60; clip: true
             Label { id: diagnosticText; width: diagnosticScroll.width; text: Resales.importDiagnostics; wrapMode: Text.WordWrap }
         }
+            }
+        }
+        Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; color: theme.separator }
         TabBar {
             id: viewTabs; visible: window.compact; Layout.fillWidth: true
             TabButton { text: qsTr("Map") }
@@ -284,6 +288,7 @@ ApplicationWindow {
         }
         SplitView {
             id: workspace
+            handle: Rectangle { implicitWidth: 1; implicitHeight: 1; color: SplitHandle.pressed ? theme.accent : theme.separator }
             Layout.fillWidth: true
             Layout.fillHeight: true
             Item {
@@ -413,9 +418,9 @@ ApplicationWindow {
                 }
                 Rectangle {
                     id: attributionPanel
-                    anchors.left: parent.left; anchors.bottom: parent.bottom
-                    width: Math.min(parent.width, attributionRow.implicitWidth + 12); height: attributionRow.implicitHeight + 8
-                    color: "#f2ffffff"
+                    anchors.left: parent.left; anchors.bottom: parent.bottom; anchors.margins: theme.s
+                    width: Math.min(parent.width - theme.s * 2, attributionRow.implicitWidth + 12); height: attributionRow.implicitHeight + 8
+                    color: "#f2ffffff"; radius: theme.radius / 2; border.width: 1; border.color: theme.separator
                     RowLayout {
                         id: attributionRow
                         width: parent.width - 12
@@ -435,29 +440,40 @@ ApplicationWindow {
                         }
                     }
                 }
-                Pane {
-                    anchors.top: parent.top; anchors.right: parent.right; anchors.margins: 8
-                    padding: 4
-                    Row {
-                        spacing: 6
-                        Button { id: zoomIn; action: commands.zoomIn; text: "+"; Accessible.name: qsTr("Zoom in") }
-                        Button { action: commands.zoomOut; text: "−"; Accessible.name: qsTr("Zoom out") }
-                        Button { id: recenter; action: commands.recenter; text: qsTr("Singapore") }
+                MapOverlay {
+                    anchors.top: parent.top; anchors.right: parent.right; anchors.margins: theme.s
+                    implicitWidth: mapControls.implicitWidth + theme.xs * 2
+                    implicitHeight: mapControls.implicitHeight + theme.xs * 2
+                    width: implicitWidth; height: implicitHeight
+                    Column {
+                        id: mapControls
+                        anchors.centerIn: parent
+                        spacing: 0
+                        ToolButton { id: zoomIn; action: commands.zoomIn; text: "+"; width: theme.target; height: theme.target; Accessible.name: qsTr("Zoom in"); ToolTip.visible: hovered; ToolTip.text: qsTr("Zoom in"); ToolTip.delay: 600 }
+                        ToolButton { action: commands.zoomOut; text: "−"; width: theme.target; height: theme.target; Accessible.name: qsTr("Zoom out"); ToolTip.visible: hovered; ToolTip.text: qsTr("Zoom out"); ToolTip.delay: 600 }
+                        ToolButton { id: recenter; action: commands.recenter; text: qsTr("SG"); width: theme.target; height: theme.target; Accessible.name: qsTr("Return to Singapore view"); ToolTip.visible: hovered; ToolTip.text: qsTr("Return to Singapore"); ToolTip.delay: 600 }
                     }
                 }
-                Label {
-                    anchors.left: parent.left; anchors.top: parent.top; anchors.margins: 8
+                MapOverlay {
+                    anchors.left: parent.left; anchors.top: parent.top; anchors.margins: theme.s
                     visible: preferences.showMapCoordinates
-                    text: "Zoom " + map.zoomLevel.toFixed(1) + " · " + map.center.latitude.toFixed(4) + ", " + map.center.longitude.toFixed(4)
-                    padding: 5; color: window.palette.windowText
-                    background: Rectangle { color: window.palette.window }
+                    width: coordinateLabel.implicitWidth + theme.m; height: coordinateLabel.implicitHeight + theme.s
+                    Label {
+                        id: coordinateLabel; anchors.centerIn: parent
+                        text: "Zoom " + map.zoomLevel.toFixed(1) + " · " + map.center.latitude.toFixed(4) + ", " + map.center.longitude.toFixed(4)
+                        font.pointSize: window.font.pointSize * theme.captionScale
+                    }
                 }
-                Label {
-                    anchors.left: parent.left; anchors.bottom: attributionPanel.top; anchors.margins: 8
-                    width: Math.min(implicitWidth, parent.width - 16); wrapMode: Text.WordWrap
-                    text: Resales.presentationSummary + qsTr("\nGroups: addresses · Pins: matching sales")
-                    padding: 6; color: window.palette.windowText
-                    background: Rectangle { color: window.palette.window }
+                MapOverlay {
+                    anchors.left: parent.left; anchors.bottom: attributionPanel.top; anchors.margins: theme.s
+                    width: Math.min(30 * window.unit, parent.width - theme.s * 2)
+                    height: summaryColumn.implicitHeight + theme.s * 2
+                    Column {
+                        id: summaryColumn
+                        x: theme.m; y: theme.s; width: parent.width - theme.m * 2
+                        Label { width: parent.width; wrapMode: Text.WordWrap; text: Resales.presentationSummary; font.pointSize: window.font.pointSize * theme.captionScale }
+                        Label { width: parent.width; wrapMode: Text.WordWrap; text: qsTr("Groups count addresses · pins count matching sales"); font.pointSize: window.font.pointSize * theme.captionScale; color: theme.secondaryText }
+                    }
                 }
                 Rectangle {
                     anchors.fill: parent; color: "transparent"
@@ -469,24 +485,29 @@ ApplicationWindow {
                     visible: !map.mapReady || map.error !== Map.NoError
                     text: map.error !== Map.NoError ? qsTr("Map error: %1").arg(map.errorString) : qsTr("Preparing map…")
                     width: Math.min(implicitWidth, parent.width - 24); wrapMode: Text.WordWrap
-                    padding: 12; color: window.palette.windowText
-                    background: Rectangle { color: window.palette.window }
+                    padding: theme.m; color: window.palette.windowText
+                    background: MapOverlay {}
                 }
             }
-            ColumnLayout {
+            Pane {
                 id: addressesPane
+                padding: 0
+                background: Rectangle { color: theme.panel }
                 visible: !window.compact || viewTabs.currentIndex === 1
-                SplitView.minimumWidth: window.compact ? 0 : 22 * window.unit
-                SplitView.preferredWidth: 27 * window.unit
-                spacing: 6
-                RowLayout {
-                    Label { text: "Addresses"; font.bold: true; font.pointSize: window.font.pointSize * 1.15 }
-                    Item { Layout.fillWidth: true }
-                    Label { text: "↑ ↓ navigate · Enter select"; color: window.palette.windowText }
+                SplitView.fillWidth: window.compact
+                SplitView.minimumWidth: window.compact ? 0 : 24 * window.unit
+                SplitView.preferredWidth: 30 * window.unit
+                contentItem: ColumnLayout {
+                spacing: 0
+                Section {
+                    Layout.fillWidth: true
+                    title: qsTr("Addresses")
+                    caption: Resales.addressCount.toLocaleString()
                 }
                 ListView {
                     id: transactionsList
                     Layout.fillWidth: true
+                    Layout.margins: theme.s
                     Layout.preferredHeight: Resales.selectedMapKey !== "" ? (window.compact ? 4 : 6) * window.unit : 10 * window.unit
                     Layout.minimumHeight: (window.compact ? 3.5 : 4) * window.unit
                     clip: true; spacing: 3; model: Resales
@@ -544,16 +565,17 @@ ApplicationWindow {
                     }
                 }
                 Label { visible: Resales.addressCount === 0; text: "No matching addresses. Adjust the filters or reset."; wrapMode: Text.WordWrap; Layout.fillWidth: true }
-                Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; color: window.palette.mid }
+                Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; color: theme.separator }
                 RowLayout {
                     Layout.fillWidth: true
-                    Label { text: Resales.selectedHeading; font.bold: true; font.pointSize: window.font.pointSize * 1.15; wrapMode: Text.WordWrap; Layout.fillWidth: true }
-                    Button { action: commands.showSelected; text: qsTr("Show on map"); visible: window.compact && Resales.selectedMapKey !== ""; Accessible.name: commands.showSelected.text }
+                    Layout.margins: theme.m
+                    Label { text: Resales.selectedHeading; font.bold: true; font.pointSize: window.font.pointSize * theme.titleScale; wrapMode: Text.WordWrap; Layout.fillWidth: true; Accessible.role: Accessible.Heading }
+                    Button { action: commands.showSelected; text: qsTr("Show on map"); visible: Resales.selectedMapKey !== ""; Accessible.name: commands.showSelected.text }
                 }
-                Label { text: Resales.selectionMapStatus; wrapMode: Text.WordWrap; Layout.fillWidth: true }
-                Button { action: commands.showSelected; visible: !window.compact && Resales.selectedMapKey !== ""; Accessible.name: text }
+                Label { text: Resales.selectionMapStatus; wrapMode: Text.WordWrap; Layout.fillWidth: true; Layout.leftMargin: theme.m; Layout.rightMargin: theme.m; Layout.bottomMargin: theme.s; color: theme.secondaryText }
                 ScrollView {
                     id: detailsScroll; Layout.fillWidth: true; Layout.fillHeight: true; clip: true
+                    leftPadding: theme.m; rightPadding: theme.m; bottomPadding: theme.m
                     contentWidth: availableWidth; activeFocusOnTab: true; Accessible.name: "Selected address details and recent transactions"
                     Column {
                         width: detailsScroll.availableWidth; spacing: 8
@@ -579,12 +601,33 @@ ApplicationWindow {
                         Label { width: parent.width; text: Resales.selectedEvidence; wrapMode: Text.WordWrap }
                     }
                 }
+                }
             }
         }
-        Label {
-            Layout.fillWidth: true; wrapMode: Text.WordWrap
-            linkColor: window.palette.link
-            text: 'Independent research tool · HDB / ACRA via data.gov.sg · <a href="https://data.gov.sg/open-data-licence">Singapore Open Data Licence</a>'; onLinkActivated: (link) => Qt.openUrlExternally(link)
+        Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; color: theme.separator }
+        ToolBar {
+            id: statusBar
+            Layout.fillWidth: true
+            leftPadding: theme.m; rightPadding: theme.m; topPadding: theme.xs; bottomPadding: theme.xs
+            contentItem: ColumnLayout {
+                spacing: 0
+                readonly property real caption: window.font.pointSize * theme.captionScale
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: theme.m
+                    Label { id: summaryLabel; text: Resales.filterSummary; font.pointSize: parent.parent.caption; elide: Text.ElideRight; Layout.fillWidth: true; Layout.minimumWidth: 0; Accessible.name: text }
+                    ToolButton {
+                        text: qsTr("Data and import…"); font.pointSize: parent.parent.caption; flat: true
+                        onClicked: window.showDialog(dataDialog); Accessible.name: text
+                    }
+                }
+                Label {
+                    Layout.fillWidth: true; wrapMode: Text.WordWrap
+                    font.pointSize: parent.caption; color: theme.secondaryText; linkColor: window.palette.link
+                    text: Resales.dataModeLabel + ' · Independent research tool · HDB / ACRA via data.gov.sg · <a href="https://data.gov.sg/open-data-licence">Singapore Open Data Licence</a>'
+                    onLinkActivated: (link) => Qt.openUrlExternally(link)
+                }
+            }
         }
     }
     }

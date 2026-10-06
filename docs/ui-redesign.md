@@ -1,5 +1,8 @@
 # UI/UX redesign: audit, principles and PR stack
 
+Evidence screenshots contain OneMap tiles and are therefore kept out of the
+repository (local `~/hdb-ui-evidence/<pr>/`).
+
 Status: living document for the stacked redesign that follows the native
 foundation in PR #1. Evidence screenshots were produced with the opt-in
 `HDB_SCREENSHOT_DIR` gate (`src/HdbResale.App/ScreenshotGate.qml`) from the
