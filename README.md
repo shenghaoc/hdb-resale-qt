@@ -46,12 +46,14 @@ Set `HDB_DATA_DIRECTORY` to an offline prepared input directory to explore anoth
 
 [Ordered offline source imports](docs/ordered-source-import.md) preserve different source headers, source-qualified row identity and raw provenance through the existing buyer views. HDB's integer remaining-lease years are interpreted without inventing missing observations or extra precision.
 
+[Local HTTP snapshots](docs/http-snapshots.md) add explicit discovery, bounded verified downloads, atomic local activation and offline buyer views. The public API does not yet publish this snapshot contract; no production serving change is included.
+
 ## Data interpretation
 
 - Source months are registration months. Floor area is approximate and may include purchased recess areas or improvements.
 - Median price per m² is the median of individual valid price/area ratios. Display rounding never drives filtering or aggregation.
 - Recent rows are capped only after cohort filtering and deterministic sorting; medians and counts use every matching transaction.
-- Source remaining lease is shown at registration. A separately labelled estimate subtracts elapsed calendar months from those source observations, using the fixed latest dataset month as its reference. Conflicting observations produce a range. Commencement year is not used as a replacement for source lease.
+- Source remaining lease retains its documented resale-application reference. A separately labelled estimate subtracts elapsed calendar months using the fixed latest dataset month. Cohorts containing whole-year observations display rounded whole years, with unknown exact expiry/source rounding; month observations retain approximate year/month display. Commencement year is not used as a replacement for missing source lease.
 - Coordinates are approximate HDB footprint points, never exact flats. Neither a match nor a lease estimate is an eligibility, valuation or affordability assessment.
 
 See [buyer semantics and verification](docs/product-rc/README.md), [official HDB dataset](https://data.gov.sg/datasets/d_8b84c4ee58e3cfc0ece0d773c8ca6abc/view), and [Singapore Open Data Licence](https://data.gov.sg/open-data-licence).

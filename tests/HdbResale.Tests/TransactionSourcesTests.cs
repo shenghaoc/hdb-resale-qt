@@ -69,6 +69,8 @@ public sealed class TransactionSourcesTests : IDisposable
         Assert.DoesNotContain("y 0m", BuyerPresentation.Lease(state));
         state.Filter("T", "3 ROOM", 0, 1_000_000, 12);
         Assert.Equal("HDB-modern-2", Assert.Single(state.Visible).Id);
+        Assert.False(state.SelectedAddress!.LeaseIncludesWholeYearObservations);
+        Assert.Contains("approximately 68y 5m.", BuyerPresentation.Lease(state));
     }
 
     [Fact]

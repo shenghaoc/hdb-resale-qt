@@ -7,6 +7,24 @@ internal static class Program
 {
     private static void Main(string[] args)
     {
+        if (args.Length == 3 && args[0] == "--sync-snapshot")
+        {
+            try
+            {
+                var directory = HttpSnapshot.SynchronizeAsync(new Uri(args[1]), args[2]).GetAwaiter().GetResult();
+                Console.WriteLine(directory);
+            }
+            catch (Exception e) when (e is IOException or InvalidDataException or UriFormatException or HttpRequestException or System.Text.Json.JsonException or
+                UnauthorizedAccessException or ArgumentException or OperationCanceledException)
+            { Console.Error.WriteLine("Snapshot synchronization failed: " + e.Message); Environment.ExitCode = 1; }
+            return;
+        }
+        if (args.Length == 2 && args[0] == "--snapshot-cache")
+        {
+            try { Environment.SetEnvironmentVariable("HDB_DATA_DIRECTORY", HttpSnapshot.ActiveDirectory(args[1])); }
+            catch (Exception e) when (e is IOException or InvalidDataException or System.Text.Json.JsonException or UnauthorizedAccessException)
+            { Console.Error.WriteLine("Snapshot cache unavailable: " + e.Message); Environment.ExitCode = 1; return; }
+        }
         if (args.Length == 3 && args[0] is "--address-coverage" or "--address-coverage-baseline")
         {
             WriteReport(args[2], AddressCoverageStudy.Run(args[1], supportMultiPolygon: args[0] != "--address-coverage-baseline"));
