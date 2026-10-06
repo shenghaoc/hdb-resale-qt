@@ -25,7 +25,7 @@ ApplicationWindow {
     // A usable map (22 text heights) beside a usable inspector (24) plus margins.
     readonly property bool compact: width < 50 * unit
     readonly property alias theme: theme
-    Theme { id: theme; palette: window.palette; unit: window.unit }
+    Theme { id: theme; unit: window.unit }
     property var dialogFocusItem
     property alias mapView: map
     property alias resultView: transactionsList
@@ -37,6 +37,8 @@ ApplicationWindow {
     property alias settingsPopup: settingsDialog
     property alias dataPopup: dataDialog
     property alias grabRoot: shellRoot
+    property alias townControl: townPicker
+    property alias typeControl: typePicker
     readonly property bool modalOpen: aboutDialog.visible || settingsDialog.visible || dataDialog.visible
     FontMetrics { id: textMetrics; font: window.font }
     Settings {
@@ -110,7 +112,7 @@ ApplicationWindow {
     }
     Loader {
         active: Resales.screenshotDirectory !== ""
-        sourceComponent: Component { ScreenshotGate { targetWindow: window; townControl: townPicker; typeControl: typePicker; priceControl: pricePicker } }
+        sourceComponent: Component { ScreenshotGate { targetWindow: window } }
     }
     Loader {
         active: Resales.desktopUiGate
@@ -189,7 +191,7 @@ ApplicationWindow {
         name: "osm"
         // OneMap's public 256px XYZ basemap. Qt appends %z/%x/%y.png to this prefix.
         // Search/geocoding evidence and authentication are separate and unchanged.
-        PluginParameter { name: "osm.mapping.custom.host"; value: "https://www.onemap.gov.sg/maps/tiles/Default/" }
+        PluginParameter { name: "osm.mapping.custom.host"; value: Resales.syntheticBasemapHost !== "" ? Resales.syntheticBasemapHost : "https://www.onemap.gov.sg/maps/tiles/Default/" }
         PluginParameter { name: "osm.mapping.custom.datacopyright"; value: "Singapore Land Authority" }
         PluginParameter { name: "osm.mapping.custom.mapcopyright"; value: "OneMap" }
         PluginParameter { name: "osm.useragent"; value: "HdbResaleExplorer/0.1.0 (independent resale research)" }
@@ -288,7 +290,6 @@ ApplicationWindow {
         }
         SplitView {
             id: workspace
-            handle: Rectangle { implicitWidth: 1; implicitHeight: 1; color: SplitHandle.pressed ? theme.accent : theme.separator }
             Layout.fillWidth: true
             Layout.fillHeight: true
             Item {
@@ -474,6 +475,14 @@ ApplicationWindow {
                         Label { width: parent.width; wrapMode: Text.WordWrap; text: Resales.presentationSummary; font.pointSize: window.font.pointSize * theme.captionScale }
                         Label { width: parent.width; wrapMode: Text.WordWrap; text: qsTr("Groups count addresses · pins count matching sales"); font.pointSize: window.font.pointSize * theme.captionScale; color: theme.secondaryText }
                     }
+                }
+                Label {
+                    visible: Resales.syntheticBasemapHost !== ""
+                    anchors.horizontalCenter: parent.horizontalCenter; anchors.top: parent.top; anchors.margins: theme.s
+                    text: qsTr("SYNTHETIC BASEMAP · UI EVIDENCE ONLY")
+                    font.pointSize: window.font.pointSize * theme.captionScale; font.bold: true; padding: theme.xs
+                    color: "#7a1f00"; background: Rectangle { color: "#ffe9d6"; radius: 3 }
+                    Accessible.ignored: true
                 }
                 Rectangle {
                     anchors.fill: parent; color: "transparent"

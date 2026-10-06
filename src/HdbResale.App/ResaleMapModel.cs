@@ -132,12 +132,19 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
         GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true, compacting: true);
         Console.WriteLine($"HDB_SCALE_HEAP after managed={GC.GetTotalMemory(false)} working={Environment.WorkingSet} collection-ms={timer.ElapsedMilliseconds}");
     }
-    public string BasemapCacheDirectory => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "HdbResaleQt", "onemap-default-v1");
+    // UI-evidence only: honoured solely together with HDB_SCREENSHOT_DIR. Replaces the
+    // OneMap tile host by a local synthetic one and isolates its cache from the real cache.
+    public string SyntheticBasemapHost => ScreenshotDirectory != "" ? Environment.GetEnvironmentVariable("HDB_SYNTHETIC_BASEMAP_HOST") ?? "" : "";
+    public string BasemapCacheDirectory => SyntheticBasemapHost != ""
+        ? Path.Combine(ScreenshotDirectory, ".synthetic-basemap-cache")
+        : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "HdbResaleQt", "onemap-default-v1");
     public string UiSettingsFile => new Uri(Path.GetFullPath(Environment.GetEnvironmentVariable("HDB_UI_SETTINGS_FILE") ??
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "HdbResaleQt", "ui.ini"))).AbsoluteUri;
     public string DataModeLabel => Environment.GetEnvironmentVariable("HDB_DATA_DIRECTORY") is null
         ? $"Bundled development sample · {import.Accepted.Count:N0} registrations · not the full dataset"
         : $"Local import · {import.Accepted.Count:N0} registrations · source coverage and omissions in Data and import";
+    public string ScreenshotColorScheme => Environment.GetEnvironmentVariable("HDB_SCREENSHOT_COLOR_SCHEME") ?? "";
+    public string ScreenshotMode => Environment.GetEnvironmentVariable("HDB_SCREENSHOT_MODE") ?? "grab";
     public string ScreenshotDirectory => Environment.GetEnvironmentVariable("HDB_SCREENSHOT_DIR") ?? "";
     public bool DesktopUiGate => Environment.GetEnvironmentVariable("HDB_DESKTOP_UI_GATE") == "1";
     public string DesktopUiFault => DesktopUiGate ? Environment.GetEnvironmentVariable("HDB_DESKTOP_UI_FAULT") ?? "" : "";

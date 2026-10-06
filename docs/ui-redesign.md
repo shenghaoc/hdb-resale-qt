@@ -95,6 +95,50 @@ Boundaries may move after each visual review; PR 5 requires adding structured
 properties to the C# model (today details are preformatted strings), which is
 presentation-only and keeps matching and corpus semantics unchanged.
 
+## Skills and references actually applied
+
+No Qt, QML, product-design, accessibility or screenshot-audit skill is installed in
+this agent environment (installed: document/office skills, `engineering:*`
+review/testing/architecture skills, `run`, `artifact-design`, browser/computer-use
+skills). That gap is recorded rather than filled with an invented skill; Qt 6.12
+documentation and the official HIGs were used instead.
+
+| Skill / source | Used for | Resulting decision |
+| --- | --- | --- |
+| `run` | Launching and driving the real app, looking at the saved window captures | Real KDE/Wayland captures are taken from the running app (`ui_screenshots.py --mode native`); blank frames count as failure |
+| `artifact-design` | Publishing review images as a themed, reviewer-readable page | Evidence page built from redacted/synthetic images only |
+| Qt 6.12 [SplitView](https://doc.qt.io/qt-6.12/qml-qtquick-controls-splitview.html) | Handle behaviour | “Handles should be purely visual and not handle events”; a thin handle needs `containmentMask` for hit area. The custom 1 px handle was removed in favour of the style's native handle |
+| Qt 6.12 [QStyleHints](https://doc.qt.io/qt-6.12/qstylehints.html) | Dark appearance without touching the desktop | `colorScheme` is writable since Qt 6.8, “not supported on all platforms”. Verified per run, not assumed (below) |
+| Qt 6.12 [High-DPI](https://doc.qt.io/qt-6.12/highdpi.html) | Scale testing | `QT_SCALE_FACTOR` multiplies the native ratio; the effective ratio is recorded in each manifest |
+| [KDE HIG layout](https://develop.kde.org/hig/layout_and_nav/) | Shell composition | Toolbar above content, status bar below it, contextual/preview area trailing the content, adapt fluidly to narrow windows |
+| [Apple HIG split views](https://developer.apple.com/design/human-interface-guidelines/split-views) | Divider and inspector | Inspector trails the content; dividers need hover feedback and adequate target (satisfied by the native handle) |
+
+The GNOME sidebar page and the Windows/HarmonyOS pages were not re-read for this
+layer; PR #1's references stand for them.
+
+## Evidence method
+
+* `tools/ui_screenshots.py` runs the in-app `ScreenshotGate` and fails on: capture
+  not starting, a grab callback timing out, an image not saving, a state's
+  preconditions (selection, filters, pane, dialog, font, window size, colour
+  scheme) not met within a bounded wait, or a missing/empty/undecodable/uniform
+  image. Every scenario restores the baseline font first and verifies it.
+* Generation is not acceptance: images are inspected by a person.
+* `--synthetic-basemap` serves neutral tiles from `tools/synthetic_basemap.py`
+  (honoured only together with `HDB_SCREENSHOT_DIR`) and marks the map
+  “SYNTHETIC BASEMAP · UI EVIDENCE ONLY”. These images are shareable. Captures
+  with OneMap tiles stay local.
+* Each manifest records head SHA, working-tree state, dataset, logical window
+  size, effective device-pixel ratio, platform plugin, style, requested and
+  effective colour scheme, and whether the image is a native window or a grab.
+* Dark appearance: `Qt.styleHints.colorScheme = Qt.Dark` takes effect on the
+  Wayland platform plugin (asynchronously; the gate waits for it) and changes the
+  effective palette to Qt's generic dark palette. It does **not** demonstrate
+  Plasma's Breeze Dark, nor following a real system switch. The offscreen plugin
+  ignores the override.
+* Scale: `QT_SCALE_FACTOR` is process-local. On this Wayland session it
+  multiplies a native ratio of 1.
+
 ## Verification limits (honest status)
 
 * Native runtime here: KDE Plasma on Wayland (Fedora), Qt 6.12.0, Bridge

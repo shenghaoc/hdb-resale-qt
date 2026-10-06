@@ -1,55 +1,200 @@
 import QtQuick
+import QtQuick.Controls
 
-// Opt-in visual-QA harness: HDB_SCREENSHOT_DIR=<dir> renders named UI states
-// to PNG files and quits. Never loaded in normal use; asserts nothing.
+// Opt-in visual-QA harness (HDB_SCREENSHOT_DIR=<dir>); never loaded in normal use.
+// It drives named UI states, verifies each state's preconditions within a bounded
+// wait, and either grabs PNGs (default) or, in HDB_SCREENSHOT_MODE=native, announces
+// each ready state so tools/ui_screenshots.py can take a real compositor capture.
+// Producing an image proves only that the state was reached; it is not acceptance.
 Item {
+    id: gate
     required property var targetWindow
-    required property var townControl
-    required property var typeControl
-    required property var priceControl
-    property int step: 0
-    property bool busy: false
-    readonly property real baseFont: 0
-    property real originalFont: targetWindow.font.pointSize
+    property real baseFont: -1      // captured once at start; never bound
+    property int step: -1
+    property string stage: "start"  // start → restore → wait → settle → capturing/acking
+    property double stageStarted: Date.now()
+    property double startedAt: Date.now()
+    property var scenario
+    readonly property bool nativeMode: Resales.screenshotMode === "native"
+    readonly property var win: targetWindow
+    readonly property var popups: [win.settingsPopup, win.aboutPopup, win.dataPopup]
+    Button { id: styleProbe; visible: false }
+
+    // Each scenario fully specifies window size, font scale, pane, dialog and filters
+    // so that every state is independent of the previous one. `expect` returns an
+    // empty string when its preconditions hold, otherwise the reason they do not.
     readonly property var scenarios: [
-        { name: "wide-startup", w: 1360, h: 900, settle: 4000 },
-        { name: "default", w: 1100, h: 760, settle: 1500 },
-        { name: "selected", w: 1100, h: 760, settle: 2500, run: () => Resales.selectAddressAt(0) },
-        { name: "selected-compact", w: 700, h: 700, settle: 2000 },
-        { name: "compact-map", w: 640, h: 600, settle: 1500, run: () => { targetWindow.viewTabs.currentIndex = 0 } },
-        { name: "filtered", w: 1100, h: 760, settle: 2000, run: () => { Resales.setTown("ANG MO KIO"); Resales.setFlatType("3 ROOM") } },
-        { name: "empty", w: 1100, h: 760, settle: 1500, run: () => { Resales.setTown("ANG MO KIO"); Resales.setFlatType("2 ROOM"); Resales.setMinimumPrice(900000) } },
-        { name: "reset", w: 1100, h: 760, settle: 1500, run: () => Resales.resetFilters() },
-        { name: "large-text", w: 1000, h: 760, settle: 1500, run: () => { targetWindow.font.pointSize = originalFont * 1.4 } },
-        { name: "settings", w: 1000, h: 760, settle: 800, run: () => { targetWindow.font.pointSize = originalFont; targetWindow.commands.settings.trigger() } },
-        { name: "about", w: 1000, h: 760, settle: 800, run: () => { targetWindow.settingsPopup.close(); targetWindow.commands.about.trigger() } },
-        { name: "data-dialog", w: 1000, h: 760, settle: 800, run: () => { targetWindow.aboutPopup.close(); targetWindow.showDialog(targetWindow.dataPopup) } }
+        { name: "default-wide", w: 1360, h: 900, settle: 2500, expect: () => selected(false) || compact(false) || filters("All towns", "All flat types") || count(6) },
+        { name: "default", w: 1100, h: 760, settle: 1200, expect: () => selected(false) || compact(false) || filters("All towns", "All flat types") || count(6) },
+        { name: "compact-map", w: 640, h: 600, settle: 1200, tab: 0, expect: () => compact(true) || tab(0) || selected(false) },
+        { name: "filtered", w: 1100, h: 760, settle: 1500,
+          setup: () => { Resales.setTown("ANG MO KIO"); Resales.setFlatType("3 ROOM") },
+          expect: () => selected(false) || filters("ANG MO KIO", "3 ROOM") || count(1) },
+        { name: "empty", w: 1100, h: 760, settle: 1200,
+          setup: () => { Resales.setMinimumPrice(900000) },
+          expect: () => selected(false) || count(0) },
+        { name: "reset", w: 1100, h: 760, settle: 1200,
+          setup: () => Resales.resetFilters(),
+          expect: () => selected(false) || filters("All towns", "All flat types") || count(6) },
+        { name: "selected", w: 1100, h: 760, settle: 2200,
+          setup: () => Resales.selectAddressAt(0),
+          expect: () => selected(true) || compact(false) || count(6) },
+        { name: "selected-compact-details", w: 700, h: 700, settle: 1500, tab: 1,
+          setup: () => Resales.selectAddressAt(0),
+          expect: () => selected(true) || compact(true) || tab(1) },
+        { name: "large-text", w: 1100, h: 760, settle: 1500, fontScale: 1.4,
+          setup: () => Resales.selectAddressAt(0),
+          expect: () => selected(true) },
+        { name: "settings", w: 1000, h: 760, settle: 900, dialog: "settings", expect: () => selected(true) },
+        { name: "about", w: 1000, h: 760, settle: 900, dialog: "about", expect: () => selected(true) },
+        { name: "data-dialog", w: 1000, h: 760, settle: 900, dialog: "data", expect: () => selected(true) },
+        { name: "dialog-compact-large-text", w: 640, h: 600, settle: 900, dialog: "settings", fontScale: 1.4,
+          expect: () => selected(true) }
     ]
-    function shoot(name) {
-        const dialog = [targetWindow.settingsPopup, targetWindow.aboutPopup, targetWindow.dataPopup].find(d => d.visible)
-        const item = dialog ? dialog.contentItem : targetWindow.grabRoot
-        console.log("HDB_SHOT_GRAB " + name)
-        item.grabToImage(function(result) {
-            const path = Resales.screenshotDirectory + "/" + name + ".png"
-            console.log("HDB_SHOT " + name + " " + result.saveToFile(path))
-            next()
+
+    function selected(want) { return (Resales.selectedMapKey !== "") === want ? "" : "selection is " + (want ? "empty" : "set") }
+    function compact(want) { return win.compact === want ? "" : "compact is " + win.compact }
+    function count(n) { return win.resultView.count === n ? "" : "list count " + win.resultView.count + " != " + n }
+    function tab(i) { return win.viewTabs.currentIndex === i ? "" : "tab index " + win.viewTabs.currentIndex }
+    function filters(town, type) {
+        return win.townControl.currentText === town && win.typeControl.currentText === type ? "" : "filters " + win.townControl.currentText + "/" + win.typeControl.currentText
+    }
+    function dialogFor(name) { return name === "settings" ? win.settingsPopup : name === "about" ? win.aboutPopup : win.dataPopup }
+    function fail(message) {
+        console.error("HDB_SHOT_FAIL " + (scenario ? scenario.name : "init") + ": " + message)
+        timer.stop(); guard.stop(); ackTimer.stop(); Qt.exit(1)
+    }
+    function enter(name) { stage = name; stageStarted = Date.now() }
+    function elapsed() { return Date.now() - stageStarted }
+    function meta(name) {
+        const screen = win.screen
+        return JSON.stringify({
+            name, mode: nativeMode ? "native-window" : "grab",
+            window: [win.width, win.height], dpr: win.devicePixelRatio, screenDpr: screen ? screen.devicePixelRatio : 0,
+            font: win.font.pointSize, baseFont, platform: Qt.platform.pluginName,
+            style: String(styleProbe.background).replace(/_QMLTYPE.*|\(.*/, ""),
+            colorScheme: Qt.styleHints.colorScheme, windowColor: String(win.palette.window), textColor: String(win.palette.windowText),
+            synthetic: Resales.syntheticBasemapHost !== "", base: String(win.palette.base), themePanel: String(win.theme.panel), themeChrome: String(win.theme.chrome)
         })
     }
-    function next() { step++; busy = false }
+    Component.onCompleted: {
+        baseFont = win.font.pointSize
+        // Process-local appearance request. Whether it changes the effective palette is
+        // recorded per scenario (colorScheme/windowColor), not assumed.
+        if (Resales.screenshotColorScheme !== "") {
+            console.log("HDB_SCHEME before=" + Qt.styleHints.colorScheme + " window=" + win.palette.window)
+            Qt.styleHints.colorScheme = Resales.screenshotColorScheme === "dark" ? Qt.Dark : Qt.Light
+            console.log("HDB_SCHEME after=" + Qt.styleHints.colorScheme + " window=" + win.palette.window)
+        }
+    }
+
     Timer {
         id: timer; interval: 100; repeat: true; running: true
         onTriggered: {
-            if (busy) return
-            if (step >= scenarios.length) { stop(); console.log("HDB_SHOTS_DONE"); Qt.quit(); return }
-            const s = scenarios[step]
-            if (!targetWindow.mapView.mapReady && step === 0 && Date.now() - startedAt < 8000) return
-            targetWindow.raise(); targetWindow.requestActivate()
-            busy = true; console.log("HDB_SHOT_BEGIN " + s.name)
-            targetWindow.width = s.w; targetWindow.height = s.h
-            if (s.run) s.run()
-            settle.interval = s.settle; settle.shotName = s.name; settle.restart()
+            if (gate.stage === "capturing" || gate.stage === "acking") return
+            if (gate.step < 0) {
+                // Wait for the map and list before the first state.
+                if (!win.mapView.mapReady || win.resultView.count === 0) {
+                    if (Date.now() - gate.startedAt > 15000) gate.fail("application not ready")
+                    return
+                }
+                gate.step = 0
+            }
+            if (gate.step >= gate.scenarios.length) {
+                timer.stop(); console.log("HDB_SHOTS_DONE " + gate.scenarios.length); Qt.quit(); return
+            }
+            gate.scenario = gate.scenarios[gate.step]
+            const s = gate.scenario
+            switch (gate.stage) {
+            case "start":
+                // Restore the baseline before applying anything and verify it took effect.
+                for (const p of gate.popups) if (p.visible) p.close()
+                win.font.pointSize = gate.baseFont
+                Resales.resetFilters()
+                gate.enter("restore"); break
+            case "restore":
+                if (gate.popups.some(p => p.visible) || Math.abs(win.font.pointSize - gate.baseFont) > 0.01) {
+                    if (gate.elapsed() > 4000) gate.fail("baseline not restored (font " + win.font.pointSize + " vs " + gate.baseFont + ")")
+                    return
+                }
+                win.width = s.w; win.height = s.h
+                if (s.fontScale) win.font.pointSize = gate.baseFont * s.fontScale
+                if (s.tab !== undefined) win.viewTabs.currentIndex = s.tab
+                if (s.setup) s.setup()
+                if (s.dialog) win.showDialog(gate.dialogFor(s.dialog))
+                win.raise(); win.requestActivate()
+                gate.enter("wait"); break
+            case "wait": {
+                const want = s.fontScale || 1
+                let reason = ""
+                if (win.width !== s.w || win.height !== s.h) reason = "window " + win.width + "x" + win.height
+                else if (Math.abs(win.font.pointSize - gate.baseFont * want) > 0.01) reason = "font " + win.font.pointSize
+                else if (s.dialog && !gate.dialogFor(s.dialog).opened) reason = "dialog not open"
+                else if (!s.dialog && gate.popups.some(p => p.visible)) reason = "unexpected dialog"
+                else if (!win.mapView.mapReady) reason = "map not ready"
+                else if (Resales.screenshotColorScheme !== "" && Qt.styleHints.colorScheme !== (Resales.screenshotColorScheme === "dark" ? Qt.Dark : Qt.Light)) reason = "requested colour scheme not applied (" + Qt.styleHints.colorScheme + ")"
+                else reason = s.expect ? s.expect() : ""
+                if (reason !== "") {
+                    if (gate.elapsed() > 8000) gate.fail("precondition not met: " + reason)
+                    return
+                }
+                gate.enter("settle"); break
+            }
+            case "settle":
+                // Tiles and layout need a few frames; the preconditions are re-checked at capture.
+                if (gate.elapsed() < s.settle) return
+                gate.capture(); break
+            }
         }
     }
-    property double startedAt: Date.now()
-    Timer { id: settle; property string shotName; onTriggered: shoot(shotName) }
+    function capture() {
+        const s = scenario
+        const reason = s.expect ? s.expect() : ""
+        if (reason !== "") { fail("state changed before capture: " + reason); return }
+        const dir = Resales.screenshotDirectory
+        console.log("HDB_SHOT_META " + meta(s.name))
+        if (nativeMode) {
+            enter("acking")
+            console.log("HDB_SHOT_READY " + s.name)
+            ackTimer.ack = dir + "/" + s.name + ".ack"; ackTimer.begin = Date.now(); ackTimer.restart()
+            return
+        }
+        enter("capturing")
+        grab(win.grabRoot, dir + "/" + s.name + ".shell.png", () => {
+            const open = popups.find(p => p.visible)
+            if (!open) { done(); return }
+            // The popup item carries the frame, title and buttons; its window position
+            // is recorded so the driver composites it where the user would see it.
+            const item = open.contentItem.parent
+            const origin = item.mapToItem(win.grabRoot, 0, 0)
+            console.log("HDB_SHOT_POPUP " + JSON.stringify({ name: s.name, x: origin.x, y: origin.y, w: item.width, h: item.height }))
+            grab(item, dir + "/" + s.name + ".overlay.png", done)
+        })
+    }
+    function grab(item, path, then) {
+        guard.restart()
+        const queued = item.grabToImage(function(result) {
+            guard.stop()
+            if (!result.saveToFile(path)) { fail("could not save " + path); return }
+            console.log("HDB_SHOT_SAVED " + path)
+            then()
+        })
+        if (!queued) fail("grabToImage could not start for " + path)
+    }
+    function done() { step++; enter("start") }
+    Timer { id: guard; interval: 6000; onTriggered: gate.fail("grabToImage callback timed out") }
+    Timer {
+        id: ackTimer; interval: 150; repeat: true
+        property string ack; property double begin
+        onTriggered: {
+            if (Date.now() - begin > 30000) { stop(); gate.fail("capture driver did not acknowledge"); return }
+            const xhr = new XMLHttpRequest()
+            xhr.open("GET", "file://" + ack)
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState !== XMLHttpRequest.DONE || !ackTimer.running) return
+                if (xhr.status === 200 || (xhr.status === 0 && xhr.responseText !== "")) { ackTimer.stop(); gate.done() }
+            }
+            xhr.send()
+        }
+    }
 }

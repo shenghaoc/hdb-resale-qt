@@ -1,12 +1,16 @@
 import QtQuick
+import QtQuick.Controls
 
 // Product presentation vocabulary. Everything derives from the active Qt style
 // palette and font so platform appearance, dark mode and text scaling flow
 // through; only the rhythm and roles below are product decisions.
-QtObject {
+Item {
     id: theme
-    required property var palette
+    visible: false
     required property real unit          // text height of the platform font
+    // Tokens read a Control's inherited palette: unlike a copied palette value it is
+    // refreshed when the style, system scheme or an application override changes.
+    Control { id: sample }
 
     // Spacing rhythm (quarter / half / three-quarter / one text height).
     readonly property real xs: Math.round(unit * 0.25)
@@ -22,16 +26,16 @@ QtObject {
     readonly property real captionScale: 0.9
 
     // Semantic colours.
-    readonly property color text: palette.windowText
+    readonly property color text: sample.palette.windowText
     readonly property color secondaryText: Qt.color(Qt.rgba(
-        (palette.windowText.r + palette.window.r * 0.9) / 1.9,
-        (palette.windowText.g + palette.window.g * 0.9) / 1.9,
-        (palette.windowText.b + palette.window.b * 0.9) / 1.9, 1))
-    readonly property color chrome: palette.window
-    readonly property color panel: palette.base
-    readonly property color separator: Qt.rgba(palette.windowText.r, palette.windowText.g, palette.windowText.b, 0.2)
-    readonly property color accent: palette.highlight
-    readonly property color accentText: palette.highlightedText
+        (sample.palette.windowText.r + sample.palette.window.r * 0.9) / 1.9,
+        (sample.palette.windowText.g + sample.palette.window.g * 0.9) / 1.9,
+        (sample.palette.windowText.b + sample.palette.window.b * 0.9) / 1.9, 1))
+    readonly property color chrome: sample.palette.window
+    readonly property color panel: sample.palette.base
+    readonly property color separator: Qt.rgba(sample.palette.windowText.r, sample.palette.windowText.g, sample.palette.windowText.b, 0.2)
+    readonly property color accent: sample.palette.highlight
+    readonly property color accentText: sample.palette.highlightedText
     // Floating map overlays: mostly opaque window colour with a hairline edge.
-    readonly property color overlay: Qt.rgba(palette.window.r, palette.window.g, palette.window.b, 0.94)
+    readonly property color overlay: Qt.rgba(sample.palette.window.r, sample.palette.window.g, sample.palette.window.b, 0.94)
 }
