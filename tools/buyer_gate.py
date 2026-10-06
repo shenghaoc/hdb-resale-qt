@@ -67,6 +67,7 @@ def expectation(data):
 
 def verify(code,output):
  if code or FORBIDDEN.search(output):raise RuntimeError(output)
+ if re.findall(r'HDB_BUYER_DETAILS_RESET ([a-z-]+)',output)!=['empty','hidden-address']:raise RuntimeError('Incomplete detail scroll resets: '+output)
  if re.findall(r'HDB_BUYER_STEP ([a-z-]+)',output)!=STEPS or output.count('HDB_BUYER_PASS')!=1 or output.count('HDB_GATE_EXIT')!=1:raise RuntimeError('Incomplete buyer transitions: '+output)
 
 def run(executable,data,log,expanded=False):

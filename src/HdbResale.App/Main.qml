@@ -40,7 +40,10 @@ ApplicationWindow {
 
     Loader {
         active: Resales.buyerGate
-        sourceComponent: Component { BuyerGate { targetMap: map; targetList: transactionsList; townControl: townPicker; typeControl: typePicker; minimumControl: minimumPicker; priceControl: pricePicker; recencyControl: recencyPicker; attributionImage: oneMapLogo; targetTrendLoader: trendLoader } }
+        sourceComponent: Component { BuyerGate { targetMap: map; targetList: transactionsList; townControl: townPicker; typeControl: typePicker; minimumControl: minimumPicker; priceControl: pricePicker; recencyControl: recencyPicker; attributionImage: oneMapLogo; targetTrendLoader: trendLoader; targetDetailsScroll: detailsScroll; textSurfacePairs: [
+            [versionLabel, window], [introLabel, window], [windowHelpLabel, window], [priceWarningLabel, window],
+            [keyboardHint, window], [leaseLabel, window], [attributionLabel, attributionSurface], [zoomLabel, zoomLabel.background], [mapErrorLabel, mapErrorLabel.background]
+        ] } }
     }
 
     Loader {
@@ -100,11 +103,11 @@ ApplicationWindow {
         spacing: 10
         RowLayout {
             Label { text: "HDB Resale Explorer"; font.pixelSize: 25; font.bold: true }
-            Label { text: "0.1.0 RC"; color: "#536775" }
+            Label { id: versionLabel; text: "0.1.0 RC"; color: palette.windowText }
             Item { Layout.fillWidth: true }
             Button { text: "About"; Accessible.name: "About HDB Resale Explorer"; onClicked: aboutDialog.open() }
         }
-        Label { text: "Explore historical resale records by address. Approximate block locations; not current listings."; color: "#455a64" }
+        Label { id: introLabel; text: "Explore historical resale records by address. Approximate block locations; not current listings."; color: palette.windowText }
         RowLayout {
             spacing: 12
             ColumnLayout {
@@ -156,8 +159,8 @@ ApplicationWindow {
             Button { text: "Reset"; Layout.alignment: Qt.AlignBottom; Accessible.name: "Reset all filters"; onClicked: Resales.resetFilters() }
             Item { Layout.fillWidth: true }
         }
-        Label { text: "Inclusive price bounds · all statistics use matching transactions · time windows end at source month " + Resales.datasetLatestMonth + " (may be partial)"; font.pixelSize: 12; color: "#455a64" }
-        Label { visible: Resales.minimumPrice > Resales.maximumPrice; text: "Minimum exceeds maximum. Adjust either bound to show results."; color: "#9b3b00" }
+        Label { id: windowHelpLabel; text: "Inclusive price bounds · all statistics use matching transactions · time windows end at source month " + Resales.datasetLatestMonth + " (may be partial)"; font.pixelSize: 12; color: palette.windowText }
+        Label { id: priceWarningLabel; visible: Resales.minimumPrice > Resales.maximumPrice; text: "Minimum exceeds maximum. Adjust either bound to show results."; color: palette.windowText; font.bold: true }
         Label { text: Resales.filterSummary; font.bold: true; Accessible.name: text }
         RowLayout {
             Label { text: Resales.presentationSummary; Layout.fillWidth: true; wrapMode: Text.WordWrap }
@@ -282,9 +285,10 @@ ApplicationWindow {
                     }
                 }
                 Rectangle {
+                    id: attributionSurface
                     anchors.left: parent.left; anchors.bottom: parent.bottom
                     width: attributionRow.implicitWidth + 12; height: 30
-                    color: "#f2ffffff"
+                    color: window.palette.window
                     Row {
                         id: attributionRow
                         anchors.centerIn: parent
@@ -296,14 +300,19 @@ ApplicationWindow {
                             Accessible.name: "OneMap logo"
                         }
                         Label {
+                            id: attributionLabel
                             anchors.verticalCenter: parent.verticalCenter
+                            color: palette.windowText; linkColor: palette.link
                             text: '<a href="https://www.onemap.gov.sg/">OneMap</a> © contributors | <a href="https://www.sla.gov.sg/">Singapore Land Authority</a>'
                             font.pixelSize: 11
                             onLinkActivated: (link) => Qt.openUrlExternally(link)
                         }
                     }
                 }
+                // Native map buttons may be translucent; keep a matching opaque surface behind them.
+                Rectangle { anchors.fill: mapControls; color: window.palette.window }
                 Row {
+                    id: mapControls
                     anchors.top: parent.top; anchors.right: parent.right; anchors.margins: 8; spacing: 6
                     Button { id: zoomIn; text: "+"; Accessible.name: "Zoom in"; onClicked: map.zoomLevel += 1 }
                     Button { text: "−"; Accessible.name: "Zoom out"; onClicked: map.zoomLevel -= 1 }
@@ -314,17 +323,19 @@ ApplicationWindow {
                     }
                 }
                 Label {
+                    id: zoomLabel; color: palette.windowText
                     anchors.left: parent.left; anchors.top: parent.top; anchors.margins: 8
                     text: "Zoom " + map.zoomLevel.toFixed(1) + " · " + map.center.latitude.toFixed(4) + ", " + map.center.longitude.toFixed(4)
                     padding: 5
-                    background: Rectangle { color: "white"; opacity: 0.85 }
+                    background: Rectangle { color: window.palette.window }
                 }
                 Label {
+                    id: mapErrorLabel; color: palette.windowText
                     anchors.centerIn: parent
                     visible: map.error !== Map.NoError
                     text: "Map error: " + map.errorString
                     padding: 12
-                    background: Rectangle { color: "white" }
+                    background: Rectangle { color: window.palette.window }
                 }
             }
             ColumnLayout {
@@ -333,7 +344,7 @@ ApplicationWindow {
                 RowLayout {
                     Label { text: "Addresses"; font.bold: true; font.pixelSize: 17 }
                     Item { Layout.fillWidth: true }
-                    Label { text: "↑ ↓ navigate · Enter select"; font.pixelSize: 11; color: "#455a64" }
+                    Label { id: keyboardHint; text: "↑ ↓ navigate · Enter select"; font.pixelSize: 11; color: palette.windowText }
                 }
                 ListView {
                     id: transactionsList
@@ -393,10 +404,17 @@ ApplicationWindow {
                 ScrollView {
                     id: detailsScroll; Layout.fillWidth: true; Layout.fillHeight: true; clip: true
                     contentWidth: availableWidth; activeFocusOnTab: true; Accessible.name: "Selected address details and recent transactions"
+                    function resetPosition() {
+                        contentItem.cancelFlick()
+                        contentItem.contentY = contentItem.originY
+                    }
+                    readonly property string selectionKey: Resales.selectedMapKey
+                    // Defer until the new detail text and column layout have updated.
+                    onSelectionKeyChanged: Qt.callLater(resetPosition)
                     Column {
                         width: detailsScroll.availableWidth; spacing: 8
                         Label { width: parent.width; text: Resales.selectedMetrics; wrapMode: Text.WordWrap; font.pixelSize: 13 }
-                        Label { width: parent.width; text: Resales.selectedLease; wrapMode: Text.WordWrap; font.pixelSize: 12; color: "#455a64" }
+                        Label { id: leaseLabel; width: parent.width; text: Resales.selectedLease; wrapMode: Text.WordWrap; font.pixelSize: 12; color: palette.windowText }
                         Loader {
                             id: trendLoader; width: parent.width
                             active: Resales.selectedMapKey !== ""

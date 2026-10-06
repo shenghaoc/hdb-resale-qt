@@ -8,6 +8,7 @@ Column {
     readonly property var trend: JSON.parse(Resales.trendJson)
     property bool completed: false
     readonly property int pointCount: medianSeries.count
+    readonly property var textSurfacePairs: [[metadataLabel, root], [cautionLabel, root]]
     function pointAt(index) { return medianSeries.at(index) }
     function refreshSeries() {
         const points = []
@@ -36,7 +37,8 @@ Column {
     Component.onCompleted: { completed=true; refreshSeries() }
     Label { text: "Monthly median price · matching sales"; font.bold: true; width: parent.width; wrapMode: Text.WordWrap }
     Label {
-        width: parent.width; font.pixelSize: 11; color: "#455a64"; wrapMode: Text.WordWrap
+        id: metadataLabel
+        width: parent.width; font.pixelSize: 11; color: palette.windowText; wrapMode: Text.WordWrap
         text: trend.Start + "–" + trend.End + " · " + trend.Sales + " sales in " + trend.ObservedMonths + " observed months"
     }
     GraphsView {
@@ -46,12 +48,15 @@ Column {
         Accessible.name: "Monthly median resale prices in thousands of Singapore dollars. Gaps mean no matching sale."
         marginLeft: 4; marginRight: 8; marginTop: 4; marginBottom: 2
         theme: GraphsTheme {
-            colorScheme: GraphsTheme.ColorScheme.Light
+            colorScheme: GraphsTheme.ColorScheme.Automatic
             backgroundVisible: false
             plotAreaBackgroundVisible: false
             axisYLabelFont.pixelSize: 10
             axisXLabelFont.pixelSize: 10
-            grid.mainColor: "#dce4e9"
+            axisX.labelTextColor: root.palette.windowText
+            axisY.labelTextColor: root.palette.windowText
+            labelTextColor: root.palette.windowText
+            grid.mainColor: root.palette.mid
         }
         axisX: ValueAxis { min: 0; max: Math.max(1, root.trend.Points.length - 1); labelsVisible: false; gridVisible: false; subGridVisible: false }
         axisY: ValueAxis {
@@ -60,10 +65,10 @@ Column {
             titleText: "S$000"; titleFont.pixelSize: 10
         }
         LineSeries {
-            id: medianSeries; color: "#1565c0"; width: 2
+            id: medianSeries; color: root.palette.link; width: 2
             pointDelegate: Rectangle {
                 property real pointValueY
-                width: 5; height: 5; radius: 2.5; color: "#1565c0"
+                width: 5; height: 5; radius: 2.5; color: root.palette.link
                 visible: Number.isFinite(pointValueY)
             }
         }
@@ -74,7 +79,8 @@ Column {
         Label { width: root.width/2; text: root.trend.End; horizontalAlignment: Text.AlignRight; font.pixelSize: 10 }
     }
     Label {
-        width: parent.width; wrapMode: Text.WordWrap; font.pixelSize: 11; color: "#455a64"
+        id: cautionLabel
+        width: parent.width; wrapMode: Text.WordWrap; font.pixelSize: 11; color: palette.windowText
         text: graph.visible ? "Gaps mean no matching sale; dots show observed monthly medians. Flat-type and price filters change this cohort."
                             : "No matching registrations in this 24-month display window."
     }

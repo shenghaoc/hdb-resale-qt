@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 import QtLocation
 import QtPositioning
 Item {
@@ -11,12 +12,17 @@ Item {
     required property var recencyControl
     required property var attributionImage
     required property var targetTrendLoader
+    required property var targetDetailsScroll
+    required property var textSurfacePairs
     property var expected: JSON.parse(Resales.gateBuyerExpectedJson)
     property int phase: 0
     property double started: Date.now()
     property bool prepared: false
     property bool listActivated: false
     visible: false
+    // Keep the empty-state text taller than the viewport, as in the reported
+    // clipped detail case. Otherwise Flickable can clamp to zero without a reset.
+    Component.onCompleted: targetDetailsScroll.Layout.maximumHeight = 100
     function equal(a,b) {
         if (typeof a === "number" && typeof b === "number") return Math.abs(a-b)<0.0000001
         if (a === null || b === null || typeof a !== "object" || typeof b !== "object") return a===b
@@ -38,7 +44,31 @@ Item {
         }
         return targetMap.mapItems.length===expectedRows.length
     }
+    function contrast(text, surface) {
+        function luminance(c) {
+            function linear(v) { return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4) }
+            return 0.2126 * linear(c.r) + 0.7152 * linear(c.g) + 0.0722 * linear(c.b)
+        }
+        const a = luminance(text), b = luminance(surface)
+        return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05)
+    }
+    function textIsLegible(pairs) {
+        for (const pair of pairs) {
+            const surface = pair[1].color !== undefined ? pair[1].color : pair[1].palette.window
+            if (surface.a !== 1 || pair[0].color.a !== 1 || contrast(pair[0].color, surface) < 4.5) return false
+        }
+        return true
+    }
+    function scrollDetailsToEnd() {
+        const flickable = targetDetailsScroll.contentItem
+        const bottom = Math.max(0, flickable.contentHeight - flickable.height)
+        if (bottom <= 0) return false
+        flickable.contentY = flickable.originY + bottom
+        return !flickable.atYBeginning
+    }
     function ready(e) {
+        if (!textIsLegible(textSurfacePairs)) return false
+        if ((phase === 7 && !e.selected || phase === 8 || phase === 12) && !targetDetailsScroll.contentItem.atYBeginning) return false
         const state=JSON.parse(Resales.buyerStateJson)
         if (!targetMap.mapReady || targetMap.error!==Map.NoError || targetMap.viewportPending || !Resales.mapViewportReady || attributionImage.status!==Image.Ready
             || targetList.count!==e.addresses || state.addresses!==e.addresses || state.rows!==e.rows || state.latest!==e.latest
@@ -50,7 +80,7 @@ Item {
         if (e.selected) {
             const chart=targetTrendLoader.item
             const trendCount=e.trend.ObservedMonths>0?24:0
-            if(!chart||chart.pointCount!==trendCount||!chart.pointsAgree())return false
+            if(!chart||chart.pointCount!==trendCount||!chart.pointsAgree()||!textIsLegible(chart.textSurfacePairs))return false
             for(let i=0;i<trendCount;i++) {
                 const point=chart.pointAt(i);const expectedPoint=e.trend.Points[i]
                 if(point.x!==expectedPoint.X)return false
@@ -121,6 +151,9 @@ Item {
                 if(!item||item.addressKey!==e.key||!item.highlighted)return
             }
             if(phase===14 && (targetMap.zoomLevel!==16||Resales.mapViewportZoom!==16||Math.abs(Resales.mapViewportLatitude-1.37)>1e-10))return
+            // Start each clear-selection transition with a genuinely scrolled detail viewport.
+            if (e.selected && (phase === 6 || phase === 7 || phase === 11) && !scrollDetailsToEnd()) return
+            if (phase === 8 || phase === 12) console.log("HDB_BUYER_DETAILS_RESET " + e.name)
             const elapsed=Date.now()-started
             if(elapsed>(Resales.scaleExpandedCoverage?10000:5000)){fail();return}
             console.log("HDB_BUYER_STEP "+e.name+" ms="+elapsed+" transactions="+Resales.visibleCount+" addresses="+Resales.addressCount)

@@ -42,9 +42,9 @@ class BuyerGateTests(unittest.TestCase):
    self.assertTrue(all(r['lease'] is None for r in es[6]['selected']['recent']))
    self.assertIsNotNone(es[6]['leaseMinimum'])
  def test_strict_runner_requires_every_step_and_teardown(self):
-  good='\n'.join('HDB_BUYER_STEP '+s+' ms=1' for s in STEPS)+'\nHDB_BUYER_PASS\nHDB_GATE_EXIT\n'
+  good='\n'.join('HDB_BUYER_STEP '+s+' ms=1' for s in STEPS)+'\nHDB_BUYER_DETAILS_RESET empty\nHDB_BUYER_DETAILS_RESET hidden-address\nHDB_BUYER_PASS\nHDB_GATE_EXIT\n'
   verify(0,good)
-  for bad in [good.replace('HDB_GATE_EXIT',''),good.replace('HDB_BUYER_STEP budget','HDB_BUYER_STEP missing'),good+'\nTypeError\n',good+'\nHDB_BUYER_PASS\n']:
+  for bad in [good.replace('HDB_GATE_EXIT',''),good.replace('HDB_BUYER_DETAILS_RESET empty',''),good.replace('HDB_BUYER_DETAILS_RESET hidden-address',''),good.replace('HDB_BUYER_STEP budget','HDB_BUYER_STEP missing'),good+'\nTypeError\n',good+'\nHDB_BUYER_PASS\n']:
    with self.assertRaises(RuntimeError):verify(0,bad)
   with self.assertRaises(RuntimeError):verify(1,good)
 if __name__=='__main__':unittest.main()
