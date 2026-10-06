@@ -104,7 +104,7 @@ ApplicationWindow {
             Item { Layout.fillWidth: true }
             Button { text: "About"; Accessible.name: "About HDB Resale Explorer"; onClicked: aboutDialog.open() }
         }
-        Label { text: "Explore historical registrations by address. Approximate block locations; not current listings."; color: "#455a64" }
+        Label { text: "Explore historical resale records by address. Approximate block locations; not current listings."; color: "#455a64" }
         RowLayout {
             spacing: 12
             ColumnLayout {

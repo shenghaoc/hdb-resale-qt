@@ -24,8 +24,11 @@ internal static class BuyerPresentation
     private static string Months(int months) => months < 0 ? "expired / below zero" : $"{months / 12}y {months % 12}m";
     internal static string RecentJson(ExplorerState state) => JsonSerializer.Serialize(state.RecentTransactions.Select(t => new {
         id=t.Id, heading=$"{t.Facts.Month} · {t.FlatType} · {Money(t.Price)}",
-        details=$"{Number(t.Facts.FloorAreaSqm, 1)} m² · {Money(t.PricePerSqm)}/m² · storey {Empty(t.Facts.StoreyRange)}\n{Empty(t.Facts.FlatModel)} · lease start {Empty(t.Facts.LeaseCommenceDateSource)}\nSource remaining lease at registration: {Empty(t.Facts.RemainingLeaseSource)}"
+        details=$"{Number(t.Facts.FloorAreaSqm, 1)} m² · {Money(t.PricePerSqm)}/m² · storey {Empty(t.Facts.StoreyRange)}\n{Empty(t.Facts.FlatModel)} · lease start {Empty(t.Facts.LeaseCommenceDateSource)}\nSource remaining lease at resale application: {SourceLease(t.Facts)}" +
+            (t.Provenance is not { } p ? "" : $"\nSource {p.SourceIdentity}, row {p.SourceRow}; SHA-256 {p.RawSha256}")
     }));
+    private static string SourceLease(TransactionFacts facts) => facts.RemainingLeaseSource is { Length: >= 1 and <= 3 } raw &&
+        raw.All(char.IsAsciiDigit) && facts.RemainingLeaseMonths.HasValue ? raw + " years (reported in whole years)" : Empty(facts.RemainingLeaseSource);
     private static string Empty(string? value) => string.IsNullOrEmpty(value) ? "unavailable" : value;
     internal static object? Summary(BlockSummary? b) => b is null ? null : new {
         key=b.Key, address=b.Latest.Address, town=b.Latest.Town, count=b.Count, latest=b.Latest.Facts.Month.ToString(),

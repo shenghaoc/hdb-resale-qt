@@ -85,12 +85,11 @@ public static class CsvImport
         stage?.Invoke("evidence-index");
         var accepted = new List<ResaleTransaction>();
         var strings = new ExactStrings();
-        var ids = new HashSet<int>();
-        var transactionRows = Read(Path.Combine(directory, "transactions.csv"),
-            ["source_row", "month", "town", "flat_type", "block", "street_name", "resale_price"], rejected, diagnostics, referenceCsv);
+        var ids = new HashSet<(string? Source, int Row)>();
+        var transactionRows = TransactionRows(directory, rejected, diagnostics, referenceCsv);
         stage?.Invoke("transaction-csv");
-        var parsed = new List<(int SourceRow, TransactionFacts Facts)>();
-        foreach (var row in transactionRows)
+        var parsed = new List<(string Id, TransactionProvenance? Provenance, TransactionFacts Facts)>();
+        foreach (var (file, source, row) in transactionRows)
         {
             var f = row;
             string? error = null;
@@ -100,7 +99,7 @@ public static class CsvImport
             else if (string.IsNullOrWhiteSpace(f["town"]) || string.IsNullOrWhiteSpace(f["flat_type"]) ||
                 string.IsNullOrWhiteSpace(f["block"]) || string.IsNullOrWhiteSpace(f["street_name"]))
                 error = "Town, flat type, block and street are required.";
-            else if (!int.TryParse(f["source_row"], out var sourceRow) || sourceRow < 2 || !ids.Add(sourceRow))
+            else if (!int.TryParse(f["source_row"], out var sourceRow) || sourceRow < 2 || !ids.Add((source?.SourceIdentity, sourceRow)))
                 error = "Source row must be unique and at least 2.";
             else
             {
@@ -116,13 +115,14 @@ public static class CsvImport
                     RemainingLeaseSource = strings.ShareOptional(f.Optional("remaining_lease")),
                     RemainingLeaseMonths = LeaseMonths(f.Optional("remaining_lease"))
                 };
-                parsed.Add((sourceRow, facts));
+                parsed.Add((source is null ? "HDB-" + sourceRow : $"HDB-{source.SourceIdentity}-{sourceRow}",
+                    source is null ? null : new(source.SourceIdentity, source.RawSha256, sourceRow), facts));
             }
-            if (error is not null) Reject("transactions.csv", row, error, rejected, diagnostics);
+            if (error is not null) Reject(file, row, error, rejected, diagnostics);
         }
         stage?.Invoke("validation-facts");
-        var resolved = new List<(int SourceRow, TransactionFacts Facts, DerivedLocation Location, AddressMatch Match)>();
-        foreach (var (sourceRow, facts) in parsed)
+        var resolved = new List<(string Id, TransactionProvenance? Provenance, TransactionFacts Facts, DerivedLocation Location, AddressMatch Match)>();
+        foreach (var (id, provenance, facts) in parsed)
         {
             var key = (facts.Town, facts.Block, facts.Street);
             if (!indexed || !matches.TryGetValue(key, out var match))
@@ -139,10 +139,10 @@ public static class CsvImport
                 if (indexed) matches.Add(key, match);
             }
             var location = match.MatchedFootprint?.Location ?? new DerivedLocation(null, CoordinateQuality.Missing, match.Reason);
-            resolved.Add((sourceRow, facts, location, match));
+            resolved.Add((id, provenance, facts, location, match));
         }
         stage?.Invoke("matching-resolution");
-        foreach (var row in resolved) accepted.Add(new("HDB-" + row.SourceRow, row.Facts, row.Location, row.Match));
+        foreach (var row in resolved) accepted.Add(new(row.Id, row.Facts, row.Location, row.Match) { Provenance = row.Provenance });
         stage?.Invoke("transaction-domain");
         return new(accepted.AsReadOnly(), rejected.AsReadOnly(), diagnostics.AsReadOnly());
     }
@@ -167,6 +167,11 @@ public static class CsvImport
     private static int? LeaseMonths(string? value)
     {
         if (value is null) return null;
+        // HDB's 2015–2016 source reports whole years at the resale application.
+        // Conversion supplies a reported value, not extra month precision.
+        if (value.Length is >= 1 and <= 3 && value.All(char.IsAsciiDigit) &&
+            int.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out var wholeYears))
+            return wholeYears * 12;
         // Source lease is independent evidence; commencement year is not a
         // substitute. Retain malformed text without rejecting its transaction.
         var match = System.Text.RegularExpressions.Regex.Match(value,
@@ -340,18 +345,51 @@ public static class CsvImport
         rejected.Add(new(file, row.Number, Array.AsReadOnly(row.Raw), error));
         diagnostics.Add(new(file, row.Number, error));
     }
-    private static IReadOnlyList<CsvRow> Read(string path, string[] required,
+    private static IReadOnlyList<(string File, TransactionSource? Source, CsvRow Row)> TransactionRows(string directory,
         List<RejectedRecord> rejected, List<ImportDiagnostic> diagnostics, bool referenceCsv)
     {
+        string[] required = ["source_row", "month", "town", "flat_type", "block", "street_name", "resale_price"];
+        var manifestPath = Path.Combine(directory, TransactionSources.ManifestName);
+        if (!Path.Exists(manifestPath) && new FileInfo(manifestPath).LinkTarget is null)
+            return Read(Path.Combine(directory, "transactions.csv"), required, rejected, diagnostics, referenceCsv)
+                .Select(row => ("transactions.csv", (TransactionSource?)null, row)).ToArray();
+        var rows = new List<(string, TransactionSource?, CsvRow)>();
+        try
+        {
+            foreach (var source in TransactionSources.Read(directory))
+            {
+                using var input = new FileStream(Path.Combine(directory, source.Path), FileMode.Open, FileAccess.Read, FileShare.Read);
+                TransactionSources.Verify(input, source);
+                var rejectedStart = rejected.Count;
+                var diagnosticStart = diagnostics.Count;
+                var parsed = Read(source.Path, required, rejected, diagnostics, referenceCsv, input, source.Path);
+                if (diagnostics.Count != diagnosticStart || rejected.Count != rejectedStart || parsed.Count != source.Records ||
+                    (parsed.Count > 0 && !parsed[0].Header.OrderBy(column => column.Value).Select(column => column.Key).SequenceEqual(source.Columns)))
+                    throw new InvalidDataException($"Transaction source schema/count failed: {source.Path}.");
+                rows.AddRange(parsed.Select(row => (source.Path, (TransactionSource?)source, row)));
+            }
+        }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException or JsonException or InvalidDataException)
+        {
+            diagnostics.Add(new(TransactionSources.ManifestName, 0, e.Message));
+            rows.Clear(); // An invalid pack never exposes a partial transaction cohort.
+        }
+        return rows;
+    }
+    private static IReadOnlyList<CsvRow> Read(string path, string[] required,
+        List<RejectedRecord> rejected, List<ImportDiagnostic> diagnostics, bool referenceCsv,
+        FileStream? verifiedInput = null, string? displayName = null)
+    {
         var rows = new List<CsvRow>();
-        var file = Path.GetFileName(path);
+        var file = displayName ?? Path.GetFileName(path);
         try
         {
             // Hold one stream throughout detection and fallback. Every line is
             // checked before fast-path acceptance, so a quote can never slip
             // through a stale pre-scan decision. Fallback discards provisional
             // parse results; an I/O failure still preserves preceding readable rows.
-            using var input = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            using var ownedInput = verifiedInput is null ? new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read) : null;
+            var input = verifiedInput ?? ownedInput!;
             var rejectedStart = rejected.Count;
             var diagnosticsStart = diagnostics.Count;
             if (!referenceCsv && TryReadPlain(input, file, required, rejected, diagnostics, out rows)) return rows;

@@ -59,6 +59,8 @@ public sealed record TransactionFacts(YearMonth Month, string Town, string Block
 }
 public sealed record ResaleTransaction(string Id, TransactionFacts Facts, DerivedLocation Location, AddressMatch Match)
 {
+    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public TransactionProvenance? Provenance { get; init; }
     public string Town => Facts.Town;
     public string Address => $"{Facts.Block} {Facts.Street}";
     public string FlatType => Facts.FlatType;

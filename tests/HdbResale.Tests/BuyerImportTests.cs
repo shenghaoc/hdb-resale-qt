@@ -95,7 +95,11 @@ public sealed class BuyerImportTests : IDisposable
     [InlineData("60 years 005 months", null)]
     [InlineData("60 years -1 months", null)]
     [InlineData("60.5 years", null)]
-    [InlineData("60", null)]
+    [InlineData("60", 720)]
+    [InlineData("070", 840)]
+    [InlineData("0", 0)]
+    [InlineData("1000", null)]
+    [InlineData("-1", null)]
     [InlineData("", null)]
     [InlineData("60 years 05 months extra", null)]
     public void SourceLeaseHasSafeOptionalMonthParsingAndKeepsExactText(string source, int? expected)
