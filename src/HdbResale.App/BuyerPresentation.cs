@@ -14,6 +14,17 @@ internal static class BuyerPresentation
     internal static string Metrics(ExplorerState state) => state.SelectedAddress is { } b
         ? $"{b.Latest.Town} · {string.Join(", ", b.FlatTypes)}\n{b.Count:N0} matching transactions · latest {b.Latest.Facts.Month}\nMedian {Money(b.MedianPrice)} · {Money(b.MedianPricePerSqm)}/m² ({b.PricePerSqmCount} of {b.Count} sales)\nPrice range {Money(b.MinimumPrice)}–{Money(b.MaximumPrice)}\nFloor area {Range(b.MinimumAreaSqm, b.MaximumAreaSqm, " m²")}\nLease commencement year{(b.LeaseCommenceYears.Count == 1 ? "" : "s")}: {(b.LeaseCommenceYears.Count == 0 ? "unavailable" : string.Join(", ", b.LeaseCommenceYears))}"
         : "The list and map summarize the same matching sales. Select an address to inspect its recent registrations.";
+    // Structured, display-ready facts for the details view. Same values and rounding as
+    // Metrics(); nothing is derived beyond what the address summary already holds.
+    internal static string Facts(ExplorerState state) => state.SelectedAddress is not { } b ? "{}" : JsonSerializer.Serialize(new {
+        address = b.Latest.Address, town = b.Latest.Town, flatTypes = string.Join(", ", b.FlatTypes),
+        sales = b.Count == 1 ? "1 sale" : $"{b.Count:N0} sales", latest = b.Latest.Facts.Month.ToString(),
+        median = Money(b.MedianPrice), range = b.MinimumPrice == b.MaximumPrice ? Money(b.MinimumPrice) : $"{Money(b.MinimumPrice)} – {Money(b.MaximumPrice)}",
+        perSqm = b.MedianPricePerSqm is null ? "unavailable" : $"{Money(b.MedianPricePerSqm)}/m² ({b.PricePerSqmCount} of {b.Count} sales)",
+        area = Range(b.MinimumAreaSqm, b.MaximumAreaSqm, " m²"),
+        leaseYears = b.LeaseCommenceYears.Count == 0 ? "unavailable" : string.Join(", ", b.LeaseCommenceYears),
+        locationState = LocationPresentation.State(b), locationShort = LocationPresentation.Short(b), locationDetail = LocationPresentation.Detail(b)
+    });
     internal static string Lease(ExplorerState state)
     {
         if (state.SelectedAddress is not { } b || state.LatestDatasetMonth is not { } reference) return "";

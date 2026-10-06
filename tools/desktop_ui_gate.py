@@ -10,7 +10,7 @@ from native_gate import FORBIDDEN
 
 STEPS = ['loaded', 'minimum-layout', 'long-label', 'list-keyboard', 'selected', 'map-keyboard',
          'editing-isolated', 'modal-isolated', 'focus-restored', 'reset-medium',
-         'system-font-scaling', 'settings']
+         'system-font-scaling', 'settings', 'back-navigation']
 
 def run(executable, output, negative=False):
     env = {**os.environ, 'HDB_DESKTOP_UI_GATE': '1',

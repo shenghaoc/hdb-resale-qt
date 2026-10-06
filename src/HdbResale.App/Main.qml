@@ -29,7 +29,9 @@ ApplicationWindow {
     property var dialogFocusItem
     property alias mapView: map
     property alias resultView: transactionsList
-    property alias detailsView: detailsScroll
+    readonly property var detailsView: details.scroll
+    readonly property var trendLoader: details.trendLoader
+    readonly property var detailsPane: details
     property alias filterBar: filterBar
     readonly property bool filtersActive: filterBar.activeCount > 0
     readonly property var townPicker: filterBar.townPicker
@@ -493,47 +495,13 @@ ApplicationWindow {
                             Button { action: commands.reset; text: qsTr("Reset filters"); Layout.alignment: Qt.AlignHCenter; Accessible.name: qsTr("Reset all filters") }
                         }
                     }
-                    ColumnLayout {
-                    id: detailsArea
-                    visible: Resales.selectedMapKey !== ""
-                    SplitView.preferredHeight: paneSplit.height * 0.58
-                    SplitView.minimumHeight: 9 * window.unit
-                    spacing: 0
-                RowLayout {
-                    Layout.fillWidth: true
-                    Layout.margins: theme.m
-                    Label { text: Resales.selectedHeading; font.bold: true; font.pointSize: window.font.pointSize * theme.titleScale; wrapMode: Text.WordWrap; Layout.fillWidth: true; Accessible.role: Accessible.Heading }
-                    Button { action: commands.showSelected; text: qsTr("Show on map"); visible: Resales.selectedMapKey !== ""; Accessible.name: commands.showSelected.text }
-                }
-                Label { text: Resales.selectionMapStatus; wrapMode: Text.WordWrap; Layout.fillWidth: true; Layout.leftMargin: theme.m; Layout.rightMargin: theme.m; Layout.bottomMargin: theme.s; color: theme.secondaryText }
-                ScrollView {
-                    id: detailsScroll; Layout.fillWidth: true; Layout.fillHeight: true; clip: true
-                    leftPadding: theme.m; rightPadding: theme.m; bottomPadding: theme.m
-                    contentWidth: availableWidth; activeFocusOnTab: true; Accessible.name: "Selected address details and recent transactions"
-                    Column {
-                        width: detailsScroll.availableWidth; spacing: 8
-                        Label { width: parent.width; text: Resales.selectedMetrics; wrapMode: Text.WordWrap }
-                        Label { width: parent.width; text: Resales.selectedLease; wrapMode: Text.WordWrap; color: window.palette.windowText }
-                        Loader {
-                            id: trendLoader; width: parent.width
-                            active: Resales.selectedMapKey !== ""
-                            sourceComponent: Component { BuyerTrendChart {} }
-                        }
-                        Label { width: parent.width; text: "Recent matching transactions (up to 15)"; visible: Resales.selectedMapKey !== ""; font.bold: true }
-                        Repeater {
-                            model: JSON.parse(Resales.recentTransactionsJson)
-                            delegate: Column {
-                                required property var modelData
-                                width: detailsScroll.availableWidth; spacing: 3
-                                Label { width: parent.width; text: modelData.heading; font.bold: true; wrapMode: Text.WordWrap }
-                                Label { width: parent.width; text: modelData.details; wrapMode: Text.WordWrap }
-                                Rectangle { width: parent.width; height: 1; color: window.palette.mid }
-                            }
-                        }
-                        Label { width: parent.width; text: "Address evidence"; visible: Resales.selectedMapKey !== ""; font.bold: true }
-                        Label { width: parent.width; text: Resales.selectedEvidence; wrapMode: Text.WordWrap }
-                    }
-                }
+                    DetailsPane {
+                        id: details
+                        theme: window.theme; basePoint: window.font.pointSize
+                        visible: Resales.selectedMapKey !== ""
+                        SplitView.preferredHeight: paneSplit.height * (window.compact ? 0.74 : 0.6)
+                        SplitView.minimumHeight: 12 * window.unit
+                        onBackRequested: { Resales.selectAddress(""); transactionsList.forceActiveFocus(Qt.ShortcutFocusReason) }
                     }
                 }
                 }

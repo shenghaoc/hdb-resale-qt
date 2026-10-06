@@ -57,6 +57,7 @@
     <None Include="Section.qml"/>
     <None Include="FilterBar.qml"/>
     <None Include="AddressRow.qml"/>
+    <None Include="DetailsPane.qml"/>
     <None Include="FilterField.qml"/>
     <None Include="MapOverlay.qml"/>
     <None Include="DesktopActions.qml"/>

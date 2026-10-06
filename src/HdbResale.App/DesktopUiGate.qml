@@ -104,6 +104,11 @@ Item {
             case 12:
                 if (targetWindow.compact || map.width < 300 || list.width < 250 || list.count !== 6) return
                 if (Resales.selectedMapKey !== selectedKey) { fail("resize lost selection"); return }
+                // "All addresses" returns from the details to the broader results.
+                targetWindow.detailsPane.backRequested()
+                advance("back-navigation"); break
+            case 13:
+                if (Resales.selectedMapKey !== "" || !list.activeFocus || list.count !== 6) return
                 if (Resales.desktopUiFault === "skip-pass") { fail("negative control"); return }
                 console.log("HDB_DESKTOP_PASS"); stop(); Qt.quit(); break
             }

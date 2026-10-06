@@ -40,3 +40,24 @@ public sealed class LocationPresentationTests
         Assert.Contains("do not agree on one position", LocationPresentation.Detail(mixed));
     }
 }
+
+public sealed class SelectedFactsTests
+{
+    [Fact]
+    public void FactsRestateTheExistingMetricsAndLocationWordingWithoutNewClaims()
+    {
+        Assert.True(YearMonth.TryParse("2025-06", out var month));
+        ResaleTransaction Row(string id, decimal price) => new(id, new(month!, "TOA PAYOH", "1", "ST", "3 ROOM", price) { FloorAreaSqm = 80 },
+            new(new(1.3, 103.8), CoordinateQuality.BlockApproximation, "e"), new(MatchQuality.ExactAddress, "r", [], [], []));
+        var state = new ExplorerState([Row("a", 400_000), Row("b", 500_000)]);
+        state.SelectAddress(state.Addresses[0].Key);
+        using var doc = System.Text.Json.JsonDocument.Parse(BuyerPresentation.Facts(state));
+        var facts = doc.RootElement;
+        Assert.Equal("2 sales", facts.GetProperty("sales").GetString());
+        Assert.Equal("S$400,000 – S$500,000", facts.GetProperty("range").GetString());
+        Assert.Equal("S$450,000", facts.GetProperty("median").GetString());
+        Assert.Equal("approximate", facts.GetProperty("locationState").GetString());
+        Assert.Contains("shows the block, not the flat", facts.GetProperty("locationDetail").GetString());
+        Assert.Equal("{}", BuyerPresentation.Facts(new ExplorerState([])));
+    }
+}

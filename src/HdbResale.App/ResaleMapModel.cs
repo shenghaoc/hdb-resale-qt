@@ -211,6 +211,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public string TrendJson => System.Text.Json.JsonSerializer.Serialize(trend);
     public string RecentTransactionsJson => BuyerPresentation.RecentJson(state);
     public string SelectedHeading => state.SelectedAddress is { } b ? b.Latest.Address : "Choose an address";
+    public string SelectedFactsJson => BuyerPresentation.Facts(state);
     public string SelectedMetrics => BuyerPresentation.Metrics(state);
     public string SelectedLease => BuyerPresentation.Lease(state);
     public string SelectedEvidence => state.SelectedAddress is { } b ? $"Identity: {string.Join(", ", b.MatchQualities)}\nCoordinates: {string.Join(", ", b.CoordinateQualities)}\n{b.Latest.Match.Reason}\n{MatchSources(b.Latest.Match)}\n{b.Latest.Location.Source}" : "";
@@ -270,7 +271,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
         NotifySelection();
     }
     private void NotifySelection() => Notify(nameof(SelectedId), nameof(SelectedMapKey), nameof(SelectionDetails),
-        nameof(SelectedAddressIndex), nameof(SelectedHeading), nameof(SelectedMetrics), nameof(SelectedLease), nameof(SelectedEvidence),
+        nameof(SelectedAddressIndex), nameof(SelectedHeading), nameof(SelectedMetrics), nameof(SelectedFactsJson), nameof(SelectedLease), nameof(SelectedEvidence),
         nameof(RecentTransactionsJson), nameof(BuyerStateJson), nameof(TrendJson));
     private void ApplyFilter(string town, string flatType, int minimum, int maximum, int months)
     {

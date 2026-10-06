@@ -144,6 +144,27 @@ Decisions and why:
   and sparse blocks, long histories). `ui_screenshots.py --profile stress` uses it.
   It supports UI review only — it is not real data and not the expanded-data gate.
 
+## Details layer (PR 5)
+
+* **Order answers the buyer's questions in turn:** what is it (address, town, flat
+  types, *location reliability* directly under the title) → what do flats here
+  typically cost (median as the dominant figure, then range, per m², floor area,
+  lease start) → how sure are we where it is → remaining lease → price trend →
+  what exactly sold. Previously one undifferentiated paragraph.
+* **Back navigation.** `‹ All addresses` (and Esc inside the details) clears the
+  selection and returns focus to the list; the list then owns the pane again.
+  Checked by a gate step.
+* **Uncertainty stays visible, in words.** The one-line label is always shown; the
+  explanation follows (“The pin is placed on the building block's footprint, so it
+  shows the block, not the flat”, “More than one building or postal code fits this
+  address…”). The raw match/coordinate/source evidence is one disclosure away
+  (“Show technical evidence”), not removed.
+* **Model.** One read-only `SelectedFactsJson` (display-ready strings built from the
+  same summary and rounding as the old text) replaces parsing paragraphs in QML;
+  unit-tested. Existing properties remain.
+* The trend chart itself is unchanged here; it is a single dot for single-sale
+  addresses, which is accurate but sparse (PR 6/7 may revisit presentation).
+
 ## Skills and references actually applied
 
 No Qt, QML, product-design, accessibility or screenshot-audit skill is installed in
