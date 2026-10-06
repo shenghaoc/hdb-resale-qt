@@ -42,7 +42,7 @@ public sealed class HttpSnapshotTests : IDisposable
                 entries.Add(new JsonObject { ["path"] = path, ["sha256"] = Sha(bytes), ["bytes"] = bytes.Length,
                     ["gzipSha256"] = hash, ["gzipBytes"] = compressed.Length });
             }
-            Manifest = new JsonObject { ["schemaVersion"] = "hdb-desktop-snapshot-v1", ["importerVersion"] = 1, ["files"] = entries };
+            Manifest = new JsonObject { ["schemaVersion"] = "hdb-desktop-snapshot-v1", ["importerVersion"] = 2, ["files"] = entries };
             Seal();
         }
         public void Seal()
@@ -129,6 +129,28 @@ public sealed class HttpSnapshotTests : IDisposable
         Assert.Equal(active, await HttpSnapshot.SynchronizeAsync(server.Root, cache));
         Assert.Equal(new[] { "/current.json", "/manifests/" + fixture.Hash + ".json", "/current.json" }, server.Requests);
     }
+    [Fact]
+    public async Task SidecarFreeVersionOnePackRemainsReadable()
+    {
+        var fixture = new Fixture(); fixture.Manifest["importerVersion"] = 1; fixture.Seal();
+        var active = await Activate(fixture);
+        Assert.Equal(active, HttpSnapshot.ActiveDirectory(cache));
+        Assert.Equal(2, CsvImport.LoadDirectory(active).Accepted.Count);
+    }
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    public async Task HistoricalPackIsRejectedBeforeObjectsAndPreservesPreviousCache(int importerVersion)
+    {
+        var previous = await Activate(new Fixture());
+        var fixture = new Fixture(); fixture.Manifest["importerVersion"] = importerVersion;
+        var sidecar = (JsonObject)fixture.First.DeepClone(); sidecar["path"] = "historical-postal-evidence.json";
+        ((JsonArray)fixture.Manifest["files"]!).Add(sidecar); fixture.Seal();
+        await using var server = new Server(fixture);
+        await Assert.ThrowsAsync<InvalidDataException>(() => HttpSnapshot.SynchronizeAsync(server.Root, cache));
+        Assert.Equal(new[] { "/current.json", "/manifests/" + fixture.Hash + ".json" }, server.Requests);
+        PreviousStillWorks(previous);
+    }
     [Theory]
     [InlineData("truncated")]
     [InlineData("compressed-corrupt")]
@@ -147,7 +169,7 @@ public sealed class HttpSnapshotTests : IDisposable
         var fixture = new Fixture(500000, kind == "wrong-records" ? 3 : 2);
         if (kind == "raw-corrupt") fixture.First["sha256"] = new string('0', 64);
         if (kind == "unsupported-pack") fixture.Manifest["schemaVersion"] = "future";
-        if (kind == "unsupported-importer") fixture.Manifest["importerVersion"] = 2;
+        if (kind == "unsupported-importer") fixture.Manifest["importerVersion"] = 3;
         if (kind == "invalid-path") fixture.First["path"] = "../outside.csv";
         fixture.Seal();
         await using var server = new Server(fixture);

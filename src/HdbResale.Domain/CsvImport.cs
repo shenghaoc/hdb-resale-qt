@@ -37,13 +37,8 @@ public static class CsvImport
             catch (Exception e) when (e is IOException or UnauthorizedAccessException)
             { diagnostics.Add(new(Path.GetFileName(normalizationPath), 0, e.Message)); }
         }
-        var historicalPath = Path.Combine(directory, "historical-postal-evidence.json");
-        if (historicalAssertions is null && File.Exists(historicalPath))
-        {
-            try { historicalAssertions = HistoricalOneMap.ReadApprovedProjection(historicalPath); }
-            catch (Exception e) when (e is IOException or InvalidDataException or UnauthorizedAccessException or JsonException)
-            { diagnostics.Add(new(Path.GetFileName(historicalPath), 0, e.Message)); }
-        }
+        // Historical first-hit assertions belong only to explicitly invoked
+        // offline experiments. A file in an import directory never opts in.
         var properties = new List<PropertyAddress>();
         foreach (var row in Read(Path.Combine(directory, "address-evidence.csv"),
             ["source_row", "blk_no", "street"], rejected, diagnostics, referenceCsv))

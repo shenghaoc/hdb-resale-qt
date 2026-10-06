@@ -96,12 +96,36 @@ public sealed class AddressCoverageTests : IDisposable
         });
     }
     [Fact]
-    public void UnapprovedHistoricalSidecarCannotSilentlyInfluenceCoordinates()
+    public void HistoricalSidecarCannotOptAnOrdinaryImportIntoAnExperiment()
     {
         Postals("");File.WriteAllText(Path.Combine(directory,"historical-postal-evidence.json"),"{}");
         var result=CsvImport.LoadDirectory(directory);
         Assert.All(result.Accepted,t=>{Assert.Null(t.Match.HistoricalOneMap);Assert.Equal(MatchQuality.Unmatched,t.Match.Quality);});
-        Assert.Contains("projection hash mismatch",Assert.Single(result.Diagnostics).Message);
+        Assert.Empty(result.Diagnostics);
+    }
+    [Fact]
+    public void EvenPinnedHistoricalSidecarRequiresAnExplicitOfflineExperiment()
+    {
+        var source = Path.Combine(AppContext.BaseDirectory, "historical", "benchmark.json");
+        File.Copy(source, Path.Combine(directory, "historical-postal-evidence.json"));
+        var entries = HistoricalOneMap.ReadApprovedProjection(source);
+        Assert.True(YearMonth.TryParse("2024-01", out var month));
+        var facts = new TransactionFacts(month!, "BEDOK", "10D", "BEDOK STH AVE 2", "3 ROOM", 100);
+        var assertion = entries[HistoricalOneMap.Key(facts)];
+        Assert.True(HistoricalOneMap.Usable(facts, assertion));
+        File.WriteAllText(Path.Combine(directory, "transactions.csv"), "source_row,month,town,flat_type,block,street_name,resale_price\n2,2024-01,BEDOK,3 ROOM,10D,BEDOK STH AVE 2,100\n");
+        File.WriteAllText(Path.Combine(directory, "address-evidence.csv"), "source_row,blk_no,street\n2,10D,BEDOK STH AVE 2\n");
+        File.WriteAllText(Path.Combine(directory, "building-evidence.geojson"), JsonSerializer.Serialize(new {
+            type = "FeatureCollection", features = new[] { new { properties = new { OBJECTID = 42, ENTITYID = 77, BLK_NO = "10D", POSTAL_COD = assertion.Postal }, geometry = (object?)null } }
+        }));
+        Postals("");
+        var ordinary = CsvImport.LoadDirectory(directory);
+        Assert.Equal(MatchQuality.Unmatched, Assert.Single(ordinary.Accepted).Match.Quality);
+        Assert.Null(ordinary.Accepted[0].Match.HistoricalOneMap); Assert.Empty(ordinary.Diagnostics);
+        var experiment = CsvImport.LoadDirectory(directory, historicalAssertions: entries);
+        Assert.Equal(MatchQuality.NormalizedAddress, Assert.Single(experiment.Accepted).Match.Quality);
+        Assert.Equal(assertion, experiment.Accepted[0].Match.HistoricalOneMap);
+        Assert.Equal(ordinary.Accepted[0].Facts, experiment.Accepted[0].Facts);
     }
     [Fact]
     public void LegacyCanonicalAndFrozenCoverageOutputsOmitOptionalDatasetField()

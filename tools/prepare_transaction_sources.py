@@ -13,7 +13,7 @@ from pathlib import Path
 SCHEMA = 'hdb-transaction-sources-v1'
 REQUIRED = {'month', 'town', 'flat_type', 'block', 'street_name', 'resale_price'}
 EVIDENCE = ('address-evidence.csv', 'postal-address-evidence.csv', 'building-evidence.geojson',
-            'address-normalization.txt', 'historical-postal-evidence.json')
+            'address-normalization.txt')
 
 def digest(path):
     with path.open('rb') as stream:

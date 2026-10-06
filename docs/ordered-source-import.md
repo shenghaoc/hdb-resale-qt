@@ -30,10 +30,13 @@ HDB_DATA_DIRECTORY=/absolute/new-offline-directory /absolute/HdbResale.App
 ```
 
 The evidence directory supplies `address-evidence.csv`,
-`postal-address-evidence.csv` and `building-evidence.geojson`. If present, the
-existing normalization marker and approved historical postal sidecar are copied
-unchanged. Their coverage and provenance remain those of that evidence set;
-loading older transactions does not establish historical building locations.
+`postal-address-evidence.csv` and `building-evidence.geojson`. The normalization
+marker is copied unchanged when present. Historical postal sidecars are excluded;
+ordinary imports do not automatically load them. Coverage and provenance come
+from the retained canonical evidence set. Loading older transactions does not
+establish historical building locations. The [canonical-only candidate review](canonical-snapshot/README.md)
+records the deliberate coverage and digest changes, while preserving historical
+checkpoint evidence and explicit offline historical experiments.
 
 Output must be new. The tool stages beside it, writes the descriptor last and
 renames the completed directory. Errors clean only the staging directory owned

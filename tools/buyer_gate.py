@@ -62,7 +62,7 @@ def expectation(data):
   # Only rendered detail rows need provenance expectations (at most 15 per
   # state). Never repeat the full corpus's provenance across all 15 states.
   source_evidence={r['id']:dict(identity=r['_source']['sourceIdentity'],sha256=r['_source']['rawSha256'],row=int(r['source_row'])) for r in selected_rows if r['id'] in recent_ids and '_source' in r}
-  result.append(dict(leaseWholeYears=whole_year_observations,sourceEvidence=source_evidence,trend=trend,addressIndex=sorted({key(r)for r in g}).index(chosen) if selected else -1,leaseMinimum=min(lease_observations) if lease_observations else None,leaseMaximum=max(lease_observations) if lease_observations else None,expectedFullMapped=7618 if len(rows)==241920 and (data/'address-normalization.txt').is_file() and (data/'address-normalization.txt').read_text()=='terminal-road-types-v1\n' else 6 if len(rows)==6 else None,name=STEPS[i],town=t,type=typ,minimum=lo,maximum=hi,months=months,rows=len(g),addresses=len({key(r)for r in g}),latest=latest,selected=selected,key=chosen))
+  result.append(dict(leaseWholeYears=whole_year_observations,sourceEvidence=source_evidence,trend=trend,addressIndex=sorted({key(r)for r in g}).index(chosen) if selected else -1,leaseMinimum=min(lease_observations) if lease_observations else None,leaseMaximum=max(lease_observations) if lease_observations else None,expectedFullMapped=7533 if len(rows)==241920 and (data/'address-normalization.txt').is_file() and (data/'address-normalization.txt').read_text()=='terminal-road-types-v1\n' else 6 if len(rows)==6 else None,name=STEPS[i],town=t,type=typ,minimum=lo,maximum=hi,months=months,rows=len(g),addresses=len({key(r)for r in g}),latest=latest,selected=selected,key=chosen))
  return result
 
 def verify(code,output):

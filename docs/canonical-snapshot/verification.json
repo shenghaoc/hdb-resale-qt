@@ -1,0 +1,568 @@
+{
+  "schemaVersion": "hdb-canonical-cohort-review-v1",
+  "publishedCheckpoint": "5dc803bbd8b73ff1e03cef87fac19b2b9948b3b3",
+  "transactions": 988123,
+  "addresses": 10016,
+  "rejected": 1,
+  "diagnostics": 198,
+  "before": {
+    "NormalizedAddress": {
+      "Addresses": 6721,
+      "Transactions": 671149
+    },
+    "Ambiguous": {
+      "Addresses": 209,
+      "Transactions": 22561
+    },
+    "Unmatched": {
+      "Addresses": 2189,
+      "Transactions": 231752
+    },
+    "ExactAddress": {
+      "Addresses": 897,
+      "Transactions": 62661
+    }
+  },
+  "canonicalOnly": {
+    "NormalizedAddress": {
+      "Addresses": 6636,
+      "Transactions": 661209
+    },
+    "Ambiguous": {
+      "Addresses": 208,
+      "Transactions": 22158
+    },
+    "Unmatched": {
+      "Addresses": 2275,
+      "Transactions": 242095
+    },
+    "ExactAddress": {
+      "Addresses": 897,
+      "Transactions": 62661
+    }
+  },
+  "beforeCoordinates": {
+    "BlockApproximation": {
+      "Addresses": 7618,
+      "Transactions": 733810
+    },
+    "Missing": {
+      "Addresses": 2398,
+      "Transactions": 254313
+    }
+  },
+  "canonicalCoordinates": {
+    "BlockApproximation": {
+      "Addresses": 7533,
+      "Transactions": 723870
+    },
+    "Missing": {
+      "Addresses": 2483,
+      "Transactions": 264253
+    }
+  },
+  "qualityTransitions": {
+    "NormalizedAddress → NormalizedAddress": {
+      "Addresses": 6635,
+      "Transactions": 660806
+    },
+    "Ambiguous → Ambiguous": {
+      "Addresses": 208,
+      "Transactions": 22158
+    },
+    "Unmatched → Unmatched": {
+      "Addresses": 2189,
+      "Transactions": 231752
+    },
+    "ExactAddress → ExactAddress": {
+      "Addresses": 897,
+      "Transactions": 62661
+    },
+    "NormalizedAddress → Unmatched": {
+      "Addresses": 86,
+      "Transactions": 10343
+    },
+    "Ambiguous → NormalizedAddress": {
+      "Addresses": 1,
+      "Transactions": 403
+    }
+  },
+  "coordinateTransitions": {
+    "BlockApproximation → BlockApproximation": {
+      "Addresses": 7532,
+      "Transactions": 723467
+    },
+    "Missing → Missing": {
+      "Addresses": 2397,
+      "Transactions": 253910
+    },
+    "BlockApproximation → Missing": {
+      "Addresses": 86,
+      "Transactions": 10343
+    },
+    "Missing → BlockApproximation": {
+      "Addresses": 1,
+      "Transactions": 403
+    }
+  },
+  "reasonTransitions": {
+    "Matched → Matched": {
+      "Addresses": 7532,
+      "Transactions": 723467
+    },
+    "ConflictingPostals → ConflictingPostals": {
+      "Addresses": 190,
+      "Transactions": 19804
+    },
+    "MissingProperty → MissingProperty": {
+      "Addresses": 262,
+      "Transactions": 20617
+    },
+    "MissingFootprint → MissingFootprint": {
+      "Addresses": 1,
+      "Transactions": 88
+    },
+    "MissingPostalCorroboration → MissingPostalCorroboration": {
+      "Addresses": 1926,
+      "Transactions": 211047
+    },
+    "Matched → MissingPostalCorroboration": {
+      "Addresses": 86,
+      "Transactions": 10343
+    },
+    "InvalidPostalAssertion → InvalidPostalAssertion": {
+      "Addresses": 18,
+      "Transactions": 2354
+    },
+    "CrossSourcePostalConflict → Matched": {
+      "Addresses": 1,
+      "Transactions": 403
+    }
+  },
+  "outcomeChangedAddresses": 87,
+  "outcomeChangedTransactions": 10746,
+  "provenanceOnlyAddresses": 291,
+  "provenanceOnlyTransactions": 31696,
+  "unchangedOrderedAddressTransactionMembership": true,
+  "identicalCanonicalPropertyAndPostalAssertions": true,
+  "independentCanonicalVerification": {
+    "AddressesChecked": 10016,
+    "TransactionsChecked": 988123,
+    "CompletePropertyCandidates": true,
+    "CompletePublicPostalCandidates": true,
+    "RawMalformedAssertionsRetained": true,
+    "IndependentOutcomeAndFootprintPoint": true,
+    "NoHistoricalAssertions": true
+  },
+  "sourceDescriptorSha256": "ea36ce53fd727cb7bf76e4b90a9af572f59a86aae58323cb4752c133b6f96f5a",
+  "preparedFiles": {
+    "address-evidence.csv": "dbca1d985aa1aee6108b995306368bb8948c0b3f6731e8570c831156403b9932",
+    "address-normalization.txt": "61934ce5078e5edf42d06bd0cbc1141e46338a7556a83dfd34737c00630fa59c",
+    "building-evidence.geojson": "7c987511548de3a82da403cabca02702031e02ade8703a9e401417883dfeb702",
+    "postal-address-evidence.csv": "d5b09b63e3123a4cdf3cbe3c934473d03bd8c6355b48e09639619833790d4584",
+    "transaction-sources.json": "ea36ce53fd727cb7bf76e4b90a9af572f59a86aae58323cb4752c133b6f96f5a",
+    "transactions/d_2d5ff9ea31397b66239f245f57751537.csv": "9c581749461d3b50f82efe0c7702efbffd2d8d9733f0a8262b27a685c5f90dc6",
+    "transactions/d_43f493c6c50d54243cc1eab0df142d6a.csv": "a4c49fb0309f4dc6317b25f18fbbc33d6cb61a9fd0366d91d058d90c927cd6c4",
+    "transactions/d_8b84c4ee58e3cfc0ece0d773c8ca6abc.csv": "a0bad19233f321d3d045ea6f4fbad8d4b84432f1db8b4dc90f2e2d676c5217bb",
+    "transactions/d_ea9ed51da2787afaf8e51f827c304208.csv": "1cbbca626a9ddf8f789e0207c7f591c1b97fa137d9cfcc6aa5de4a7f54746e98",
+    "transactions/d_ebc5ab87086db484f88045b47411ebc5.csv": "eac11f5313dd38c823684625c6a41ab2b5c384a05cf110043ef6180a44e9692c"
+  },
+  "historicalSidecarRetainedSha256": "7d8af54d5cae591455e5161535218b66c9f85b9718d9a00d730602f72086ccd5",
+  "reportSha256": {
+    "historical-coverage.json": "6b6693b4cbf552f44277dd8636a64dbc097f5b550278a9c2c7ce3100cd4112de",
+    "canonical-coverage.json": "847554363bca88c2ea0b499669f0b30fadb5f58d6e0bf9fe4e00be92978c7c84"
+  },
+  "currentOneMap": {
+    "providerRequests": 0,
+    "availableProcessToken": false,
+    "plannedAddresses": 86,
+    "status": "Canonical-only candidate complete. Optional bounded current Search acquisition not performed: no process token; no credentials inspected or copied into Qt. No old result is substituted."
+  },
+  "changedAddressInventorySha256": "bf01175d0e12c05f1f1d856dab2049eadf5845d287b2c7ffb93eaf7f9036d565",
+  "changedTransactionInventorySha256": "517b9057f25238b48f9bc99eedf4175fe060e2772b1d2fd5e11dcfa97d666c94",
+  "provenanceOnlyInventorySha256": "cc7641242b30f9afef2ffe3596c8b51ad65e9c133330324190989f375b25fcf7",
+  "newNativeDigests": [
+    {
+      "configuration": "Debug",
+      "cohort": "full",
+      "command": "--import-digest",
+      "sha256": "33bd80d17ffd69555c6513c27d7b203e94430faed2738717dde043c79d3cdbca",
+      "seconds": 15.441,
+      "nativeHostCLI": true,
+      "nativeUI": false
+    },
+    {
+      "configuration": "Debug",
+      "cohort": "full",
+      "command": "--legacy-import-digest",
+      "sha256": "7c928addf4ed12f2e6a9783d0a506711b802d23b6b18108999daea5b97ff54d2",
+      "seconds": 14.492,
+      "nativeHostCLI": true,
+      "nativeUI": false
+    },
+    {
+      "configuration": "Debug",
+      "cohort": "2017",
+      "command": "--import-digest",
+      "sha256": "e1b0e7a08e4be347b266f35190d60a8cefbdbc0bd37f107515faca4bb00c8fcb",
+      "seconds": 4.628,
+      "nativeHostCLI": true,
+      "nativeUI": false
+    },
+    {
+      "configuration": "Debug",
+      "cohort": "2017",
+      "command": "--legacy-import-digest",
+      "sha256": "4e53fa128ec62e0be7b5d2e7cd433d19f1a3e680ffd410cb6d4ec93ff80e6f84",
+      "seconds": 4.531,
+      "nativeHostCLI": true,
+      "nativeUI": false
+    },
+    {
+      "configuration": "Release",
+      "cohort": "full",
+      "command": "--import-digest",
+      "sha256": "33bd80d17ffd69555c6513c27d7b203e94430faed2738717dde043c79d3cdbca",
+      "seconds": 15.42,
+      "nativeHostCLI": true,
+      "nativeUI": false
+    },
+    {
+      "configuration": "Release",
+      "cohort": "full",
+      "command": "--legacy-import-digest",
+      "sha256": "7c928addf4ed12f2e6a9783d0a506711b802d23b6b18108999daea5b97ff54d2",
+      "seconds": 19.604,
+      "nativeHostCLI": true,
+      "nativeUI": false
+    },
+    {
+      "configuration": "Release",
+      "cohort": "2017",
+      "command": "--import-digest",
+      "sha256": "e1b0e7a08e4be347b266f35190d60a8cefbdbc0bd37f107515faca4bb00c8fcb",
+      "seconds": 4.535,
+      "nativeHostCLI": true,
+      "nativeUI": false
+    },
+    {
+      "configuration": "Release",
+      "cohort": "2017",
+      "command": "--legacy-import-digest",
+      "sha256": "4e53fa128ec62e0be7b5d2e7cd433d19f1a3e680ffd410cb6d4ec93ff80e6f84",
+      "seconds": 4.552,
+      "nativeHostCLI": true,
+      "nativeUI": false
+    }
+  ],
+  "httpPack": {
+    "pointer": {
+      "schemaVersion": "hdb-snapshot-current-v1",
+      "manifestSha256": "4060448ae47bd658aa3e0aaca1ed8e7c460beb842d04d921fbe29c1178c4421e"
+    },
+    "importerVersion": 2,
+    "manifestBytes": 2990,
+    "currentBytes": 137,
+    "files": [
+      {
+        "path": "transaction-sources.json",
+        "sha256": "ea36ce53fd727cb7bf76e4b90a9af572f59a86aae58323cb4752c133b6f96f5a",
+        "bytes": 3429,
+        "gzipSha256": "6856991cbdc4a5ade910130a4d204a7a1d9cb63d8bfe3b558f48341c8c96d31f",
+        "gzipBytes": 941
+      },
+      {
+        "path": "address-evidence.csv",
+        "sha256": "dbca1d985aa1aee6108b995306368bb8948c0b3f6731e8570c831156403b9932",
+        "bytes": 236846,
+        "gzipSha256": "acbf3219cff7558ac40c1157065ae49cf199de771f4e799edf33273054d1bb76",
+        "gzipBytes": 56393
+      },
+      {
+        "path": "postal-address-evidence.csv",
+        "sha256": "d5b09b63e3123a4cdf3cbe3c934473d03bd8c6355b48e09639619833790d4584",
+        "bytes": 21775223,
+        "gzipSha256": "56f1f0c20cdb869dee59960e6a73429b25fbb26aa0b23ded62e05a1d90ed0903",
+        "gzipBytes": 3295421
+      },
+      {
+        "path": "building-evidence.geojson",
+        "sha256": "7c987511548de3a82da403cabca02702031e02ade8703a9e401417883dfeb702",
+        "bytes": 57012074,
+        "gzipSha256": "b230d76bf0886a7c065460605535f246f4585dd6aee7670cf783ce0e802b11d8",
+        "gzipBytes": 16421057
+      },
+      {
+        "path": "address-normalization.txt",
+        "sha256": "61934ce5078e5edf42d06bd0cbc1141e46338a7556a83dfd34737c00630fa59c",
+        "bytes": 23,
+        "gzipSha256": "694719dd3457dc60659c8b9c01f46bbf210a36d9074d862045497ecaa181f682",
+        "gzipBytes": 43
+      },
+      {
+        "path": "transactions/d_ebc5ab87086db484f88045b47411ebc5.csv",
+        "sha256": "eac11f5313dd38c823684625c6a41ab2b5c384a05cf110043ef6180a44e9692c",
+        "bytes": 24534906,
+        "gzipSha256": "567178bbbdc135e4d996f68b4148ee7ee6da634c36c495f4fd493d6cf1d469d4",
+        "gzipBytes": 3605208
+      },
+      {
+        "path": "transactions/d_43f493c6c50d54243cc1eab0df142d6a.csv",
+        "sha256": "a4c49fb0309f4dc6317b25f18fbbc33d6cb61a9fd0366d91d058d90c927cd6c4",
+        "bytes": 31846413,
+        "gzipSha256": "1db185b0b4271bd8ede5f34783fe0e9b0ceeb23bcf5a8ffe60e04552fa0cbead",
+        "gzipBytes": 5015866
+      },
+      {
+        "path": "transactions/d_2d5ff9ea31397b66239f245f57751537.csv",
+        "sha256": "9c581749461d3b50f82efe0c7702efbffd2d8d9733f0a8262b27a685c5f90dc6",
+        "bytes": 4462898,
+        "gzipSha256": "4e239e1d3662307ac851ff711bf29277d99b453fa48abac0875c8d7184679a37",
+        "gzipBytes": 762508
+      },
+      {
+        "path": "transactions/d_ea9ed51da2787afaf8e51f827c304208.csv",
+        "sha256": "1cbbca626a9ddf8f789e0207c7f591c1b97fa137d9cfcc6aa5de4a7f54746e98",
+        "bytes": 3282751,
+        "gzipSha256": "968f1a32edfe88248ea62c10290ca77616a005fcd446c2361a2db2dcb0a1c3fd",
+        "gzipBytes": 570685
+      },
+      {
+        "path": "transactions/d_8b84c4ee58e3cfc0ece0d773c8ca6abc.csv",
+        "sha256": "a0bad19233f321d3d045ea6f4fbad8d4b84432f1db8b4dc90f2e2d676c5217bb",
+        "bytes": 25511111,
+        "gzipSha256": "ff5062b5d9fde8342c8e8caf598a33e633d72e866beb32d059642d073d760168",
+        "gzipBytes": 3670171
+      }
+    ],
+    "unpackedBytes": 168665674,
+    "gzipBytes": 33398293,
+    "freshGETs": 13,
+    "prepareSeconds": 1.323,
+    "packageSeconds": 2.098,
+    "sourceDescriptorUnchanged": true,
+    "allRemainingFileBytesUnchanged": true,
+    "providerRequests": 0,
+    "published": false,
+    "firstDownloadBodyBytes": 33401557
+  },
+  "validation": {
+    "builds": {
+      "Debug": "0 warnings / 0 errors",
+      "Release": "0 warnings / 0 errors"
+    },
+    "CSharpTests": {
+      "Debug": 235,
+      "Release": 235
+    },
+    "PythonTests": 53,
+    "nativePositiveCases": 24,
+    "nativeDeliberateFailuresDetected": 54,
+    "nativePositiveMaximumRecordedInteractionMilliseconds": 940,
+    "fullCandidateReportEqualsIndependentCanonicalCheckpointReport": true,
+    "physicalVisualAcceptance": false
+  },
+  "httpNative": [
+    {
+      "configuration": "Debug",
+      "syncSeconds": 4.002,
+      "freshLocalGETs": 13,
+      "activeDirectory": "/Users/shenghaochen/Documents/Codex/2026-10-06/task-3/canonical-evidence/full-cache-Debug/snapshots/4060448ae47bd658aa3e0aaca1ed8e7c460beb842d04d921fbe29c1178c4421e",
+      "manifestSha256": "4060448ae47bd658aa3e0aaca1ed8e7c460beb842d04d921fbe29c1178c4421e",
+      "failures": [
+        {
+          "kind": "corrupt",
+          "exit": 1,
+          "priorPointerPreserved": true,
+          "ownedStageCleaned": true
+        },
+        {
+          "kind": "incomplete",
+          "exit": 1,
+          "priorPointerPreserved": true,
+          "ownedStageCleaned": true
+        }
+      ],
+      "cached": {
+        "nativeUI": true,
+        "automatedReadiness": true,
+        "physicalInput": false,
+        "screenshots": false,
+        "networkOutboundDenied": false,
+        "seconds": 6.967,
+        "stageMilliseconds": 4906.456,
+        "forcedGC": false,
+        "maximumSampledWorkingSetBytes": 1785937920,
+        "maximumSampleStage": "qml-ready-full",
+        "readyWorkingSetBytes": 1785937920,
+        "readyManagedBytes": 1496765400,
+        "processMaximumRSSBytes": 1791000576
+      }
+    },
+    {
+      "configuration": "Release",
+      "syncSeconds": 3.171,
+      "freshLocalGETs": 13,
+      "activeDirectory": "/Users/shenghaochen/Documents/Codex/2026-10-06/task-3/canonical-evidence/full-cache-Release/snapshots/4060448ae47bd658aa3e0aaca1ed8e7c460beb842d04d921fbe29c1178c4421e",
+      "manifestSha256": "4060448ae47bd658aa3e0aaca1ed8e7c460beb842d04d921fbe29c1178c4421e",
+      "failures": [
+        {
+          "kind": "corrupt",
+          "exit": 1,
+          "priorPointerPreserved": true,
+          "ownedStageCleaned": true
+        },
+        {
+          "kind": "incomplete",
+          "exit": 1,
+          "priorPointerPreserved": true,
+          "ownedStageCleaned": true
+        }
+      ],
+      "cached": {
+        "nativeUI": true,
+        "automatedReadiness": true,
+        "physicalInput": false,
+        "screenshots": false,
+        "networkOutboundDenied": false,
+        "seconds": 4.898,
+        "stageMilliseconds": 4580.966,
+        "forcedGC": false,
+        "maximumSampledWorkingSetBytes": 1520369664,
+        "maximumSampleStage": "qml-ready-full",
+        "readyWorkingSetBytes": 1520369664,
+        "readyManagedBytes": 1439014616,
+        "processMaximumRSSBytes": 1671053312
+      },
+      "interruption": {
+        "killedExit": -9,
+        "priorPointerPreserved": true,
+        "orphanStages": 1,
+        "orphanAutomaticallyDeleted": false,
+        "retryVerifiedTestFixture": true,
+        "nativeBuyerSteps": 15
+      },
+      "restoredCanonicalCacheGETs": 3,
+      "offline": {
+        "nativeUI": true,
+        "automatedReadiness": true,
+        "physicalInput": false,
+        "screenshots": false,
+        "networkOutboundDenied": true,
+        "seconds": 4.828,
+        "stageMilliseconds": 4515.926,
+        "forcedGC": false,
+        "maximumSampledWorkingSetBytes": 1771831296,
+        "maximumSampleStage": "matching-resolution",
+        "readyWorkingSetBytes": 1238073344,
+        "readyManagedBytes": 1439213136,
+        "processMaximumRSSBytes": 1800847360
+      }
+    }
+  ],
+  "memory": {
+    "scope": "Fresh-process managed import/full buyer state, diagnostic GC with roots alive; no Qt UI in this probe",
+    "retainedManagedBytes": 598369232,
+    "workingSetBytesAfterDiagnosticGC": 775372800,
+    "processMaximumRSSBytes": 1774305280,
+    "measurementsAreSingleObservations": true,
+    "nativeStartup": [
+      {
+        "configuration": "Debug",
+        "syncSeconds": 4.002,
+        "freshLocalGETs": 13,
+        "activeDirectory": "/Users/shenghaochen/Documents/Codex/2026-10-06/task-3/canonical-evidence/full-cache-Debug/snapshots/4060448ae47bd658aa3e0aaca1ed8e7c460beb842d04d921fbe29c1178c4421e",
+        "manifestSha256": "4060448ae47bd658aa3e0aaca1ed8e7c460beb842d04d921fbe29c1178c4421e",
+        "failures": [
+          {
+            "kind": "corrupt",
+            "exit": 1,
+            "priorPointerPreserved": true,
+            "ownedStageCleaned": true
+          },
+          {
+            "kind": "incomplete",
+            "exit": 1,
+            "priorPointerPreserved": true,
+            "ownedStageCleaned": true
+          }
+        ],
+        "cached": {
+          "nativeUI": true,
+          "automatedReadiness": true,
+          "physicalInput": false,
+          "screenshots": false,
+          "networkOutboundDenied": false,
+          "seconds": 6.967,
+          "stageMilliseconds": 4906.456,
+          "forcedGC": false,
+          "maximumSampledWorkingSetBytes": 1785937920,
+          "maximumSampleStage": "qml-ready-full",
+          "readyWorkingSetBytes": 1785937920,
+          "readyManagedBytes": 1496765400,
+          "processMaximumRSSBytes": 1791000576
+        }
+      },
+      {
+        "configuration": "Release",
+        "syncSeconds": 3.171,
+        "freshLocalGETs": 13,
+        "activeDirectory": "/Users/shenghaochen/Documents/Codex/2026-10-06/task-3/canonical-evidence/full-cache-Release/snapshots/4060448ae47bd658aa3e0aaca1ed8e7c460beb842d04d921fbe29c1178c4421e",
+        "manifestSha256": "4060448ae47bd658aa3e0aaca1ed8e7c460beb842d04d921fbe29c1178c4421e",
+        "failures": [
+          {
+            "kind": "corrupt",
+            "exit": 1,
+            "priorPointerPreserved": true,
+            "ownedStageCleaned": true
+          },
+          {
+            "kind": "incomplete",
+            "exit": 1,
+            "priorPointerPreserved": true,
+            "ownedStageCleaned": true
+          }
+        ],
+        "cached": {
+          "nativeUI": true,
+          "automatedReadiness": true,
+          "physicalInput": false,
+          "screenshots": false,
+          "networkOutboundDenied": false,
+          "seconds": 4.898,
+          "stageMilliseconds": 4580.966,
+          "forcedGC": false,
+          "maximumSampledWorkingSetBytes": 1520369664,
+          "maximumSampleStage": "qml-ready-full",
+          "readyWorkingSetBytes": 1520369664,
+          "readyManagedBytes": 1439014616,
+          "processMaximumRSSBytes": 1671053312
+        },
+        "interruption": {
+          "killedExit": -9,
+          "priorPointerPreserved": true,
+          "orphanStages": 1,
+          "orphanAutomaticallyDeleted": false,
+          "retryVerifiedTestFixture": true,
+          "nativeBuyerSteps": 15
+        },
+        "restoredCanonicalCacheGETs": 3,
+        "offline": {
+          "nativeUI": true,
+          "automatedReadiness": true,
+          "physicalInput": false,
+          "screenshots": false,
+          "networkOutboundDenied": true,
+          "seconds": 4.828,
+          "stageMilliseconds": 4515.926,
+          "forcedGC": false,
+          "maximumSampledWorkingSetBytes": 1771831296,
+          "maximumSampleStage": "matching-resolution",
+          "readyWorkingSetBytes": 1238073344,
+          "readyManagedBytes": 1439213136,
+          "processMaximumRSSBytes": 1800847360
+        }
+      }
+    ]
+  }
+}

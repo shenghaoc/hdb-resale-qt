@@ -32,7 +32,7 @@ class HttpPreparationTests(unittest.TestCase):
         self.assertEqual(hashlib.sha256(manifest_bytes).hexdigest(), current['manifestSha256'])
         manifest = json.loads(manifest_bytes)
         self.assertEqual('hdb-desktop-snapshot-v1', manifest['schemaVersion'])
-        self.assertEqual(1, manifest['importerVersion'])
+        self.assertEqual(2, manifest['importerVersion'])
         self.assertEqual(5, len(manifest['files']))
         for entry in manifest['files']:
             object_path = 'objects/' + entry['gzipSha256'] + '.gz'
@@ -44,6 +44,14 @@ class HttpPreparationTests(unittest.TestCase):
             self.assertEqual(unpacked, (self.prepared / entry['path']).read_bytes())
             self.assertEqual(len(unpacked), entry['bytes'])
             self.assertEqual(hashlib.sha256(unpacked).hexdigest(), entry['sha256'])
+
+    def test_historical_sidecar_is_rejected_instead_of_silently_repackaged(self):
+        sidecar = self.prepared / 'historical-postal-evidence.json'
+        sidecar.write_text('historical fixture')
+        with self.assertRaisesRegex(ValueError, 'unexpected files'):
+            package(self.prepared, self.root / 'historical')
+        self.assertFalse((self.root / 'historical').exists())
+        self.assertEqual('historical fixture', sidecar.read_text())
 
     def test_existing_pack_is_never_modified(self):
         output = self.root / 'output'

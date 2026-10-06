@@ -16,7 +16,7 @@ public static class HttpSnapshot
         UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow, RespectRequiredConstructorParameters = true };
     private static readonly string[] Required = [TransactionSources.ManifestName, "address-evidence.csv",
         "postal-address-evidence.csv", "building-evidence.geojson"];
-    private static readonly string[] Optional = ["address-normalization.txt", "historical-postal-evidence.json"];
+    private static readonly string[] Optional = ["address-normalization.txt"];
     private const long MaxFile = 268_435_456, MaxTotal = 805_306_368;
 
     public static async Task<string> SynchronizeAsync(Uri root, string cache, CancellationToken cancellation = default)
@@ -131,8 +131,8 @@ public static class HttpSnapshot
     private static Pack ReadPack(byte[] bytes)
     {
         var pack = JsonSerializer.Deserialize<Pack>(bytes, Json);
-        if (pack is null || pack.SchemaVersion != "hdb-desktop-snapshot-v1" || pack.ImporterVersion != 1 ||
-            pack.Files is null || pack.Files.Length is < 5 or > 22)
+        if (pack is null || pack.SchemaVersion != "hdb-desktop-snapshot-v1" || pack.ImporterVersion is not (1 or 2) ||
+            pack.Files is null || pack.Files.Length is < 5 or > 21)
             throw new InvalidDataException("Unsupported snapshot/importer version or file count.");
         var paths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         long total = 0, compressed = 0;

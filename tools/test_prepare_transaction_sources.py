@@ -55,6 +55,17 @@ class TransactionPreparationTests(unittest.TestCase):
                 self.assertEqual('Model,\n A ', rows[0]['flat_model'])
                 self.assertEqual('3', rows[0]['source_row'])
 
+    def test_historical_evidence_is_excluded_while_canonical_evidence_and_marker_survive(self):
+        (self.evidence / 'historical-postal-evidence.json').write_text('historical fixture, deliberately not parsed')
+        (self.evidence / 'address-normalization.txt').write_text('terminal-road-types-v1\n')
+        source = self.source('a', HEADER + '\n' + ROW + '\n')
+        output = self.root / 'canonical'
+        prepare([source], self.evidence, output)
+        self.assertFalse((output / 'historical-postal-evidence.json').exists())
+        self.assertTrue((self.evidence / 'historical-postal-evidence.json').exists())
+        for name in ('address-evidence.csv', 'postal-address-evidence.csv', 'building-evidence.geojson', 'address-normalization.txt'):
+            self.assertEqual((self.evidence / name).read_bytes(), (output / name).read_bytes())
+
     def test_invalid_identity_duplicate_and_case_collisions_fail_before_activation(self):
         source = self.source('good', HEADER + '\n' + ROW + '\n')
         for names in (['../bad'], ['/bad'], ['a/b'], ['good', 'good'], ['a', 'A']):

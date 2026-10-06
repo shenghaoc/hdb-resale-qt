@@ -65,7 +65,7 @@ def package(prepared, output):
             files.append(dict(path=path, sha256=sha.hexdigest(), bytes=size,
                               gzipSha256=compressed_sha, gzipBytes=compressed_size))
             temporary.replace(stage / 'objects' / (compressed_sha + '.gz'))
-        manifest = dict(schemaVersion='hdb-desktop-snapshot-v1', importerVersion=1, files=files)
+        manifest = dict(schemaVersion='hdb-desktop-snapshot-v1', importerVersion=2, files=files)
         data = (json.dumps(manifest, indent=2) + '\n').encode('utf-8')
         manifest_sha = hashlib.sha256(data).hexdigest()
         (stage / 'manifests' / (manifest_sha + '.json')).write_bytes(data)

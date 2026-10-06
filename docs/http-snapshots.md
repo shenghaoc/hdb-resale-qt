@@ -65,7 +65,7 @@ Its manifest is `manifests/<manifestSha256>.json`; the entire manifest byte hash
 must match the pointer. The manifest contains:
 
 ```json
-{"schemaVersion":"hdb-desktop-snapshot-v1","importerVersion":1,"files":[
+{"schemaVersion":"hdb-desktop-snapshot-v1","importerVersion":2,"files":[
   {"path":"transaction-sources.json","sha256":"<unpacked SHA-256>","bytes":123,
    "gzipSha256":"<compressed SHA-256>","gzipBytes":100}
 ]}
@@ -75,13 +75,18 @@ The example file declaration illustrates the shape; a real pack requires all
 evidence and source entries. Every compressed object is
 `objects/<gzipSha256>.gz`. Only `transaction-sources.json`,
 `address-evidence.csv`, `postal-address-evidence.csv`,
-`building-evidence.geojson`, the existing optional normalization/historical
-sidecars, and `transactions/<sourceIdentity>.csv` are accepted. Inventory must
-match the ordered source descriptor exactly. Hashes detect corruption; source
+`building-evidence.geojson`, the optional `address-normalization.txt`, and
+`transactions/<sourceIdentity>.csv` are accepted. Historical postal sidecars are
+excluded. New packs declare importer version 2; sidecar-free version-1 packs
+remain readable. A version-1 pack containing historical evidence fails explicitly
+and stays on disk, rather than being reinterpreted as the canonical-only cohort.
+Inventory must match the ordered source descriptor exactly. The
+[canonical-only candidate review](canonical-snapshot/README.md) records its exact
+quality changes and new digest expectations. Hashes detect corruption; source
 raw-hash metadata is not independent authentication of an official publisher.
 The selected origin and its publication process must be trusted.
 
-Bounds: current metadata 4 KiB, manifest 1 MiB, 5–22 files, each compressed or
+Bounds: current metadata 4 KiB, manifest 1 MiB, 5–21 files, each compressed or
 unpacked file at most 256 MiB, total compressed and total unpacked at most
 768 MiB. Existing source descriptor bounds also apply: 1–16 sources, at most
 512 MiB prepared transactions, and at most 2 million records per source.
