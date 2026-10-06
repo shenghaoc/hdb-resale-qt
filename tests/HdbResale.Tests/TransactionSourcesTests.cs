@@ -64,7 +64,9 @@ public sealed class TransactionSourcesTests : IDisposable
         Assert.Contains("070 years (reported in whole years)", BuyerPresentation.RecentJson(state));
         Assert.Contains("Source remaining lease at resale application", BuyerPresentation.RecentJson(state));
         Assert.Contains("Source integer, row 2; SHA-256", BuyerPresentation.RecentJson(state));
-        Assert.Contains("approximately 68y 0m–68y 5m", BuyerPresentation.Lease(state));
+        Assert.Contains("approximately 68 years.", BuyerPresentation.Lease(state));
+        Assert.Contains("exact expiry and rounding convention are unknown", BuyerPresentation.Lease(state));
+        Assert.DoesNotContain("y 0m", BuyerPresentation.Lease(state));
         state.Filter("T", "3 ROOM", 0, 1_000_000, 12);
         Assert.Equal("HDB-modern-2", Assert.Single(state.Visible).Id);
     }

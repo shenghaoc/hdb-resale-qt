@@ -130,17 +130,17 @@ public sealed class BuyerDomainTests
         var summary = Assert.Single(BlockSummaries.All([older, newer]));
         Assert.Equal(new[] { 1977, 1992 }, summary.LeaseCommenceYears);
         Assert.Equal(2, summary.LeaseEstimateCount);
-        Assert.Equal(new LeaseEstimate(reference, 895, 895), summary.EstimateLeaseMonths(reference));
+        Assert.Equal(new LeaseEstimate(reference, 895, 895) { IncludesWholeYearObservations = true }, summary.EstimateLeaseMonths(reference));
         Assert.Equal("80 years", older.Facts.RemainingLeaseSource);
         var differing = newer with { Facts = newer.Facts with { RemainingLeaseMonths = 950 } };
-        Assert.Equal(new LeaseEstimate(reference, 895, 899), Assert.Single(BlockSummaries.All([older, differing])).EstimateLeaseMonths(reference));
+        Assert.Equal(new LeaseEstimate(reference, 895, 899) { IncludesWholeYearObservations = true }, Assert.Single(BlockSummaries.All([older, differing])).EstimateLeaseMonths(reference));
         Assert.Null(Assert.Single(BlockSummaries.All([Row("unknown", commenceYear: 1980, lease: "unknown", leaseMonths: null)]))
             .EstimateLeaseMonths(reference));
         Assert.Empty(Assert.Single(BlockSummaries.All([Row("missing-year", commenceYear: null)])).LeaseCommenceYears);
         // A 16th older row is excluded from recent display, but still participates in the source-lease range.
         var all = Enumerable.Range(0, 15).Select(i => newer with { Id = $"recent-{i}" }).Append(
             older with { Facts = older.Facts with { RemainingLeaseMonths = 900 } }).ToArray();
-        Assert.Equal(new LeaseEstimate(reference, 835, 895), Assert.Single(BlockSummaries.All(all)).EstimateLeaseMonths(reference));
+        Assert.Equal(new LeaseEstimate(reference, 835, 895) { IncludesWholeYearObservations = true }, Assert.Single(BlockSummaries.All(all)).EstimateLeaseMonths(reference));
         var expired = Row("expired", month: "2020-01", lease: "1 year", leaseMonths: 12);
         Assert.Equal(-53, Assert.Single(BlockSummaries.All([expired])).EstimateLeaseMonths(reference)!.MinimumMonths);
     }

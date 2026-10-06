@@ -18,9 +18,14 @@ internal static class BuyerPresentation
     {
         if (state.SelectedAddress is not { } b || state.LatestDatasetMonth is not { } reference) return "";
         var estimate = b.EstimateLeaseMonths(reference);
-        return estimate is null ? "Derived remaining lease unavailable; see source lease text in each transaction." :
-            $"Derived remaining lease at {reference}: approximately {Months(estimate.MinimumMonths)}{(estimate.MinimumMonths == estimate.MaximumMonths ? "" : "–" + Months(estimate.MaximumMonths))}.\n{b.LeaseEstimateCount} of {b.Count} matching source lease observations, minus elapsed registration months; rounded source facts may disagree. Not an eligibility assessment.";
+        if (estimate is null) return "Derived remaining lease unavailable; see source lease text in each transaction.";
+        var minimum = estimate.IncludesWholeYearObservations ? Years(estimate.MinimumMonths) : Months(estimate.MinimumMonths);
+        var maximum = estimate.IncludesWholeYearObservations ? Years(estimate.MaximumMonths) : Months(estimate.MaximumMonths);
+        var precision = estimate.IncludesWholeYearObservations
+            ? " Display rounded to whole years because source precision is whole years; exact expiry and rounding convention are unknown." : "";
+        return $"Derived remaining lease at {reference}: approximately {minimum}{(minimum == maximum ? "" : "–" + maximum)}.\n{b.LeaseEstimateCount} of {b.Count} matching source lease observations, minus elapsed calendar months; rounded source facts may disagree.{precision} Not an eligibility assessment.";
     }
+    private static string Years(int months) => months < 0 ? "expired / below zero" : $"{Math.Round(months / 12d, MidpointRounding.AwayFromZero):0} years";
     private static string Months(int months) => months < 0 ? "expired / below zero" : $"{months / 12}y {months % 12}m";
     internal static string RecentJson(ExplorerState state) => JsonSerializer.Serialize(state.RecentTransactions.Select(t => new {
         id=t.Id, heading=$"{t.Facts.Month} · {t.FlatType} · {Money(t.Price)}",

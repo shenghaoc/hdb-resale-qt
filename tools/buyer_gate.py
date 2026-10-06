@@ -40,11 +40,12 @@ def expectation(data):
   selected=summary(g,chosen) if i in(6,7,10,11) else None
   selected_rows=[r for r in g if key(r)==chosen] if selected else []
   lease_observations=[]
+  whole_year_observations=False
   for r in selected_rows:
    raw=r.get('remaining_lease') or ''
    m=re.fullmatch(r'([0-9]{1,3}) years?(?: ([0-9]{1,2}) months?)?',raw)
-   if re.fullmatch(r'[0-9]{1,3}',raw):lease_observations.append(int(raw)*12-(end-month(r)))
-   elif m and int(m[2]or 0)<=11:lease_observations.append(int(m[1])*12+int(m[2]or 0)-(end-month(r)))
+   if re.fullmatch(r'[0-9]{1,3}',raw):lease_observations.append(int(raw)*12-(end-month(r)));whole_year_observations=True
+   elif m and int(m[2]or 0)<=11:lease_observations.append(int(m[1])*12+int(m[2]or 0)-(end-month(r)));whole_year_observations |= m[2] is None
   trend={'Points':[],'Start':'','End':'','ObservedMonths':0,'Sales':0,'MinimumY':0,'MaximumY':1}
   if selected:
    points=[]
@@ -61,7 +62,7 @@ def expectation(data):
   # Only rendered detail rows need provenance expectations (at most 15 per
   # state). Never repeat the full corpus's provenance across all 15 states.
   source_evidence={r['id']:dict(identity=r['_source']['sourceIdentity'],sha256=r['_source']['rawSha256'],row=int(r['source_row'])) for r in selected_rows if r['id'] in recent_ids and '_source' in r}
-  result.append(dict(sourceEvidence=source_evidence,trend=trend,addressIndex=sorted({key(r)for r in g}).index(chosen) if selected else -1,leaseMinimum=min(lease_observations) if lease_observations else None,leaseMaximum=max(lease_observations) if lease_observations else None,expectedFullMapped=7618 if len(rows)==241920 and (data/'address-normalization.txt').is_file() and (data/'address-normalization.txt').read_text()=='terminal-road-types-v1\n' else 6 if len(rows)==6 else None,name=STEPS[i],town=t,type=typ,minimum=lo,maximum=hi,months=months,rows=len(g),addresses=len({key(r)for r in g}),latest=latest,selected=selected,key=chosen))
+  result.append(dict(leaseWholeYears=whole_year_observations,sourceEvidence=source_evidence,trend=trend,addressIndex=sorted({key(r)for r in g}).index(chosen) if selected else -1,leaseMinimum=min(lease_observations) if lease_observations else None,leaseMaximum=max(lease_observations) if lease_observations else None,expectedFullMapped=7618 if len(rows)==241920 and (data/'address-normalization.txt').is_file() and (data/'address-normalization.txt').read_text()=='terminal-road-types-v1\n' else 6 if len(rows)==6 else None,name=STEPS[i],town=t,type=typ,minimum=lo,maximum=hi,months=months,rows=len(g),addresses=len({key(r)for r in g}),latest=latest,selected=selected,key=chosen))
  return result
 
 def verify(code,output):

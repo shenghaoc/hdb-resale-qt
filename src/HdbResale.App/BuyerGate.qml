@@ -70,7 +70,10 @@ Item {
                 if(Resales.selectedLease.indexOf("Derived remaining lease unavailable")<0)return false
             } else {
                 if(Resales.selectedLease.indexOf("at "+e.latest)<0||Resales.selectedLease.indexOf("Not an eligibility assessment")<0)return false
-                const leaseRange=leaseMonths(e.leaseMinimum)+(e.leaseMinimum===e.leaseMaximum?"":"–"+leaseMonths(e.leaseMaximum))
+                const formatLease=months => e.leaseWholeYears ? (months<0 ? "expired / below zero" : Math.round(months/12)+" years") : leaseMonths(months)
+                const minimum=formatLease(e.leaseMinimum),maximum=formatLease(e.leaseMaximum)
+                const leaseRange=minimum+(minimum===maximum?"":"–"+maximum)
+                if(e.leaseWholeYears && Resales.selectedLease.indexOf("source precision is whole years")<0)return false
                 if(Resales.selectedLease.indexOf("approximately "+leaseRange+".")<0)return false
             }
             if(phase===11) {

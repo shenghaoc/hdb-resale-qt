@@ -2,7 +2,10 @@ namespace HdbResale.Domain;
 
 // Advance source remaining-lease observations by elapsed calendar months. This
 // is approximate, not an eligibility assessment or a commencement-year formula.
-public sealed record LeaseEstimate(YearMonth ReferenceMonth, int MinimumMonths, int MaximumMonths);
+public sealed record LeaseEstimate(YearMonth ReferenceMonth, int MinimumMonths, int MaximumMonths)
+{
+    public bool IncludesWholeYearObservations { get; init; }
+}
 
 // Presentation projection only: all accepted transactions remain in ExplorerState.
 public sealed record BlockSummary(string Key, ResaleTransaction Latest, int Count, decimal MinimumPrice,
@@ -14,6 +17,7 @@ public sealed record BlockSummary(string Key, ResaleTransaction Latest, int Coun
     public decimal? MedianPricePerSqm { get; init; }
     public int PricePerSqmCount { get; init; }
     public int LeaseEstimateCount { get; init; }
+    public bool LeaseIncludesWholeYearObservations { get; init; }
     public IReadOnlyList<int> LeaseCommenceYears { get; init; } = [];
     public IReadOnlyList<MatchQuality> MatchQualities { get; init; } = [];
     public IReadOnlyList<CoordinateQuality> CoordinateQualities { get; init; } = [];
@@ -28,7 +32,7 @@ public sealed record BlockSummary(string Key, ResaleTransaction Latest, int Coun
         var referenceIndex = referenceMonth.Year * 12 + referenceMonth.Month - 1;
         return LeaseExpiryMonthIndices.Count == 0 ? null : new(referenceMonth,
             LeaseExpiryMonthIndices.Min() - referenceIndex,
-            LeaseExpiryMonthIndices.Max() - referenceIndex);
+            LeaseExpiryMonthIndices.Max() - referenceIndex) { IncludesWholeYearObservations = LeaseIncludesWholeYearObservations };
     }
 }
 public static class BlockSummaries
@@ -63,6 +67,7 @@ public static class BlockSummaries
                     MedianPricePerSqm = ratios.Length == 0 ? null : Median(ratios),
                     PricePerSqmCount = ratios.Length,
                     LeaseEstimateCount = g.Count(t => t.Facts.RemainingLeaseMonths is >= 0),
+                    LeaseIncludesWholeYearObservations = g.Any(t => t.Facts.RemainingLeaseReportedInWholeYears),
                     LeaseCommenceYears = Array.AsReadOnly(g.Select(t => t.Facts.LeaseCommenceYear)
                         .Where(y => y is >= 1 and <= 9999).Select(y => y!.Value).Distinct().Order().ToArray()),
                     MatchQualities = Array.AsReadOnly(g.Select(t => t.Match.Quality).Distinct().Order().ToArray()),

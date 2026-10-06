@@ -56,6 +56,12 @@ public sealed record TransactionFacts(YearMonth Month, string Town, string Block
     public int? LeaseCommenceYear { get; init; }
     public string? RemainingLeaseSource { get; init; }
     public int? RemainingLeaseMonths { get; init; }
+    // Precision is independent of the arithmetic unit. No rounding convention
+    // or exact expiry date is inferred from a whole-year source observation.
+    [System.Text.Json.Serialization.JsonIgnore]
+    public bool RemainingLeaseReportedInWholeYears => RemainingLeaseMonths.HasValue &&
+        RemainingLeaseSource is { } raw && (raw.All(char.IsAsciiDigit) ||
+            raw.EndsWith(" year", StringComparison.Ordinal) || raw.EndsWith(" years", StringComparison.Ordinal));
 }
 public sealed record ResaleTransaction(string Id, TransactionFacts Facts, DerivedLocation Location, AddressMatch Match)
 {
