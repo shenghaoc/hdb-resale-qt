@@ -36,6 +36,15 @@ Item {
         { name: "reset", w: 1100, h: 760, settle: 1200,
           setup: () => Resales.resetFilters(),
           expect: () => selected(false) || filters("All towns", "All flat types") || count(6) },
+        { name: "price-invalid", w: 1100, h: 760, settle: 1200,
+          setup: () => { Resales.setMinimumPrice(600000); Resales.setMaximumPrice(300000) },
+          expect: () => selected(false) || (win.filterBar.priceInvalid ? "" : "price range not invalid") || count(0) },
+        { name: "compact-filters-open", w: 640, h: 600, settle: 1200, tab: 0,
+          setup: () => { Resales.setTown("ANG MO KIO"); win.filterBar.expanded = true },
+          expect: () => compact(true) || tab(0) || (win.filterBar.showFields ? "" : "filters not shown") || filters("ANG MO KIO", "All flat types") },
+        { name: "compact-filters-active", w: 640, h: 600, settle: 1200, tab: 0,
+          setup: () => { Resales.setTown("ANG MO KIO"); Resales.setFlatType("3 ROOM") },
+          expect: () => compact(true) || (win.filterBar.showFields ? "filters shown" : "") || filters("ANG MO KIO", "3 ROOM") },
         { name: "selected", w: 1100, h: 760, settle: 2200,
           setup: () => Resales.selectAddressAt(0),
           expect: () => selected(true) || compact(false) || count(6) },
@@ -110,7 +119,7 @@ Item {
                 // Restore the baseline before applying anything and verify it took effect.
                 for (const p of gate.popups) if (p.visible) p.close()
                 win.font.pointSize = gate.baseFont
-                Resales.resetFilters()
+                Resales.resetFilters(); win.filterBar.expanded = false
                 gate.enter("restore"); break
             case "restore":
                 if (gate.popups.some(p => p.visible) || Math.abs(win.font.pointSize - gate.baseFont) > 0.01) {

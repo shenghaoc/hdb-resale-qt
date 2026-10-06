@@ -30,15 +30,21 @@ ApplicationWindow {
     property alias mapView: map
     property alias resultView: transactionsList
     property alias detailsView: detailsScroll
-    property alias filterGrid: filters
+    property alias filterBar: filterBar
+    readonly property bool filtersActive: filterBar.activeCount > 0
+    readonly property var townPicker: filterBar.townPicker
+    readonly property var typePicker: filterBar.typePicker
+    readonly property var minimumPicker: filterBar.minimumPicker
+    readonly property var pricePicker: filterBar.pricePicker
+    readonly property var recencyPicker: filterBar.recencyPicker
     property alias viewTabs: viewTabs
     property alias commands: commands
     property alias aboutPopup: aboutDialog
     property alias settingsPopup: settingsDialog
     property alias dataPopup: dataDialog
     property alias grabRoot: shellRoot
-    property alias townControl: townPicker
-    property alias typeControl: typePicker
+    readonly property var townControl: townPicker
+    readonly property var typeControl: typePicker
     readonly property bool modalOpen: aboutDialog.visible || settingsDialog.visible || dataDialog.visible
     FontMetrics { id: textMetrics; font: window.font }
     Settings {
@@ -71,7 +77,7 @@ ApplicationWindow {
         id: commands
         targetWindow: window; targetMap: map
         onResetRequested: Resales.resetFilters()
-        onFiltersRequested: Qt.callLater(() => townPicker.forceActiveFocus(Qt.ShortcutFocusReason))
+        onFiltersRequested: { filterBar.expanded = true; Qt.callLater(() => townPicker.forceActiveFocus(Qt.ShortcutFocusReason)) }
         onMapRequested: window.focusMap()
         onResultsRequested: window.focusResults()
         onSelectedRequested: {
@@ -208,80 +214,7 @@ ApplicationWindow {
         id: shell
         anchors.fill: parent
         spacing: 0
-        ToolBar {
-            id: filterBar
-            Layout.fillWidth: true
-            leftPadding: theme.m; rightPadding: theme.m; topPadding: theme.s; bottomPadding: theme.s
-            contentItem: ColumnLayout {
-                spacing: theme.s
-        GridLayout {
-            id: filters
-            Layout.fillWidth: true
-            columns: width >= 78 * window.unit ? 6 : width >= 44 * window.unit ? 3 : 2
-            columnSpacing: 12; rowSpacing: 6
-            ColumnLayout {
-                Layout.fillWidth: true
-                spacing: 2
-                Label { text: qsTr("Town"); Layout.fillWidth: true; wrapMode: Text.WordWrap }
-                ComboBox {
-                    id: townPicker; Layout.fillWidth: true
-                    model: JSON.parse(Resales.townsJson); currentIndex: Resales.townIndex
-                    onActivated: Resales.setTown(currentText); Accessible.name: "Town filter"
-                }
-            }
-            ColumnLayout {
-                Layout.fillWidth: true
-                spacing: 2
-                Label { text: qsTr("Flat type"); Layout.fillWidth: true; wrapMode: Text.WordWrap }
-                ComboBox {
-                    id: typePicker; Layout.fillWidth: true
-                    model: JSON.parse(Resales.flatTypesJson); currentIndex: Resales.flatTypeIndex
-                    onActivated: Resales.setFlatType(currentText); Accessible.name: "Flat type filter"
-                }
-            }
-            ColumnLayout {
-                Layout.fillWidth: true
-                spacing: 2
-                Label { text: qsTr("Minimum price (S$)"); Layout.fillWidth: true; wrapMode: Text.WordWrap }
-                SpinBox {
-                    id: minimumPicker; Layout.fillWidth: true; from: 0; to: Resales.maximumAvailablePrice; stepSize: 50000
-                    value: Resales.minimumPrice; editable: true
-                    onValueModified: Resales.setMinimumPrice(value); Accessible.name: "Minimum resale price"
-                }
-            }
-            ColumnLayout {
-                Layout.fillWidth: true
-                spacing: 2
-                Label { text: qsTr("Maximum price (S$)"); Layout.fillWidth: true; wrapMode: Text.WordWrap }
-                SpinBox {
-                    id: pricePicker; Layout.fillWidth: true; from: 0; to: Resales.maximumAvailablePrice; stepSize: 50000
-                    value: Resales.maximumPrice; editable: true
-                    onValueModified: Resales.setMaximumPrice(value); Accessible.name: "Maximum resale price"
-                }
-            }
-            ColumnLayout {
-                Layout.fillWidth: true
-                spacing: 2
-                Label { text: qsTr("Registration window"); Layout.fillWidth: true; wrapMode: Text.WordWrap }
-                ComboBox {
-                    id: recencyPicker; Layout.fillWidth: true; model: ["All months", "Latest 12 months", "Latest 24 months"]
-                    currentIndex: Resales.recencyMonths === 12 ? 1 : Resales.recencyMonths === 24 ? 2 : 0
-                    onActivated: Resales.setRecencyMonths(currentIndex === 1 ? 12 : currentIndex === 2 ? 24 : 0)
-                    Accessible.name: "Registration month window"
-                }
-            }
-            Button { action: commands.reset; Layout.alignment: Qt.AlignBottom; Accessible.name: qsTr("Reset all filters") }
-        }
-        Label { visible: Resales.minimumPrice > Resales.maximumPrice; text: qsTr("Minimum exceeds maximum. Adjust either bound to show results."); Layout.fillWidth: true; wrapMode: Text.WordWrap }
-        Flickable {
-            id: diagnosticScroll; contentWidth: width; contentHeight: diagnosticText.implicitHeight
-            ScrollBar.vertical: ScrollBar {}
-            visible: Resales.importDiagnostics.length > 0
-            Layout.fillWidth: true; Layout.preferredHeight: 60; Layout.maximumHeight: 60; clip: true
-            Label { id: diagnosticText; width: diagnosticScroll.width; text: Resales.importDiagnostics; wrapMode: Text.WordWrap }
-        }
-            }
-        }
+        FilterBar { id: filterBar; Layout.fillWidth: true }
         Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; color: theme.separator }
         TabBar {
             id: viewTabs; visible: window.compact; Layout.fillWidth: true

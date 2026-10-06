@@ -38,6 +38,8 @@ Item {
     readonly property color separator: Qt.rgba(sample.palette.windowText.r, sample.palette.windowText.g, sample.palette.windowText.b, 0.2)
     readonly property color accent: sample.palette.highlight
     readonly property color accentText: sample.palette.highlightedText
+    // Warning text must stay legible on the chrome colour in light and dark appearances.
+    readonly property color warning: sample.palette.window.hslLightness > 0.5 ? "#8a3200" : "#ffb070"
     // Floating map overlays: mostly opaque window colour with a hairline edge.
     readonly property color overlay: Qt.rgba(sample.palette.window.r, sample.palette.window.g, sample.palette.window.b, 0.94)
 }

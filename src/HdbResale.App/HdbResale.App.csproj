@@ -55,6 +55,8 @@
     <None Include="Main.qml"/>
     <None Include="Theme.qml"/>
     <None Include="Section.qml"/>
+    <None Include="FilterBar.qml"/>
+    <None Include="FilterField.qml"/>
     <None Include="MapOverlay.qml"/>
     <None Include="DesktopActions.qml"/>
     <None Include="MacMenuBar.qml"/>

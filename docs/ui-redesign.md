@@ -95,6 +95,32 @@ Boundaries may move after each visual review; PR 5 requires adding structured
 properties to the C# model (today details are preformatted strings), which is
 presentation-only and keeps matching and corpus semantics unchanged.
 
+## Filter layer (PR 3)
+
+Arrangements compared in the real application (1100 × 760, synthetic basemap):
+
+| Arrangement | Filter height | Map width | Verdict |
+| --- | --- | --- | --- |
+| A. PR 2 toolbar grid, captions above, 2 rows | ≈ 110 px | 610 px (55 %) | Rows wrap unpredictably; Reset stranded; min/max as two separate fields |
+| B. One wrapping row, price as a single min–max group, Reset fixed at the right | ≈ 62 px | 610 px (55 %) | **Chosen** |
+| C. Left filter sidebar (prototype, discarded) | full height | 393 px (36 %) | Starves the map; five short controls leave most of the sidebar empty |
+
+Decisions and why:
+
+* Filters stay on the canvas as a toolbar (KDE HIG: toolbar above the content area;
+  PR #1's Windows commanding guidance: frequent filters stay visible). The map keeps
+  the most area.
+* Compact windows show one summary row — a `Filters (n)` disclosure with a text
+  summary and Reset — and expand the *same* controls in place, so keyboard order,
+  accessible names and the C# state are unchanged and nothing is removed
+  (progressive disclosure; at 640 × 600 the map keeps its height instead of ~160 px
+  of filters).
+* Reset is enabled only when a filter differs from the default and shows how many
+  differ; the Reset shortcut follows the same state.
+* A minimum above the maximum is shown next to the price control with a warning
+  glyph, bold text and a ≥ 7:1 colour, so it never relies on colour alone.
+* No filtering semantics changed: the same `Resales.set*` calls and defaults.
+
 ## Skills and references actually applied
 
 No Qt, QML, product-design, accessibility or screenshot-audit skill is installed in

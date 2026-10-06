@@ -27,7 +27,7 @@ Item {
     property alias settings: settingsAction
     property alias quit: quitAction
     readonly property bool available: !targetWindow.modalOpen
-    Action { id: resetAction; text: qsTr("Reset filters"); shortcut: "Ctrl+Shift+R"; enabled: root.available; onTriggered: resetRequested() }
+    Action { id: resetAction; text: qsTr("Reset filters"); shortcut: "Ctrl+Shift+R"; enabled: root.available && targetWindow.filtersActive; onTriggered: resetRequested() }
     Action { id: filtersAction; text: qsTr("Focus filters"); shortcut: "Ctrl+L"; enabled: root.available; onTriggered: filtersRequested() }
     Action { id: mapAction; text: qsTr("Focus map"); shortcut: "Ctrl+1"; enabled: root.available; onTriggered: mapRequested() }
     Action { id: resultsAction; text: qsTr("Focus addresses"); shortcut: "Ctrl+2"; enabled: root.available; onTriggered: resultsRequested() }

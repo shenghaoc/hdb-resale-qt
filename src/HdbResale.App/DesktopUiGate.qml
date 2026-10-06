@@ -39,7 +39,8 @@ Item {
                 targetWindow.width = 640; targetWindow.height = 600
                 advance("loaded"); break
             case 1:
-                if (!targetWindow.compact || targetWindow.filterGrid.columns !== 2 || map.width < 600 || map.height < 120) return
+                // Compact filters collapse to one summary row so the map keeps most of the window.
+                if (!targetWindow.compact || targetWindow.filterBar.expanded || targetWindow.filterBar.showFields || map.width < 600 || map.height < 250) return
                 // Explicit visual-inspection mode holds a real native window.
                 // It emits no pass; close it through the normal Quit command.
                 if (Resales.desktopUiFault === "inspect-narrow") { stop(); return }
@@ -59,6 +60,7 @@ Item {
                 if (Resales.selectedMapKey === "") return
                 if (targetWindow.detailsView.height < 3 * targetWindow.unit) { fail("compact details clipped"); return }
                 selectedKey = Resales.selectedMapKey
+                targetWindow.filterBar.expanded = true   // controls must be reachable to be edited
                 commands.map.trigger(); savedZoom = map.zoomLevel
                 Qt.callLater(() => key(Qt.Key_Plus, Qt.ShiftModifier)); advance("selected"); break
             case 5:
@@ -82,12 +84,12 @@ Item {
                 commands.reset.trigger(); targetWindow.width = 1000; targetWindow.height = 700
                 advance("focus-restored"); break
             case 9:
-                if (Resales.visibleCount !== 6 || priceControl.value !== 1000000 || targetWindow.filterGrid.columns !== 3) return
+                if (Resales.visibleCount !== 6 || priceControl.value !== 1000000 || !targetWindow.filterBar.showFields) return
                 targetWindow.font.pointSize = originalFont * 1.5
                 targetWindow.width = 640; targetWindow.height = 760
                 advance("reset-medium"); break
             case 10:
-                if (targetWindow.filterGrid.columns !== 2 || map.height < 120 || townControl.width < 150 || priceControl.width < 150) return
+                if (!targetWindow.compact || map.height < 120 || townControl.width < 150 || priceControl.width < 150) return
                 commands.settings.trigger(); advance("system-font-scaling"); break
             case 11:
                 if (!targetWindow.settingsPopup.opened) return
