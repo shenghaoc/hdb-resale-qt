@@ -59,10 +59,20 @@ Item {
             }
             const recent=JSON.parse(Resales.recentTransactionsJson)
             if(recent.length!==e.selected.recent.length||Resales.selectedHeading!==e.selected.address||Resales.selectedMetrics.indexOf(e.selected.latest)<0)return false
-            for(let i=0;i<recent.length;i++)if(recent[i].id!==e.selected.recent[i].id||recent[i].details.indexOf(e.selected.recent[i].lease)<0)return false
-            if(Resales.selectedLease.indexOf("at "+e.latest)<0||Resales.selectedLease.indexOf("Not an eligibility assessment")<0)return false
-            const leaseRange=leaseMonths(e.leaseMinimum)+(e.leaseMinimum===e.leaseMaximum?"":"–"+leaseMonths(e.leaseMaximum))
-            if(Resales.selectedLease.indexOf("approximately "+leaseRange+".")<0)return false
+            for(let i=0;i<recent.length;i++) {
+                const observed=e.selected.recent[i]
+                if(recent[i].id!==observed.id||recent[i].details.indexOf(observed.lease || "unavailable")<0)return false
+                const source=e.sourceEvidence ? e.sourceEvidence[observed.id] : null
+                if(source && (recent[i].details.indexOf("Source "+source.identity+", row "+source.row+"; SHA-256 "+source.sha256)<0))return false
+                if(source && /^[0-9]{1,3}$/.test(observed.lease || "") && recent[i].details.indexOf("reported in whole years")<0)return false
+            }
+            if(e.leaseMinimum===null) {
+                if(Resales.selectedLease.indexOf("Derived remaining lease unavailable")<0)return false
+            } else {
+                if(Resales.selectedLease.indexOf("at "+e.latest)<0||Resales.selectedLease.indexOf("Not an eligibility assessment")<0)return false
+                const leaseRange=leaseMonths(e.leaseMinimum)+(e.leaseMinimum===e.leaseMaximum?"":"–"+leaseMonths(e.leaseMaximum))
+                if(Resales.selectedLease.indexOf("approximately "+leaseRange+".")<0)return false
+            }
             if(phase===11) {
                 let marker=null;for(const item of targetMap.mapItems)if(item.mapKey===e.key)marker=item
                 if(!marker||!marker.selected||marker.transactionCount!==e.selected.count||marker.address!==e.selected.address)return false

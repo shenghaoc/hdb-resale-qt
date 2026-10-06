@@ -44,6 +44,8 @@ dotnet run --project src/HdbResale.App -c Release --no-build
 
 Set `HDB_DATA_DIRECTORY` to an offline prepared input directory to explore another supported corpus. [Source preparation and provenance](data/README.md) and the [full-corpus coverage study](docs/address-coverage/README.md) document the pinned inputs; no automatic acquisition runs at startup.
 
+[Ordered offline source imports](docs/ordered-source-import.md) preserve different source headers, source-qualified row identity and raw provenance through the existing buyer views. HDB's integer remaining-lease years are interpreted without inventing missing observations or extra precision.
+
 ## Data interpretation
 
 - Source months are registration months. Floor area is approximate and may include purchased recess areas or improvements.
