@@ -33,6 +33,9 @@ ApplicationWindow {
     readonly property var trendLoader: details.trendLoader
     readonly property var detailsPane: details
     property alias mapStatusCard: mapStatusCard
+    readonly property var zoomInButton: zoomIn
+    readonly property var zoomOutButton: zoomOutButton
+    readonly property var recenterButton: recenter
     property alias filterBar: filterBar
     readonly property bool filtersActive: filterBar.activeCount > 0
     readonly property var townPicker: filterBar.townPicker
@@ -407,7 +410,7 @@ ApplicationWindow {
                             Accessible.name: qsTr("Zoom in"); ToolTip.visible: hovered; ToolTip.text: qsTr("Zoom in (+)"); ToolTip.delay: 600
                         }
                         ToolButton {
-                            action: commands.zoomOut; display: AbstractButton.IconOnly
+                            id: zoomOutButton; action: commands.zoomOut; display: AbstractButton.IconOnly
                             icon.width: 18; icon.height: 18; icon.name: "zoom-out"; icon.source: "qrc:/hdb-resale/icons/zoom-out.svg"
                             width: theme.target; height: theme.target
                             Accessible.name: qsTr("Zoom out"); ToolTip.visible: hovered; ToolTip.text: qsTr("Zoom out (−)"); ToolTip.delay: 600
@@ -514,7 +517,7 @@ ApplicationWindow {
                         }
                     }
                     Accessible.name: "Matching address results"
-                    ScrollBar.vertical: ScrollBar {}
+                    ScrollBar.vertical: ScrollBar { Accessible.name: qsTr("Address list scroll bar") }
                     Keys.onDownPressed: (event) => {
                         if (count > 0) { currentIndex = Math.min(count - 1, currentIndex + 1); positionViewAtIndex(currentIndex, ListView.Contain) }
                         event.accepted = true

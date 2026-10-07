@@ -19,7 +19,8 @@ ColumnLayout {
     RowLayout { id: slot; spacing: theme.xs; Layout.fillWidth: true }
     Label {
         visible: root.problem !== ""
-        text: "⚠ " + root.problem
+        text: root.problem !== "" ? "⚠ " + root.problem : ""
+        Accessible.ignored: root.problem === ""      // no empty alert node while there is no problem
         font.pointSize: Window.window.font.pointSize * theme.captionScale; font.bold: true
         color: theme.warning; wrapMode: Text.WordWrap; Layout.fillWidth: true
         Accessible.role: Accessible.AlertMessage

@@ -187,6 +187,26 @@ plugin, C# grouping/membership and all selection/FIFO rules are unchanged.
 * **No animation** was added (Qt reports no reduced-motion preference to apps).
 * Attribution stays an opaque light panel with the unchanged text, logo and links.
 
+## Accessibility and input audit (PR 7)
+
+What was verified, and by which method (kept separate on purpose):
+
+| Check | Method | Result |
+| --- | --- | --- |
+| Exposed names/roles/states | `tools/a11y_tree.py`: launch with Qt's accessibility bridge on, walk the live **AT-SPI** tree, assert named controls, no empty alerts, after an AT-SPI default action selects an address | Passes. Found and fixed: four empty `alert` nodes, duplicated row child labels, unnamed scroll bars |
+| Tab order, no focus trap, visible focus targets | Desktop gate step `tab-order` (QtTest key events, **in-app, not physical input**) | Filters → map → zoom controls → list → details → cycles; Shift+Tab leaves the list for the map area |
+| Contrast | Computed WCAG ratios for derived colours (secondary text ≥ 5.3:1, warning ≥ 7:1 in light and dark); selected-row text kept on a light tint rather than the 2.4:1 saturated highlight | Computed, not instrument-measured |
+| State without colour | Selection: bar + tint; keyboard focus: separate ring; markers: size, count, halo; invalid price: ⚠ text | By inspection of captures |
+| Large text, scaling | Gate scenarios at 1.4× font and `QT_SCALE_FACTOR=1.5` | Layout holds; compact + large-text relies on the filter disclosure |
+| Pointer targets | Map controls ≥ 28 px; list rows ≥ 3 lines tall | By construction |
+| Motion | Nothing animated except the busy indicator and an instant hover scale; Qt exposes no reduced-motion hint to apps | Documented limit |
+
+Not verified: spoken output and focus announcements in a real screen reader (Orca/NVDA/
+VoiceOver/Narrator), physical keyboard and pointer input, Windows UI Automation, macOS
+accessibility. The style-provided inner text of combo/spin boxes has no name of its own
+(its owning control is named); that is Qt Quick Controls behaviour and was not overridden
+to avoid re-implementing native controls.
+
 ## Skills and references actually applied
 
 No Qt, QML, product-design, accessibility or screenshot-audit skill is installed in

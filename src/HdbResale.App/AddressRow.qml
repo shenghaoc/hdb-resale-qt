@@ -50,25 +50,30 @@ ItemDelegate {
     contentItem: GridLayout {
         columns: 2; columnSpacing: theme.m; rowSpacing: 2
         Label {
+            Accessible.ignored: true
             id: addressText
             text: root.displayAddress; font.bold: true; wrapMode: Text.WordWrap
             Layout.fillWidth: true; Layout.minimumWidth: 0
         }
         Label {
+            Accessible.ignored: true
             text: root.priceLabel; font.bold: true; Layout.alignment: Qt.AlignRight | Qt.AlignTop
             font.features: { "tnum": 1 }
         }
         Label {
+            Accessible.ignored: true
             text: root.townName + " · " + root.flatTypes
             color: theme.secondaryText; elide: Text.ElideRight; Layout.fillWidth: true; Layout.columnSpan: 2
             font.pointSize: root.font.pointSize * theme.captionScale
         }
         Label {
+            Accessible.ignored: true
             text: root.salesText + " · latest " + root.latestMonth
             color: theme.secondaryText; font.pointSize: root.font.pointSize * theme.captionScale
             Layout.fillWidth: true; elide: Text.ElideRight
         }
         Label {
+            Accessible.ignored: true
             text: root.locationShort
             font.pointSize: root.font.pointSize * theme.captionScale
             font.italic: root.locationState !== "approximate"

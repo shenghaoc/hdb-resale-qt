@@ -55,6 +55,8 @@ ColumnLayout {
         leftPadding: theme.m; rightPadding: theme.m; topPadding: theme.m; bottomPadding: theme.m
         contentWidth: availableWidth; activeFocusOnTab: true
         Accessible.name: "Selected address details and recent transactions"
+        ScrollBar.vertical: ScrollBar { Accessible.name: qsTr("Details scroll bar") }
+        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff   // content always fits the width
         Keys.onEscapePressed: root.backRequested()
         Column {
             width: detailsScroll.availableWidth

@@ -104,10 +104,41 @@ Item {
             case 12:
                 if (targetWindow.compact || map.width < 300 || list.width < 250 || list.count !== 6) return
                 if (Resales.selectedMapKey !== selectedKey) { fail("resize lost selection"); return }
+                // Keyboard traversal (in-app key delivery, not physical input): Tab visits the
+                // controls in visual order, every stop is visible, and focus cycles (no trap).
+                targetWindow.filterBar.expanded = true
+                townControl.forceActiveFocus(Qt.TabFocusReason)
+                {
+                    const stops = [["town", townControl], ["flat type", typeControl], ["minimum", minimumControl], ["maximum", priceControl],
+                                   ["registered", recencyControl], ["map", map], ["zoom in", targetWindow.zoomInButton], ["zoom out", targetWindow.zoomOutButton], ["home", targetWindow.recenterButton], ["list", list], ["back", targetWindow.detailsPane.backButton],
+                                   ["details", targetWindow.detailsView]]
+                    const owner = (item) => { for (let p = item; p; p = p.parent) for (const [name, control] of stops) if (p === control) return name; return "" }
+                    const seen = [owner(targetWindow.activeFocusItem)]
+                    for (let i = 0; i < 40; i++) {
+                        key(Qt.Key_Tab)
+                        const item = targetWindow.activeFocusItem
+                        if (item && (!item.visible || item.width <= 0 || item.height <= 0)) { fail("focus on an invisible item"); return }
+                        const name = owner(item)
+                        if (name !== "" && name !== seen[seen.length - 1]) seen.push(name)
+                        if (name === "town" && seen.length > 3) break
+                    }
+                    const order = seen.join(">")
+                    console.log("HDB_DESKTOP_TABS " + order)
+                    const expected = ["town", "flat type", "minimum", "maximum", "registered", "map", "list", "back", "details"]
+                    let at = -1
+                    for (const stop of expected) { const next = seen.indexOf(stop, at + 1); if (next < 0) { fail("tab order missing or out of order at " + stop + ": " + order); return } at = next }
+                    if (seen.filter(n => n === "town").length < 2) { fail("focus did not cycle: " + order); return }
+                    list.forceActiveFocus(Qt.TabFocusReason)
+                    key(Qt.Key_Backtab)
+                    if (!["map", "zoom in", "zoom out", "home"].includes(owner(targetWindow.activeFocusItem))) { fail("Shift+Tab from the list did not leave it for the map area"); return }
+                }
+                advance("tab-order"); break
+            case 13:
+                targetWindow.filterBar.expanded = false
                 // "All addresses" returns from the details to the broader results.
                 targetWindow.detailsPane.backRequested()
                 advance("back-navigation"); break
-            case 13:
+            case 14:
                 if (Resales.selectedMapKey !== "" || !list.activeFocus || list.count !== 6) return
                 if (Resales.desktopUiFault === "skip-pass") { fail("negative control"); return }
                 console.log("HDB_DESKTOP_PASS"); stop(); Qt.quit(); break

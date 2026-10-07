@@ -119,7 +119,7 @@ ToolBar {
             id: diagnosticScroll
             visible: Resales.importDiagnostics.length > 0
             contentWidth: width; contentHeight: diagnosticText.implicitHeight
-            ScrollBar.vertical: ScrollBar {}
+            ScrollBar.vertical: ScrollBar { Accessible.name: qsTr("Import diagnostics scroll bar") }
             Layout.fillWidth: true; Layout.preferredHeight: 60; Layout.maximumHeight: 60; clip: true
             Label { id: diagnosticText; width: diagnosticScroll.width; text: Resales.importDiagnostics; wrapMode: Text.WordWrap }
         }
