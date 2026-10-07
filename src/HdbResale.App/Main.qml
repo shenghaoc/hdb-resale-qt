@@ -32,6 +32,7 @@ ApplicationWindow {
     readonly property var detailsView: details.scroll
     readonly property var trendLoader: details.trendLoader
     readonly property var detailsPane: details
+    property alias mapStatusCard: mapStatusCard
     property alias filterBar: filterBar
     readonly property bool filtersActive: filterBar.activeCount > 0
     readonly property var townPicker: filterBar.townPicker
@@ -302,22 +303,38 @@ ApplicationWindow {
                             coordinate: QtPositioning.coordinate(latitude, longitude)
                             anchorPoint.x: pin.width / 2
                             anchorPoint.y: pin.height / 2
-                            sourceItem: Rectangle {
+                            sourceItem: Item {
                                 id: pin
                                 // Groups count addresses; individual pins count transactions.
                                 // C# owns grouping and exact viewport membership.
-                                width: (selected ? 28 : cluster ? 38 : 24) * Math.max(1, window.unit / 16)
-                                height: width; radius: width / 2
-                                color: selected ? "#e35b19" : cluster ? "#17574f" : "#1565c0"
-                                border.color: "white"; border.width: 2
+                                readonly property real diameter: (selected ? 30 : cluster ? 38 : 24) * Math.max(1, window.unit / 16)
+                                width: diameter; height: diameter
                                 Accessible.role: Accessible.Button
-                                Accessible.name: address + ", " + priceLabel
+                                Accessible.name: cluster ? qsTr("Group of %1 addresses. Activate to zoom in.").arg(addressCount) : address + ", " + priceLabel
                                 Accessible.onPressAction: pin.activateMarker()
-                                Text { anchors.centerIn: parent; text: cluster ? addressCount : transactionCount > 1 ? transactionCount : ""; color: "white"; font.pointSize: window.font.pointSize * 0.85 }
+                                // Selected marker: a wide halo in the accent colour, then the usual ring.
+                                Rectangle {
+                                    visible: selected; anchors.centerIn: parent
+                                    width: pin.diameter + 14; height: width; radius: width / 2
+                                    color: Qt.rgba(0.85, 0.31, 0, 0.28); border.width: 2; border.color: theme.markerSelected
+                                }
+                                Rectangle {
+                                    anchors.fill: parent; radius: width / 2
+                                    color: selected ? theme.markerSelected : cluster ? theme.markerGroup : theme.markerSingle
+                                    border.width: 2; border.color: "white"
+                                    scale: hover.hovered ? 1.12 : 1
+                                    Rectangle { anchors.fill: parent; anchors.margins: -2; radius: width / 2; color: "transparent"; border.width: 1; border.color: theme.markerEdge; z: -1 }
+                                    Text {
+                                        anchors.centerIn: parent; color: "white"; font.bold: true
+                                        text: cluster ? addressCount : transactionCount > 1 ? transactionCount : ""
+                                        font.pointSize: window.font.pointSize * 0.85
+                                    }
+                                }
                                 function activateMarker() {
                                     if (cluster) { map.center = QtPositioning.coordinate(latitude, longitude); map.zoomLevel = Math.min(19, map.zoomLevel + 2) }
                                     else Resales.selectAddress(mapKey)
                                 }
+                                HoverHandler { id: hover; cursorShape: Qt.PointingHandCursor }
                                 TapHandler { onTapped: pin.activateMarker() }
                             }
                         }
@@ -378,16 +395,30 @@ ApplicationWindow {
                 }
                 MapOverlay {
                     anchors.top: parent.top; anchors.right: parent.right; anchors.margins: theme.s
-                    implicitWidth: mapControls.implicitWidth + theme.xs * 2
-                    implicitHeight: mapControls.implicitHeight + theme.xs * 2
-                    width: implicitWidth; height: implicitHeight
+                    width: theme.target + theme.xs * 2; height: mapControls.implicitHeight + theme.xs * 2
                     Column {
                         id: mapControls
                         anchors.centerIn: parent
                         spacing: 0
-                        ToolButton { id: zoomIn; action: commands.zoomIn; text: "+"; width: theme.target; height: theme.target; Accessible.name: qsTr("Zoom in"); ToolTip.visible: hovered; ToolTip.text: qsTr("Zoom in"); ToolTip.delay: 600 }
-                        ToolButton { action: commands.zoomOut; text: "−"; width: theme.target; height: theme.target; Accessible.name: qsTr("Zoom out"); ToolTip.visible: hovered; ToolTip.text: qsTr("Zoom out"); ToolTip.delay: 600 }
-                        ToolButton { id: recenter; action: commands.recenter; text: qsTr("SG"); width: theme.target; height: theme.target; Accessible.name: qsTr("Return to Singapore view"); ToolTip.visible: hovered; ToolTip.text: qsTr("Return to Singapore"); ToolTip.delay: 600 }
+                        ToolButton {
+                            id: zoomIn; action: commands.zoomIn; display: AbstractButton.IconOnly
+                            icon.width: 18; icon.height: 18; icon.name: "zoom-in"; icon.source: "qrc:/hdb-resale/icons/zoom-in.svg"
+                            width: theme.target; height: theme.target
+                            Accessible.name: qsTr("Zoom in"); ToolTip.visible: hovered; ToolTip.text: qsTr("Zoom in (+)"); ToolTip.delay: 600
+                        }
+                        ToolButton {
+                            action: commands.zoomOut; display: AbstractButton.IconOnly
+                            icon.width: 18; icon.height: 18; icon.name: "zoom-out"; icon.source: "qrc:/hdb-resale/icons/zoom-out.svg"
+                            width: theme.target; height: theme.target
+                            Accessible.name: qsTr("Zoom out"); ToolTip.visible: hovered; ToolTip.text: qsTr("Zoom out (−)"); ToolTip.delay: 600
+                        }
+                        Rectangle { width: theme.target; height: 1; color: theme.separator }
+                        ToolButton {
+                            id: recenter; action: commands.recenter; display: AbstractButton.IconOnly
+                            icon.width: 18; icon.height: 18; icon.name: "go-home"; icon.source: "qrc:/hdb-resale/icons/go-home.svg"
+                            width: theme.target; height: theme.target
+                            Accessible.name: qsTr("Return to Singapore view"); ToolTip.visible: hovered; ToolTip.text: qsTr("Return to Singapore (Home)"); ToolTip.delay: 600
+                        }
                     }
                 }
                 MapOverlay {
@@ -402,13 +433,13 @@ ApplicationWindow {
                 }
                 MapOverlay {
                     anchors.left: parent.left; anchors.bottom: attributionPanel.top; anchors.margins: theme.s
-                    width: Math.min(30 * window.unit, parent.width - theme.s * 2)
+                    width: Math.min(Math.max(summaryLine.implicitWidth, legendLine.implicitWidth) + theme.m * 2, 30 * window.unit, parent.width - theme.s * 2)
                     height: summaryColumn.implicitHeight + theme.s * 2
                     Column {
                         id: summaryColumn
                         x: theme.m; y: theme.s; width: parent.width - theme.m * 2
-                        Label { width: parent.width; wrapMode: Text.WordWrap; text: Resales.presentationSummary; font.pointSize: window.font.pointSize * theme.captionScale }
-                        Label { width: parent.width; wrapMode: Text.WordWrap; text: qsTr("Groups count addresses · pins count matching sales"); font.pointSize: window.font.pointSize * theme.captionScale; color: theme.secondaryText }
+                        Label { id: summaryLine; width: parent.width; wrapMode: Text.WordWrap; text: Resales.presentationSummary; font.pointSize: window.font.pointSize * theme.captionScale }
+                        Label { id: legendLine; width: parent.width; wrapMode: Text.WordWrap; text: qsTr("Groups count addresses · pins count matching sales"); font.pointSize: window.font.pointSize * theme.captionScale; color: theme.secondaryText }
                     }
                 }
                 Label {
@@ -424,13 +455,25 @@ ApplicationWindow {
                     border.width: 2; border.color: window.palette.highlight
                     visible: map.activeFocus; Accessible.ignored: true
                 }
-                Label {
+                MapOverlay {
+                    id: mapStatusCard
+                    property string forced: ""     // visual-QA only: "loading" | "error"
+                    readonly property bool errorShown: forced === "error" || map.error !== Map.NoError
+                    visible: forced !== "" || !map.mapReady || map.error !== Map.NoError
                     anchors.centerIn: parent
-                    visible: !map.mapReady || map.error !== Map.NoError
-                    text: map.error !== Map.NoError ? qsTr("Map error: %1").arg(map.errorString) : qsTr("Preparing map…")
-                    width: Math.min(implicitWidth, parent.width - 24); wrapMode: Text.WordWrap
-                    padding: theme.m; color: window.palette.windowText
-                    background: MapOverlay {}
+                    width: Math.min(24 * window.unit, parent.width - theme.l * 2)
+                    height: statusColumn.implicitHeight + theme.m * 2
+                    Accessible.role: Accessible.StaticText
+                    Accessible.name: mapStatusCard.errorShown ? qsTr("Map unavailable. Addresses, filters and details still work.") : qsTr("Preparing map")
+                    Column {
+                        id: statusColumn
+                        x: theme.m; y: theme.m; width: parent.width - theme.m * 2; spacing: theme.s
+                        BusyIndicator { visible: !mapStatusCard.errorShown; running: visible; anchors.horizontalCenter: parent.horizontalCenter; width: theme.target; height: theme.target }
+                        Label { width: parent.width; horizontalAlignment: Text.AlignHCenter; wrapMode: Text.WordWrap; font.bold: true
+                            text: mapStatusCard.errorShown ? qsTr("Map unavailable") : qsTr("Preparing map…") }
+                        Label { visible: mapStatusCard.errorShown; width: parent.width; horizontalAlignment: Text.AlignHCenter; wrapMode: Text.WordWrap; color: theme.secondaryText
+                            text: qsTr("Addresses, filters and details still work. %1").arg(map.errorString) }
+                    }
                 }
             }
             Pane {

@@ -46,6 +46,14 @@ Item {
     readonly property color accentBar: dark ? sample.palette.highlight : Qt.darker(sample.palette.highlight, 1.7)
     // Warning text must stay legible on the chrome colour in light and dark appearances.
     readonly property color warning: sample.palette.window.hslLightness > 0.5 ? "#8a3200" : "#ffb070"
+    // Map markers sit on OneMap's *light* tiles regardless of the application appearance, so
+    // they are fixed product colours, each with a white ring plus a dark outer edge (≥ 3:1
+    // against the pale land and the blue water), and are told apart by size and count as
+    // well as colour.
+    readonly property color markerSingle: "#1565c0"
+    readonly property color markerGroup: "#17574f"
+    readonly property color markerSelected: "#d94f00"
+    readonly property color markerEdge: "#102a43"
     // Floating map overlays: mostly opaque window colour with a hairline edge.
     readonly property color overlay: Qt.rgba(sample.palette.window.r, sample.palette.window.g, sample.palette.window.b, 0.94)
 }

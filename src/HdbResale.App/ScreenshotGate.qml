@@ -59,6 +59,10 @@ Item {
         { name: "selected-unmatched", stressOnly: true, w: 1100, h: 760, settle: 1800,
           setup: () => Resales.selectAddress("CLEMENTI|105|TEST CLEMENTI STREET 6"),
           expect: () => selected(true) || (Resales.selectedMapKey === "CLEMENTI|105|TEST CLEMENTI STREET 6" ? "" : "wrong selection") },
+        { name: "map-loading-card", w: 1100, h: 760, settle: 900, setup: () => { win.mapStatusCard.forced = "loading" },
+          expect: () => (win.mapStatusCard.visible ? "" : "status card hidden") },
+        { name: "map-unavailable-card", w: 1100, h: 760, settle: 900, setup: () => { win.mapStatusCard.forced = "error" },
+          expect: () => (win.mapStatusCard.visible ? "" : "status card hidden") },
         { name: "selected-compact-details", w: 700, h: 700, settle: 1500, tab: 1,
           setup: () => Resales.selectAddressAt(0),
           expect: () => selected(true) || compact(true) || tab(1) },
@@ -133,7 +137,7 @@ Item {
                 // Restore the baseline before applying anything and verify it took effect.
                 for (const p of gate.popups) if (p.visible) p.close()
                 win.font.pointSize = gate.baseFont
-                Resales.resetFilters(); win.filterBar.expanded = false
+                Resales.resetFilters(); win.filterBar.expanded = false; win.mapStatusCard.forced = ""
                 gate.enter("restore"); break
             case "restore":
                 if (gate.popups.some(p => p.visible) || Math.abs(win.font.pointSize - gate.baseFont) > 0.01) {

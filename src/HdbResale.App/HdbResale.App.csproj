@@ -50,6 +50,9 @@
 
   <ItemGroup>
     <QtResource Include="assets/onemap-logo.png" Alias="hdb-resale/onemap-logo.png" />
+    <QtResource Include="assets/icons/zoom-in.svg" Alias="hdb-resale/icons/zoom-in.svg" />
+    <QtResource Include="assets/icons/zoom-out.svg" Alias="hdb-resale/icons/zoom-out.svg" />
+    <QtResource Include="assets/icons/go-home.svg" Alias="hdb-resale/icons/go-home.svg" />
     <QtResource Include="qtquickcontrols2.conf" Alias="qtquickcontrols2.conf" />
     <QtResource Include="styles/windows/qtquickcontrols2.conf" Alias="+windows/qtquickcontrols2.conf" />
     <None Include="Main.qml"/>

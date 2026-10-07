@@ -165,6 +165,28 @@ Decisions and why:
 * The trend chart itself is unchanged here; it is a single dot for single-sale
   addresses, which is accurate but sparse (PR 6/7 may revisit presentation).
 
+## Map layer (PR 6)
+
+Presentation only: OneMap direct tiles, logo/attribution wording, zoom limits, the map
+plugin, C# grouping/membership and all selection/FIFO rules are unchanged.
+
+* **Markers.** Fixed product colours (they sit on OneMap's light tiles whatever the app
+  appearance) now live in `Theme`. Each has a white ring plus a dark outer edge so it
+  reads on pale land and blue water. Groups are larger and show an address count; pins
+  show a sale count when more than one; the selected address gets a wider accent halo
+  and a larger body — so state never relies on colour alone. Pointer hover enlarges a
+  marker and shows a hand cursor. Group markers are announced as “Group of N
+  addresses. Activate to zoom in.”
+* **Controls.** A single vertical cluster with ≥ 28 px targets, icons first from the
+  platform icon theme (`zoom-in`, `zoom-out`, `go-home`) with three small original SVGs
+  as the fallback where no theme exists, tooltips including the keyboard shortcut. The
+  cryptic text buttons (“+”, “−”, “SG”) are gone.
+* **Overlays.** One surface treatment; the in-view summary sizes to its content.
+* **Loading / unavailable.** A card with a busy indicator while the map prepares; if the
+  map fails it says so and that addresses, filters and details still work.
+* **No animation** was added (Qt reports no reduced-motion preference to apps).
+* Attribution stays an opaque light panel with the unchanged text, logo and links.
+
 ## Skills and references actually applied
 
 No Qt, QML, product-design, accessibility or screenshot-audit skill is installed in
