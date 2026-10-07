@@ -67,6 +67,7 @@ internal static class Program
             WriteReport(args[2], StartupStudy.Run(args[1]));
             return;
         }
+        using var tileStatus = NativeTileStatus.Capture();
         Qml.LoadFromRootModule("Main");
         Qml.WaitForExit();
         if (Environment.GetEnvironmentVariable("HDB_PACKAGE_SMOKE") == "1") Console.WriteLine("HDB_PACKAGE_EXIT");

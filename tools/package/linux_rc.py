@@ -75,6 +75,11 @@ def validate_output(output: Path, root: Path = ROOT) -> None:
         raise ValueError("Output already exists; choose a new directory (nothing is deleted)")
 
 
+def copy_app_native_libraries(build, app):
+    # Managed P/Invoke dependencies are absent from the executable's ELF NEEDED list.
+    copy(build / "libhdb_tile_status.so", app / "libhdb_tile_status.so")
+
+
 def configure_app_local_icu(package: Path) -> None:
     """Configure only staged files; never alter host libraries or globalization."""
     runtime_dir = package / "dotnet/shared/Microsoft.NETCore.App/10.0.12"
@@ -117,6 +122,7 @@ def stage(args: argparse.Namespace) -> Path:
     for name in ("HdbResale.App", "HdbResale.App.deps.json", "HdbResale.App.runtimeconfig.json",
                  "qt_bridge_metadata.json"):
         copy(build / name, app / name)
+    copy_app_native_libraries(build, app)
     for source in sorted(build.glob("*.dll")):
         copy(source, app / source.name)
     # Application QML is normally compiled into the host; retaining its deployed

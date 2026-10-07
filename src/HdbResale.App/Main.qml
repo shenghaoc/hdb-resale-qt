@@ -41,12 +41,36 @@ ApplicationWindow {
         interval: 50; repeat: true; running: Resales.apiGate.length > 0
         property int ticks: 0
         property bool configured: false
+        function contrast(text, surface) {
+            function luminance(c) {
+                function linear(v) { return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4) }
+                return 0.2126 * linear(c.r) + 0.7152 * linear(c.g) + 0.0722 * linear(c.b)
+            }
+            const a = luminance(text), b = luminance(surface)
+            return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05)
+        }
+        function legible(text, surface) { return text.a === 1 && surface.a === 1 && contrast(text, surface) >= 4.5 }
         onTriggered: {
             ticks++
+            const row = transactionsList.currentItem
             if (Resales.apiGate === "unreachable" && Resales.canRetry && !Resales.busy
                     && Resales.addressCount === 0 && !Resales.detailReady) {
                 console.log("HDB_API_UNREACHABLE_PASS " + Resales.statusText)
                 stop(); packageExit.start()
+            } else if (Resales.apiGate === "tile-failure" && Resales.addressCount > 0) {
+                // Every tile answers 503: the notice must appear without a map error, while the
+                // API's addresses, selection and details stay usable and legible.
+                if (Resales.selectedMapKey === "") Resales.selectAddress(Resales.firstAddressKey)
+                else if (Resales.tileFailuresRepeated && tileFailureLabel.visible && map.error === Map.NoError
+                        && Resales.detailReady && transactionsList.count === Resales.addressCount
+                        && row && row.highlighted && !Qt.colorEqual(row.background.color, row.palette.base)
+                        && legible(row.contentItem.color, row.background.color)
+                        && legible(tileFailureLabel.color, tileFailureLabel.background.color)) {
+                    console.log("HDB_API_TILE_NOTICE_PASS selection-contrast="
+                        + contrast(row.contentItem.color, row.background.color).toFixed(2)
+                        + " notice-contrast=" + contrast(tileFailureLabel.color, tileFailureLabel.background.color).toFixed(2))
+                    stop(); packageExit.start()
+                }
             } else if (Resales.apiGate === "high-zoom" && Resales.addressCount > 0 && map.mapReady) {
                 if (!configured) {
                     configured = true
@@ -73,12 +97,13 @@ ApplicationWindow {
         }
     }
     Timer { id: packageExit; interval: 350; onTriggered: Qt.quit() }
+    Timer { interval: 250; repeat: true; running: true; onTriggered: Resales.refreshTileStatus() }
     Plugin {
         id: osm
         name: "osm"
         // OneMap's public 256px XYZ basemap. Qt appends %z/%x/%y.png to this prefix.
         // Search/geocoding evidence and authentication are separate and unchanged.
-        PluginParameter { name: "osm.mapping.custom.host"; value: "https://www.onemap.gov.sg/maps/tiles/Default/" }
+        PluginParameter { name: "osm.mapping.custom.host"; value: Resales.basemapTileEndpoint }
         PluginParameter { name: "osm.mapping.custom.datacopyright"; value: "Singapore Land Authority" }
         PluginParameter { name: "osm.mapping.custom.mapcopyright"; value: "OneMap" }
         PluginParameter { name: "osm.useragent"; value: "HdbResaleExplorer/0.1.0 (independent resale research)" }
@@ -310,6 +335,17 @@ ApplicationWindow {
                     background: Rectangle { color: window.palette.window }
                 }
                 Label {
+                    id: tileFailureLabel
+                    visible: Resales.tileFailuresRepeated
+                    anchors.left: parent.left; anchors.right: parent.right
+                    anchors.top: zoomLabel.bottom; anchors.margins: 8
+                    text: "Some map tiles failed to load. Address results and details are not affected."
+                    Accessible.name: text
+                    color: palette.windowText; font.pixelSize: 12
+                    wrapMode: Text.WordWrap; padding: 6
+                    background: Rectangle { color: window.palette.window }
+                }
+                Label {
                     id: mapErrorLabel; color: palette.windowText
                     anchors.centerIn: parent
                     visible: map.error !== Map.NoError
@@ -354,6 +390,7 @@ ApplicationWindow {
                     Keys.onEnterPressed: Resales.selectAddressAt(currentIndex)
                     Keys.onSpacePressed: Resales.selectAddressAt(currentIndex)
                     delegate: ItemDelegate {
+                        id: addressDelegate
                         required property int index
                         required property string addressKey
                         required property string address
@@ -367,10 +404,15 @@ ApplicationWindow {
                         highlighted: Resales.selectedMapKey === addressKey
                         Accessible.name: text + ". " + locationLabel
                         onClicked: { transactionsList.forceActiveFocus(); Resales.selectAddress(addressKey) }
-                        Rectangle {
-                            anchors.fill: parent; color: "transparent"; radius: 3
-                            border.width: 2; border.color: "#1565c0"
-                            visible: transactionsList.activeFocus && transactionsList.currentIndex === index
+                        contentItem: Label {
+                            text: addressDelegate.text; font: addressDelegate.font
+                            color: addressDelegate.highlighted ? addressDelegate.palette.highlightedText : addressDelegate.palette.text
+                        }
+                        background: Rectangle {
+                            color: addressDelegate.highlighted ? addressDelegate.palette.highlight : addressDelegate.palette.base
+                            radius: 3
+                            border.width: transactionsList.activeFocus && transactionsList.currentIndex === index ? 2 : 0
+                            border.color: addressDelegate.highlighted ? addressDelegate.palette.highlightedText : addressDelegate.palette.highlight
                         }
                     }
                 }

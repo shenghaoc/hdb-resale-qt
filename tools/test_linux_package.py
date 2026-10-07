@@ -16,6 +16,17 @@ launch = load("launch_check")
 
 
 class PackageChecks(unittest.TestCase):
+    def test_tile_monitor_is_required_and_staged_byte_exactly(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            build = root / "build"
+            build.mkdir()
+            with self.assertRaises(FileNotFoundError):
+                package.copy_app_native_libraries(build, root / "app")
+            (build / "libhdb_tile_status.so").write_bytes(b"native-monitor")
+            package.copy_app_native_libraries(build, root / "app")
+            self.assertEqual((root / "app/libhdb_tile_status.so").read_bytes(), b"native-monitor")
+
     def test_app_local_icu_uses_only_relative_internal_links(self):
         import json
         with tempfile.TemporaryDirectory() as temp:
