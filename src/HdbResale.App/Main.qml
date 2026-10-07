@@ -491,6 +491,7 @@ ApplicationWindow {
                 spacing: 0
                 Section {
                     Layout.fillWidth: true
+                    visible: !(window.compact && Resales.selectedMapKey !== "")
                     title: qsTr("Addresses")
                     caption: Resales.addressCount.toLocaleString()
                 }
@@ -500,6 +501,9 @@ ApplicationWindow {
                     Layout.fillWidth: true; Layout.fillHeight: true
                     Item {
                         id: listArea
+                        // Compact windows are master/detail: a selection gives the whole pane to its
+                        // details; "‹ All addresses" (or Esc) brings the list back. Nothing is removed.
+                        visible: !(window.compact && Resales.selectedMapKey !== "")
                         SplitView.fillHeight: true
                         SplitView.minimumHeight: 7 * window.unit
                 ListView {
@@ -545,7 +549,8 @@ ApplicationWindow {
                         id: details
                         theme: window.theme; basePoint: window.font.pointSize
                         visible: Resales.selectedMapKey !== ""
-                        SplitView.preferredHeight: paneSplit.height * (window.compact ? 0.74 : 0.6)
+                        SplitView.fillHeight: window.compact
+                        SplitView.preferredHeight: paneSplit.height * 0.6
                         SplitView.minimumHeight: 12 * window.unit
                         onBackRequested: { Resales.selectAddress(""); transactionsList.forceActiveFocus(Qt.ShortcutFocusReason) }
                     }

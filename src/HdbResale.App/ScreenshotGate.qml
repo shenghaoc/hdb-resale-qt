@@ -19,6 +19,10 @@ Item {
     readonly property var win: targetWindow
     readonly property var popups: [win.settingsPopup, win.aboutPopup, win.dataPopup]
     Button { id: styleProbe; visible: false }
+    // Native captures need the compositor to present frames; otherwise it would hand back a stale image.
+    property int frames: 0
+    property int framesAtApply: 0
+    Connections { target: targetWindow; function onFrameSwapped() { frames++ } }
     // "stress" runs against the synthetic UI fixture (tools/make_ui_fixture.py): many results,
     // long addresses, ambiguous/unmatched rows. Never a data or coverage claim.
     readonly property bool stress: Resales.screenshotProfile === "stress"
@@ -150,6 +154,7 @@ Item {
                 if (s.setup) s.setup()
                 if (s.dialog) win.showDialog(gate.dialogFor(s.dialog))
                 win.raise(); win.requestActivate()
+                gate.framesAtApply = gate.frames
                 gate.enter("wait"); break
             case "wait": {
                 const want = s.fontScale || 1
@@ -160,6 +165,7 @@ Item {
                 else if (!s.dialog && gate.popups.some(p => p.visible)) reason = "unexpected dialog"
                 // `spectacle -a` captures the *active* window: never capture unless it is this one.
                 else if (nativeMode && !win.active) { win.requestActivate(); reason = "window not active; a native capture would show another window" }
+                else if (nativeMode && gate.frames - gate.framesAtApply < 3) reason = "no frames presented since the state was applied (display not presenting)"
                 else if (!win.mapView.mapReady) reason = "map not ready"
                 else if (Resales.screenshotColorScheme !== "" && Qt.styleHints.colorScheme !== (Resales.screenshotColorScheme === "dark" ? Qt.Dark : Qt.Light)) reason = "requested colour scheme not applied (" + Qt.styleHints.colorScheme + ")"
                 else reason = s.expect ? s.expect() : ""

@@ -207,6 +207,30 @@ accessibility. The style-provided inner text of combo/spin boxes has no name of 
 (its owning control is named); that is Qt Quick Controls behaviour and was not overridden
 to avoid re-implementing native controls.
 
+## Platform-native review (no PR 8)
+
+A platform PR was planned. After the first seven layers it is **not justified**: every
+presentation decision derives from the active Qt style, palette, font and icon theme, and
+the platform-specific parts already live in PR #1 (macOS role menu, Windows Fluent
+resource selector, Linux defaults). Adding per-platform branches without a host to run
+them on would be unverified code.
+
+| Host | What the design relies on | Verified here? |
+| --- | --- | --- |
+| KDE Plasma (Wayland, Qt 6.12, Fusion-derived style) | Platform palette/fonts, Breeze `zoom-in`/`zoom-out`/`go-home` icons from the icon theme, menu bar, standard dialog buttons | **Yes** — native window captures, native gates, AT-SPI tree. Not Plasma theme switching or display scaling |
+| GNOME | Same portable Qt controls (no libadwaita); icons from the icon theme; adaptive master/detail follows the GNOME HIG adaptive-sidebar idea | No |
+| macOS | PR #1's app/Settings/Quit roles; no freedesktop icon theme, so the three bundled fallback SVGs are used | No |
+| Windows | PR #1's Fluent selector; fallback SVGs; palette tokens come from whatever the style provides | No |
+
+Review points for whoever runs those hosts: toolbar/disclosure appearance in the Fluent
+and macOS styles, fallback icon legibility, `Theme.secondaryText` contrast against the
+host's `window` colour (re-run the ratio check), list-row selection tint against the
+host's `base`, and menu/shortcut placement. HarmonyOS PC remains a reference only.
+
+Harness note: native captures and the desktop gate need a display that presents frames.
+Both now say so (“no frames presented …”) instead of reporting a layout failure or
+capturing a stale image.
+
 ## Skills and references actually applied
 
 No Qt, QML, product-design, accessibility or screenshot-audit skill is installed in

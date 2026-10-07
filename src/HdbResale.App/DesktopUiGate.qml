@@ -20,6 +20,9 @@ Item {
     property real originalRowHeight
     property string selectedKey
     TestEvent { id: events }
+    property int frames: 0
+    property int framesAtChange: 0
+    Connections { target: targetWindow; function onFrameSwapped() { frames++ } }
     function key(value, modifiers = Qt.NoModifier) { events.keyClick(value, modifiers, -1) }
     function advance(name) { console.log("HDB_DESKTOP_STEP " + name); phase++; started = Date.now() }
     function fail(message) { console.error("HDB_DESKTOP_FAIL " + message + " phase=" + phase); timer.stop(); Qt.quit() }
@@ -53,11 +56,17 @@ Item {
                 if (!list.activeFocus || !list.visible || targetWindow.viewTabs.currentIndex !== 1) return
                 probedRow = list.itemAtIndex(0)
                 if (!probedRow) return
-                originalRowText = probedRow.displayAddress; originalRowHeight = probedRow.height
+                originalRowText = probedRow.displayAddress; originalRowHeight = probedRow.height; framesAtChange = frames
                 probedRow.displayAddress = "A long address that must remain readable in a narrow native window. ".repeat(4)
                 advance("long-label"); break
             case 3:
-                if (probedRow.height <= originalRowHeight || probedRow.width > list.width || probedRow.addressLabel.truncated) { fail("long row clipped"); return }
+                // Layout of the substituted text is applied on the next frame; allow it a bounded time.
+                if (probedRow.height <= originalRowHeight) {
+                    // Layout needs a presented frame. Without one the check cannot say anything about the row.
+                    if (frames === framesAtChange && Date.now() - started > 2500) { fail("window delivered no frames after the change (display not presenting); layout unverifiable"); return }
+                    if (Date.now() - started < 2500) return
+                }
+                if (probedRow.height <= originalRowHeight || probedRow.width > list.width || probedRow.addressLabel.truncated) { fail("long row clipped h=" + probedRow.height + " orig=" + originalRowHeight + " w=" + probedRow.width + " list=" + list.width + " truncated=" + probedRow.addressLabel.truncated + " listVisible=" + list.visible + " lines=" + probedRow.addressLabel.lineCount + " textlen=" + probedRow.addressLabel.text.length + " labelW=" + probedRow.addressLabel.width + " labelH=" + probedRow.addressLabel.height + " rowImplicit=" + probedRow.implicitHeight + " dispAddr=" + probedRow.displayAddress.length + " frames=" + frames); return }
                 probedRow.displayAddress = originalRowText
                 key(Qt.Key_Down); key(Qt.Key_Return); advance("list-keyboard"); break
             case 4:
