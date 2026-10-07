@@ -165,7 +165,7 @@ Item {
                 else if (!s.dialog && gate.popups.some(p => p.visible)) reason = "unexpected dialog"
                 // `spectacle -a` captures the *active* window: never capture unless it is this one.
                 else if (nativeMode && !win.active) { win.requestActivate(); reason = "window not active; a native capture would show another window" }
-                else if (nativeMode && gate.frames - gate.framesAtApply < 3) reason = "no frames presented since the state was applied (display not presenting)"
+                else if (nativeMode && gate.frames === gate.framesAtApply) { win.update(); reason = "no frames presented since the state was applied (display not presenting)" }
                 else if (!win.mapView.mapReady) reason = "map not ready"
                 else if (Resales.screenshotColorScheme !== "" && Qt.styleHints.colorScheme !== (Resales.screenshotColorScheme === "dark" ? Qt.Dark : Qt.Light)) reason = "requested colour scheme not applied (" + Qt.styleHints.colorScheme + ")"
                 else reason = s.expect ? s.expect() : ""
