@@ -76,6 +76,7 @@ def main():
     parser.add_argument('--data-directory', type=Path, help='HDB_DATA_DIRECTORY for a synthetic or local import')
     parser.add_argument('--color-scheme', choices=['light', 'dark'], help='process-local Qt.styleHints.colorScheme request')
     parser.add_argument('--profile', choices=['sample', 'stress'], default='sample', help='stress = synthetic UI fixture via --data-directory')
+    parser.add_argument('--only', help='comma-separated scenario names to run')
     parser.add_argument('--label', default='')
     parser.add_argument('--timeout', type=int, default=0, help='seconds; default 240 (600 for the stress profile)')
     args = parser.parse_args()
@@ -96,6 +97,8 @@ def main():
     env['HDB_SCREENSHOT_PROFILE'] = args.profile
     if args.profile == 'stress' and not (args.data_directory and (args.data_directory / 'SYNTHETIC_UI_FIXTURE.txt').exists()):
         sys.exit('--profile stress requires --data-directory pointing at tools/make_ui_fixture.py output')
+    if args.only:
+        env['HDB_SCREENSHOT_ONLY'] = args.only
     if args.color_scheme:
         env['HDB_SCREENSHOT_COLOR_SCHEME'] = args.color_scheme
     if args.scale:

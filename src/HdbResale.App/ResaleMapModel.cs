@@ -145,6 +145,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
         : $"Local import · {import.Accepted.Count:N0} registrations · source coverage and omissions in Data and import";
     public string ScreenshotColorScheme => Environment.GetEnvironmentVariable("HDB_SCREENSHOT_COLOR_SCHEME") ?? "";
     public string ScreenshotProfile => Environment.GetEnvironmentVariable("HDB_SCREENSHOT_PROFILE") ?? "sample";
+    public string ScreenshotOnly => Environment.GetEnvironmentVariable("HDB_SCREENSHOT_ONLY") ?? "";
     public string ScreenshotMode => Environment.GetEnvironmentVariable("HDB_SCREENSHOT_MODE") ?? "grab";
     public string ScreenshotDirectory => Environment.GetEnvironmentVariable("HDB_SCREENSHOT_DIR") ?? "";
     public bool DesktopUiGate => Environment.GetEnvironmentVariable("HDB_DESKTOP_UI_GATE") == "1";

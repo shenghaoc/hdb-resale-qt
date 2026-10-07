@@ -80,7 +80,9 @@ Item {
           expect: () => selected(true) }
     ]
 
-    readonly property var scenarios: allScenarios.filter(s => !s.stressOnly || stress)
+    // HDB_SCREENSHOT_ONLY=a,b limits the run (e.g. scaled runs on a screen too small for every size).
+    readonly property var only: Resales.screenshotOnly === "" ? [] : Resales.screenshotOnly.split(",")
+    readonly property var scenarios: allScenarios.filter(s => (!s.stressOnly || stress) && (only.length === 0 || only.includes(s.name)))
     function selected(want) { return (Resales.selectedMapKey !== "") === want ? "" : "selection is " + (want ? "empty" : "set") }
     function compact(want) { return win.compact === want ? "" : "compact is " + win.compact }
     function countAll() { return stress ? (win.resultView.count > 100 ? "" : "stress list too short: " + win.resultView.count) : count(6) }
