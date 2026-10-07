@@ -10,6 +10,8 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <ProjectReference Include="../../src/HdbResale.Domain/HdbResale.Domain.csproj" />
+    <Compile Include="../../src/HdbResale.App/BasemapConfiguration.cs" Link="BasemapConfiguration.cs" />
+    <Compile Include="../../src/HdbResale.App/TileFailureStatus.cs" Link="TileFailureStatus.cs" />
     <Compile Include="../../src/HdbResale.App/MapRowDiff.cs" Link="MapRowDiff.cs" />
     <Compile Include="../../src/HdbResale.App/MapPresentation.cs" Link="MapPresentation.cs" />
     <Compile Include="../../src/HdbResale.App/UiMutationQueue.cs" Link="UiMutationQueue.cs" />

@@ -7,7 +7,7 @@ version = 1
 
 [[annotations]]
 path = [
-  "src/**/*.cs", "src/**/*.qml", "src/**/*.csproj", "src/**/Info.plist",
+  "src/**/*.cs", "src/**/*.cpp", "src/**/*.h", "src/**/*.cmake", "src/**/*.qml", "src/**/*.csproj", "src/**/Info.plist",
   "tests/**/*.cs", "tests/**/*.csproj",
   "tools/**/*.py", "tools/**/*.sh", ".github/workflows/*.yml",
   "Directory.Build.props", "HdbResale.slnx", "global.json", ".gitignore"

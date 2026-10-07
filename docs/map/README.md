@@ -102,3 +102,58 @@ The logo therefore does not depend on a separate network image request when
 cached tiles are displayed. Both native gates require `Image.Ready`, and a Python
 test checks the exact PNG and local resource wiring. The linked text stays
 visible; no raster tiles are bundled.
+
+## Local tile-failure test
+
+Normal launches retain the OneMap Default URL, attribution, and
+`onemap-default-v1` cache. Only `HDB_TILE_TEST=1` enables the test-only endpoint
+override. Set both `HDB_TEST_TILE_ENDPOINT` to a loopback HTTP(S) URL prefix
+ending in `/` and `HDB_TEST_TILE_CACHE_DIRECTORY` to an absolute, separate fresh
+cache directory. Remote endpoints, URL credentials/query/fragment, and the
+production cache tree are rejected. Test variables are ignored without the
+explicit opt-in.
+
+A loopback test server can return HTTP 503 for every XYZ request to reproduce
+missing tiles in the normal native app without modifying system networking or
+reading warm production tiles. The endpoint hook affects tile requests only; the
+repeated-failure notice below is runtime behavior, and tile failures do not set
+the existing map error overlay. `tools/api_native_smoke.py --mode tile-failure`
+runs exactly this: the recorded Worker API (`tools/api_fixture_server.py`), a
+loopback tile server answering 503 to every request, and a fresh temporary cache.
+The harness clears inherited test variables, removes the cache afterwards, and
+fails unless at least two tiles were refused through all of Qt's attempts.
+
+### Repeated tile failures and selected-address contrast
+
+Address delegates use their palette's `highlight` / `highlightedText` pair for
+selection and `base` / `text` for other rows, with a palette-derived keyboard focus
+border.
+
+After two tile requests exhaust Qt's retries, a small map notice reads: “Some map
+tiles failed to load. Address results and details are not affected.” It remains
+for that launch and does not change `Map.error`, the API data, filters, selection,
+details, or marker behavior. A new launch starts without the notice. This is a
+historical failure notice; it does not claim that every currently visible tile is
+unavailable or that later requests cannot recover.
+
+The `tile-failure` gate passes only when the notice is visible, `Map.error` is
+unset, every recorded address is listed, and the selected address's details have
+loaded. It also checks the actual colours of the selected delegate (highlighted,
+distinct from the base surface, at least 4.5:1) and of the notice (at least 4.5:1).
+
+Qt Location does not expose exhausted per-tile requests through `Map.error`.
+The small `Native/TileStatus.cmake` library uses the public Qt Core
+[`qInstallMessageHandler`](https://doc.qt.io/qt-6/qtlogging.html) API to count only
+the exhaustion warning emitted by the pinned Qt 6.12 tile request manager. It
+forwards diagnostics to any earlier handler, or formats them to stderr using
+`qFormatLogMessage`; it restores the earlier handler on normal teardown. The
+counter is atomic and polled on the QML/UI thread every 250 ms. No managed callback
+or native allocation crosses P/Invoke. If external logging rules suppress this
+warning, or a future Qt version changes its wording, this diagnostic-based notice
+cannot observe it; rerun the `tile-failure` gate after a Qt upgrade.
+
+Builds install the native helper beside the managed app. Linux packaging copies
+this explicit P/Invoke dependency before collecting its ELF dependencies. Native
+`ctest --test-dir src/HdbResale.App/obj/Release/net10.0/qt/native/build
+--output-on-failure` verifies classification, concurrent requests, diagnostic
+forwarding, idempotent installation, and restoration.

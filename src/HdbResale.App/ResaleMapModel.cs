@@ -134,7 +134,16 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
 
     // ---- Map -----------------------------------------------------------------------------------------
 
-    public string BasemapCacheDirectory => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "HdbResaleQt", "onemap-default-v1");
+    private readonly BasemapConfiguration basemap = BasemapConfiguration.FromEnvironment();
+    public string BasemapTileEndpoint => basemap.TileEndpoint;
+    public string BasemapCacheDirectory => basemap.CacheDirectory;
+    private readonly TileFailureStatus tileFailures = new();
+    public bool TileFailuresRepeated => tileFailures.RepeatedFailures;
+    public void RefreshTileStatus()
+    {
+        if (tileFailures.Observe(NativeTileStatus.ExhaustedRequests()))
+            Notify(nameof(TileFailuresRepeated));
+    }
     public int MappedCount => MapPoints.Count;
     public int PresentationCount => MapPoints.PresentationCount;
     public int InViewAddressCount => MapPoints.InViewCount;
