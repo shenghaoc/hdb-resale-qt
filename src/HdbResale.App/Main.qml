@@ -405,20 +405,20 @@ ApplicationWindow {
                         spacing: 0
                         ToolButton {
                             id: zoomIn; action: commands.zoomIn; display: AbstractButton.IconOnly
-                            icon.width: 18; icon.height: 18; icon.name: "zoom-in"; icon.source: "qrc:/hdb-resale/icons/zoom-in.svg"
+                            icon.width: 18; icon.height: 18; icon.color: enabled ? theme.text : Qt.alpha(theme.text, 0.45); icon.name: "zoom-in"; icon.source: "qrc:/hdb-resale/icons/zoom-in.svg"
                             width: theme.target; height: theme.target
                             Accessible.name: qsTr("Zoom in"); ToolTip.visible: hovered; ToolTip.text: qsTr("Zoom in (+)"); ToolTip.delay: 600
                         }
                         ToolButton {
                             id: zoomOutButton; action: commands.zoomOut; display: AbstractButton.IconOnly
-                            icon.width: 18; icon.height: 18; icon.name: "zoom-out"; icon.source: "qrc:/hdb-resale/icons/zoom-out.svg"
+                            icon.width: 18; icon.height: 18; icon.color: enabled ? theme.text : Qt.alpha(theme.text, 0.45); icon.name: "zoom-out"; icon.source: "qrc:/hdb-resale/icons/zoom-out.svg"
                             width: theme.target; height: theme.target
                             Accessible.name: qsTr("Zoom out"); ToolTip.visible: hovered; ToolTip.text: qsTr("Zoom out (−)"); ToolTip.delay: 600
                         }
                         Rectangle { width: theme.target; height: 1; color: theme.separator }
                         ToolButton {
                             id: recenter; action: commands.recenter; display: AbstractButton.IconOnly
-                            icon.width: 18; icon.height: 18; icon.name: "go-home"; icon.source: "qrc:/hdb-resale/icons/go-home.svg"
+                            icon.width: 18; icon.height: 18; icon.color: enabled ? theme.text : Qt.alpha(theme.text, 0.45); icon.name: "go-home"; icon.source: "qrc:/hdb-resale/icons/go-home.svg"
                             width: theme.target; height: theme.target
                             Accessible.name: qsTr("Return to Singapore view"); ToolTip.visible: hovered; ToolTip.text: qsTr("Return to Singapore (Home)"); ToolTip.delay: 600
                         }
