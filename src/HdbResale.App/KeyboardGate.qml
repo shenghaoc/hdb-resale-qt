@@ -13,8 +13,12 @@ Item {
     property int frames: 0
     property var remembered: ({})
     property int selectionSignals: 0
-    // A binding, like the details pane's label: it only sees what the model notifies.
-    readonly property string shownMetrics: Resales.selectedMetrics
+    // A binding, like the inspector's repeater: it only sees what the model notifies.
+    readonly property string shownInspector: Resales.selectedInspectorJson
+    function shownFact(label) {
+        for (const section of JSON.parse(shownInspector)) for (const fact of section.facts) if (fact.label === label) return fact.value
+        return ""
+    }
     TestEvent { id: events }
     Connections { target: gate.targetWindow; function onFrameSwapped() { gate.frames++ } }
     Connections { target: Resales; function onSelectedMapKeyChanged() { gate.selectionSignals++ } }
@@ -66,9 +70,13 @@ Item {
             }
             // Loading the details must not signal the selection again (it would re-announce it and move the list).
             if (selectionSignals !== 1) { fail("one selection signalled " + selectionSignals + " times"); return }
-            // The details' middle half of sales (recorded priceIqr 705750–880000) reaches the metrics.
-            if (shownMetrics.indexOf("Middle half of all sales S$705,750–S$880,000") < 0) {
-                fail("details missing from the shown metrics: " + JSON.stringify(shownMetrics)); return
+            // The details' middle half of sales (recorded priceIqr 705750–880000) reaches the inspector, whose four
+            // sections are laid out as fact rows.
+            if (shownFact("Middle half of all sales") !== "S$705,750–S$880,000") {
+                fail("details missing from the shown inspector: " + shownInspector); return
+            }
+            if (w.inspectorView.count !== 4 || !w.inspectorView.itemAt(0) || w.inspectorView.itemAt(0).factCount !== 6) {
+                fail("inspector sections " + w.inspectorView.count + " facts " + (w.inspectorView.itemAt(0) ? w.inspectorView.itemAt(0).factCount : "none")); return
             }
             selectionSignals = 0
             type("e")                                  // "bedok rese" still matches the selected 748B

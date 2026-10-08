@@ -54,6 +54,7 @@ ApplicationWindow {
     readonly property alias resultList: transactionsList
     readonly property alias emptyResultsView: emptyResults
     readonly property alias detailsView: detailsPane
+    readonly property alias inspectorView: inspectorSections
     readonly property alias viewSwitch: viewTabs
     readonly property alias mapView: map
     readonly property alias filtersView: filterBar
@@ -781,30 +782,59 @@ ApplicationWindow {
                                         readonly property string selectionKey: Resales.selectedMapKey
                                         // Defer until the new detail text and column layout have updated.
                                         onSelectionKeyChanged: Qt.callLater(resetPosition)
-                                        Column {
-                                            width: detailsScroll.availableWidth; spacing: 8
-                                            Label { width: parent.width; text: Resales.selectedMetrics; wrapMode: Text.WordWrap; font.pixelSize: 13 }
-                                            Label { id: leaseLabel; width: parent.width; text: Resales.selectedLease; wrapMode: Text.WordWrap; font.pixelSize: 12; color: palette.windowText }
-                                            Label { width: parent.width; text: Resales.detailStatus; visible: text.length > 0; wrapMode: Text.WordWrap; font.pixelSize: 12; font.italic: true }
-                                            Button { text: "Retry registrations"; visible: Resales.canRetryDetail; onClicked: Resales.retryDetail() }
+                                        ColumnLayout {
+                                            width: detailsScroll.availableWidth; spacing: theme.m
+                                            // The inspector: C#'s titled fact groups, then the registrations that need the details.
+                                            Repeater {
+                                                id: inspectorSections
+                                                model: JSON.parse(Resales.selectedInspectorJson)
+                                                delegate: InspectorSection {
+                                                    required property var modelData
+                                                    Layout.fillWidth: true
+                                                    title: modelData.title; note: modelData.note; facts: modelData.facts
+                                                }
+                                            }
+                                            Label {
+                                                text: Resales.detailStatus; visible: text.length > 0; wrapMode: Text.WordWrap
+                                                color: theme.secondaryText; Layout.fillWidth: true
+                                            }
+                                            Button { text: qsTr("Retry registrations"); visible: Resales.canRetryDetail; onClicked: Resales.retryDetail() }
                                             Loader {
-                                                id: trendLoader; width: parent.width
+                                                id: trendLoader; Layout.fillWidth: true
                                                 active: Resales.detailReady
                                                 sourceComponent: Component { BuyerTrendChart {} }
                                             }
-                                            Label { width: parent.width; text: "Latest registrations at this address (up to 20, every flat type)"; visible: Resales.detailReady; font.bold: true; wrapMode: Text.WordWrap }
-                                            Repeater {
-                                                model: JSON.parse(Resales.recentTransactionsJson)
-                                                delegate: Column {
-                                                    required property var modelData
-                                                    width: detailsScroll.availableWidth; spacing: 3
-                                                    Label { width: parent.width; text: modelData.heading; font.bold: true; wrapMode: Text.WordWrap; font.pixelSize: 12 }
-                                                    Label { width: parent.width; text: modelData.details; wrapMode: Text.WordWrap; font.pixelSize: 12 }
-                                                    Rectangle { width: parent.width; height: 1; color: "#e3e8eb" }
+                                            ColumnLayout {
+                                                id: registrations
+                                                visible: Resales.detailReady; Layout.fillWidth: true; spacing: theme.xs
+                                                Accessible.role: Accessible.Grouping; Accessible.name: qsTr("Latest registrations")
+                                                Label {
+                                                    text: qsTr("Latest registrations"); font.weight: Font.DemiBold; Accessible.role: Accessible.Heading
+                                                }
+                                                Label {
+                                                    text: qsTr("Up to 20, every flat type, as recorded at the source.")
+                                                    color: theme.secondaryText; font.pointSize: window.font.pointSize * theme.captionScale
+                                                    wrapMode: Text.WordWrap; Layout.fillWidth: true
+                                                }
+                                                Repeater {
+                                                    model: JSON.parse(Resales.recentTransactionsJson)
+                                                    delegate: ColumnLayout {
+                                                        required property var modelData
+                                                        Layout.fillWidth: true; spacing: 0
+                                                        Accessible.role: Accessible.StaticText; Accessible.name: modelData.heading + ". " + modelData.details
+                                                        Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; Layout.bottomMargin: theme.xs; color: theme.separator }
+                                                        Label {
+                                                            text: modelData.heading; font.weight: Font.DemiBold; font.features: { "tnum": 1 }
+                                                            wrapMode: Text.WordWrap; Layout.fillWidth: true; Accessible.ignored: true
+                                                        }
+                                                        Label {
+                                                            text: modelData.details; color: theme.secondaryText; font.features: { "tnum": 1 }
+                                                            font.pointSize: window.font.pointSize * theme.captionScale
+                                                            wrapMode: Text.WordWrap; Layout.fillWidth: true; Accessible.ignored: true
+                                                        }
+                                                    }
                                                 }
                                             }
-                                            Label { width: parent.width; text: "Location"; visible: Resales.selectedMapKey !== ""; font.bold: true }
-                                            Label { width: parent.width; text: Resales.selectedLocation; wrapMode: Text.WordWrap; font.pixelSize: 11 }
                                         }
                                     }
                                 }

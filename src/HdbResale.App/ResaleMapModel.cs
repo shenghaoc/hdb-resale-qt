@@ -144,7 +144,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     {
         if (SelectedMapKey != selectedBefore) { SelectionChanged(); return; }
         NotifyPresentation();
-        Notify(nameof(SelectedAddressIndex), nameof(SelectedMetrics));
+        Notify(nameof(SelectedAddressIndex), nameof(SelectedInspectorJson));
     }
 
     public int AddressCount => explorer?.Addresses.Count ?? 0;
@@ -208,13 +208,12 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     }
     private void NotifySelection()
     {
-        Notify(nameof(SelectedMapKey), nameof(SelectedAddressIndex), nameof(SelectedHeading), nameof(SelectedLease),
-            nameof(SelectedLocation));
+        Notify(nameof(SelectedMapKey), nameof(SelectedAddressIndex), nameof(SelectedHeading));
         NotifyDetail();
     }
     // A detail response leaves the selection as it was, so only what depends on the details changes (the metrics gain
     // the middle half of sales): the list keeps its scroll position and the selection is not announced again.
-    private void NotifyDetail() => Notify(nameof(SelectedMetrics), nameof(DetailStatus), nameof(DetailReady),
+    private void NotifyDetail() => Notify(nameof(SelectedInspectorJson), nameof(DetailStatus), nameof(DetailReady),
         nameof(CanRetryDetail), nameof(RecentTransactionsJson), nameof(TrendJson));
 
     public bool CanRetryDetail => details.CanRetry;
@@ -235,11 +234,9 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public double SelectedLatitude => Selected?.Coordinates.Lat ?? 1.3521;
     public double SelectedLongitude => Selected?.Coordinates.Lng ?? 103.8198;
     public string SelectedHeading => Selected?.Address ?? "Choose an address";
-    public string SelectedMetrics => Selected is null
-        ? "The list and map show the same addresses. Select one to see its registrations."
-        : BuyerPresentation.Metrics(Selected, FlatType, details.Detail, explorer!.LatestDatasetMonth);
-    public string SelectedLease => Selected is null ? "" : BuyerPresentation.Lease(Selected, DateTime.Now.Year);
-    public string SelectedLocation => Selected is null ? "" : BuyerPresentation.Location(Selected);
+    // Structured facts for the inspector; the details add the middle half of sales once they arrive.
+    public string SelectedInspectorJson => Selected is null ? "[]"
+        : BuyerPresentation.InspectorJson(BuyerPresentation.Inspector(Selected, FlatType, details.Detail, explorer!.LatestDatasetMonth, DateTime.Now.Year));
     public bool DetailReady => details.Detail is not null && details.Detail.Summary.AddressKey == SelectedMapKey;
     public string DetailStatus => Selected is null ? "" : details.Loading ? "Loading registrations…" : details.Error;
     public string TrendJson => System.Text.Json.JsonSerializer.Serialize(details.Trend);

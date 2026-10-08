@@ -2,9 +2,13 @@ import QtQuick
 import QtQuick.Controls
 import QtGraphs
 
+// The selected address's 24-month median chart, in the platform palette and font so dark mode and text scaling
+// flow through. C# computes the series; this only plots it.
 Column {
     id: root
-    spacing: 3
+    spacing: root.theme.xs
+    readonly property var theme: Window.window.theme
+    readonly property real captionSize: Window.window.font.pointSize * theme.captionScale
     readonly property var trend: JSON.parse(Resales.trendJson)
     property bool completed: false
     readonly property int pointCount: medianSeries.count
@@ -31,11 +35,15 @@ Column {
     }
     onTrendChanged: if(completed) refreshSeries()
     Component.onCompleted: { completed=true; refreshSeries() }
-    Label { text: "Monthly median price · every registration at this address"; font.bold: true; width: parent.width; wrapMode: Text.WordWrap }
+    Label {
+        text: qsTr("Monthly median price"); font.weight: Font.DemiBold; width: parent.width; wrapMode: Text.WordWrap
+        Accessible.role: Accessible.Heading
+    }
     Label {
         id: metadataLabel
-        width: parent.width; font.pixelSize: 11; color: palette.windowText; wrapMode: Text.WordWrap
-        text: trend.Start + "–" + trend.End + " · " + trend.Sales + " sales in " + trend.ObservedMonths + " observed months"
+        width: parent.width; font.pointSize: root.captionSize; color: root.theme.secondaryText; wrapMode: Text.WordWrap
+        font.features: { "tnum": 1 }
+        text: root.trend.Start + "–" + root.trend.End + " · " + root.trend.Sales + " sales in " + root.trend.ObservedMonths + " observed months"
     }
     GraphsView {
         id: graph
@@ -47,8 +55,8 @@ Column {
             colorScheme: GraphsTheme.ColorScheme.Automatic
             backgroundVisible: false
             plotAreaBackgroundVisible: false
-            axisYLabelFont.pixelSize: 10
-            axisXLabelFont.pixelSize: 10
+            axisYLabelFont.pointSize: root.captionSize
+            axisXLabelFont.pointSize: root.captionSize
             axisX.labelTextColor: root.palette.windowText
             axisY.labelTextColor: root.palette.windowText
             labelTextColor: root.palette.windowText
@@ -58,7 +66,7 @@ Column {
         axisY: ValueAxis {
             min: root.trend.MinimumY; max: root.trend.MaximumY
             tickInterval: (max-min)/4; labelDecimals: 0; subGridVisible: false
-            titleText: "S$000"; titleFont.pixelSize: 10
+            titleText: "S$000"; titleFont.pointSize: root.captionSize
         }
         LineSeries {
             id: medianSeries; color: root.palette.link; width: 2
@@ -71,13 +79,13 @@ Column {
     }
     Row {
         width: parent.width; visible: graph.visible
-        Label { width: root.width/2; text: root.trend.Start; font.pixelSize: 10 }
-        Label { width: root.width/2; text: root.trend.End; horizontalAlignment: Text.AlignRight; font.pixelSize: 10 }
+        Label { width: root.width/2; text: root.trend.Start; font.pointSize: root.captionSize; color: root.theme.secondaryText; font.features: { "tnum": 1 } }
+        Label { width: root.width/2; text: root.trend.End; horizontalAlignment: Text.AlignRight; font.pointSize: root.captionSize; color: root.theme.secondaryText; font.features: { "tnum": 1 } }
     }
     Label {
         id: cautionLabel
-        width: parent.width; wrapMode: Text.WordWrap; font.pixelSize: 11; color: palette.windowText
-        text: graph.visible ? "Gaps mean no sale that month; dots show observed monthly medians across every flat type."
-                            : "No registrations at this address in this 24-month display window."
+        width: parent.width; wrapMode: Text.WordWrap; font.pointSize: root.captionSize; color: root.theme.secondaryText
+        text: graph.visible ? qsTr("Every flat type. Gaps mean no sale that month; dots are observed monthly medians.")
+                            : qsTr("No registrations at this address in this 24-month window.")
     }
 }
