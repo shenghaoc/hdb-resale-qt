@@ -7,7 +7,13 @@ permissions:
   contents: read
 jobs:
   domain:
-    runs-on: ubuntu-latest
+    # Windows covers the shared C# domain and presentation code only. Physical Windows UI and packaging
+    # acceptance are pending; see docs/ui/native-acceptance.md.
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
@@ -15,4 +21,6 @@ jobs:
           dotnet-version: 10.0.401
       - run: dotnet build tests/HdbResale.Tests -c Release
       - run: dotnet test tests/HdbResale.Tests -c Release --no-build
-      - run: python3 -m unittest discover -s tools -p 'test_*.py' -v
+      # The offline tools' tests assume POSIX paths and symlinks.
+      - if: runner.os == 'Linux'
+        run: python3 -m unittest discover -s tools -p 'test_*.py' -v
