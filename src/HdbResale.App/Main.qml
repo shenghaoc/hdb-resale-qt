@@ -12,7 +12,6 @@ ApplicationWindow {
     minimumWidth: 640
     minimumHeight: 600
     title: "HDB Resale Explorer"
-    color: theme.chrome
 
     // One text height of the platform font: the unit for spacing and the compact breakpoint.
     readonly property real unit: textMetrics.height
@@ -146,7 +145,6 @@ ApplicationWindow {
     Item {
         id: shellRoot
         anchors.fill: parent
-        Rectangle { anchors.fill: parent; color: theme.chrome }
         ColumnLayout {
             anchors.fill: parent
             spacing: 0
@@ -358,7 +356,6 @@ ApplicationWindow {
                 Pane {
                     id: inspector
                     padding: 0
-                    background: Rectangle { color: theme.panel }
                     visible: !window.compact || viewTabs.currentIndex === 1
                     SplitView.fillWidth: window.compact
                     SplitView.minimumWidth: window.compact ? 0 : 22 * window.unit

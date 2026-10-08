@@ -30,11 +30,7 @@ Item {
         sample.palette.windowText.r * 0.7 + sample.palette.window.r * 0.3,
         sample.palette.windowText.g * 0.7 + sample.palette.window.g * 0.3,
         sample.palette.windowText.b * 0.7 + sample.palette.window.b * 0.3, 1))
-    readonly property color chrome: sample.palette.window
-    readonly property color panel: sample.palette.base
     readonly property color separator: Qt.rgba(sample.palette.windowText.r, sample.palette.windowText.g, sample.palette.windowText.b, 0.2)
-    // Warning text must stay legible on the chrome colour in light and dark appearances.
-    readonly property color warning: sample.palette.window.hslLightness > 0.5 ? "#8a3200" : "#ffb070"
     // Floating map overlays: mostly opaque window colour with a hairline edge.
     readonly property color overlay: Qt.rgba(sample.palette.window.r, sample.palette.window.g, sample.palette.window.b, 0.94)
 }
