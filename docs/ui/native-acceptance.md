@@ -33,7 +33,7 @@ fixtures (`tools/api_native_smoke.py --mode recorded`) and the production API.
 | F3 | Search (Stage 2) | Typing narrows the list and the map locally; ranking, abbreviations and postal codes behave as in PR #12; clearing restores the list without restoring a hidden selection. |
 | F4 | Selection sync | List, map marker and details show the same address; a selection hidden by a search or filter clears everywhere. |
 | F5 | Details | The inspector shows the address's figures, lease, chart and latest registrations; "Middle half of all sales" appears once the details arrive. |
-| F6 | Loading and errors | An unreachable API reports and offers Retry; a failed detail request offers Retry; tile failures show the notice without blocking the list. |
+| F6 | Loading and errors | An unreachable API reports and offers Retry (`--mode unreachable`); a failed detail request shows the error and offers Retry, reached with `python3 tools/api_fixture_server.py --fail-details 503` and `HDB_API_BASE_URL` pointing at it (the list loads, every selection fails); tile failures show the notice without blocking the list (`--mode tile-failure`). |
 | F7 | Scrolling | The list and details scroll by wheel, trackpad and keyboard; a mouse drag does not flick the list on desktop. |
 | F8 | Chart | The 24-month median chart renders with gaps for months without a sale, in the platform palette, in light and dark appearance. |
 | F9 | Compact layout | Narrowing below the breakpoint switches to Map/Addresses toggles; focus moves to the pane shown. |
@@ -52,6 +52,16 @@ fixtures (`tools/api_native_smoke.py --mode recorded`) and the production API.
 
 ### Linux KDE Plasma (Wayland)
 
+Prerequisite: the build must run as a native Wayland client. The official Qt 6.12
+`linux_gcc_64` install carries `plugins/platforms/libqwayland.so`, but the
+documented Linux setup verifies only the XCB plugin and the local RC package
+stages only XCB, so until the packaging milestone stages the Wayland plugin,
+this acceptance runs from the source build. Verify `ldd` resolves
+`libqwayland.so` as it does `libqxcb.so`, launch with `QT_QPA_PLATFORM=wayland`
+so a missing plugin fails loudly instead of falling back to XWayland, and
+confirm the window is a Wayland client (KWin's window information shows no X11
+window id). A run through XWayland does not satisfy any row below.
+
 - Qt's platform theme selects KDE's style and colour scheme; controls look like Breeze, not like macOS.
 - Ctrl+F focuses search; Ctrl+L focuses Filters; About is in the status bar.
 - Window resizing, including the compact breakpoint, works through the Plasma window frame; focus follows the pane shown.
@@ -65,6 +75,7 @@ fixtures (`tools/api_native_smoke.py --mode recorded`) and the production API.
 
 RPM and DEB installation and launch are accepted separately from the UI stages:
 
+- The package stages the Wayland and XCB platform plugins with their runtime dependencies, so a Plasma Wayland session runs it natively.
 - Install the package on a clean system (Fedora for RPM, Debian or Ubuntu for DEB).
 - Launch from the application menu and from the terminal; the Worker API loads; the chart renders (Qt Graphs and its Quick 3D runtime are bundled or depended on).
 - Uninstall leaves no application files behind.
