@@ -26,7 +26,8 @@ ApplicationWindow {
     function showAbout() { aboutDialog.open() }
     function showView(index) {
         if (compact) viewTabs.currentIndex = index
-        if (index === 1) transactionsList.forceActiveFocus(Qt.ShortcutFocusReason)
+        if (index === 1) (compact && Resales.selectedMapKey !== "" ? detailsBack : transactionsList).forceActiveFocus(Qt.ShortcutFocusReason)
+        else if (compact) map.forceActiveFocus(Qt.ShortcutFocusReason)
     }
     function showSelectedOnMap() {
         if (compact) viewTabs.currentIndex = 0
@@ -81,11 +82,13 @@ ApplicationWindow {
             Action { text: qsTr("Zoom"); onTriggered: window.toggleZoom() }
         }
     }
-    // When a compact selection hides the focused list, the details' back button takes the keyboard focus.
-    function keepFocusInCompactDetails() {
+    // When a compact view switch or selection hides the focused control, focus moves to the pane now shown.
+    function keepFocusVisible() {
         const item = activeFocusItem
-        if (compact && Resales.selectedMapKey !== "" && (!item || !item.visible || item === contentItem || item === contentItem.parent))
-            detailsBack.forceActiveFocus(Qt.OtherFocusReason)
+        if (item && item.visible && item !== contentItem && item !== contentItem.parent) return
+        if (compact && viewTabs.currentIndex === 0) map.forceActiveFocus(Qt.OtherFocusReason)
+        else if (compact && Resales.selectedMapKey !== "") detailsBack.forceActiveFocus(Qt.OtherFocusReason)
+        else transactionsList.forceActiveFocus(Qt.OtherFocusReason)
     }
 
     // WCAG relative luminance and contrast ratio, for text drawn on a palette colour.
@@ -227,7 +230,10 @@ ApplicationWindow {
                     property int currentIndex: 0
                     anchors.centerIn: parent
                     spacing: theme.xs
-                    onCurrentIndexChanged: (currentIndex === 1 ? addressesView : mapView).checked = true
+                    onCurrentIndexChanged: {
+                        (currentIndex === 1 ? addressesView : mapView).checked = true
+                        Qt.callLater(window.keepFocusVisible)
+                    }
                     ButtonGroup { id: views; onClicked: (button) => viewTabs.currentIndex = button === addressesView ? 1 : 0 }
                     Button { id: mapView; text: qsTr("Map"); checkable: true; checked: true; ButtonGroup.group: views }
                     Button { id: addressesView; text: qsTr("Addresses"); checkable: true; ButtonGroup.group: views }
@@ -403,7 +409,7 @@ ApplicationWindow {
                     }
                     // Compact windows keep the list on the other view; show loading and errors over the map.
                     Rectangle {
-                        visible: window.compact && (Resales.loading || Resales.canRetry)
+                        visible: window.compact && Resales.statusText.length > 0
                         anchors.centerIn: parent
                         width: Math.min(parent.width - theme.l * 2, 22 * window.unit)
                         height: compactLoadStatus.implicitHeight + theme.l * 2
@@ -451,7 +457,7 @@ ApplicationWindow {
                             visible: !(window.compact && Resales.selectedMapKey !== "")
                             title: qsTr("Addresses")
                             // No count until the addresses have loaded.
-                            caption: Resales.loading || Resales.canRetry ? "" : Resales.addressCount.toLocaleString(Qt.locale(), "f", 0)
+                            caption: Resales.statusText.length > 0 ? "" : Resales.addressCount.toLocaleString(Qt.locale(), "f", 0)
                         }
                         SplitView {
                             id: paneSplit
@@ -480,7 +486,7 @@ ApplicationWindow {
                                         }
                                         // A compact selection hides the list; keep the keyboard position by moving into the details.
                                         function onSelectedMapKeyChanged() {
-                                            if (window.compact && Resales.selectedMapKey !== "") Qt.callLater(window.keepFocusInCompactDetails)
+                                            if (window.compact && Resales.selectedMapKey !== "") Qt.callLater(window.keepFocusVisible)
                                         }
                                     }
                                     Accessible.name: "Matching address results"
@@ -531,7 +537,7 @@ ApplicationWindow {
                                 }
                                 }
                                 ColumnLayout {
-                                    visible: Resales.addressCount === 0 && !Resales.loading && !Resales.canRetry
+                                    visible: Resales.addressCount === 0 && Resales.statusText.length === 0
                                     anchors.centerIn: parent
                                     width: Math.min(parent.width - theme.l * 2, 26 * window.unit)
                                     spacing: theme.s
@@ -635,6 +641,7 @@ ApplicationWindow {
                     spacing: theme.m
                     Label {
                         visible: text.length > 0
+                        Layout.minimumWidth: 0; elide: Text.ElideRight
                         text: Resales.filterSummary; font.pointSize: window.font.pointSize * theme.captionScale; Accessible.name: text
                     }
                     // Compact windows keep the count and the licence; About has the rest.
