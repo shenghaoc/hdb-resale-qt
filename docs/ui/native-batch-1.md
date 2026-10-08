@@ -147,7 +147,11 @@ running session: `base=https://hdb-resale-visualizer.shenghaoc.workers.dev; curl
 and the printed `generatedAt` must equal the one About shows (if not,
 relaunch the application and fetch again until they agree); every API
 comparison in this pass then reads the saved `summaries.json`, and the detail
-fetches of S3.7 are made in the same session. The count equals
+fetches of S3.7 are saved beside it. The endpoints are not version-addressed,
+so the set is proved coherent afterwards: fetch the manifest again after the
+summaries and again after the last detail fetch, and if its `generatedAt`
+differs from the pinned value at either point, discard the saved responses
+and restart the production pass from this step. The count equals
 `python3 -c "import json; print(sum(1 for a in json.load(open('summaries.json')) if a['medianPrice'] <= 1000000))"`;
 a lower count in the window means a partial load and fails F1. Search (F3): the map must hold exactly the result list's addresses,
 and below zoom 15 the map groups results while above it shows only the
@@ -262,11 +266,14 @@ note the scale factor and the Qt Quick Controls style that loaded.
 - S3.5's crispness check is the Retina observation: no pixelated or blurred
   chart line, dots, text or map markers at scale 2.
 - Light and dark: System Settings › Appearance for S3.5 and S3.9. Then,
-  separately, per-app dark mode: with the system light, launch once more
-  with the standard AppKit argument `"$exe" -NSAppearanceName
-  NSAppearanceNameDarkAqua`, check the controls and the chart follow the
-  dark appearance while other applications stay light, then quit and launch
-  without it.
+  separately, the per-app appearance override macOS supports for any bundle
+  (there is no supported per-app dark override, and the application reads no
+  appearance argument of its own): with the system dark, run
+  `defaults write io.github.shenghaoc.hdb-resale-qt NSRequiresAquaSystemAppearance -bool YES`,
+  launch, check the controls and the chart follow the light appearance while
+  other applications stay dark, then quit, run
+  `defaults delete io.github.shenghaoc.hdb-resale-qt NSRequiresAquaSystemAppearance`
+  and relaunch to confirm the window is dark again.
 - VoiceOver for S2.12 and S3.11.
 
 ### Fedora KDE Plasma (Wayland)
@@ -275,10 +282,13 @@ note the scale factor and the Qt Quick Controls style that loaded.
   Qt 6.12.0 `gcc_64`, venv CMake). Run `ldd "$QtDir/plugins/platforms/libqwayland.so"`
   first; no `not found` line is expected.
 - `export QT_QPA_PLATFORM=wayland` for every launch in sections 1 and 2.
-  Confirm the window is a Wayland client: KWin's window information (Alt+F3 ›
-  More Actions › Configure Special Window Settings, or `qdbus-qt6 org.kde.KWin
-  /KWin queryWindowInfo`; Fedora ships the Qt 6 tool under that name) shows no
-  X11 window id. Anything through XWayland
+  Confirm the window is a Wayland client with a protocol-aware source, since
+  KWin's window information reports the same fields for XWayland windows:
+  open KWin's debug console (`qdbus-qt6 org.kde.KWin /KWin showDebugConsole`;
+  Fedora ships the Qt 6 tool under that name), and on its Windows tab the
+  application must be listed under the Wayland windows, not the X11 windows;
+  as a second signal, `xlsclients` (from xorg-x11-utils) must not list it.
+  Record both. Anything through XWayland
   does not count; record it as unverified, not failed.
 - Record the Qt Quick Controls style that loaded (`QT_QUICK_CONTROLS_STYLE` in
   the session, or `QT_LOGGING_RULES=qt.quick.controls*=true`).
