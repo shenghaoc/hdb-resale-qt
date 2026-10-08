@@ -29,9 +29,7 @@ internal sealed record BasemapConfiguration(string TileEndpoint, string CacheDir
         var production = Physical(defaultCacheDirectory);
         var comparison = OperatingSystem.IsWindows() || OperatingSystem.IsMacOS()
             ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
-        if (physicalCache.Equals(production, comparison) ||
-            physicalCache.StartsWith(production + Path.DirectorySeparatorChar, comparison) ||
-            production.StartsWith(physicalCache + Path.DirectorySeparatorChar, comparison))
+        if (Within(physicalCache, production, comparison) || Within(production, physicalCache, comparison))
             throw new ArgumentException("Tile test cache must be separate from the production tile cache.");
         return new(uri.AbsoluteUri, cache);
     }
@@ -58,16 +56,31 @@ internal sealed record BasemapConfiguration(string TileEndpoint, string CacheDir
             { throw new ArgumentException("Tile test cache path could not be resolved: " + e.Message, e); }
             if (target is null) { current = next; continue; }
             if (++links > MaximumLinks) throw new ArgumentException("Tile test cache path has too many links.");
-            // An absolute target starts again from its root; a relative one continues from the link's directory.
-            if (Path.IsPathRooted(target))
+            // A fully qualified target starts again from its root and a relative one continues from the link's
+            // directory. A Windows root-relative target ("\\dir") stays on the link's volume; a drive-relative
+            // one ("C:dir") depends on per-drive state and is refused.
+            if (Path.IsPathFullyQualified(target))
             {
                 current = Path.GetPathRoot(target)!;
                 target = target[current.Length..];
+            }
+            else if (Path.IsPathRooted(target))
+            {
+                var prefix = Path.GetPathRoot(target)!;
+                if (prefix.Length == 0 || prefix[0] is not ('\\' or '/'))
+                    throw new ArgumentException("Tile test cache path has a drive-relative link: " + target);
+                current = Path.GetPathRoot(current)!;
+                target = target[prefix.Length..];
             }
             remaining = new Queue<string>(Components(target).Concat(remaining));
         }
         return Path.TrimEndingDirectorySeparator(current);
     }
+
+    // Whether path is ancestor or lies inside it, component by component; a root keeps its own separator.
+    private static bool Within(string path, string ancestor, StringComparison comparison) =>
+        path.Equals(ancestor, comparison) || path.StartsWith(
+            Path.EndsInDirectorySeparator(ancestor) ? ancestor : ancestor + Path.DirectorySeparatorChar, comparison);
 
     private static string[] Components(string relative) => relative.Split(
         [Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar], StringSplitOptions.RemoveEmptyEntries);
