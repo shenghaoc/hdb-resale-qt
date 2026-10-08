@@ -102,24 +102,83 @@ This milestone is unverified until recorded here.
 Each batch of native verification adds a dated section below. One row per
 scenario per platform; "unverified" is a valid and expected entry.
 
-### Batch 1 — Stage 2 and Stage 3 (pending)
+### Batch 1 — Stage 2 and Stage 3 (macOS recorded 2026-10-09; KDE pending)
 
 Runbook: [native-batch-1.md](native-batch-1.md).
 
 | Scenario | macOS | KDE Plasma/Wayland |
 |---|---|---|
-| F1 Launch and load | unverified | unverified |
-| F2 Filters | unverified | unverified |
-| F3 Search | unverified | unverified |
-| F4 Selection sync | unverified | unverified |
-| F5 Details | unverified | unverified |
-| F6 Loading and errors | unverified | unverified |
-| F7 Scrolling | unverified | unverified |
-| F8 Chart | unverified | unverified |
-| F9 Compact layout | unverified | unverified |
-| F10 About and modal isolation | unverified | unverified |
-| Platform-specific items | unverified | unverified |
+| F1 Launch and load | passed | unverified (pending: KDE batch not run) |
+| F2 Filters | passed | unverified (pending) |
+| F3 Search | passed | unverified (pending) |
+| F4 Selection sync | passed | unverified (pending) |
+| F5 Details | passed | unverified (pending) |
+| F6 Loading and errors | passed | unverified (pending) |
+| F7 Scrolling | unverified: S3.12 wheel and trackpad scrolling need the owner's input; S3.6 and S3.12's keyboard and pointer steps passed | unverified (pending) |
+| F8 Chart | passed | unverified (pending) |
+| F9 Compact layout | passed | unverified (pending) |
+| F10 About and modal isolation | passed | unverified (pending) |
+| Platform-specific items | unverified: VoiceOver (S2.12, S3.11), larger system text (S3.10), wheel and trackpad (S3.12) need the owner's input; every other item passed | unverified (pending) |
 | RPM/DEB packaging | — | unverified |
 
-Captures of inactive macOS windows for Stage 2 are described in PR #12; they
-do not stand in for an interaction session.
+Nothing in the macOS column is carried into the KDE column.
+
+#### macOS run
+
+- **Head:** `ui/details-inspector` at `6ca00e5` (Stage 3, containing Stage 2
+  at `c880920`). Both heads passed Codex review and CI.
+- **Platform:** macOS 27.0.1 (26A434) on an Apple M5, built-in Retina
+  display. Cocoa windows; `QSG_INFO` logged "Creating QRhi with backend
+  Metal" and a CAMetalLayer at scale 2.00. The Qt Quick Controls style that
+  loaded was `macOS`, with `QT_QUICK_CONTROLS_STYLE` unset. Keyboard
+  navigation was at the macOS default (off), so Tab stops at text fields
+  and lists: filters, search, list.
+- **Appearance:** the system was dark throughout and was not changed. Light
+  came from the per-app `NSRequiresAquaSystemAppearance` override; the
+  window was dark again once the override was deleted.
+- **Section 1:** all six smoke modes passed natively on the final head, with
+  no QML warning.
+- **Production:** pinned at `generatedAt` 2026-10-04T15:30:00.000Z, unchanged
+  from the first fetch to the last, and the same value About showed. The
+  default count was 9,297, as computed from the pinned summaries. Filter
+  counts also matched: maximum S$479,999 gave 2,174; minimum S$438,001,
+  7,700; the latest 12 months, 7,517; town Ang Mo Kio, 354; the maximum at its
+  S$1,650,000 limit, 9,730. Each named exclusion lost its marker while a
+  neighbour kept its own. For `ang mo kio 10`, all 103 markers were pressed,
+  each selecting its own address, and the marker set equalled the list.
+  Details, chart and all 20 registrations of 121 ANG MO KIO AVE 3 matched its
+  saved response, including the full-history cohort note for 4 ROOM. 346
+  JURONG EAST ST 31 showed the empty-window chart caption.
+- **Defects found and fixed during the run**, each in its owning PR. The
+  three keyboard fixes have keyboard-gate checks that fail without them. The
+  pooling fix was verified natively before and after, by counting the rows
+  the platform exposes after scrolling. The chart fix was verified with
+  native captures before and after.
+  - #12 `225e0f8`: Tab skipped the result list. A list needs its
+    accessible role to be a Tab stop on macOS.
+  - #12 `63f40ff`: Page Up/Down and Home/End did nothing in the list.
+  - #12 `c880920`: rows reused from the list's pool dropped out of the
+    accessibility tree after scrolling, so rows are no longer pooled.
+  - #14 `e3822a3`: the chart's month labels sat about 38 points below the
+    axis, and the y labels missed both bounds.
+  - #14 `cb1d6a5`: the details could not be scrolled from the keyboard on a
+    default Mac. A click now focuses them, Page Up/Down and Home/End scroll
+    them, and focus leaves them when they hide.
+- **How input was given:** keys and clicks were real events posted to the
+  application. Latin text went through the accessibility text API, because
+  the Mac's input source was Chinese Pinyin, which composes typed letters.
+  The window was narrowed through its frame and widened through the
+  accessibility window-size API. Announcements (S2.4, the count after
+  typing) were observed as the platform's accessibility announcements, not
+  through VoiceOver speech.
+- **Notes for the runbook:**
+  - S2.11: in the compact layout, Addresses shows the selected address's
+    details, by design, with focus on "‹ All addresses". It does not show the
+    list.
+  - Production has no block 10 in Ang Mo Kio. The ranking rule held: the
+    exact "AVE 10" matches came before blocks 101 to 109.
+  - Section 1's backend grep misses Qt 6.12's wording; the line reads
+    "Creating QRhi with backend Metal".
+- **Captures** (light and dark, not committed): S2.3 (active, inactive and
+  reactivated), S2.8, S2.11, S3.1, S3.5, S3.6 (both directions), S3.7,
+  S3.8, S3.9 and S3.15, plus the chart before and after `e3822a3`.
