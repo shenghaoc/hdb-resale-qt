@@ -140,6 +140,11 @@ Basemap availability and network access remain external runtime conditions.
 
 ## What the Linux recipe does
 
+> **Historical (M11, 2026-10-03).** This section describes the private 0.1.0 RC recipe, which bundled a local
+> corpus and was driven by `tools/package/linux_rc.py`. That script is now `tools/package/stage_linux.py`, the corpus is no
+> longer packaged, and `--bridge-source` is gone. The current architecture and verification are in
+> [docs/packaging/linux.md](../packaging/linux.md); the text below is kept as dated evidence and not updated.
+
 The initial Bridge build output was not relocatable: the native executable
 contained absolute build-prefix RUNPATHs, `qt.conf` was under a different
 `bin/` directory, and QML/Location/geoservices plus .NET runtime discovery
@@ -256,6 +261,8 @@ is performed in this milestone. This Debian 13.6 x64 run does not certify Mac
 or Windows packages.
 
 ## CI and validation boundary
+
+> Superseded for Linux packaging by `.github/workflows/linux-package.yml` (see [docs/packaging/linux.md](../packaging/linux.md)); the paragraph below records the state on 2026-10-03.
 
 The existing `.github/workflows/domain.yml` uses pinned checkout/setup-dotnet
 actions, .NET SDK 10.0.401, C# domain tests and Python unit tests. It has no Qt
