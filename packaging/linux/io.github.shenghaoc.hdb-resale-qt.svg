@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>HDB Resale Explorer</title>
+  <rect width="128" height="128" rx="24" fill="#1d4e89"/>
+  <g fill="#ffffff">
+    <rect x="18" y="52" width="26" height="58" rx="2"/>
+    <rect x="51" y="30" width="26" height="80" rx="2"/>
+    <rect x="84" y="62" width="26" height="48" rx="2"/>
+  </g>
+  <g fill="#1d4e89">
+    <rect x="23" y="58" width="6" height="6"/><rect x="33" y="58" width="6" height="6"/>
+    <rect x="23" y="70" width="6" height="6"/><rect x="33" y="70" width="6" height="6"/>
+    <rect x="23" y="82" width="6" height="6"/><rect x="33" y="82" width="6" height="6"/>
+    <rect x="56" y="36" width="6" height="6"/><rect x="66" y="36" width="6" height="6"/>
+    <rect x="56" y="48" width="6" height="6"/><rect x="66" y="48" width="6" height="6"/>
+    <rect x="56" y="60" width="6" height="6"/><rect x="66" y="60" width="6" height="6"/>
+    <rect x="56" y="72" width="6" height="6"/><rect x="66" y="72" width="6" height="6"/>
+    <rect x="89" y="68" width="6" height="6"/><rect x="99" y="68" width="6" height="6"/>
+    <rect x="89" y="80" width="6" height="6"/><rect x="99" y="80" width="6" height="6"/>
+  </g>
+  <rect x="12" y="110" width="104" height="4" rx="2" fill="#f2a900"/>
+</svg>

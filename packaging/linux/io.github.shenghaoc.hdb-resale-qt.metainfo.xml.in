@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.shenghaoc.hdb-resale-qt</id>
+  <metadata_license>MIT</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>HDB Resale Explorer</name>
+  <summary>Explore Singapore HDB resale registrations by address</summary>
+  <developer id="io.github.shenghaoc">
+    <name>HDB Resale Explorer contributors</name>
+  </developer>
+  <description>
+    <p>An independent desktop app for exploring Singapore HDB resale registrations by address. It reads the HDB Resale Explorer API and shows addresses on a map with their recorded prices and a monthly median trend.</p>
+    <p>It is not affiliated with HDB, SLA or the Singapore Government.</p>
+  </description>
+  <launchable type="desktop-id">io.github.shenghaoc.hdb-resale-qt.desktop</launchable>
+  <url type="homepage">https://github.com/shenghaoc/hdb-resale-qt</url>
+  <url type="bugtracker">https://github.com/shenghaoc/hdb-resale-qt/issues</url>
+  <provides>
+    <binary>hdb-resale-explorer</binary>
+  </provides>
+  <categories>
+    <category>Education</category>
+    <category>Geography</category>
+  </categories>
+  <content_rating type="oars-1.1"/>
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+  </supports>
+  <releases>
+    <release version="@VERSION@" date="@DATE@"/>
+  </releases>
+</component>
