@@ -106,7 +106,7 @@ the default S$1,000,000 maximum).
 | S3.2 | Set the flat type filter to 4 ROOM | Sales facts switch to the 4 ROOM cohort; "Middle half, all types" keeps the all-type range; the chart and registrations are unchanged. |
 | S3.3 | Address group, with 748B selected | Town BEDOK; Flat types 3 ROOM, 4 ROOM, 5 ROOM; Models DBSS, MAX FLOOR 15; Postal code 472748; Nearest MRT BEDOK NORTH MRT STATION · 317 m, about 4 min walk; "Nearest MRT" and "Postal code" on one line each. |
 | S3.4 | Lease and Location groups | Commenced, "Remaining in <the current year>" (the label follows the clock; record the year); one block point; the two notes in the caption role. |
-| S3.5 | Chart, in the light appearance (set it now if the session is dark) | At the display's scale (2 on Retina) the line, dots, text and the map's markers are crisp, with no pixelation or blur. Title, range caption, axis labels and the two month labels in the caption size; line and dots in the link colour; gaps for months without a sale. |
+| S3.5 | Chart, in the light appearance (set it now if the session is dark) | At the display's scale (2 on Retina) the line, dots, text and the map's markers are crisp, with no pixelation or blur. Title, range caption, axis labels and the two month labels in the caption size; line and dots in the link colour; gaps for months without a sale. Values, from 748B's recorded `monthlyTrend` over the window 2024-11 to 2026-10: the caption reads "2024-11–2026-10 · 10 sales in 10 observed months", the month labels read 2024-11 and 2026-10, the y axis runs 600 to 1,150 (thousands), ten dots, the highest at 2026-05 (S$1,060,000) and the lowest at 2026-06 (S$653,000), the first at 2024-12 (S$850,000) and the last at 2026-09 (S$663,000); 2026-03 is an interior gap between the 2026-02 and 2026-04 dots, with no segment across it. |
 | S3.6 | Scroll the details so the chart is half out of view, in both directions | The chart is clipped at the details' edge; nothing is drawn over the list or the heading. **Record the result explicitly; this is the open question from the offscreen captures.** |
 | S3.7 | Latest registrations, with the flat type reset to All flat types | Heading, caption, 20 rows separated by hairlines, newest first: the first reads 2026-09 · 3 ROOM · S$663,000, the second 2026-06 · 3 ROOM · S$653,000, and months never increase down the list; headings demibold and tabular; details in the secondary colour. |
 | S3.8 | Reset the flat type filter to All flat types, then select 727 ANG MO KIO AVE 6 | Chart replaced by the "No registrations … 24-month window" caption; the inspector still shows four groups. |
@@ -138,10 +138,15 @@ latest month older than the 24-month window (search by town and sort by eye,
 or use the Any time window); if none exists on the day, record S3.8 as
 unverified for production. S2.0: the launch completes without
 a load error, the status bar's count matches the list and the map shows
-markers. Search (F3): after each query below, the map shows markers for
-exactly the addresses in the result list (zoom to the result area and count,
-or compare the status bar's count with the markers; stale markers from the
-previous query fail). `ang mo kio ave` returns results whose addresses all
+markers. Search (F3): the map must hold exactly the result list's addresses,
+and below zoom 15 the map groups results while above it shows only the
+viewport, so counts prove nothing; identity is checked on the two small
+queries instead: for `ang mo kio 10`, zoom to the Ang Mo Kio results until
+each is an individual marker, click every marker and confirm each selects an
+address on the result list and that no listed address is without a marker;
+for the postal-code query, the map holds one marker and clicking it selects
+that address. A marker that selects an address not on the list, or a listed
+address without one, fails F3. `ang mo kio ave` returns results whose addresses all
 contain those words; `ang mo kio 10` returns block 10 (an exact word match)
 before blocks that merely begin with 10, such as 101 to 109, and no address
 outside Ang Mo Kio; `ang mo kio avenue`
@@ -161,7 +166,12 @@ populated months on both sides (a missing month before the first sale or
 after the last has no points to connect across, so it proves nothing); an
 address with a sale in every month cannot show a gap. Confirm the line is
 discontinuous between the two populated months around each such interior
-gap, instead of a connecting segment. Filters (F2): town,
+gap, instead of a connecting segment; and confirm the values against the
+same `monthlyTrend`: the caption's sales and observed-month counts are the
+sums over the window's entries, the month labels are the window's first and
+last months, the first and last dots sit at the window's first and last
+populated months, and the highest and lowest dots sit at the months with the
+highest and lowest `medianPrice`. Filters (F2): town,
 a tightened price bound and the registration window narrow the count or leave it
 unchanged; a flat type may raise it, because the selected type's own median
 is compared against the price cap, and raising the maximum above its
