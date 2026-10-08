@@ -91,7 +91,7 @@ the default S$1,000,000 maximum).
 | S2.7 | With the list focused, type `4717` | Typing continues in the search field; results 748A and 747A (postal codes). |
 | S2.8 | Replace with `588` | Empty state explains two matches hidden by the filters; Clear Search works. |
 | S2.9 | ⌘L / Ctrl+L | Focus lands on the town filter; in a compact window the filters expand. |
-| S2.10 | Narrow the window below the breakpoint with the filters collapsed and focus the list; open About from the platform's surface (the application menu on macOS, the status bar's About button on KDE); press ⌘F / Ctrl+F and then ⌘L / Ctrl+L; close About; widen the window again | Neither shortcut acts behind the dialog: the search field is not focused and the collapsed filters neither expand nor take focus; on closing, focus returns to the list. |
+| S2.10 | Narrow the window below the breakpoint with the filters collapsed; type `748` in the search (748A and 748B) and focus the list; open About from the platform's surface (the application menu on macOS, the status bar's About button on KDE); press ⌘F / Ctrl+F, then ⌘L / Ctrl+L, then Escape; widen the window again | No shortcut acts behind the dialog: the search field is not focused and the collapsed filters neither expand nor take focus; Escape closes About and nothing else, so the search still reads `748` with its two results and the status bar count unchanged (Escape clearing the search behind the dialog fails F10); on closing, focus returns to the list; a further Escape, with About closed, now clears the search. |
 | S2.11 | Select 748B, then narrow the window below the breakpoint; click the Map toggle, then the Addresses toggle; press ⌘L / Ctrl+L; widen it again | Map/Addresses toggles appear; the Map toggle shows the map and moves focus into it (the marker or the map itself reads as focused), the Addresses toggle shows the list and moves focus to it with 748B still current; in the compact layout the Filters shortcut expands the collapsed filters and focuses the town picker; 748B stays selected throughout. |
 | S2.12 | Screen reader on (VoiceOver, Orca): move through three rows, select one, type `b` | One name per row with address, town, median, sales and month; "Selected …" once; the result count announced after a pause. Then Escape until the search is empty and six addresses show. |
 | S2.13 | Select 748B, then set town ANG MO KIO; Reset. Then each filter from the defaults (Reset between them): town ANG MO KIO; flat type 4 ROOM; maximum S$500,000; minimum S$500,000; minimum S$600,000 with maximum S$500,000; maximum raised to its upper limit; Latest 12 months; then Reset | The excluded selection clears from the list, the map highlight and the details together. Then counts, with the list, the map and the status bar agreeing each time: 1 (727); 5 (747A, 748B, 748A, 115, 39); 3 (115, 39, 727); 3 (747A, 748B, 748A); 0 with the reversed-range explanation; 11 (relaxing the default S$1,000,000 cap widens the list: 58, 46, 588B, 10D and 588C appear on the list and the map); 4 (747A, 748B, 748A, 39: the window starts at 2025-11, and 115's latest sale is 2025-10); Reset restores six and every default. |
@@ -140,7 +140,11 @@ latest month older than the 24-month window (search by town and sort by eye,
 or use the Any time window); if none exists on the day, record S3.8 as
 unverified for production. S2.0: the launch completes without
 a load error, the status bar's count matches the list and the map shows
-markers. Search (F3): the map must hold exactly the result list's addresses,
+markers; the count also equals the default filter applied to the API's own
+summaries (every town and flat type, no window, median at most S$1,000,000):
+`curl -s https://hdb-resale-visualizer.shenghaoc.workers.dev/api/block-summaries | python3 -c "import json,sys; print(sum(1 for a in json.load(sys.stdin) if a['medianPrice'] <= 1000000))"`
+run within the same hour; a lower count in the window means a partial load
+and fails F1. Search (F3): the map must hold exactly the result list's addresses,
 and below zoom 15 the map groups results while above it shows only the
 viewport, so counts prove nothing; identity is checked on the two small
 queries instead: for `ang mo kio 10`, zoom to the Ang Mo Kio results until
@@ -195,7 +199,13 @@ below a listed address's median excludes that address, a minimum just above
 another's median excludes it, and a registration window shorter than the
 time since a listed address's latest month excludes it; each change must
 remove the named address and lower the count (a control that leaves the
-count unchanged fails); town narrows to its own addresses; a flat type may raise the count, because the selected type's own median
+count unchanged fails); town narrows to its own addresses; for the flat type,
+choose a type that one listed address advertises and a neighbouring listed
+address does not (read `flatTypes` off the list's addresses or the summaries):
+after selecting it the first address stays, the second leaves the list and
+its location shows no marker, and every remaining address checked (at least
+five, spread through the list) advertises the type; the count may rise
+rather than fall, because the selected type's own median
 is compared against the price cap, and raising the maximum above its
 S$1,000,000 default widens the count (record the count at the upper limit,
 which must exceed S2.0's); list, map and status bar agree after every
