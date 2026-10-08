@@ -82,7 +82,8 @@ ApplicationWindow {
             Action { text: qsTr("Zoom"); onTriggered: window.toggleZoom() }
         }
     }
-    // When a compact view switch or selection hides the focused control, focus moves to the pane now shown.
+    // When a compact view switch, selection or resize hides the focused control, focus moves to the pane now shown.
+    onCompactChanged: Qt.callLater(keepFocusVisible)
     function keepFocusVisible() {
         const item = activeFocusItem
         if (item && item.visible && item !== contentItem && item !== contentItem.parent) return
@@ -407,15 +408,6 @@ ApplicationWindow {
                             onClicked: window.recenterMap()
                         }
                     }
-                    // Compact windows keep the list on the other view; show loading and errors over the map.
-                    Rectangle {
-                        visible: window.compact && Resales.statusText.length > 0
-                        anchors.centerIn: parent
-                        width: Math.min(parent.width - theme.l * 2, 22 * window.unit)
-                        height: compactLoadStatus.implicitHeight + theme.l * 2
-                        color: theme.overlay; border.color: theme.separator; radius: theme.s
-                        LoadStatus { id: compactLoadStatus; anchors.fill: parent; anchors.margins: theme.l }
-                    }
                     Label {
                         id: zoomLabel; color: palette.windowText
                         anchors.left: parent.left; anchors.top: parent.top; anchors.margins: 8
@@ -434,13 +426,26 @@ ApplicationWindow {
                         wrapMode: Text.WordWrap; padding: 6
                         background: Rectangle { color: window.palette.window }
                     }
-                    Label {
-                        id: mapErrorLabel; color: palette.windowText
+                    // Centred diagnostics, stacked so neither covers the other: compact windows keep the list on the
+                    // other view, so loading and API errors show over the map; a map error goes beneath.
+                    Column {
                         anchors.centerIn: parent
-                        visible: map.error !== Map.NoError
-                        text: "Map error: " + map.errorString
-                        padding: 12
-                        background: Rectangle { color: window.palette.window }
+                        spacing: theme.s
+                        Rectangle {
+                            visible: window.compact && Resales.statusText.length > 0
+                            width: Math.min(mapArea.width - theme.l * 2, 22 * window.unit)
+                            height: compactLoadStatus.implicitHeight + theme.l * 2
+                            color: theme.overlay; border.color: theme.separator; radius: theme.s
+                            LoadStatus { id: compactLoadStatus; anchors.fill: parent; anchors.margins: theme.l }
+                        }
+                        Label {
+                            id: mapErrorLabel; color: palette.windowText
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            visible: map.error !== Map.NoError
+                            text: "Map error: " + map.errorString
+                            padding: 12
+                            background: Rectangle { color: window.palette.window }
+                        }
                     }
                 }
                 Pane {
