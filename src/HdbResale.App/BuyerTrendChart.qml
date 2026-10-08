@@ -41,6 +41,9 @@ Column {
         id: graph
         width: parent.width; height: visible ? 130 : 0
         visible: root.trend.ObservedMonths > 0
+        // On Qt Quick's software renderer the trend line ignored the scrolling details' clip and drew past
+        // the pane onto the window. Rendering the chart into its own layer keeps it clipped there.
+        layer.enabled: true; layer.samples: 4
         Accessible.name: "Monthly median resale prices in thousands of Singapore dollars. Gaps mean no sale that month."
         marginLeft: 4; marginRight: 8; marginTop: 4; marginBottom: 2
         theme: GraphsTheme {
