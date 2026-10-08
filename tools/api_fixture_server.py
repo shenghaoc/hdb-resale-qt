@@ -7,6 +7,8 @@ Lets the desktop app run without the network:
     HDB_API_BASE_URL=http://127.0.0.1:8787/ <app>
 
 Only the read routes the app uses are served; anything else answers 404 like the Worker.
+`--fail-details 503` answers every detail request with that status instead, so the app's failed-detail state
+(docs/ui/native-acceptance.md, F6) can be reached on demand; the manifest and the address list still load.
 """
 import argparse
 import http.server
@@ -34,10 +36,15 @@ def resolve(path: str, root: pathlib.Path = FIXTURES) -> pathlib.Path | None:
 
 
 class Handler(http.server.BaseHTTPRequestHandler):
+    fail_details: int | None = None
+
     def do_GET(self) -> None:
         found = resolve(self.path)
-        body = found.read_bytes() if found else b'{"error":"Not found"}'
-        self.send_response(200 if found else 404)
+        status = 200 if found else 404
+        if self.fail_details and urllib.parse.urlsplit(self.path).path.startswith("/api/details/"):
+            found, status = None, self.fail_details
+        body = found.read_bytes() if found else b'{"error":"Not found"}' if status == 404 else b'{"error":"Injected failure"}'
+        self.send_response(status)
         self.send_header("content-type", "application/json; charset=utf-8")
         self.send_header("content-length", str(len(body)))
         self.end_headers()
@@ -47,7 +54,10 @@ class Handler(http.server.BaseHTTPRequestHandler):
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--port", type=int, default=8787)
-    port = parser.parse_args().port
+    parser.add_argument("--fail-details", type=int, metavar="STATUS", help="answer every detail request with this HTTP status")
+    args = parser.parse_args()
+    port = args.port
+    Handler.fail_details = args.fail_details
     with http.server.ThreadingHTTPServer(("127.0.0.1", port), Handler) as server:
         print(f"Serving recorded API responses at http://127.0.0.1:{port}/", flush=True)
         server.serve_forever()

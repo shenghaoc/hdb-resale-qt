@@ -37,6 +37,7 @@ aqt install-qt linux desktop 6.12.0 linux_gcc_64 -O "$HOME/Qt" \
 export QtDir="$HOME/Qt/6.12.0/gcc_64"
 "$QtDir/bin/qmake" -query QT_VERSION
 ldd "$QtDir/plugins/platforms/libqxcb.so"
+ldd "$QtDir/plugins/platforms/libqwayland.so"   # native Wayland client on KDE Plasma
 ldd "$QtDir/plugins/geoservices/libqtgeoservices_osm.so"
 # No "not found" entries are expected.
 

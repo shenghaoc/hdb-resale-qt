@@ -22,5 +22,32 @@ class ResolveTests(unittest.TestCase):
             self.assertIsNotNone(server.resolve(f"/api/details/{key}"), key)
 
 
+class FailDetailsTests(unittest.TestCase):
+    def test_injected_detail_failure_leaves_the_list_routes_alone(self):
+        import http.client
+        import http.server
+        import threading
+
+        class Failing(server.Handler):
+            fail_details = 503
+
+            def log_message(self, *args):
+                pass
+
+        with http.server.ThreadingHTTPServer(("127.0.0.1", 0), Failing) as httpd:
+            threading.Thread(target=httpd.serve_forever, daemon=True).start()
+            try:
+                connection = http.client.HTTPConnection("127.0.0.1", httpd.server_port, timeout=5)
+                for path, status in (("/api/manifest", 200), ("/api/block-summaries", 200),
+                                     ("/api/details/bedok-39-bedok-sth-rd", 503), ("/api/details/no-such-block", 503),
+                                     ("/api/search", 404)):
+                    connection.request("GET", path)
+                    response = connection.getresponse()
+                    response.read()
+                    self.assertEqual(response.status, status, path)
+            finally:
+                httpd.shutdown()
+
+
 if __name__ == "__main__":
     unittest.main()
