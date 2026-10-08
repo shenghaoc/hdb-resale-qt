@@ -557,6 +557,7 @@ ApplicationWindow {
                                     // The style's scroll view keeps its scroll bar beside the rows, not over their right column,
                                     // and on desktop leaves mouse drags to the rows instead of flicking the list.
                                     ScrollView {
+                                        id: resultScroll
                                         Layout.fillWidth: true
                                         Layout.fillHeight: true
                                         ScrollBar.vertical.Accessible.name: qsTr("Scroll addresses")
@@ -571,22 +572,35 @@ ApplicationWindow {
                                             activeFocusOnTab: true; keyNavigationEnabled: true
                                             currentIndex: -1
                                             // The keyboard cursor is Qt's current-item highlight, drawn as a ring while the list or
-                                            // the search field has focus. It sits above the rows because the style's row backgrounds
-                                            // are opaque, and it moves and resizes with the current row at once.
+                                            // the search field has focus in the active window, as platforms show focus. It sits above
+                                            // the rows because the style's row backgrounds are opaque, and it moves and resizes with
+                                            // the current row at once.
                                             highlight: Rectangle {
                                                 z: 2
-                                                visible: transactionsList.activeFocus || addressSearch.activeFocus
+                                                visible: window.active && (transactionsList.activeFocus || addressSearch.activeFocus)
                                                 color: "transparent"; radius: theme.xs; border.width: 2
                                                 border.color: transactionsList.currentItem && transactionsList.currentItem.highlighted
                                                     ? transactionsList.currentItem.textColor : window.palette.highlight
                                             }
                                             highlightMoveDuration: 0; highlightResizeDuration: 0
+                                            // A new selection keeps its row in view while the list's height changes (the details
+                                            // opening below it, a resize), until the user scrolls the list.
+                                            property bool revealSelection: false
+                                            function revealSelected() {
+                                                if (currentIndex >= 0) positionViewAtIndex(currentIndex, ListView.Contain)
+                                            }
+                                            onHeightChanged: if (revealSelection) revealSelected()
+                                            onMovementStarted: revealSelection = false
+                                            Connections {
+                                                target: resultScroll.ScrollBar.vertical
+                                                function onPressedChanged() { if (target.pressed) transactionsList.revealSelection = false }
+                                            }
                                             Connections {
                                                 target: Resales
                                                 function onSelectedAddressIndexChanged() {
                                                     transactionsList.currentIndex = Resales.selectedAddressIndex
-                                                    if (transactionsList.currentIndex >= 0)
-                                                        transactionsList.positionViewAtIndex(transactionsList.currentIndex, ListView.Contain)
+                                                    transactionsList.revealSelection = transactionsList.currentIndex >= 0
+                                                    transactionsList.revealSelected()
                                                 }
                                                 function onSelectedMapKeyChanged() {
                                                     if (Resales.selectedMapKey === "") return
@@ -683,13 +697,15 @@ ApplicationWindow {
                                     readonly property bool searching: Resales.searchText.trim().length > 0
                                     readonly property int hidden: Resales.searchMatchesOutsideFilters
                                     Label {
-                                        text: parent.searching ? qsTr("No address matches “%1”").arg(Resales.searchText.trim()) : qsTr("No matching addresses")
+                                        text: !parent.searching ? qsTr("No matching addresses")
+                                            : parent.hidden > 0 ? qsTr("No address matches “%1” with the current filters").arg(Resales.searchText.trim())
+                                            : qsTr("No address matches “%1”").arg(Resales.searchText.trim())
                                         font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignHCenter; wrapMode: Text.WordWrap
                                     }
                                     Label {
                                         text: parent.searching
-                                            ? (parent.hidden === 1 ? qsTr("1 address matches, but the current filters hide it. Check the price range and the other filters.")
-                                                : parent.hidden > 1 ? qsTr("%1 addresses match, but the current filters hide them. Check the price range and the other filters.").arg(parent.hidden)
+                                            ? (parent.hidden === 1 ? qsTr("1 address matches without them. Check the price range and the other filters.")
+                                                : parent.hidden > 1 ? qsTr("%1 addresses match without them. Check the price range and the other filters.").arg(parent.hidden)
                                                 : qsTr("Search by block (58), street (Bedok Reservoir) or postal code (471748)."))
                                             : filterBar.priceInvalid ? qsTr("The minimum median is above the maximum. Adjust either bound to see results.")
                                             : qsTr("No address matches these filters. Widen the price range, choose another town or flat type, or reset the filters.")
