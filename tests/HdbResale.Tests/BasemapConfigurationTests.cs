@@ -142,6 +142,29 @@ public sealed class BasemapConfigurationTests
         finally { Directory.Delete(root, recursive: true); }
     }
 
+    // Windows only, and only where the volume generates 8.3 names: a short name aliases the production cache.
+    [Fact]
+    public void TestResolvesWindowsShortNames()
+    {
+        if (!OperatingSystem.IsWindows()) return;
+        var root = Directory.CreateTempSubdirectory("hdb-tile-links-").FullName;
+        try
+        {
+            var production = Path.Combine(root, "production-tile-cache");
+            Directory.CreateDirectory(production);
+            var buffer = new System.Text.StringBuilder(1024);
+            if (GetShortPathNameW(production, buffer, (uint)buffer.Capacity) == 0) return;
+            var shortName = buffer.ToString();
+            if (string.Equals(shortName, production, StringComparison.OrdinalIgnoreCase)) return;
+            Assert.Throws<ArgumentException>(() => BasemapConfiguration.Create(true, Endpoint, shortName, production));
+            Assert.Throws<ArgumentException>(() => BasemapConfiguration.Create(true, Endpoint, Path.Combine(shortName, "tests"), production));
+        }
+        finally { Directory.Delete(root, recursive: true); }
+    }
+
+    [System.Runtime.InteropServices.DllImport("kernel32.dll", CharSet = System.Runtime.InteropServices.CharSet.Unicode, SetLastError = true)]
+    private static extern uint GetShortPathNameW(string longPath, System.Text.StringBuilder shortPath, uint length);
+
     private const string Endpoint = "http://127.0.0.1:12345/tiles/";
 
     private static bool TryLink(string link, string target)

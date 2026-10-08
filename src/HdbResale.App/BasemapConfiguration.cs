@@ -1,3 +1,6 @@
+using System.Runtime.InteropServices;
+using System.Text;
+
 namespace HdbResale.App;
 
 // Explicit local test opt-in; ordinary launches keep the production provider/cache.
@@ -54,7 +57,7 @@ internal sealed record BasemapConfiguration(string TileEndpoint, string CacheDir
             try { target = entry.LinkTarget; }
             catch (Exception e) when (e is IOException or UnauthorizedAccessException)
             { throw new ArgumentException("Tile test cache path could not be resolved: " + e.Message, e); }
-            if (target is null) { current = next; continue; }
+            if (target is null) { current = LongName(next); continue; }
             if (++links > MaximumLinks) throw new ArgumentException("Tile test cache path has too many links.");
             // A fully qualified target starts again from its root and a relative one continues from the link's
             // directory. A Windows root-relative target ("\\dir") stays on the link's volume; a drive-relative
@@ -76,6 +79,26 @@ internal sealed record BasemapConfiguration(string TileEndpoint, string CacheDir
         }
         return Path.TrimEndingDirectorySeparator(current);
     }
+
+    // Windows can also name an existing directory by its 8.3 short name (ONEMAP~1); use the long name the
+    // filesystem stores, so an alias cannot pass for a separate directory. Elsewhere names are already unique.
+    private static string LongName(string path)
+    {
+        if (!OperatingSystem.IsWindows() || !Path.Exists(path)) return path;
+        var buffer = new StringBuilder(260);
+        var length = GetLongPathNameW(path, buffer, (uint)buffer.Capacity);
+        if (length > buffer.Capacity)
+        {
+            buffer.EnsureCapacity((int)length);
+            length = GetLongPathNameW(path, buffer, (uint)buffer.Capacity);
+        }
+        if (length == 0 || length > buffer.Capacity)
+            throw new ArgumentException("Tile test cache path could not be resolved: " + path);
+        return buffer.ToString();
+    }
+
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+    private static extern uint GetLongPathNameW(string shortPath, StringBuilder longPath, uint length);
 
     // Whether path is ancestor or lies inside it, component by component; a root keeps its own separator.
     private static bool Within(string path, string ancestor, StringComparison comparison) =>
