@@ -34,7 +34,6 @@ DESKTOP = f"usr/share/applications/{APPLICATION_ID}.desktop"
 ICON = f"usr/share/icons/hicolor/scalable/apps/{APPLICATION_ID}.svg"
 METAINFO = f"usr/share/metainfo/{APPLICATION_ID}.metainfo.xml"
 DOC = f"usr/share/doc/{PACKAGE_NAME}/copyright"
-DOC_DIR = f"/usr/share/doc/{PACKAGE_NAME}"
 
 
 def load_metadata() -> dict:
@@ -99,8 +98,7 @@ def assemble_root(staged: Path, root: Path, version: str, epoch: int) -> None:
     (root / "usr/bin").mkdir(parents=True)
     (root / BIN_LINK.lstrip("/")).symlink_to(os.path.relpath(f"{INSTALL_PREFIX}/{PACKAGE_NAME}", "/usr/bin"))
     linux = PACKAGING / "linux"
-    for destination, source in ((DESKTOP, f"{APPLICATION_ID}.desktop"), (ICON, f"{APPLICATION_ID}.svg"),
-                                (DOC, "copyright")):
+    for destination, source in ((DESKTOP, f"{APPLICATION_ID}.desktop"), (ICON, f"{APPLICATION_ID}.svg")):
         target = root / destination
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(linux / source, target)
@@ -153,6 +151,14 @@ def build_deb(root: Path, work: Path, output: Path, metadata: dict, manifest: di
               epoch: int) -> Path:
     deb_root = work / "deb-root"
     shutil.copytree(root, deb_root, symlinks=True)
+    # Debian policy wants /usr/share/doc/<pkg>/copyright. The RPM carries the same notices in
+    # /opt/hdb-resale-explorer/licenses instead: Fedora container images install with nodocs.
+    doc = deb_root / DOC
+    doc.parent.mkdir(parents=True)
+    shutil.copyfile(PACKAGING / "linux/copyright", doc)
+    for path in (doc.parent, doc):
+        os.utime(path, (epoch, epoch))
+    doc.chmod(0o644)
     control_dir = deb_root / "DEBIAN"
     write_deb_control(control_dir, metadata, manifest, table, version, installed_kib(root))
     lines = []
@@ -207,8 +213,6 @@ cp -a %{{hdb_root}}/. %{{buildroot}}/
 /{DESKTOP}
 /{ICON}
 /{METAINFO}
-%dir {DOC_DIR}
-/{DOC}
 """
 
 
