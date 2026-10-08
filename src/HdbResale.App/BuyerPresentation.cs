@@ -18,43 +18,52 @@ internal static class BuyerPresentation
             ? $"in the 24 source months to {latestDatasetMonth}"
             : "in all recorded months (none in the latest 24)";
 
-    internal static string Metrics(AddressSummary address, string flatType, AddressDetail? detail, YearMonth latestDatasetMonth)
+    // The inspector's structured facts. Each section is a titled group of label/value pairs with an optional note;
+    // QML lays them out and never derives a figure. Sections that have nothing to say are omitted, never empty.
+    internal sealed record Fact(string Label, string Value);
+    internal sealed record InspectorSection(string Title, string Note, IReadOnlyList<Fact> Facts);
+
+    internal static IReadOnlyList<InspectorSection> Inspector(AddressSummary address, string flatType, AddressDetail? detail,
+        YearMonth latestDatasetMonth, int currentYear)
     {
         var cohort = AddressSemantics.Cohort(address, flatType);
-        var median = AddressSemantics.EffectiveMedianPrice(address, flatType);
-        var perSqm = AddressSemantics.EffectivePricePerSqm(address, flatType);
         var figures = cohort.IsTypeSpecific ? AddressSemantics.CanonicalFlatType(flatType) + " sales" : "Sales of all flat types";
-        var lines = new List<string>
+        var sales = new List<Fact>
         {
-            $"{address.Town} · {string.Join(", ", address.FlatTypes)}",
-            $"{figures}: {cohort.TransactionCount:N0} {Scope(cohort.LatestMonth, latestDatasetMonth)} · latest {cohort.LatestMonth}",
-            $"Median {Money(median)} · {Money(perSqm)}/m²",
-            $"Floor area {Range(cohort.FloorAreaRange[0], cohort.FloorAreaRange[1], " m²")}",
+            new("Registrations", $"{cohort.TransactionCount:N0}"),
+            new("Latest", cohort.LatestMonth),
+            new("Median price", Money(AddressSemantics.EffectiveMedianPrice(address, flatType))),
+            new("Median per m²", Money(AddressSemantics.EffectivePricePerSqm(address, flatType)) + "/m²"),
+            new("Floor area", Range(cohort.FloorAreaRange[0], cohort.FloorAreaRange[1], " m²")),
         };
+        // The details' interquartile range covers every flat type at the address, whatever type is selected; the
+        // chart and the registrations below it do too. Only the facts above follow the selected type.
         if (detail is { Summary.PriceIqr: [var lower, var upper] })
-            lines.Add($"Middle half of all sales {Money(lower)}–{Money(upper)}");
-        if (address.NearestMrt is { } mrt)
-            lines.Add($"Nearest MRT: {mrt.StationName} · {Number(mrt.DistanceMeters)} m, about {Math.Round(mrt.WalkingTimeSeconds / 60m):0} min walk");
-        return string.Join("\n", lines);
-    }
+            sales.Add(new("Middle half, all types", $"{Money(lower)}–{Money(upper)}"));
 
-    // The web app's estimate: what remains of a 99-year lease in the current calendar year.
-    internal static string Lease(AddressSummary address, int currentYear)
-    {
+        var about = new List<Fact> { new("Town", address.Town), new("Flat types", string.Join(", ", address.FlatTypes)) };
+        if (cohort.FlatModels.Count > 0) about.Add(new("Models", string.Join(", ", cohort.FlatModels)));
+        if (!string.IsNullOrWhiteSpace(address.PostalCode)) about.Add(new("Postal code", address.PostalCode));
+        if (address.NearestMrt is { } mrt)
+            about.Add(new("Nearest MRT", $"{mrt.StationName} · {Number(mrt.DistanceMeters)} m, about {Math.Round(mrt.WalkingTimeSeconds / 60m):0} min walk"));
+
         var range = address.LeaseCommenceRange;
         var (minimum, maximum) = AddressSemantics.RemainingLeaseYears(range, currentYear);
-        var commenced = range[0] == range[1] ? $"{range[0]}" : $"{range[0]}–{range[1]}";
-        var remaining = minimum == maximum ? $"{maximum} years" : $"{minimum}–{maximum} years";
-        return $"Lease commenced {commenced}: about {remaining} of a 99-year lease remain in {currentYear}. " +
-            "Each registration below shows the remaining lease recorded at its resale application. Not an eligibility assessment.";
-    }
-
-    internal static string Location(AddressSummary address)
-    {
         var point = string.Create(CultureInfo.InvariantCulture, $"{address.Coordinates.Lat:F5}, {address.Coordinates.Lng:F5}");
-        var postal = string.IsNullOrWhiteSpace(address.PostalCode) ? "" : $" · postal code {address.PostalCode}";
-        return $"Approximate block location {point}{postal}. Locations are block points, never individual flats.";
+        return
+        [
+            new("Sales", $"{figures} {Scope(cohort.LatestMonth, latestDatasetMonth)}.", sales),
+            new("Address", "", about),
+            new("Lease", "Each registration below shows the remaining lease recorded at its resale application. Not an eligibility assessment.",
+            [
+                new("Commenced", range[0] == range[1] ? $"{range[0]}" : $"{range[0]}–{range[1]}"),
+                new($"Remaining in {currentYear}", "about " + (minimum == maximum ? $"{maximum} years" : $"{minimum}–{maximum} years") + " of a 99-year lease"),
+            ]),
+            new("Location", "Locations are approximate block points, never individual flats.", [new("Block point", point)]),
+        ];
     }
+    internal static string InspectorJson(IReadOnlyList<InspectorSection> sections) => JsonSerializer.Serialize(sections.Select(s => new {
+        title = s.Title, note = s.Note, facts = s.Facts.Select(f => new { label = f.Label, value = f.Value }) }));
 
     internal static string RecentJson(AddressDetail? detail) => JsonSerializer.Serialize((detail?.RecentTransactions ?? []).Select(t => new {
         id=t.Id, heading=$"{t.Month} · {t.FlatType} · {Money(t.ResalePrice)}",

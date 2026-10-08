@@ -13,8 +13,12 @@ Item {
     property int frames: 0
     property var remembered: ({})
     property int selectionSignals: 0
-    // A binding, like the details pane's label: it only sees what the model notifies.
-    readonly property string shownMetrics: Resales.selectedMetrics
+    // A binding, like the inspector's repeater: it only sees what the model notifies.
+    readonly property string shownInspector: Resales.selectedInspectorJson
+    function shownFact(label) {
+        for (const section of JSON.parse(shownInspector)) for (const fact of section.facts) if (fact.label === label) return fact.value
+        return ""
+    }
     TestEvent { id: events }
     Connections { target: gate.targetWindow; function onFrameSwapped() { gate.frames++ } }
     Connections { target: Resales; function onSelectedMapKeyChanged() { gate.selectionSignals++ } }
@@ -59,20 +63,55 @@ Item {
             advance("search-filters-list-and-map"); break
         }
         case 3: {
+            // Hiding the details while they hold focus moves it to the list, not nowhere; then 748B is selected again.
+            if (remembered.detailsStep === 1) {
+                if (!list.activeFocus) {
+                    if (Date.now() - remembered.hidAt > 1500) fail("hiding the details left focus on " + w.activeFocusItem)
+                    return
+                }
+                Resales.selectAddress("bedok-748b-bedok-reservoir-cres")
+                remembered.detailsStep = 2
+                return
+            }
             if (Resales.selectedMapKey !== "bedok-748b-bedok-reservoir-cres" || !Resales.detailReady) return
+            if (remembered.detailsStep === 2) {
+                search.forceActiveFocus(Qt.OtherFocusReason)
+                selectionSignals = 0
+                type("e")                                  // "bedok rese" still matches the selected 748B
+                advance("keyboard-select"); break
+            }
             const row = list.itemAtIndex(1)
             if (!w.detailsView.visible || !row.highlighted || !row.Accessible.selected || !search.activeFocus) {
                 fail("selection not shown: details=" + w.detailsView.visible + " highlighted=" + row.highlighted); return
             }
             // Loading the details must not signal the selection again (it would re-announce it and move the list).
             if (selectionSignals !== 1) { fail("one selection signalled " + selectionSignals + " times"); return }
-            // The details' middle half of sales (recorded priceIqr 705750–880000) reaches the metrics.
-            if (shownMetrics.indexOf("Middle half of all sales S$705,750–S$880,000") < 0) {
-                fail("details missing from the shown metrics: " + JSON.stringify(shownMetrics)); return
+            // The details' middle half of sales (recorded priceIqr 705750–880000) reaches the inspector, whose four
+            // sections are laid out as fact rows.
+            if (shownFact("Middle half, all types") !== "S$705,750–S$880,000") {
+                fail("details missing from the shown inspector: " + shownInspector); return
             }
-            selectionSignals = 0
-            type("e")                                  // "bedok rese" still matches the selected 748B
-            advance("keyboard-select"); break
+            if (w.inspectorView.count !== 4 || !w.inspectorView.itemAt(0) || w.inspectorView.itemAt(0).factCount !== 6) {
+                fail("inspector sections " + w.inspectorView.count + " facts " + (w.inspectorView.itemAt(0) ? w.inspectorView.itemAt(0).factCount : "none")); return
+            }
+            // A click gives the details keyboard focus; End, Home and Page Down then scroll them.
+            const details = w.detailsScrollView, flick = details.contentItem
+            events.mouseClick(details, details.width / 2, 2 * w.unit, Qt.LeftButton, Qt.NoModifier, -1)
+            if (!details.activeFocus) { fail("a click in the details left focus on " + w.activeFocusItem); return }
+            const bottom = flick.originY + flick.contentHeight - flick.height
+            key(Qt.Key_End)
+            if (bottom <= flick.originY || Math.abs(flick.contentY - bottom) > 1) {
+                fail("End left the details at " + flick.contentY + " of " + bottom); return
+            }
+            key(Qt.Key_Home)
+            if (Math.abs(flick.contentY - flick.originY) > 1) { fail("Home left the details at " + flick.contentY); return }
+            key(Qt.Key_PageDown)
+            if (flick.contentY - flick.originY < flick.height / 2) { fail("Page Down moved the details only to " + flick.contentY); return }
+            key(Qt.Key_Home)
+            Resales.selectAddress("")
+            remembered.detailsStep = 1
+            remembered.hidAt = Date.now()
+            break
         }
         case 4:
             if (Resales.searchText !== "bedok rese" || list.count !== 3) return
