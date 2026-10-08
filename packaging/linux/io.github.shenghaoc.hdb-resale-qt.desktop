@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=HDB Resale Explorer
+GenericName=HDB resale research
+Comment=Explore Singapore HDB resale registrations by address
+Exec=hdb-resale-explorer
+Icon=io.github.shenghaoc.hdb-resale-qt
+Terminal=false
+Categories=Education;Geography;
+Keywords=HDB;resale;Singapore;housing;property;map;
+StartupNotify=true
+StartupWMClass=HdbResale.App
