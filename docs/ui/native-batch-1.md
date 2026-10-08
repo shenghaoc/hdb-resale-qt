@@ -104,7 +104,7 @@ the default S$1,000,000 maximum).
 |---|---|---|
 | S3.1 | Select 748B, read the Sales group | Five facts at once and, when the details arrive, a sixth labelled "Middle half, all types" reading S$705,750–S$880,000 (the all-types interquartile range the contract's F5 requires); labels right-aligned in one column, values aligned, tabular figures; the note names the 24-month scope. |
 | S3.2 | Set the flat type filter to 4 ROOM | Sales facts switch to the 4 ROOM cohort; "Middle half, all types" keeps the all-type range; the chart and registrations are unchanged. |
-| S3.3 | Address group | Town, flat types, models, postal code, nearest MRT; "Nearest MRT" and "Postal code" on one line each. |
+| S3.3 | Address group, with 748B selected | Town BEDOK; Flat types 3 ROOM, 4 ROOM, 5 ROOM; Models DBSS, MAX FLOOR 15; Postal code 472748; Nearest MRT BEDOK NORTH MRT STATION · 317 m, about 4 min walk; "Nearest MRT" and "Postal code" on one line each. |
 | S3.4 | Lease and Location groups | Commenced, "Remaining in <the current year>" (the label follows the clock; record the year); one block point; the two notes in the caption role. |
 | S3.5 | Chart, in the light appearance (set it now if the session is dark) | At the display's scale (2 on Retina) the line, dots, text and the map's markers are crisp, with no pixelation or blur. Title, range caption, axis labels and the two month labels in the caption size; line and dots in the link colour; gaps for months without a sale. |
 | S3.6 | Scroll the details so the chart is half out of view, in both directions | The chart is clipped at the details' edge; nothing is drawn over the list or the heading. **Record the result explicitly; this is the open question from the offscreen captures.** |
@@ -138,20 +138,27 @@ latest month older than the 24-month window (search by town and sort by eye,
 or use the Any time window); if none exists on the day, record S3.8 as
 unverified for production. S2.0: the launch completes without
 a load error, the status bar's count matches the list and the map shows
-markers. Search (F3): `ang mo kio ave` returns results whose addresses all
+markers. Search (F3): after each query below, the map shows markers for
+exactly the addresses in the result list (zoom to the result area and count,
+or compare the status bar's count with the markers; stale markers from the
+previous query fail). `ang mo kio ave` returns results whose addresses all
 contain those words; `ang mo kio 10` returns block 10 (an exact word match)
 before blocks that merely begin with 10, such as 101 to 109, and no address
 outside Ang Mo Kio; `ang mo kio avenue`
 returns the same results (abbreviation equivalence); the postal code read
 from a selected address's Address group, searched on its own, returns that
 address. Details (F5): selecting any result opens four populated groups whose
+Address group shows that address's own town, flat types, postal code and
+nearest MRT as its `/api/block-summaries` entry gives them (`town`,
+`flatTypes`, `postalCode`, `nearestMrt`), and whose
 Sales note names the dataset's latest month, and once the details arrive
 the Sales group shows "Middle half, all types" with a populated S$ range; an address with sales in the
 window shows a chart, one without shows the empty caption. Chart (F8, S3.5):
-choose an address whose Latest registrations skip at least one month inside
-the 24-month window (read the months off the list; an address with a sale in
-every month cannot show a gap) and confirm the chart leaves a visible gap at
-each skipped month instead of a connecting line. Filters (F2): town,
+choose an address whose detail response's `monthlyTrend` (the same curl as
+S3.7; the list shows at most 20 registrations, so it cannot be read off the
+list) lacks at least one month inside the 24-month window; an address with a
+sale in every month cannot show a gap. Confirm the chart leaves a visible gap
+at each month absent from `monthlyTrend` instead of a connecting line. Filters (F2): town,
 a tightened price bound and the registration window narrow the count or leave it
 unchanged; a flat type may raise it, because the selected type's own median
 is compared against the price cap, and raising the maximum above its
