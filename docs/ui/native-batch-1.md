@@ -87,7 +87,7 @@ the default S$1,000,000 maximum).
 | S2.8 | Replace with `588` | Empty state explains two matches hidden by the filters; Clear Search works. |
 | S2.9 | ⌘L / Ctrl+L | Focus lands on the town filter; in a compact window the filters expand. |
 | S2.10 | Open About from the platform's surface (the application menu on macOS, the status bar's About button on KDE), press ⌘F / Ctrl+F and then ⌘L / Ctrl+L, close About | Neither shortcut acts behind the dialog (search is not focused, the filters neither expand nor take focus); focus returns where it was. |
-| S2.11 | Select 748B, then narrow the window below the breakpoint and widen it again | Map/Addresses toggles appear; focus moves to the pane shown; 748B stays selected throughout. |
+| S2.11 | Select 748B, then narrow the window below the breakpoint; press ⌘L / Ctrl+L; widen it again | Map/Addresses toggles appear; focus moves to the pane shown; in the compact layout the Filters shortcut expands the collapsed filters and focuses the town picker; 748B stays selected throughout. |
 | S2.12 | Screen reader on (VoiceOver, Orca): move through three rows, select one, type `b` | One name per row with address, town, median, sales and month; "Selected …" once; the result count announced after a pause. Then Escape until the search is empty and six addresses show. |
 | S2.13 | Select 748B, then set town ANG MO KIO; Reset. Then each filter from the defaults (Reset between them): town ANG MO KIO; flat type 4 ROOM; maximum S$500,000; minimum S$500,000; minimum S$600,000 with maximum S$500,000; Latest 12 months; then Reset | The excluded selection clears from the list, the map highlight and the details together. Then counts, with the list, the map and the status bar agreeing each time: 1 (727); 5 (747A, 748B, 748A, 115, 39); 3 (115, 39, 727); 3 (747A, 748B, 748A); 0 with the reversed-range explanation; 4 (747A, 748B, 748A, 39: the window starts at 2025-11, and 115's latest sale is 2025-10); Reset restores six and every default. |
 | S2.14 | Click a map marker (zoom in until 748B is an individual marker) | The list highlights and scrolls to 748B, the details open, and the marker is highlighted; "Show on map" from the details recentres on it. |
@@ -103,7 +103,7 @@ the default S$1,000,000 maximum).
 | S3.4 | Lease and Location groups | Commenced, "Remaining in <the current year>" (the label follows the clock; record the year); one block point; the two notes in the caption role. |
 | S3.5 | Chart, in the light appearance (set it now if the session is dark) | At the display's scale (2 on Retina) the line, dots, text and the map's markers are crisp, with no pixelation or blur. Title, range caption, axis labels and the two month labels in the caption size; line and dots in the link colour; gaps for months without a sale. |
 | S3.6 | Scroll the details so the chart is half out of view, in both directions | The chart is clipped at the details' edge; nothing is drawn over the list or the heading. **Record the result explicitly; this is the open question from the offscreen captures.** |
-| S3.7 | Latest registrations | Heading, caption, 20 rows separated by hairlines, newest first: the first reads 2026-09 · 3 ROOM · S$663,000, the second 2026-06 · 3 ROOM · S$653,000, and months never increase down the list; headings demibold and tabular; details in the secondary colour. |
+| S3.7 | Latest registrations, with the flat type reset to All flat types | Heading, caption, 20 rows separated by hairlines, newest first: the first reads 2026-09 · 3 ROOM · S$663,000, the second 2026-06 · 3 ROOM · S$653,000, and months never increase down the list; headings demibold and tabular; details in the secondary colour. |
 | S3.8 | Reset the flat type filter to All flat types, then select 727 ANG MO KIO AVE 6 | Chart replaced by the "No registrations … 24-month window" caption; the inspector still shows four groups. |
 | S3.9 | Reselect 748B, then switch to the dark appearance or colour scheme | Every label, value, note, chart element and separator remains readable; no hard-coded light colour shows. |
 | S3.10 | Raise the system text size or scale factor one step | Labels wrap rather than clip; the label column does not exceed two fifths of the pane; the chart captions scale. |
@@ -118,9 +118,10 @@ the default S$1,000,000 maximum).
 Repeat S2.0 to S2.15 and S3.1 to S3.12 against production. The invariants
 below replace the fixture's data-dependent values; S2.9 to S2.11, S2.15,
 S3.5, S3.6 and S3.9 to S3.12 keep their expectations as written. S3.7 on
-production: every row belongs to the selected address, the first row's month
-is the address's latest month shown in the list, and months never increase
-down the list. S3.8 on production: pick an address whose list row shows a
+production, with the flat type reset to All flat types: every row belongs to
+the selected address, the first row's month is the address's latest month
+shown in the list (the all-types month), and months never increase down the
+list. S3.8 on production: pick an address whose list row shows a
 latest month older than the 24-month window (search by town and sort by eye,
 or use the Any time window); if none exists on the day, record S3.8 as
 unverified for production. S2.0: the launch completes without
@@ -132,7 +133,8 @@ outside Ang Mo Kio; `ang mo kio avenue`
 returns the same results (abbreviation equivalence); the postal code read
 from a selected address's Address group, searched on its own, returns that
 address. Details (F5): selecting any result opens four populated groups whose
-Sales note names the dataset's latest month; an address with sales in the
+Sales note names the dataset's latest month, and once the details arrive
+the Sales group shows "Middle half, all types" with a populated S$ range; an address with sales in the
 window shows a chart, one without shows the empty caption. Filters (F2): town,
 price bounds and the registration window narrow the count or leave it
 unchanged; a flat type may raise it, because the selected type's own median
@@ -164,7 +166,12 @@ note the scale factor and the Qt Quick Controls style that loaded.
   it; Fusion or another style fails the platform row.
 - S3.5's crispness check is the Retina observation: no pixelated or blurred
   chart line, dots, text or map markers at scale 2.
-- Light and dark: System Settings › Appearance; per-app dark mode also counts.
+- Light and dark: System Settings › Appearance for S3.5 and S3.9. Then,
+  separately, per-app dark mode: with the system light, launch once more
+  with the standard AppKit argument `"$exe" -NSAppearanceName
+  NSAppearanceNameDarkAqua`, check the controls and the chart follow the
+  dark appearance while other applications stay light, then quit and launch
+  without it.
 - VoiceOver for S2.12 and S3.11.
 
 ### Fedora KDE Plasma (Wayland)
@@ -203,11 +210,14 @@ native defect to fix before Stage 4.
 
 Scenario mapping: F1 S2.0 (section 1's `recorded` and `production` are
 supporting evidence, never sufficient); F2 S2.8, S2.13, S3.2; F3 S2.1–S2.8;
-F4 S2.3, S2.5, S2.13 (clearing through a filter), S2.14; F5 S3.1–S3.5, S3.7, S3.8; F6 S3.13, S3.14, S3.15; F7
+F4 S2.3, S2.5, S2.13 (clearing through a filter), S2.14; F5 S3.1–S3.5, S3.7, S3.8; F6 S3.13, S3.14, S3.15 and, for its production column, S2.0 on production
+(the healthy load); F7
 S3.6, S3.12; F8 S3.5, S3.8, S3.9 (light and dark both observed); F9 S2.11;
 F10 S2.10. Platform-specific items: S2.0 (window chrome, OSM tiles), S2.1 (the
 platform's Find command), S2.3 (inactive-window rings), S2.9, S2.10 (About
-from the platform's surface), S2.12, S2.15 (clean exit through the platform's
+from the platform's surface), S2.11 (resizing through the platform's frame
+across the breakpoint, and the compact Filters command), S2.12, S2.14 (the
+map's selection highlight), S2.15 (clean exit through the platform's
 own quit or close), S3.5 (Retina crispness on macOS), S3.9–S3.11, S3.12
 (wheel, trackpad, keyboard and pointer input, under Wayland on KDE) and the
 platform notes, including the loaded style on both platforms and, on KDE,
