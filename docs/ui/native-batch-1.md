@@ -69,20 +69,20 @@ the default S$1,000,000 maximum).
 
 | # | Step | Expected |
 |---|---|---|
-| S2.0 | Launch against the fixture server; wait for the load | Six addresses in the list; the status bar's count reads six; six markers or their groups on the map; no load error. |
+| S2.0 | Launch against the fixture server; wait for the load | Six addresses in the list; the status bar's count reads six; healthy OSM basemap tiles render under six markers or their groups; no load error. The window has the platform's own chrome: on macOS the native title bar with traffic lights, on KDE the Plasma frame, both titled "HDB Resale Explorer". |
 | S2.1 | Press ⌘F (macOS) or Ctrl+F (KDE); on macOS also Edit › Find Address… | Search field focused, existing text selected. |
 | S2.2 | Type `bedok res` | Three results, 748A, 748B, 747A in that order; map shows the same three. |
-| S2.3 | ↓ ↓ Return | 748B selected once; details open; the cursor ring is visible in the active window; the row stays in view. |
+| S2.3 | ↓ ↓ Return; then click another application's window, look, and click back | 748B selected once; details open; the cursor ring is visible in the active window; the row stays in view. While the window is inactive the cursor ring and focus rings are not painted and the selection uses the platform's inactive colour; both return on reactivation. |
 | S2.4 | Type `e` (so `bedok rese`) | 748B stays selected and is not re-announced. |
 | S2.5 | Type ` 747` | 748B hidden, selection and details clear, map highlight gone. |
 | S2.6 | Escape, then Escape | First clears the search (six results, nothing reselected), second moves focus to the list. |
 | S2.7 | With the list focused, type `4717` | Typing continues in the search field; results 748A and 747A (postal codes). |
 | S2.8 | Replace with `588` | Empty state explains two matches hidden by the filters; Clear Search works. |
 | S2.9 | ⌘L / Ctrl+L | Focus lands on the town filter; in a compact window the filters expand. |
-| S2.10 | Open About, press ⌘F / Ctrl+F, close About | The shortcut does nothing behind the dialog; focus returns where it was. |
+| S2.10 | Open About, press ⌘F / Ctrl+F and then ⌘L / Ctrl+L, close About | Neither shortcut acts behind the dialog (search is not focused, the filters neither expand nor take focus); focus returns where it was. |
 | S2.11 | Select 748B, then narrow the window below the breakpoint and widen it again | Map/Addresses toggles appear; focus moves to the pane shown; 748B stays selected throughout. |
 | S2.12 | Screen reader on (VoiceOver, Orca): move through three rows, select one, type `b` | One name per row with address, town, median, sales and month; "Selected …" once; the result count announced after a pause. Then Escape until the search is empty and six addresses show. |
-| S2.13 | Filters, each from the defaults (Reset between them): town ANG MO KIO; flat type 4 ROOM; maximum S$500,000; minimum S$500,000; minimum S$600,000 with maximum S$500,000; Latest 12 months; then Reset | Counts, with the list, the map and the status bar agreeing each time: 1 (727); 5 (747A, 748B, 748A, 115, 39); 3 (115, 39, 727); 3 (747A, 748B, 748A); 0 with the reversed-range explanation; 4 (747A, 748B, 748A, 39: the window starts at 2025-11, and 115's latest sale is 2025-10); Reset restores six and every default. |
+| S2.13 | Select 748B, then set town ANG MO KIO; Reset. Then each filter from the defaults (Reset between them): town ANG MO KIO; flat type 4 ROOM; maximum S$500,000; minimum S$500,000; minimum S$600,000 with maximum S$500,000; Latest 12 months; then Reset | The excluded selection clears from the list, the map highlight and the details together. Then counts, with the list, the map and the status bar agreeing each time: 1 (727); 5 (747A, 748B, 748A, 115, 39); 3 (115, 39, 727); 3 (747A, 748B, 748A); 0 with the reversed-range explanation; 4 (747A, 748B, 748A, 39: the window starts at 2025-11, and 115's latest sale is 2025-10); Reset restores six and every default. |
 | S2.14 | Click a map marker (zoom in until 748B is an individual marker) | The list highlights and scrolls to 748B, the details open, and the marker is highlighted; "Show on map" from the details recentres on it. |
 | S2.15 | Quit through the platform: macOS ⌘Q or the application menu's Quit; KDE the window frame's close button (and once more with Alt+F4) | The window closes at once, the process exits with status 0 in the launching terminal, no error is printed, and nothing is left running. Launch again afterwards for the Stage 3 steps. |
 
@@ -121,7 +121,8 @@ window shows a chart, one without shows the empty caption. Filters (F2): town,
 price bounds and the registration window narrow the count or leave it
 unchanged; a flat type may raise it, because the selected type's own median
 is compared against the price cap; list, map and status bar agree after every
-change, and Reset restores the unfiltered count. Selection (F4): a map marker
+change, and Reset restores S2.0's default count (the default S$1,000,000
+maximum still applies, so this is not every address the API holds). Selection (F4): a map marker
 click selects the address it names. Exit (S2.15): as on the fixtures. Record
 the production head's `generatedAt` from About.
 
@@ -176,5 +177,6 @@ Scenario mapping: F1 S2.0 (section 1's `recorded` and `production` are
 supporting evidence, never sufficient); F2 S2.8, S2.13, S3.2; F3 S2.1–S2.8;
 F4 S2.3, S2.5, S2.14; F5 S3.1–S3.5, S3.7, S3.8; F6 S3.13, S3.14, S3.15; F7
 S3.6, S3.12; F8 S3.5, S3.8, S3.9 (light and dark both observed); F9 S2.11;
-F10 S2.10. Platform-specific items: S2.9, S2.12, S2.15 (clean exit through
-the platform's own quit or close), S3.9–S3.11 and the platform notes. A scenario's production column needs the production pass too.
+F10 S2.10. Platform-specific items: S2.0 (window chrome, OSM tiles), S2.3
+(inactive-window rings), S2.9, S2.12, S2.15 (clean exit through the
+platform's own quit or close), S3.9–S3.11 and the platform notes. A scenario's production column needs the production pass too.
