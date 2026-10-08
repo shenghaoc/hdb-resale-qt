@@ -55,6 +55,7 @@ ApplicationWindow {
     readonly property alias emptyResultsView: emptyResults
     readonly property alias detailsView: detailsPane
     readonly property alias inspectorView: inspectorSections
+    readonly property alias detailsScrollView: detailsScroll
     readonly property alias viewSwitch: viewTabs
     readonly property alias mapView: map
     readonly property alias filtersView: filterBar
@@ -752,6 +753,8 @@ ApplicationWindow {
                             Item {
                                 id: detailsPane
                                 visible: Resales.selectedMapKey !== ""
+                                // Clearing the selection hides the details; keyboard focus inside them moves to the list.
+                                onVisibleChanged: if (!visible) Qt.callLater(window.keepFocusVisible)
                                 SplitView.fillHeight: window.compact
                                 SplitView.preferredHeight: paneSplit.height * 0.6
                                 SplitView.minimumHeight: 12 * window.unit
@@ -786,6 +789,23 @@ ApplicationWindow {
                                     ScrollView {
                                         id: detailsScroll; Layout.fillWidth: true; Layout.fillHeight: true; clip: true
                                         contentWidth: availableWidth; activeFocusOnTab: true; Accessible.name: "Selected address details and recent transactions"
+                                        // A click gives the details keyboard focus as well as Tab, which macOS's default keyboard
+                                        // navigation keeps for text fields and lists (the press never reaches the ScrollView itself,
+                                        // so a tap handler in its content takes the focus). Qt's ScrollView scrolls only by the
+                                        // arrows: Page Up/Down move by the view's height less a line, Home/End to the top or bottom.
+                                        TapHandler { onTapped: detailsScroll.forceActiveFocus(Qt.MouseFocusReason) }
+                                        Keys.onPressed: (event) => {
+                                            const flick = contentItem
+                                            const bottom = flick.originY + Math.max(0, flick.contentHeight - flick.height)
+                                            const page = Math.max(1, flick.height - window.unit)
+                                            const target = event.key === Qt.Key_PageDown ? Math.min(bottom, flick.contentY + page)
+                                                : event.key === Qt.Key_PageUp ? Math.max(flick.originY, flick.contentY - page)
+                                                : event.key === Qt.Key_End ? bottom : event.key === Qt.Key_Home ? flick.originY : NaN
+                                            if (Number.isNaN(target)) return
+                                            flick.cancelFlick()
+                                            flick.contentY = target
+                                            event.accepted = true
+                                        }
                                         function resetPosition() {
                                             contentItem.cancelFlick()
                                             contentItem.contentY = contentItem.originY
