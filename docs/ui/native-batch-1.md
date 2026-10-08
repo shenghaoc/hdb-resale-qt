@@ -110,7 +110,7 @@ the default S$1,000,000 maximum).
 | S3.6 | Scroll the details so the chart is half out of view, in both directions | The chart is clipped at the details' edge; nothing is drawn over the list or the heading. **Record the result explicitly; this is the open question from the offscreen captures.** |
 | S3.7 | Latest registrations, with the flat type reset to All flat types | Heading, caption, 20 rows separated by hairlines, newest first: the first reads 2026-09 · 3 ROOM · S$663,000, the second 2026-06 · 3 ROOM · S$653,000, and months never increase down the list; headings demibold and tabular; details in the secondary colour. |
 | S3.8 | Reset the flat type filter to All flat types, then select 727 ANG MO KIO AVE 6 | Chart replaced by the "No registrations … 24-month window" caption; the inspector still shows four groups. |
-| S3.9 | Reselect 748B, then switch to the dark appearance or colour scheme | Every label, value, note, chart element and separator remains readable; no hard-coded light colour shows. |
+| S3.9 | Reselect 748B, then switch to the dark appearance or colour scheme | Every label, value, note, chart element and separator remains readable; no hard-coded light colour shows; the chart's line and dots take the dark appearance's link colour (compare with a link in the platform's own dialog or settings, as S3.5 did in light) and the captions the dark secondary text colour. |
 | S3.10 | Raise the system text size or scale factor one step | Labels wrap rather than clip; the label column does not exceed two fifths of the pane; the chart captions scale. |
 | S3.11 | Screen reader through the details | Each group reads as a named group with a heading; each fact reads once as "Label: value"; each registration reads once. |
 | S3.12 | Scroll the list and the details by wheel, trackpad and keyboard (↑/↓, Page Up/Down, Home/End); drag a row with the mouse | Both scroll smoothly and stop at their ends; a mouse drag on the list selects or does nothing but never flicks it. |
@@ -156,9 +156,12 @@ the Sales group shows "Middle half, all types" with a populated S$ range; an add
 window shows a chart, one without shows the empty caption. Chart (F8, S3.5):
 choose an address whose detail response's `monthlyTrend` (the same curl as
 S3.7; the list shows at most 20 registrations, so it cannot be read off the
-list) lacks at least one month inside the 24-month window; an address with a
-sale in every month cannot show a gap. Confirm the chart leaves a visible gap
-at each month absent from `monthlyTrend` instead of a connecting line. Filters (F2): town,
+list) lacks at least one month inside the 24-month window that is bracketed by
+populated months on both sides (a missing month before the first sale or
+after the last has no points to connect across, so it proves nothing); an
+address with a sale in every month cannot show a gap. Confirm the line is
+discontinuous between the two populated months around each such interior
+gap, instead of a connecting segment. Filters (F2): town,
 a tightened price bound and the registration window narrow the count or leave it
 unchanged; a flat type may raise it, because the selected type's own median
 is compared against the price cap, and raising the maximum above its
