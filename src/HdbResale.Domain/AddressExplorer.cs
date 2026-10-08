@@ -74,10 +74,13 @@ public static class AddressSemantics
 }
 
 // The dataset as the API publishes it, filtered and ordered the way the web app lists it: by the median that
-// applies to the selected flat type, lowest first, keeping the API's order among equal medians.
+// applies to the selected flat type, lowest first, keeping the API's order among equal medians. An address search
+// narrows the same list (and so the map) further, ranking addresses that match more query words exactly first.
 public sealed class AddressExplorer
 {
     private readonly IReadOnlyList<AddressSummary> all;
+    private readonly string[][] searchIndex;
+    private IReadOnlyList<SearchTerm> searchTerms = [];
 
     public AddressExplorer(DatasetManifest manifest, IReadOnlyList<AddressSummary> addresses)
     {
@@ -85,6 +88,7 @@ public sealed class AddressExplorer
         ArgumentNullException.ThrowIfNull(addresses);
         Manifest = manifest;
         all = Array.AsReadOnly(addresses.ToArray());
+        searchIndex = all.Select(AddressSearch.Index).ToArray();
         LatestDatasetMonth = manifest.LatestMonth;
         Rebuild();
     }
@@ -95,6 +99,7 @@ public sealed class AddressExplorer
     public AddressFilters Filters { get; private set; } = AddressFilters.Default;
     public IReadOnlyList<AddressSummary> Addresses { get; private set; } = [];
     public AddressSummary? Selected { get; private set; }
+    public string SearchText { get; private set; } = "";
     public string? WindowStart => AddressSemantics.WindowStart(LatestDatasetMonth, Filters.RecencyMonths);
 
     public void Filter(AddressFilters filters)
@@ -112,6 +117,23 @@ public sealed class AddressExplorer
 
     public void Reset() => Filter(AddressFilters.Default);
 
+    public void Search(string? text)
+    {
+        var next = text ?? "";
+        if (next == SearchText) return;
+        SearchText = next;
+        searchTerms = AddressSearch.Parse(next);
+        Rebuild();
+    }
+
+    // Addresses the search matches across the whole dataset, so an empty result can say whether the filters hid them.
+    public int CountSearchMatchesIgnoringFilters()
+    {
+        var count = 0;
+        for (var i = 0; i < all.Count; i++) if (AddressSearch.Score(searchIndex[i], searchTerms) is not null) count++;
+        return count;
+    }
+
     public decimal EffectiveMedianPrice(AddressSummary address) => AddressSemantics.EffectiveMedianPrice(address, Filters.FlatType);
 
     private void Rebuild()
@@ -119,10 +141,17 @@ public sealed class AddressExplorer
         var selectedKey = Selected?.AddressKey;
         var start = WindowStart;
         var type = Filters.FlatType;
-        Addresses = Array.AsReadOnly(all
-            .Where(a => AddressSemantics.Matches(a, Filters.Town, type, Filters.MinimumPrice, Filters.MaximumPrice, start))
-            .OrderBy(a => AddressSemantics.EffectiveMedianPrice(a, type))
-            .ToArray());
+        var matches = new List<(AddressSummary Address, int Score)>();
+        for (var i = 0; i < all.Count; i++)
+        {
+            var a = all[i];
+            if (!AddressSemantics.Matches(a, Filters.Town, type, Filters.MinimumPrice, Filters.MaximumPrice, start)) continue;
+            if (AddressSearch.Score(searchIndex[i], searchTerms) is { } score) matches.Add((a, score));
+        }
+        // Without a search every score is zero, which leaves the median order unchanged.
+        Addresses = Array.AsReadOnly(matches.OrderByDescending(m => m.Score)
+            .ThenBy(m => AddressSemantics.EffectiveMedianPrice(m.Address, type))
+            .Select(m => m.Address).ToArray());
         // The selection survives a filter change while the address still matches, and clears otherwise.
         Selected = selectedKey is null ? null : Addresses.FirstOrDefault(a => a.AddressKey == selectedKey);
     }
