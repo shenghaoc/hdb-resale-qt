@@ -144,10 +144,15 @@ distinct from the base surface, at least 4.5:1) and of the notice (at least 4.5:
 Qt Location does not expose exhausted per-tile requests through `Map.error`.
 The small `Native/TileStatus.cmake` library uses the public Qt Core
 [`qInstallMessageHandler`](https://doc.qt.io/qt-6/qtlogging.html) API to count only
-the exhaustion warning emitted by the pinned Qt 6.12 tile request manager. It
-forwards diagnostics to any earlier handler, or formats them to stderr using
-`qFormatLogMessage`; it restores the earlier handler on normal teardown. The
-counter is atomic and polled on the QML/UI thread every 250 ms. No managed callback
+the exhaustion warning emitted by the pinned Qt 6.12 tile request manager. It is
+installed with one atomic swap and forwards every diagnostic to the handler it
+replaced: Qt's own default handler unless the application installed another, so
+the platform's sink (the debugger for a Windows GUI app, the system log, stderr)
+is unchanged. It never formats or writes diagnostics itself. A message arriving
+before the replaced handler is published waits for it rather than being dropped.
+If Qt returned no handler, Qt's default is restored and monitoring stays off. The
+earlier handler is restored on normal teardown. The counter is atomic and polled
+on the QML/UI thread every 250 ms. No managed callback
 or native allocation crosses P/Invoke. If external logging rules suppress this
 warning, or a future Qt version changes its wording, this diagnostic-based notice
 cannot observe it; rerun the `tile-failure` gate after a Qt upgrade.
@@ -156,4 +161,6 @@ Builds install the native helper beside the managed app. Linux packaging copies
 this explicit P/Invoke dependency before collecting its ELF dependencies. Native
 `ctest --test-dir src/HdbResale.App/obj/Release/net10.0/qt/native/build
 --output-on-failure` verifies classification, concurrent requests, diagnostic
-forwarding, idempotent installation, and restoration.
+forwarding, idempotent installation and restoration; that diagnostics reach Qt's
+default sink when no custom handler exists; and that starting and stopping while
+another thread logs never bypasses or drops a message for a custom handler.

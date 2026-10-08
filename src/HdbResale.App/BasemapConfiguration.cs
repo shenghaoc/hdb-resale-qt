@@ -25,7 +25,7 @@ internal sealed record BasemapConfiguration(string TileEndpoint, string CacheDir
         var cache = Path.TrimEndingDirectorySeparator(Path.GetFullPath(cacheDirectory));
         // Compare where the directories really are: a symbolic link or junction could otherwise give the
         // production cache a second, lexically separate name.
-        var physicalCache = Physical(cache);
+        var physicalCache = Physical(cacheDirectory);
         var production = Physical(defaultCacheDirectory);
         var comparison = OperatingSystem.IsWindows() || OperatingSystem.IsMacOS()
             ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
@@ -37,33 +37,38 @@ internal sealed record BasemapConfiguration(string TileEndpoint, string CacheDir
     }
 
     // The absolute path with every existing symbolic link or junction along it replaced by its target,
-    // including links inside those targets. Components that do not exist yet are kept as written.
+    // including links inside those targets. Components are taken in filesystem order from each link's own
+    // text, so "." and ".." apply to the physical directory reached so far, as the operating system applies
+    // them, rather than being collapsed lexically first. Components that do not exist yet are kept.
     internal static string Physical(string path)
     {
-        var current = Path.GetPathRoot(Path.GetFullPath(path))!;
-        var remaining = new Queue<string>(Components(path));
+        var absolute = Path.IsPathFullyQualified(path) ? path : Path.Combine(Environment.CurrentDirectory, path);
+        var current = Path.GetPathRoot(absolute)!;
+        var remaining = new Queue<string>(Components(absolute[current.Length..]));
         var links = 0;
         while (remaining.TryDequeue(out var component))
         {
+            if (component == ".") continue;
+            if (component == "..") { current = Path.GetDirectoryName(current) ?? current; continue; }
             var next = Path.Combine(current, component);
             FileSystemInfo entry = Directory.Exists(next) ? new DirectoryInfo(next) : new FileInfo(next);
-            FileSystemInfo? target;
-            try { target = entry.LinkTarget is null ? null : entry.ResolveLinkTarget(returnFinalTarget: false); }
+            string? target;
+            try { target = entry.LinkTarget; }
             catch (Exception e) when (e is IOException or UnauthorizedAccessException)
             { throw new ArgumentException("Tile test cache path could not be resolved: " + e.Message, e); }
             if (target is null) { current = next; continue; }
             if (++links > MaximumLinks) throw new ArgumentException("Tile test cache path has too many links.");
-            // Walk the target from its root as well, then continue with what followed the link.
-            remaining = new Queue<string>(Components(target.FullName).Concat(remaining));
-            current = Path.GetPathRoot(Path.GetFullPath(target.FullName))!;
+            // An absolute target starts again from its root; a relative one continues from the link's directory.
+            if (Path.IsPathRooted(target))
+            {
+                current = Path.GetPathRoot(target)!;
+                target = target[current.Length..];
+            }
+            remaining = new Queue<string>(Components(target).Concat(remaining));
         }
         return Path.TrimEndingDirectorySeparator(current);
     }
 
-    private static string[] Components(string path)
-    {
-        var full = Path.GetFullPath(path);
-        return full[Path.GetPathRoot(full)!.Length..].Split(
-            [Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar], StringSplitOptions.RemoveEmptyEntries);
-    }
+    private static string[] Components(string relative) => relative.Split(
+        [Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar], StringSplitOptions.RemoveEmptyEntries);
 }
