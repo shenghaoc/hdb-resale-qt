@@ -118,6 +118,30 @@ public sealed class BasemapConfigurationTests
         finally { Directory.Delete(root, recursive: true); }
     }
 
+    [Fact]
+    public void TestRejectsAFilesystemRootAsTheCache()
+    {
+        var root = Path.GetPathRoot(Path.GetFullPath(ProductionCache))!;
+        Assert.Throws<ArgumentException>(() => BasemapConfiguration.Create(true, Endpoint, root, ProductionCache));
+    }
+
+    // Windows only: a root-relative link target ("\\dir") stays on the link's volume.
+    [Fact]
+    public void TestKeepsTheVolumeForRootRelativeLinkTargets()
+    {
+        if (!OperatingSystem.IsWindows()) return;
+        var root = Directory.CreateTempSubdirectory("hdb-tile-links-").FullName;
+        try
+        {
+            var production = Path.Combine(root, "production", "onemap");
+            Directory.CreateDirectory(production);
+            var rootRelative = production[Path.GetPathRoot(production)!.Length..];
+            if (!TryLink(Path.Combine(root, "cache"), Path.DirectorySeparatorChar + rootRelative)) return;
+            Assert.Throws<ArgumentException>(() => BasemapConfiguration.Create(true, Endpoint, Path.Combine(root, "cache"), production));
+        }
+        finally { Directory.Delete(root, recursive: true); }
+    }
+
     private const string Endpoint = "http://127.0.0.1:12345/tiles/";
 
     private static bool TryLink(string link, string target)
