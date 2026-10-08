@@ -50,8 +50,11 @@ terminal too (or `export exe` there and open the second terminal from it), so
 `"$exe"` is defined where the application is launched. The numbered steps
 below are the **fixture pass**:
 their addresses, counts and orderings are the recorded snapshot's. The
-**production pass** repeats the same actions against the live API and checks
-only the invariants in "Production pass" below, since production data moves.
+**production pass** repeats the same actions against the live API; where a
+step's expectation depends on the fixture's data (addresses, counts, orderings,
+figures) the invariants in "Production pass" replace it, and every other
+expectation (appearance, scrolling, clipping, compact layout, modal isolation,
+exit) applies as written, so F7 to F10 are judged on production too.
 F6's faults run on the fixtures only. Each terminal line below is one server;
 launch the application from a second terminal with the printed URL.
 
@@ -82,7 +85,7 @@ the default S$1,000,000 maximum).
 | S2.7 | With the list focused, type `4717` | Typing continues in the search field; results 748A and 747A (postal codes). |
 | S2.8 | Replace with `588` | Empty state explains two matches hidden by the filters; Clear Search works. |
 | S2.9 | ⌘L / Ctrl+L | Focus lands on the town filter; in a compact window the filters expand. |
-| S2.10 | Open About, press ⌘F / Ctrl+F and then ⌘L / Ctrl+L, close About | Neither shortcut acts behind the dialog (search is not focused, the filters neither expand nor take focus); focus returns where it was. |
+| S2.10 | Open About from the platform's surface (the application menu on macOS, the status bar's About button on KDE), press ⌘F / Ctrl+F and then ⌘L / Ctrl+L, close About | Neither shortcut acts behind the dialog (search is not focused, the filters neither expand nor take focus); focus returns where it was. |
 | S2.11 | Select 748B, then narrow the window below the breakpoint and widen it again | Map/Addresses toggles appear; focus moves to the pane shown; 748B stays selected throughout. |
 | S2.12 | Screen reader on (VoiceOver, Orca): move through three rows, select one, type `b` | One name per row with address, town, median, sales and month; "Selected …" once; the result count announced after a pause. Then Escape until the search is empty and six addresses show. |
 | S2.13 | Select 748B, then set town ANG MO KIO; Reset. Then each filter from the defaults (Reset between them): town ANG MO KIO; flat type 4 ROOM; maximum S$500,000; minimum S$500,000; minimum S$600,000 with maximum S$500,000; Latest 12 months; then Reset | The excluded selection clears from the list, the map highlight and the details together. Then counts, with the list, the map and the status bar agreeing each time: 1 (727); 5 (747A, 748B, 748A, 115, 39); 3 (115, 39, 727); 3 (747A, 748B, 748A); 0 with the reversed-range explanation; 4 (747A, 748B, 748A, 39: the window starts at 2025-11, and 115's latest sale is 2025-10); Reset restores six and every default. |
@@ -97,7 +100,7 @@ the default S$1,000,000 maximum).
 | S3.2 | Set the flat type filter to 4 ROOM | Sales facts switch to the 4 ROOM cohort; "Middle half, all types" keeps the all-type range; the chart and registrations are unchanged. |
 | S3.3 | Address group | Town, flat types, models, postal code, nearest MRT; "Nearest MRT" and "Postal code" on one line each. |
 | S3.4 | Lease and Location groups | Commenced, "Remaining in 2026"; one block point; the two notes in the caption role. |
-| S3.5 | Chart, in the light appearance (set it now if the session is dark) | Title, range caption, axis labels and the two month labels in the caption size; line and dots in the link colour; gaps for months without a sale. |
+| S3.5 | Chart, in the light appearance (set it now if the session is dark) | At the display's scale (2 on Retina) the line, dots, text and the map's markers are crisp, with no pixelation or blur. Title, range caption, axis labels and the two month labels in the caption size; line and dots in the link colour; gaps for months without a sale. |
 | S3.6 | Scroll the details so the chart is half out of view, in both directions | The chart is clipped at the details' edge; nothing is drawn over the list or the heading. **Record the result explicitly; this is the open question from the offscreen captures.** |
 | S3.7 | Latest registrations | Heading, caption, 20 rows separated by hairlines, newest first: the first reads 2026-09 · 3 ROOM · S$663,000, the second 2026-06 · 3 ROOM · S$653,000, and months never increase down the list; headings demibold and tabular; details in the secondary colour. |
 | S3.8 | Reset the flat type filter to All flat types, then select 727 ANG MO KIO AVE 6 | Chart replaced by the "No registrations … 24-month window" caption; the inspector still shows four groups. |
@@ -111,8 +114,9 @@ the default S$1,000,000 maximum).
 
 ### Production pass
 
-Repeat S2.0 to S2.15 and S3.1 to S3.12 against production with these
-invariants instead of the fixture values. S2.0: the launch completes without
+Repeat S2.0 to S2.15 and S3.1 to S3.12 against production. The invariants
+below replace the fixture's data-dependent values; S2.9 to S2.11, S2.15 and
+S3.5 to S3.12 keep their expectations as written. S2.0: the launch completes without
 a load error, the status bar's count matches the list and the map shows
 markers. Search (F3): `ang mo kio ave` returns results whose addresses all
 contain those words; `ang mo kio 10` returns block 10 (an exact word match)
@@ -147,6 +151,12 @@ note the scale factor and the Qt Quick Controls style that loaded.
 - `QSG_INFO=1` is exported in section 1; its backend line must name Metal.
   Record it with the scale (2 on Retina). Without that line the macOS
   platform row stays unverified.
+- The Qt Quick Controls style must be `macOS`: `QT_QUICK_CONTROLS_STYLE` is
+  unset in the session (or set to `macOS`), and
+  `QT_LOGGING_RULES=qt.quick.controls*=true` on one launch names it. Record
+  it; Fusion or another style fails the platform row.
+- S3.5's crispness check is the Retina observation: no pixelated or blurred
+  chart line, dots, text or map markers at scale 2.
 - Light and dark: System Settings › Appearance; per-app dark mode also counts.
 - VoiceOver for S2.12 and S3.11.
 
@@ -183,7 +193,8 @@ supporting evidence, never sufficient); F2 S2.8, S2.13, S3.2; F3 S2.1–S2.8;
 F4 S2.3, S2.5, S2.13 (clearing through a filter), S2.14; F5 S3.1–S3.5, S3.7, S3.8; F6 S3.13, S3.14, S3.15; F7
 S3.6, S3.12; F8 S3.5, S3.8, S3.9 (light and dark both observed); F9 S2.11;
 F10 S2.10. Platform-specific items: S2.0 (window chrome, OSM tiles), S2.1 (the
-platform's Find command), S2.3 (inactive-window rings), S2.9, S2.12, S2.15
-(clean exit through the platform's own quit or close), S3.9–S3.11, S3.12
+platform's Find command), S2.3 (inactive-window rings), S2.9, S2.10 (About
+from the platform's surface), S2.12, S2.15 (clean exit through the platform's
+own quit or close), S3.5 (Retina crispness on macOS), S3.9–S3.11, S3.12
 (wheel, trackpad, keyboard and pointer input, under Wayland on KDE) and the
-platform notes. A scenario's production column needs the production pass too.
+platform notes, including the loaded style on both platforms. A scenario's production column needs the production pass too.
