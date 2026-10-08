@@ -99,7 +99,8 @@ def verify_installed(family: str, packages: Path, report: Path) -> None:
     launcher = Path("/usr/bin") / PACKAGE_NAME
     if Path(os.path.realpath(launcher)) != ROOT / PACKAGE_NAME or not os.access(launcher, os.X_OK):
         raise ValueError("The launcher on PATH does not resolve to the installed tree")
-    if shutil.which(PACKAGE_NAME) != str(launcher):
+    found = shutil.which(PACKAGE_NAME)  # Fedora merges /usr/sbin into /usr/bin, so compare real paths
+    if found is None or os.path.realpath(found) != os.path.realpath(launcher):
         raise ValueError("The launcher is not found on PATH")
     desktop = f"/usr/share/applications/{APPLICATION_ID}.desktop"
     capture("desktop-file-validate", desktop)
