@@ -41,4 +41,67 @@ public sealed class BasemapConfigurationTests
         foreach (var cache in new[] { null, "relative", ProductionCache, Path.Combine(ProductionCache, "child"), Path.GetDirectoryName(ProductionCache) })
             Assert.Throws<ArgumentException>(() => BasemapConfiguration.Create(true, "http://127.0.0.1:12345/tiles/", cache, ProductionCache));
     }
+
+    // Symbolic links stand in for junctions too: both resolve through ResolveLinkTarget. Where the platform
+    // refuses to create a link (Windows without the privilege), these tests have nothing to exercise.
+    [Fact]
+    public void TestRejectsLinksThatReachTheProductionCache()
+    {
+        var root = Directory.CreateTempSubdirectory("hdb-tile-links-").FullName;
+        try
+        {
+            var production = Path.Combine(root, "production", "onemap-default-v1");
+            Directory.CreateDirectory(production);
+            if (!TryLink(Path.Combine(root, "to-production"), production)) return;
+            Assert.True(TryLink(Path.Combine(root, "to-parent"), Path.GetDirectoryName(production)!));
+            Assert.True(TryLink(Path.Combine(root, "chain"), Path.Combine(root, "to-production")));
+            Assert.True(TryLink(Path.Combine(root, "relative"), Path.Combine("production", "onemap-default-v1")));
+            Assert.True(TryLink(Path.Combine(root, "alias"), root));
+            foreach (var cache in new[]
+            {
+                Path.Combine(root, "to-production"),
+                Path.Combine(root, "to-production", "tests"),
+                Path.Combine(root, "to-parent"),
+                Path.Combine(root, "chain", "tests"),
+                Path.Combine(root, "relative"),
+                Path.Combine(root, "alias", "production", "onemap-default-v1", "tests"),
+            })
+                Assert.Throws<ArgumentException>(() => BasemapConfiguration.Create(true, Endpoint, cache, production));
+        }
+        finally { Directory.Delete(root, recursive: true); }
+    }
+
+    [Fact]
+    public void TestResolvesTheProductionPathAndAcceptsUnrelatedLinks()
+    {
+        var root = Directory.CreateTempSubdirectory("hdb-tile-links-").FullName;
+        try
+        {
+            var data = Path.Combine(root, "local-data");
+            var elsewhere = Path.Combine(root, "elsewhere");
+            Directory.CreateDirectory(data);
+            Directory.CreateDirectory(elsewhere);
+            if (!TryLink(Path.Combine(root, "data-link"), data)) return;
+            // The production cache named through a link, the test cache named directly inside it.
+            var production = Path.Combine(root, "data-link", "onemap-default-v1");
+            Assert.Throws<ArgumentException>(() =>
+                BasemapConfiguration.Create(true, Endpoint, Path.Combine(data, "onemap-default-v1", "tests"), production));
+            Assert.True(TryLink(Path.Combine(root, "to-elsewhere"), elsewhere));
+            var accepted = BasemapConfiguration.Create(true, Endpoint, Path.Combine(root, "to-elsewhere"), production);
+            Assert.Equal(Path.Combine(root, "to-elsewhere"), accepted.CacheDirectory);
+            Assert.True(TryLink(Path.Combine(root, "loop-a"), Path.Combine(root, "loop-b")));
+            Assert.True(TryLink(Path.Combine(root, "loop-b"), Path.Combine(root, "loop-a")));
+            Assert.Throws<ArgumentException>(() =>
+                BasemapConfiguration.Create(true, Endpoint, Path.Combine(root, "loop-a", "tests"), production));
+        }
+        finally { Directory.Delete(root, recursive: true); }
+    }
+
+    private const string Endpoint = "http://127.0.0.1:12345/tiles/";
+
+    private static bool TryLink(string link, string target)
+    {
+        try { Directory.CreateSymbolicLink(link, target); return true; }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException) { return false; }
+    }
 }

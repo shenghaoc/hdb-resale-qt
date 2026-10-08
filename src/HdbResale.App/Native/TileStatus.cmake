@@ -14,3 +14,13 @@ add_executable(hdb_tile_status_tests "${HDB_TILE_STATUS_SOURCE_DIR}/tile_status_
 target_compile_features(hdb_tile_status_tests PRIVATE cxx_std_17)
 target_link_libraries(hdb_tile_status_tests PRIVATE hdb_tile_status Qt6::Core)
 add_test(NAME hdb_tile_status COMMAND hdb_tile_status_tests)
+
+add_executable(hdb_tile_status_default_sink_tests "${HDB_TILE_STATUS_SOURCE_DIR}/tile_status_default_sink_tests.cpp")
+target_compile_features(hdb_tile_status_default_sink_tests PRIVATE cxx_std_17)
+target_link_libraries(hdb_tile_status_default_sink_tests PRIVATE hdb_tile_status Qt6::Core)
+add_test(NAME hdb_tile_status_default_sink COMMAND hdb_tile_status_default_sink_tests)
+# The pass expression replaces the exit status, so internal failures print a marker instead.
+set_tests_properties(hdb_tile_status_default_sink PROPERTIES
+    ENVIRONMENT "QT_FORCE_STDERR_LOGGING=1"
+    PASS_REGULAR_EXPRESSION "HDB_DEFAULT_SINK_BEFORE.*giving up.*HDB_DEFAULT_SINK_AFTER_STOP"
+    FAIL_REGULAR_EXPRESSION "HDB_TEST_FAILED")

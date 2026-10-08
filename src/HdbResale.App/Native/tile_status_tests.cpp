@@ -14,6 +14,8 @@ bool require(bool ok, const char *message) { if (!ok) std::fprintf(stderr, "%s\n
 }
 int main()
 {
+    // With no custom handler, Qt hands back its own default handler: the one the monitor forwards to.
+    if (!require(qInstallMessageHandler(nullptr) != nullptr, "Qt returned no default handler to forward to")) return 1;
     const auto before = qInstallMessageHandler(original);
     hdb_tile_status_start();
     qWarning("Unrelated warning");

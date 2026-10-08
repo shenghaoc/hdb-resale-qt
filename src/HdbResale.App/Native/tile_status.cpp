@@ -3,7 +3,6 @@
 #include <QtCore/QString>
 #include <QtCore/qlogging.h>
 #include <atomic>
-#include <cstdio>
 #include <mutex>
 
 namespace {
@@ -20,13 +19,11 @@ void observe(QtMsgType type, const QMessageLogContext &context, const QString &m
         message.startsWith(QStringLiteral("QGeoTileRequestManager: Failed to fetch tile (")) &&
         message.contains(QStringLiteral(" times, giving up. Last error message was:")))
         exhausted.fetch_add(1, std::memory_order_relaxed);
-    if (const auto handler = previous.load(std::memory_order_acquire)) {
+    // Every diagnostic continues to the handler this one replaced: Qt's own default handler unless the
+    // application installed another. That keeps the platform's sink, such as the debugger for a Windows
+    // GUI application or the system log; this library never formats or writes diagnostics itself.
+    if (const auto handler = previous.load(std::memory_order_acquire))
         handler(type, context, message);
-    } else {
-        const auto line = qFormatLogMessage(type, context, message).toLocal8Bit();
-        std::fprintf(stderr, "%s\n", line.constData());
-        std::fflush(stderr);
-    }
 }
 }
 
@@ -34,8 +31,16 @@ void hdb_tile_status_start()
 {
     const std::lock_guard<std::mutex> lock(installation);
     if (installed) return;
+    // Look up the handler to forward to before installing this one, so no diagnostic arrives while it is
+    // unknown. For that instant Qt's default handler takes any concurrent message.
+    const auto current = qInstallMessageHandler(nullptr);
+    // Qt 6 hands back its default handler when none was installed, so this is never null with the pinned
+    // Qt. Without a handler to forward to, stay on Qt's default and leave monitoring off rather than
+    // replace the platform's diagnostic sink.
+    if (!current) return;
     exhausted.store(0, std::memory_order_relaxed);
-    previous.store(qInstallMessageHandler(observe), std::memory_order_release);
+    previous.store(current, std::memory_order_release);
+    qInstallMessageHandler(observe);
     installed = true;
 }
 
