@@ -14,7 +14,7 @@ ColumnLayout {
         Layout.topMargin: theme.m; Layout.bottomMargin: theme.s
         Layout.leftMargin: theme.m; Layout.rightMargin: theme.m
         Label {
-            text: root.title; font.bold: true; font.pointSize: Window.window.font.pointSize * theme.titleScale
+            text: root.title; font.weight: Font.DemiBold; font.pointSize: Window.window.font.pointSize * theme.titleScale
             Layout.fillWidth: true; elide: Text.ElideRight
             Accessible.role: Accessible.Heading
         }

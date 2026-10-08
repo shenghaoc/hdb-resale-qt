@@ -58,6 +58,9 @@
     <None Include="Section.qml"/>
     <None Include="FilterField.qml"/>
     <None Include="FilterBar.qml"/>
+    <None Include="SegmentedControl.qml"/>
+    <None Include="LoadStatus.qml"/>
+    <None Include="MacMenuBar.qml"/>
     <Compile Include="Program.cs" />
     <Compile Include="ApiRequests.cs" />
     <Compile Include="BuyerPresentation.cs" />
