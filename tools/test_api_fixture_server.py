@@ -65,6 +65,16 @@ class FailDetailsTests(unittest.TestCase):
             finally:
                 httpd.shutdown()
 
+    def test_the_reserved_port_refuses_connections(self):
+        import socket
+        held = server.reserve_refusing_port()
+        try:
+            port = held.getsockname()[1]
+            with self.assertRaises(ConnectionRefusedError):
+                socket.create_connection(("127.0.0.1", port), timeout=5).close()
+        finally:
+            held.close()
+
 
 if __name__ == "__main__":
     unittest.main()
