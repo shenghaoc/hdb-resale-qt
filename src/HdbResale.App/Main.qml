@@ -35,10 +35,10 @@ ApplicationWindow {
     }
     function recenterMap() { map.center = QtPositioning.coordinate(1.3521, 103.8198); map.zoomLevel = 11 }
     function toggleZoom() { visibility = visibility === Window.Maximized ? Window.Windowed : Window.Maximized }
-    // macOS has one menu bar per application; other desktops keep About in the status bar.
+    // macOS has one menu bar per application; other desktops keep About in the status bar. Loaded by URL so
+    // that other desktops never resolve Qt.labs.platform.
     Loader {
-        active: Qt.platform.os === "osx"
-        sourceComponent: Component { MacMenuBar { appWindow: window } }
+        Component.onCompleted: if (Qt.platform.os === "osx") setSource("MacMenuBar.qml", { appWindow: window })
     }
     // When a compact selection hides the focused list, the details' back button takes the keyboard focus.
     function keepFocusInCompactDetails() {
