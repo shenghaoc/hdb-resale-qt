@@ -32,7 +32,8 @@ for mode in recorded keyboard high-zoom unreachable tile-failure production; do
   python3 tools/api_native_smoke.py --executable "$exe" --mode "$mode" --log "/tmp/batch1-$mode.log" || break
 done
 grep -h "rhi backend\|Using QRhi\|backend:" /tmp/batch1-recorded.log | head -3     # record the backend line
-grep -Eil "warning|binding loop|TypeError|ReferenceError|Unable to assign|is not a type" /tmp/batch1-*.log   # expected: nothing
+# QML diagnostics ("QML Anchors: …", "file:…/Main.qml:123: …") and warnings; the gates' own "qml: HDB_…" lines are excluded.
+grep -Ei "warning|binding loop|TypeError|ReferenceError|Unable to assign|is not a type|QML [A-Za-z]+:|\.qml:[0-9]+" /tmp/batch1-*.log | grep -v "qml: HDB_"   # expected: nothing
 ```
 
 The `PASS` lines are the harness's; the logs also hold the gates' own
@@ -90,7 +91,7 @@ the default S$1,000,000 maximum).
 | S2.12 | Screen reader on (VoiceOver, Orca): move through three rows, select one, type `b` | One name per row with address, town, median, sales and month; "Selected …" once; the result count announced after a pause. Then Escape until the search is empty and six addresses show. |
 | S2.13 | Select 748B, then set town ANG MO KIO; Reset. Then each filter from the defaults (Reset between them): town ANG MO KIO; flat type 4 ROOM; maximum S$500,000; minimum S$500,000; minimum S$600,000 with maximum S$500,000; Latest 12 months; then Reset | The excluded selection clears from the list, the map highlight and the details together. Then counts, with the list, the map and the status bar agreeing each time: 1 (727); 5 (747A, 748B, 748A, 115, 39); 3 (115, 39, 727); 3 (747A, 748B, 748A); 0 with the reversed-range explanation; 4 (747A, 748B, 748A, 39: the window starts at 2025-11, and 115's latest sale is 2025-10); Reset restores six and every default. |
 | S2.14 | Click a map marker (zoom in until 748B is an individual marker) | The list highlights and scrolls to 748B, the details open, and the marker is highlighted; "Show on map" from the details recentres on it. |
-| S2.15 | Quit through the platform: macOS ⌘Q or the application menu's Quit; KDE the window frame's close button (and once more with Alt+F4) | The window closes at once, the process exits with status 0 in the launching terminal, no error is printed, and nothing is left running. Launch again afterwards for the Stage 3 steps. |
+| S2.15 | Quit through the platform, twice with a relaunch between: macOS the application menu's Quit item, then ⌘Q; KDE the window frame's close button, then Alt+F4 | The window closes at once, the process exits with status 0 in the launching terminal, no error is printed, and nothing is left running. Launch again afterwards for the Stage 3 steps. |
 
 ### Stage 3: inspector, chart, clipping, typography, accessibility
 
@@ -99,7 +100,7 @@ the default S$1,000,000 maximum).
 | S3.1 | Select 748B, read the Sales group | Five facts at once and, when the details arrive, a sixth labelled "Middle half, all types" reading S$705,750–S$880,000 (the all-types interquartile range the contract's F5 requires); labels right-aligned in one column, values aligned, tabular figures; the note names the 24-month scope. |
 | S3.2 | Set the flat type filter to 4 ROOM | Sales facts switch to the 4 ROOM cohort; "Middle half, all types" keeps the all-type range; the chart and registrations are unchanged. |
 | S3.3 | Address group | Town, flat types, models, postal code, nearest MRT; "Nearest MRT" and "Postal code" on one line each. |
-| S3.4 | Lease and Location groups | Commenced, "Remaining in 2026"; one block point; the two notes in the caption role. |
+| S3.4 | Lease and Location groups | Commenced, "Remaining in <the current year>" (the label follows the clock; record the year); one block point; the two notes in the caption role. |
 | S3.5 | Chart, in the light appearance (set it now if the session is dark) | At the display's scale (2 on Retina) the line, dots, text and the map's markers are crisp, with no pixelation or blur. Title, range caption, axis labels and the two month labels in the caption size; line and dots in the link colour; gaps for months without a sale. |
 | S3.6 | Scroll the details so the chart is half out of view, in both directions | The chart is clipped at the details' edge; nothing is drawn over the list or the heading. **Record the result explicitly; this is the open question from the offscreen captures.** |
 | S3.7 | Latest registrations | Heading, caption, 20 rows separated by hairlines, newest first: the first reads 2026-09 · 3 ROOM · S$663,000, the second 2026-06 · 3 ROOM · S$653,000, and months never increase down the list; headings demibold and tabular; details in the secondary colour. |
@@ -115,8 +116,14 @@ the default S$1,000,000 maximum).
 ### Production pass
 
 Repeat S2.0 to S2.15 and S3.1 to S3.12 against production. The invariants
-below replace the fixture's data-dependent values; S2.9 to S2.11, S2.15 and
-S3.5 to S3.12 keep their expectations as written. S2.0: the launch completes without
+below replace the fixture's data-dependent values; S2.9 to S2.11, S2.15,
+S3.5, S3.6 and S3.9 to S3.12 keep their expectations as written. S3.7 on
+production: every row belongs to the selected address, the first row's month
+is the address's latest month shown in the list, and months never increase
+down the list. S3.8 on production: pick an address whose list row shows a
+latest month older than the 24-month window (search by town and sort by eye,
+or use the Any time window); if none exists on the day, record S3.8 as
+unverified for production. S2.0: the launch completes without
 a load error, the status bar's count matches the list and the map shows
 markers. Search (F3): `ang mo kio ave` returns results whose addresses all
 contain those words; `ang mo kio 10` returns block 10 (an exact word match)
@@ -173,6 +180,12 @@ note the scale factor and the Qt Quick Controls style that loaded.
   does not count; record it as unverified, not failed.
 - Record the Qt Quick Controls style that loaded (`QT_QUICK_CONTROLS_STYLE` in
   the session, or `QT_LOGGING_RULES=qt.quick.controls*=true`).
+- Observe, with System Settings › Colours & Themes and a Plasma application
+  such as Dolphin open beside the window, that the window uses the session's
+  colour scheme (window, text, highlight and link colours match) and its
+  general font (same family and size as Dolphin's), and that no control looks
+  like a macOS control (no traffic lights, no macOS toggle or check box
+  shapes). Record the scheme and font names.
 - Light and dark: System Settings › Colours & Themes › Colours (Breeze Light,
   Breeze Dark). Scale factor: Display Configuration.
 - Orca for S2.12 and S3.11, with AT-SPI enabled for Qt
@@ -197,4 +210,5 @@ platform's Find command), S2.3 (inactive-window rings), S2.9, S2.10 (About
 from the platform's surface), S2.12, S2.15 (clean exit through the platform's
 own quit or close), S3.5 (Retina crispness on macOS), S3.9–S3.11, S3.12
 (wheel, trackpad, keyboard and pointer input, under Wayland on KDE) and the
-platform notes, including the loaded style on both platforms. A scenario's production column needs the production pass too.
+platform notes, including the loaded style on both platforms and, on KDE,
+the colour-scheme and font observation. A scenario's production column needs the production pass too.
