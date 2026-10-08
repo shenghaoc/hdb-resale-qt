@@ -147,8 +147,12 @@ queries instead: for `ang mo kio 10`, zoom to the Ang Mo Kio results until
 each is an individual marker, click every marker and confirm each selects an
 address on the result list and that no listed address is without a marker;
 for the postal-code query, the map holds one marker and clicking it selects
-that address. A marker that selects an address not on the list, or a listed
-address without one, fails F3. `ang mo kio ave` returns results whose addresses all
+that address; and because the map draws only the viewport above zoom 15,
+stale markers are checked away from the results too: before each query note
+one marker outside Ang Mo Kio (the S2.0 selection's location serves), and
+after the query zoom to that location and confirm no marker remains there.
+A marker that selects an address not on the list, a listed address without
+one, or a marker surviving outside the results, fails F3. `ang mo kio ave` returns results whose addresses all
 contain those words; `ang mo kio 10` returns block 10 (an exact word match)
 before blocks that merely begin with 10, such as 101 to 109, and no address
 outside Ang Mo Kio; `ang mo kio avenue`
@@ -160,12 +164,13 @@ Sales group matches that address's `/api/block-summaries` entry
 `floorAreaRange`; with a flat type selected, that type's `flatTypeCohorts`,
 `medianPriceByFlatType` and `medianPricePerSqmByFlatType` entries), whose
 Address group shows that address's own town, flat types, postal code and
-nearest MRT as the same entry gives them (`town`, `flatTypes`, `postalCode`,
-`nearestMrt`), whose Lease group shows its `leaseCommenceRange` and
+nearest MRT as the same entry gives them (`town`, `flatTypes`, `flatModels`,
+`postalCode`, `nearestMrt`), whose Lease group shows its `leaseCommenceRange` and
 99 minus the years since it, whose Location group shows its `coordinates`
 to five decimals, and whose
 Sales note names the dataset's latest month, and once the details arrive
-the Sales group shows "Middle half, all types" with a populated S$ range; an address with sales in the
+the Sales group shows "Middle half, all types" whose two values equal the
+detail response's `summary.priceIqr` (the S3.7 curl); an address with sales in the
 window shows a chart, one without shows the empty caption. Chart (F8, S3.5):
 choose an address whose detail response's `monthlyTrend` (the same curl as
 S3.7; the list shows at most 20 registrations, so it cannot be read off the
@@ -179,9 +184,18 @@ same `monthlyTrend`: the caption's sales and observed-month counts are the
 sums over the window's entries, the month labels are the window's first and
 last months, the first and last dots sit at the window's first and last
 populated months, and the highest and lowest dots sit at the months with the
-highest and lowest `medianPrice`. Filters (F2): town,
-a tightened price bound and the registration window narrow the count or leave it
-unchanged; a flat type may raise it, because the selected type's own median
+highest and lowest `medianPrice`; the y axis runs from
+floor(min ÷ 50,000) × 50 − 50 to ceiling(max ÷ 50,000) × 50 + 50 thousand
+(min and max over the window's `medianPrice`, the lower bound never below 0),
+so a chart keeping the fixture's 600 to 1,150 scale for a differently priced
+address fails; and the highest dot sits visibly nearer the top bound than
+the lowest dot sits, in proportion to their `medianPrice` values. Filters
+(F2): choose each bound from the live list so it must act: a maximum just
+below a listed address's median excludes that address, a minimum just above
+another's median excludes it, and a registration window shorter than the
+time since a listed address's latest month excludes it; each change must
+remove the named address and lower the count (a control that leaves the
+count unchanged fails); town narrows to its own addresses; a flat type may raise the count, because the selected type's own median
 is compared against the price cap, and raising the maximum above its
 S$1,000,000 default widens the count (record the count at the upper limit,
 which must exceed S2.0's); list, map and status bar agree after every
@@ -189,7 +203,10 @@ change; after the town filter, map membership is checked by identity, as for
 F3: note two addresses from other towns that were listed before the filter,
 zoom to each location and confirm no marker remains there, and confirm a
 listed address in the chosen town has a marker whose click selects it; after
-Reset the two markers are back. Reset restores S2.0's default count (the default S$1,000,000
+Reset the two markers are back. Hidden-by-filters (S2.8): with the maximum
+set just below a listed address's median, search for that address by its
+block and street; the list shows the empty state explaining that a match is
+hidden by the filters, and Clear Search works. Reset restores S2.0's default count (the default S$1,000,000
 maximum still applies, so this is not every address the API holds). Selection (F4): a map marker
 click selects the address it names; then, with that address selected, type a
 search that does not match it (for example the postal code of another listed
