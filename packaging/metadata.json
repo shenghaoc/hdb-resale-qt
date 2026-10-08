@@ -1,0 +1,19 @@
+{
+  "name": "hdb-resale-explorer",
+  "application_id": "io.github.shenghaoc.hdb-resale-qt",
+  "summary": "Explore Singapore HDB resale registrations by address",
+  "description": [
+    "HDB Resale Explorer is an independent desktop app for exploring Singapore HDB resale registrations by address. It reads the HDB Resale Explorer API, the same Worker API the web app uses, and shows addresses on a map with their recorded prices and a monthly median trend.",
+    "It is not affiliated with HDB, SLA or the Singapore Government.",
+    "This package is self-contained: it ships the Qt runtime it was verified with and the .NET runtime under /opt/hdb-resale-explorer, and uses only the system libraries it declares. It bundles no resale data."
+  ],
+  "homepage": "https://github.com/shenghaoc/hdb-resale-qt",
+  "bugs": "https://github.com/shenghaoc/hdb-resale-qt/issues",
+  "maintainer": "HDB Resale Explorer contributors <noreply@github.com>",
+  "developer": "HDB Resale Explorer contributors",
+  "license": "GPL-3.0-or-later AND GPL-3.0-only AND LGPL-3.0-only AND MIT",
+  "release": "1",
+  "section": "misc",
+  "categories": "Education;Geography;",
+  "keywords": "HDB;resale;Singapore;housing;property;map;"
+}

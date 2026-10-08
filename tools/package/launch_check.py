@@ -167,6 +167,7 @@ def check(package: Path, launcher: Path, log_path: Path, report_path: Path, time
     started = time.monotonic()
     mapped: set[str] = set()
     forbidden = tuple(forbid) + SYSTEM_RUNTIME_ROOTS
+    code = None
     try:
         with tempfile.TemporaryDirectory(prefix="hdb-launch-", dir=log_path.parent) as temp:
             temporary = Path(temp)
@@ -199,16 +200,14 @@ def check(package: Path, launcher: Path, log_path: Path, report_path: Path, time
                         child.kill()
                         child.wait()
             opened = forbidden_opens(trace_file.read_text(errors="replace"), forbidden) if trace else []
-        log_text = log_path.read_text(errors="replace")
-        try:
-            verify(code, log_text, mapped, package)
-            if opened:
-                raise ValueError("Package read or executed build-tree/system runtime files: " + repr(opened))
-        except ValueError as error:
-            report_path.parent.mkdir(parents=True, exist_ok=True)
-            report_path.write_text(json.dumps({"passed": False, "package": str(package), "exit_code": code,
-                "reason": str(error), "mapped_libraries": sorted(mapped)}, indent=2) + "\n")
-            raise
+        verify(code, log_path.read_text(errors="replace"), mapped, package)
+        if opened:
+            raise ValueError("Package read or executed build-tree/system runtime files: " + repr(opened))
+    except ValueError as error:
+        report_path.parent.mkdir(parents=True, exist_ok=True)
+        report_path.write_text(json.dumps({"passed": False, "package": str(package), "exit_code": code,
+            "reason": str(error), "mapped_libraries": sorted(mapped)}, indent=2) + "\n")
+        raise
     finally:
         if server:
             server.shutdown()

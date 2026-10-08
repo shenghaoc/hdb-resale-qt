@@ -9,10 +9,19 @@ version = 1
 path = [
   "src/**/*.cs", "src/**/*.cpp", "src/**/*.h", "src/**/*.cmake", "src/**/*.qml", "src/**/*.csproj", "src/**/Info.plist",
   "tests/**/*.cs", "tests/**/*.csproj",
-  "tools/**/*.py", "tools/**/*.sh", ".github/workflows/*.yml",
+  "tools/**/*.py", "tools/**/*.sh", ".github/workflows/*.yml", ".github/dependabot.yml",
+  "packaging/metadata.json", "packaging/system-dependencies.json", "packaging/README.md",
+  "packaging/linux/*.desktop", "packaging/linux/*.svg", "packaging/linux/copyright",
   "Directory.Build.props", "HdbResale.slnx", "global.json", ".gitignore"
 ]
 precedence = "closest"
 SPDX-FileCopyrightText = "2026 HDB Resale Explorer contributors"
 SPDX-License-Identifier = "GPL-3.0-or-later"
 SPDX-FileComment = "Original project code only. Existing closer upstream notices are preserved. No data, OneMap asset, provenance or experiments subtree is included."
+
+# AppStream metadata uses the metadata licence AppStream expects for catalogue data.
+[[annotations]]
+path = ["packaging/linux/*.metainfo.xml.in"]
+precedence = "closest"
+SPDX-FileCopyrightText = "2026 HDB Resale Explorer contributors"
+SPDX-License-Identifier = "MIT"
