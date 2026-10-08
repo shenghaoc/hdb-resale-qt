@@ -1,0 +1,51 @@
+# Low-noise weekly updates for the ecosystems this repository actually has.
+#
+# Deliberately NOT automated, because each is a native re-validation, not a routine bump:
+#   * Qt Bridge for C#. Linux (0.4.0-beta) and macOS (0.4.0.22-beta) pin different published
+#     pre-releases on purpose; they come from a property-driven PackageReference, and a
+#     pre-release Bridge needs native validation. Ignored below so nothing "normalises" them.
+#   * Qt 6.12.0 and aqtinstall/cmake/ninja (pinned in .github/workflows/linux-package.yml): not NuGet,
+#     not an action, so not visible to Dependabot. Change them by hand, with packaging evidence.
+#   * .NET SDK 10.0.401 (global.json) and the bundled runtime 10.0.12. The dotnet-sdk ecosystem could
+#     bump global.json alone, which would desynchronise .github/workflows/domain.yml, the runtime the
+#     package bundles and the verified Qt/.NET pairing. Left manual until those share one source.
+#
+# GitHub Actions stay pinned to immutable commit SHAs: Dependabot rewrites the SHA and the trailing
+# "# vN" comment together.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Asia/Singapore
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci(deps)"
+    labels: [dependencies]
+    groups:
+      github-actions:
+        patterns: ["*"]
+        update-types: [minor, patch]
+
+  - package-ecosystem: nuget
+    directories:
+      - /tests/*
+      - /src/*
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Asia/Singapore
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "build(deps)"
+    labels: [dependencies]
+    ignore:
+      - dependency-name: "QtGroup.Qt.Bridge.CSharp*"
+    groups:
+      test-tooling:
+        patterns: ["*"]
+        update-types: [minor, patch]
