@@ -21,6 +21,25 @@ ApplicationWindow {
     FontMetrics { id: textMetrics; font: window.font }
     Theme { id: theme; unit: window.unit }
 
+    // Commands shared by the macOS menu bar and the in-window controls.
+    readonly property int activeFilterCount: filterBar.activeCount
+    function showAbout() { aboutDialog.open() }
+    function showView(index) {
+        if (compact) viewTabs.currentIndex = index
+        if (index === 1) transactionsList.forceActiveFocus(Qt.ShortcutFocusReason)
+    }
+    function showSelectedOnMap() {
+        if (compact) viewTabs.currentIndex = 0
+        map.center = QtPositioning.coordinate(Resales.selectedLatitude, Resales.selectedLongitude)
+        map.zoomLevel = 16
+    }
+    function recenterMap() { map.center = QtPositioning.coordinate(1.3521, 103.8198); map.zoomLevel = 11 }
+    function toggleZoom() { visibility = visibility === Window.Maximized ? Window.Windowed : Window.Maximized }
+    // macOS has one menu bar per application; other desktops keep About in the status bar.
+    Loader {
+        active: Qt.platform.os === "osx"
+        sourceComponent: Component { MacMenuBar { appWindow: window } }
+    }
     // When a compact selection hides the focused list, the details' back button takes the keyboard focus.
     function keepFocusInCompactDetails() {
         const item = activeFocusItem
@@ -156,21 +175,19 @@ ApplicationWindow {
             anchors.fill: parent
             spacing: 0
             FilterBar { id: filterBar; Layout.fillWidth: true }
-            Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; color: theme.separator }
-            // Loading and API errors stay in view, with Retry, above the content they affect.
-            RowLayout {
-                visible: Resales.statusText.length > 0
-                Layout.fillWidth: true; Layout.margins: theme.s
-                Label { text: Resales.statusText; font.bold: true; wrapMode: Text.WordWrap; Layout.fillWidth: true; Accessible.name: text }
-                Button { text: "Retry"; visible: Resales.canRetry; Accessible.name: "Retry loading addresses"; onClicked: Resales.retry() }
-            }
-            TabBar {
-                id: viewTabs
+            // Compact windows show the map or the addresses, switched under the filters.
+            Item {
                 visible: window.compact
                 Layout.fillWidth: true
-                TabButton { text: qsTr("Map") }
-                TabButton { text: qsTr("Addresses and details") }
+                implicitHeight: viewTabs.implicitHeight + theme.s * 2
+                SegmentedControl {
+                    id: viewTabs
+                    anchors.centerIn: parent
+                    model: [qsTr("Map"), qsTr("Addresses")]
+                    Accessible.name: qsTr("View")
+                }
             }
+            Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; color: theme.separator }
             SplitView {
                 id: workspace
                 Layout.fillWidth: true
@@ -335,8 +352,17 @@ ApplicationWindow {
                         Button {
                             id: recenter
                             text: "Singapore"
-                            onClicked: { map.center = QtPositioning.coordinate(1.3521, 103.8198); map.zoomLevel = 11 }
+                            onClicked: window.recenterMap()
                         }
+                    }
+                    // Compact windows keep the list on the other view; show loading and errors over the map.
+                    Rectangle {
+                        visible: window.compact && (Resales.loading || Resales.canRetry)
+                        anchors.centerIn: parent
+                        width: Math.min(parent.width - theme.l * 2, 22 * window.unit)
+                        height: compactLoadStatus.implicitHeight + theme.l * 2
+                        color: theme.overlay; border.color: theme.separator; radius: theme.s
+                        LoadStatus { id: compactLoadStatus; anchors.fill: parent; anchors.margins: theme.l }
                     }
                     Label {
                         id: zoomLabel; color: palette.windowText
@@ -378,7 +404,8 @@ ApplicationWindow {
                             Layout.fillWidth: true
                             visible: !(window.compact && Resales.selectedMapKey !== "")
                             title: qsTr("Addresses")
-                            caption: Resales.addressCount.toLocaleString(Qt.locale(), "f", 0)
+                            // No count until the addresses have loaded.
+                            caption: Resales.loading || Resales.canRetry ? "" : Resales.addressCount.toLocaleString(Qt.locale(), "f", 0)
                         }
                         SplitView {
                             id: paneSplit
@@ -470,6 +497,10 @@ ApplicationWindow {
                                     }
                                     Button { text: qsTr("Reset filters"); Layout.alignment: Qt.AlignHCenter; onClicked: Resales.resetFilters(); Accessible.name: qsTr("Reset all filters") }
                                 }
+                                LoadStatus {
+                                    anchors.centerIn: parent
+                                    width: Math.min(parent.width - theme.l * 2, 22 * window.unit)
+                                }
                             }
                             Item {
                                 id: detailsPane
@@ -494,10 +525,7 @@ ApplicationWindow {
                                         Button {
                                             text: qsTr("Show on map"); flat: true; visible: Resales.selectedLocated
                                             Accessible.name: qsTr("Show selected address on the map")
-                                            onClicked: {
-                                                if (window.compact) viewTabs.currentIndex = 0
-                                                map.center = QtPositioning.coordinate(Resales.selectedLatitude, Resales.selectedLongitude); map.zoomLevel = 16
-                                            }
+                                            onClicked: window.showSelectedOnMap()
                                         }
                                     }
                                     Label {
@@ -555,16 +583,31 @@ ApplicationWindow {
                 id: statusBar
                 Layout.fillWidth: true
                 leftPadding: theme.m; rightPadding: theme.m; topPadding: theme.xs; bottomPadding: theme.xs
+                // One quiet line: the result count, provenance and the licence. The data service and the filter
+                // rules are in About.
                 contentItem: RowLayout {
                     spacing: theme.m
-                    Label { text: Resales.filterSummary; font.bold: true; font.pointSize: window.font.pointSize * theme.captionScale; Accessible.name: text }
                     Label {
-                        Layout.fillWidth: true; Layout.minimumWidth: 0; wrapMode: Text.WordWrap
-                        font.pointSize: window.font.pointSize * theme.captionScale; color: theme.secondaryText; linkColor: window.palette.link
-                        text: 'Independent research tool · HDB resale prices via data.gov.sg, served by the HDB Resale Explorer API · <a href="https://data.gov.sg/open-data-licence">Singapore Open Data Licence</a>'
+                        visible: text.length > 0
+                        text: Resales.filterSummary; font.pointSize: window.font.pointSize * theme.captionScale; Accessible.name: text
+                    }
+                    // Compact windows keep the count and the licence; About has the rest.
+                    Item { visible: window.compact; Layout.fillWidth: true }
+                    Label {
+                        visible: !window.compact
+                        Layout.fillWidth: true; Layout.minimumWidth: 0; elide: Text.ElideRight; maximumLineCount: 1
+                        font.pointSize: window.font.pointSize * theme.captionScale; color: theme.secondaryText
+                        text: qsTr("Independent research tool · resale data from data.gov.sg")
+                    }
+                    Label {
+                        font.pointSize: window.font.pointSize * theme.captionScale; linkColor: window.palette.link
+                        text: '<a href="https://data.gov.sg/open-data-licence">Singapore Open Data Licence</a>'
                         onLinkActivated: (link) => Qt.openUrlExternally(link)
                     }
-                    ToolButton { text: qsTr("About"); Accessible.name: "About HDB Resale Explorer"; onClicked: aboutDialog.open() }
+                    ToolButton {
+                        visible: Qt.platform.os !== "osx"      // in the application menu on macOS
+                        text: qsTr("About"); Accessible.name: "About HDB Resale Explorer"; onClicked: window.showAbout()
+                    }
                 }
             }
         }
