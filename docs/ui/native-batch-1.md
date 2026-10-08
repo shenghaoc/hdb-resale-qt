@@ -21,15 +21,22 @@ in-process, not through the platform's input path. Expected: every mode prints
 ```sh
 dotnet build -c Release -m:1
 dotnet test -c Release --no-build -m:1
-# Linux: the published host.
-exe="$PWD/src/HdbResale.App/bin/Release/net10.0/HdbResale.App"
-# macOS: the staged bundle, so macOS and its accessibility tools see the application, not a bare host.
-exe="$PWD/src/HdbResale.App/obj/Release/net10.0/HdbResale.app/Contents/MacOS/HdbResale.App"
+case "$(uname)" in
+  Darwin) # the staged bundle, so macOS and its accessibility tools see the application, not a bare host
+    exe="$PWD/src/HdbResale.App/obj/Release/net10.0/HdbResale.app/Contents/MacOS/HdbResale.App" ;;
+  *)      # Linux: the published host
+    exe="$PWD/src/HdbResale.App/bin/Release/net10.0/HdbResale.App" ;;
+esac
+export QSG_INFO=1      # the scene graph logs its backend; record it (macOS must say Metal)
 for mode in recorded keyboard high-zoom unreachable tile-failure production; do
   python3 tools/api_native_smoke.py --executable "$exe" --mode "$mode" --log "/tmp/batch1-$mode.log" || break
 done
-grep -il "warning\|qml" /tmp/batch1-*.log      # expected: nothing
+grep -h "rhi backend\|Using QRhi\|backend:" /tmp/batch1-recorded.log | head -3     # record the backend line
+grep -Eil "warning|binding loop|TypeError|ReferenceError|Unable to assign|is not a type" /tmp/batch1-*.log   # expected: nothing
 ```
+
+The `PASS` lines are the harness's; the logs also hold the gates' own
+`qml: HDB_…` markers, which are not warnings.
 
 The `keyboard` mode exists from Stage 2 onward (it is in `ui/address-search`
 and so in the head under test); on `main` before Stage 2 merges the harness
@@ -62,6 +69,7 @@ the default S$1,000,000 maximum).
 
 | # | Step | Expected |
 |---|---|---|
+| S2.0 | Launch against the fixture server; wait for the load | Six addresses in the list; the status bar's count reads six; six markers or their groups on the map; no load error. |
 | S2.1 | Press ⌘F (macOS) or Ctrl+F (KDE); on macOS also Edit › Find Address… | Search field focused, existing text selected. |
 | S2.2 | Type `bedok res` | Three results, 748A, 748B, 747A in that order; map shows the same three. |
 | S2.3 | ↓ ↓ Return | 748B selected once; details open; the cursor ring is visible in the active window; the row stays in view. |
@@ -73,19 +81,19 @@ the default S$1,000,000 maximum).
 | S2.9 | ⌘L / Ctrl+L | Focus lands on the town filter; in a compact window the filters expand. |
 | S2.10 | Open About, press ⌘F / Ctrl+F, close About | The shortcut does nothing behind the dialog; focus returns where it was. |
 | S2.11 | Select 748B, then narrow the window below the breakpoint and widen it again | Map/Addresses toggles appear; focus moves to the pane shown; 748B stays selected throughout. |
-| S2.12 | Screen reader on (VoiceOver, Orca): move through three rows, select one, type a letter | One name per row with address, town, median, sales and month; "Selected …" once; the result count announced after a pause. |
-| S2.13 | Filters: town ANG MO KIO; then All towns and flat type 4 ROOM; then a maximum of S$500,000; then a minimum above the maximum; then Latest 12 months; then Reset | List and map narrow together each time; the reversed range shows an empty, explained result; the status bar's count follows; Reset restores six addresses and every default. |
+| S2.12 | Screen reader on (VoiceOver, Orca): move through three rows, select one, type `b` | One name per row with address, town, median, sales and month; "Selected …" once; the result count announced after a pause. Then Escape until the search is empty and six addresses show. |
+| S2.13 | Filters, each from the defaults (Reset between them): town ANG MO KIO; flat type 4 ROOM; maximum S$500,000; minimum S$600,000 with maximum S$500,000; Latest 12 months; then Reset | Counts, with the list, the map and the status bar agreeing each time: 1 (727); 5 (747A, 748B, 748A, 115, 39); 3 (115, 39, 727); 0 with the reversed-range explanation; 5 (the same five as 4 ROOM); Reset restores six and every default. |
 | S2.14 | Click a map marker (zoom in until 748B is an individual marker) | The list highlights and scrolls to 748B, the details open, and the marker is highlighted; "Show on map" from the details recentres on it. |
 
 ### Stage 3: inspector, chart, clipping, typography, accessibility
 
 | # | Step | Expected |
 |---|---|---|
-| S3.1 | Select 748B, read the Sales group | Six facts, labels right-aligned in one column, values aligned, tabular figures; the note names the 24-month scope. |
+| S3.1 | Select 748B, read the Sales group | Five facts at once and, when the details arrive, a sixth labelled "Middle half, all types" reading S$705,750–S$880,000 (the all-types interquartile range the contract's F5 requires); labels right-aligned in one column, values aligned, tabular figures; the note names the 24-month scope. |
 | S3.2 | Set the flat type filter to 4 ROOM | Sales facts switch to the 4 ROOM cohort; "Middle half, all types" keeps the all-type range; the chart and registrations are unchanged. |
 | S3.3 | Address group | Town, flat types, models, postal code, nearest MRT; "Nearest MRT" and "Postal code" on one line each. |
 | S3.4 | Lease and Location groups | Commenced, "Remaining in 2026"; one block point; the two notes in the caption role. |
-| S3.5 | Chart | Title, range caption, axis labels and the two month labels in the caption size; line and dots in the link colour; gaps for months without a sale. |
+| S3.5 | Chart, in the light appearance (set it now if the session is dark) | Title, range caption, axis labels and the two month labels in the caption size; line and dots in the link colour; gaps for months without a sale. |
 | S3.6 | Scroll the details so the chart is half out of view, in both directions | The chart is clipped at the details' edge; nothing is drawn over the list or the heading. **Record the result explicitly; this is the open question from the offscreen captures.** |
 | S3.7 | Latest registrations | Heading, caption, rows separated by hairlines; headings demibold and tabular; details in the secondary colour. |
 | S3.8 | Reset the flat type filter to All flat types, then select 727 ANG MO KIO AVE 6 | Chart replaced by the "No registrations … 24-month window" caption; the inspector still shows four groups. |
@@ -93,7 +101,9 @@ the default S$1,000,000 maximum).
 | S3.10 | Raise the system text size or scale factor one step | Labels wrap rather than clip; the label column does not exceed two fifths of the pane; the chart captions scale. |
 | S3.11 | Screen reader through the details | Each group reads as a named group with a heading; each fact reads once as "Label: value"; each registration reads once. |
 | S3.12 | Scroll the list and the details by wheel, trackpad and keyboard (↑/↓, Page Up/Down, Home/End); drag a row with the mouse | Both scroll smoothly and stop at their ends; a mouse drag on the list selects or does nothing but never flicks it. |
-| S3.13 | `--fail-details 503` | Each selection shows the error and Retry; Retry re-requests; the inspector's four groups still show. |
+| S3.13 | Against `--fail-details 503`: select two addresses, press Retry on one | Each selection shows the error and Retry; Retry re-requests; the inspector's four groups still show. |
+| S3.14 | Against `--refuse`: launch, wait, press Retry | The load error says the API could not be reached and offers Retry; Retry re-attempts and the error remains; the window stays responsive, filters and About still open. |
+| S3.15 | Against `--fail-tiles` with `HDB_TILE_TEST=1` and `HDB_TEST_TILE_ENDPOINT`: launch, select 748B, search `bedok` | The tile-failure notice appears over an empty map; the list, search, selection and details keep working; the notice stays legible in light and dark. |
 
 ### Production pass
 
@@ -121,7 +131,9 @@ note the scale factor and the Qt Quick Controls style that loaded.
 
 - Build and run in the logged-in desktop session, not with the screen locked;
   window-level accessibility and input are otherwise blocked.
-- Confirm Metal in the log if `QSG_INFO=1` is set, and the scale (2 on Retina).
+- `QSG_INFO=1` is exported in section 1; its backend line must name Metal.
+  Record it with the scale (2 on Retina). Without that line the macOS
+  platform row stays unverified.
 - Light and dark: System Settings › Appearance; per-app dark mode also counts.
 - VoiceOver for S2.12 and S3.11.
 
@@ -153,8 +165,9 @@ screen reader not available). Add the commit hash, OS version, Qt style
 loaded, scale, and the list of captures taken. Any failed step is a concrete
 native defect to fix before Stage 4.
 
-Scenario mapping: F1 section 1 `recorded`/`production`; F2 S2.8, S2.13, S3.2;
-F3 S2.1–S2.8; F4 S2.3, S2.5, S2.14; F5 S3.1–S3.5, S3.7, S3.8; F6 section 2
-fault servers and S3.13; F7 S3.6, S3.12; F8 S3.5, S3.8, S3.9; F9 S2.11; F10
-S2.10. Platform-specific items: S2.9, S2.12, S3.9–S3.11 and the platform
+Scenario mapping: F1 S2.0 (section 1's `recorded` and `production` are
+supporting evidence, never sufficient); F2 S2.8, S2.13, S3.2; F3 S2.1–S2.8;
+F4 S2.3, S2.5, S2.14; F5 S3.1–S3.5, S3.7, S3.8; F6 S3.13, S3.14, S3.15; F7
+S3.6, S3.12; F8 S3.5, S3.8, S3.9 (light and dark both observed); F9 S2.11;
+F10 S2.10. Platform-specific items: S2.9, S2.12, S3.9–S3.11 and the platform
 notes. A scenario's production column needs the production pass too.
