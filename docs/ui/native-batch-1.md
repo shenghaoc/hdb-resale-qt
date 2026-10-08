@@ -19,8 +19,7 @@ in-process, not through the platform's input path. Expected: every mode prints
 `PASS`, with no QML warning in its log.
 
 ```sh
-dotnet build -c Release -m:1 && dotnet test -c Release --no-build -m:1 || { echo "build or tests failed: stop here, the smoke modes would exercise a stale executable"; false; }
-# continue only after the line above printed nothing
+if dotnet build -c Release -m:1 && dotnet test -c Release --no-build -m:1; then   # the rest runs only on a fresh, tested build
 case "$(uname)" in
   Darwin) # the staged bundle, so macOS and its accessibility tools see the application, not a bare host
     exe="$PWD/src/HdbResale.App/obj/Release/net10.0/HdbResale.app/Contents/MacOS/HdbResale.App" ;;
@@ -38,6 +37,7 @@ echo "failed modes:${failed:- none}"     # expected: none; a failed mode does no
 grep -h "rhi backend\|Using QRhi\|backend:" /tmp/batch1-recorded.log | head -3     # record the backend line
 # QML diagnostics ("QML Anchors: …", "file:…/Main.qml:123: …") and warnings; the gates' own "qml: HDB_…" lines are excluded.
 grep -Ei "warning|binding loop|TypeError|ReferenceError|Unable to assign|is not a type|QML [A-Za-z]+:|\.qml:[0-9]+" /tmp/batch1-*.log | grep -v "qml: HDB_"   # expected: nothing
+else echo "build or tests failed: nothing was launched, so no smoke result exists for this head"; fi
 ```
 
 The `PASS` lines are the harness's; the logs also hold the gates' own
@@ -121,8 +121,10 @@ the default S$1,000,000 maximum).
 ### Production pass
 
 Repeat S2.0 to S2.15 and S3.1 to S3.12 against production. The invariants
-below replace the fixture's data-dependent values; S2.9, S2.11, S2.15,
-S3.6 and S3.9 to S3.12 keep their expectations as written; S2.10 prepares
+below replace the fixture's data-dependent values; S2.9, S2.15, S3.6 and
+S3.10 to S3.12 keep their expectations as written; S2.11 selects any address
+from the pinned production results instead of 748B, and S3.9 reselects the
+address chosen under Chart (F8) below instead of 748B; S2.10 prepares
 its search from the pinned summaries instead of `748`: type the postal code
 of a listed address (one result) and require that text, that one identity
 and the count of one to be unchanged after Escape behind About; S3.5 keeps
