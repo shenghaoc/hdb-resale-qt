@@ -128,11 +128,13 @@ Qt's attempts.
 ### Repeated tile failures and selected-address contrast
 
 Address delegates use their palette's `highlight` for selection and `base` / `text`
-for other rows, with a palette-derived keyboard focus border. Selected text is the
-palette's `highlightedText` where that reaches 4.5:1 on the highlight, as on macOS
-(6.99:1 active, 14.13:1 inactive); otherwise black or white, whichever reads better.
-Qt's generic palette, used offscreen, pairs white with `#308cc6` at only 3.69:1;
-there the text becomes black (5.69:1).
+for other rows, with hover and pressed feedback as tints of the row surface and a
+palette-derived keyboard focus border. Row text is the palette's colour where it
+reaches 4.5:1 on the fill actually shown (translucent colours composited over the
+window), as on macOS (6.99:1 active, 14.13:1 inactive for selections); otherwise
+opaque black or white, whichever reads better. Qt's generic palette, used
+offscreen, pairs white with `#308cc6` at only 3.69:1; there selected text becomes
+black (5.69:1).
 
 After two tile requests exhaust Qt's retries, a small map notice reads: “Some map
 tiles failed to load. Address results and details are not affected.” It remains
