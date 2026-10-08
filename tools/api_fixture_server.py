@@ -9,11 +9,14 @@ Lets the desktop app run without the network:
 Only the read routes the app uses are served; anything else answers 404 like the Worker.
 `--fail-details 503` answers every detail request with that status instead, so the app's failed-detail state
 (docs/ui/native-acceptance.md, F6) can be reached on demand; the manifest and the address list still load.
+`--fail-tiles` also serves a second loopback port that answers every request 503, for the app's tile-failure
+notice: launch with HDB_TILE_TEST=1 and HDB_TEST_TILE_ENDPOINT set to the printed URL.
 """
 import argparse
 import http.server
 import pathlib
 import re
+import threading
 import urllib.parse
 
 FIXTURES = pathlib.Path(__file__).resolve().parent.parent / "tests" / "fixtures" / "worker-api"
@@ -51,15 +54,33 @@ class Handler(http.server.BaseHTTPRequestHandler):
         self.wfile.write(body)
 
 
+class FailingTiles(http.server.BaseHTTPRequestHandler):
+    """Answers every request 503, so Qt Location exhausts its tile retries without any map imagery."""
+
+    def do_GET(self) -> None:
+        self.send_response(503)
+        self.send_header("content-length", "0")
+        self.end_headers()
+
+    def log_message(self, *args) -> None:
+        pass
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--port", type=int, default=8787)
     parser.add_argument("--fail-details", type=int, metavar="STATUS", help="answer every detail request with this HTTP status")
+    parser.add_argument("--fail-tiles", action="store_true", help="also serve a tile endpoint that answers every request 503")
     args = parser.parse_args()
     port = args.port
     Handler.fail_details = args.fail_details
     with http.server.ThreadingHTTPServer(("127.0.0.1", port), Handler) as server:
         print(f"Serving recorded API responses at http://127.0.0.1:{port}/", flush=True)
+        if args.fail_tiles:
+            tiles = http.server.ThreadingHTTPServer(("127.0.0.1", 0), FailingTiles)
+            threading.Thread(target=tiles.serve_forever, daemon=True).start()
+            print(f"Failing tile endpoint at http://127.0.0.1:{tiles.server_port}/ "
+                  "(launch with HDB_TILE_TEST=1 HDB_TEST_TILE_ENDPOINT=<that URL>)", flush=True)
         server.serve_forever()
 
 
