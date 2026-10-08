@@ -44,7 +44,7 @@ for these scenarios.)
 | # | Scenario | Expected on both platforms |
 |---|---|---|
 | F1 | Launch and load | Addresses load from the Worker API; the status bar shows the result count; the map shows markers. |
-| F2 | Filters | Town, price bounds and registration window narrow the list and the map together, or leave them unchanged; a flat type may also widen them, because the selected type's own median is compared with the price bounds; the status bar count follows; Reset restores the defaults; a reversed price range is empty and explained. |
+| F2 | Filters | Town, a tightened price bound and the registration window narrow the list and the map together, or leave them unchanged; relaxing the default S$1,000,000 maximum widens them, as may a flat type, because the selected type's own median is compared with the price bounds; the status bar count follows; Reset restores the defaults; a reversed price range is empty and explained. |
 | F3 | Search (Stage 2) | Typing narrows the list and the map locally; ranking, abbreviations and postal codes behave as in PR #12; clearing restores the list without restoring a hidden selection. |
 | F4 | Selection sync | List, map marker and details show the same address; a selection hidden by a search or filter clears everywhere. |
 | F5 | Details | The inspector shows the address's figures, lease, chart and latest registrations; the all-types interquartile range ("Middle half, all types" from Stage 3) appears once the details arrive. |

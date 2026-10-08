@@ -28,9 +28,13 @@ case "$(uname)" in
     exe="$PWD/src/HdbResale.App/bin/Release/net10.0/HdbResale.App" ;;
 esac
 export QSG_INFO=1      # the scene graph logs its backend; record it (macOS must say Metal)
-for mode in recorded keyboard high-zoom unreachable tile-failure production; do
-  python3 tools/api_native_smoke.py --executable "$exe" --mode "$mode" --log "/tmp/batch1-$mode.log" || break
+modes="recorded high-zoom unreachable tile-failure production"
+python3 tools/api_native_smoke.py --help | grep -q keyboard && modes="recorded keyboard $modes"   # Stage 2 adds the keyboard gate
+failed=
+for mode in $modes; do
+  python3 tools/api_native_smoke.py --executable "$exe" --mode "$mode" --log "/tmp/batch1-$mode.log" || failed="$failed $mode"
 done
+echo "failed modes:${failed:- none}"     # expected: none; a failed mode does not stop the others
 grep -h "rhi backend\|Using QRhi\|backend:" /tmp/batch1-recorded.log | head -3     # record the backend line
 # QML diagnostics ("QML Anchors: …", "file:…/Main.qml:123: …") and warnings; the gates' own "qml: HDB_…" lines are excluded.
 grep -Ei "warning|binding loop|TypeError|ReferenceError|Unable to assign|is not a type|QML [A-Za-z]+:|\.qml:[0-9]+" /tmp/batch1-*.log | grep -v "qml: HDB_"   # expected: nothing
@@ -40,8 +44,9 @@ The `PASS` lines are the harness's; the logs also hold the gates' own
 `qml: HDB_…` markers, which are not warnings.
 
 The `keyboard` mode exists from Stage 2 onward (it is in `ui/address-search`
-and so in the head under test); on `main` before Stage 2 merges the harness
-rejects it. On Fedora, export `QT_QPA_PLATFORM=wayland` before this block
+and so in the head under test); the block adds it only when the harness lists
+it, so on `main` before Stage 2 merges the loop runs the other five and
+Stage 2's rows stay unverified. On Fedora, export `QT_QPA_PLATFORM=wayland` before this block
 (section 3). Launch the interactive runs below from the same `$exe`.
 
 ## 2. Interactive runs (both platforms)
@@ -87,9 +92,9 @@ the default S$1,000,000 maximum).
 | S2.8 | Replace with `588` | Empty state explains two matches hidden by the filters; Clear Search works. |
 | S2.9 | ⌘L / Ctrl+L | Focus lands on the town filter; in a compact window the filters expand. |
 | S2.10 | Narrow the window below the breakpoint with the filters collapsed and focus the list; open About from the platform's surface (the application menu on macOS, the status bar's About button on KDE); press ⌘F / Ctrl+F and then ⌘L / Ctrl+L; close About; widen the window again | Neither shortcut acts behind the dialog: the search field is not focused and the collapsed filters neither expand nor take focus; on closing, focus returns to the list. |
-| S2.11 | Select 748B, then narrow the window below the breakpoint; press ⌘L / Ctrl+L; widen it again | Map/Addresses toggles appear; focus moves to the pane shown; in the compact layout the Filters shortcut expands the collapsed filters and focuses the town picker; 748B stays selected throughout. |
+| S2.11 | Select 748B, then narrow the window below the breakpoint; click the Map toggle, then the Addresses toggle; press ⌘L / Ctrl+L; widen it again | Map/Addresses toggles appear; the Map toggle shows the map and moves focus into it (the marker or the map itself reads as focused), the Addresses toggle shows the list and moves focus to it with 748B still current; in the compact layout the Filters shortcut expands the collapsed filters and focuses the town picker; 748B stays selected throughout. |
 | S2.12 | Screen reader on (VoiceOver, Orca): move through three rows, select one, type `b` | One name per row with address, town, median, sales and month; "Selected …" once; the result count announced after a pause. Then Escape until the search is empty and six addresses show. |
-| S2.13 | Select 748B, then set town ANG MO KIO; Reset. Then each filter from the defaults (Reset between them): town ANG MO KIO; flat type 4 ROOM; maximum S$500,000; minimum S$500,000; minimum S$600,000 with maximum S$500,000; Latest 12 months; then Reset | The excluded selection clears from the list, the map highlight and the details together. Then counts, with the list, the map and the status bar agreeing each time: 1 (727); 5 (747A, 748B, 748A, 115, 39); 3 (115, 39, 727); 3 (747A, 748B, 748A); 0 with the reversed-range explanation; 4 (747A, 748B, 748A, 39: the window starts at 2025-11, and 115's latest sale is 2025-10); Reset restores six and every default. |
+| S2.13 | Select 748B, then set town ANG MO KIO; Reset. Then each filter from the defaults (Reset between them): town ANG MO KIO; flat type 4 ROOM; maximum S$500,000; minimum S$500,000; minimum S$600,000 with maximum S$500,000; maximum raised to its upper limit; Latest 12 months; then Reset | The excluded selection clears from the list, the map highlight and the details together. Then counts, with the list, the map and the status bar agreeing each time: 1 (727); 5 (747A, 748B, 748A, 115, 39); 3 (115, 39, 727); 3 (747A, 748B, 748A); 0 with the reversed-range explanation; 11 (relaxing the default S$1,000,000 cap widens the list: 58, 46, 588B, 10D and 588C appear on the list and the map); 4 (747A, 748B, 748A, 39: the window starts at 2025-11, and 115's latest sale is 2025-10); Reset restores six and every default. |
 | S2.14 | Click a map marker (zoom in until 748B is an individual marker) | The list highlights and scrolls to 748B, the details open, and the marker is highlighted; "Show on map" from the details recentres on it. |
 | S2.15 | Quit through the platform, twice with a relaunch between: macOS the application menu's Quit item, then ⌘Q; KDE the window frame's close button, then Alt+F4 | The window closes at once, the process exits with status 0 in the launching terminal, no error is printed, and nothing is left running. Launch again afterwards for the Stage 3 steps. |
 
@@ -109,15 +114,16 @@ the default S$1,000,000 maximum).
 | S3.10 | Raise the system text size or scale factor one step | Labels wrap rather than clip; the label column does not exceed two fifths of the pane; the chart captions scale. |
 | S3.11 | Screen reader through the details | Each group reads as a named group with a heading; each fact reads once as "Label: value"; each registration reads once. |
 | S3.12 | Scroll the list and the details by wheel, trackpad and keyboard (↑/↓, Page Up/Down, Home/End); drag a row with the mouse | Both scroll smoothly and stop at their ends; a mouse drag on the list selects or does nothing but never flicks it. |
-| S3.13 | Against `--fail-details 503`: select two addresses, press Retry on one | Each selection shows the error and Retry; Retry re-requests; the inspector's four groups still show. |
-| S3.14 | Against `--refuse`: launch, wait, press Retry | The load error says the API could not be reached and offers Retry; Retry re-attempts and the error remains; the window stays responsive, filters and About still open. |
+| S3.13 | Against `--fail-details 503`: select two addresses, press Retry on one | Each selection shows the error and Retry; pressing Retry shows the loading state before the error returns, and the server's terminal logs a new `/api/details/…` request for that address (the recorded handler logs every request); the inspector's four groups still show. |
+| S3.14 | Against `--refuse`: launch, wait, press Retry; then stop the server, start `python3 tools/api_fixture_server.py --port <the refused port>` and press Retry again | The load error says the API could not be reached and offers Retry; the first Retry shows the loading state and the error returns (the refusing port cannot log, so the loading state is the evidence); the window stays responsive, filters and About still open; the second Retry, against the healthy server on the same port, loads the six addresses and the healthy server's terminal logs the requests. |
 | S3.15 | Against `--fail-tiles` with `HDB_TILE_TEST=1` and `HDB_TEST_TILE_ENDPOINT`: launch, select 748B, search `bedok` | The tile-failure notice appears over an empty map; the list, search, selection and details keep working; the notice stays legible in light and dark. |
 
 ### Production pass
 
 Repeat S2.0 to S2.15 and S3.1 to S3.12 against production. The invariants
 below replace the fixture's data-dependent values; S2.9 to S2.11, S2.15,
-S3.5, S3.6 and S3.9 to S3.12 keep their expectations as written. S3.7 on
+S3.6 and S3.9 to S3.12 keep their expectations as written, and S3.5 keeps
+them for the address chosen under Chart (F8) below. S3.7 on
 production, with the flat type reset to All flat types: every row belongs to
 the selected address, the first row's month is the address's latest month
 shown in the list (the all-types month), and months never increase down the
@@ -135,10 +141,16 @@ from a selected address's Address group, searched on its own, returns that
 address. Details (F5): selecting any result opens four populated groups whose
 Sales note names the dataset's latest month, and once the details arrive
 the Sales group shows "Middle half, all types" with a populated S$ range; an address with sales in the
-window shows a chart, one without shows the empty caption. Filters (F2): town,
-price bounds and the registration window narrow the count or leave it
+window shows a chart, one without shows the empty caption. Chart (F8, S3.5):
+choose an address whose Latest registrations skip at least one month inside
+the 24-month window (read the months off the list; an address with a sale in
+every month cannot show a gap) and confirm the chart leaves a visible gap at
+each skipped month instead of a connecting line. Filters (F2): town,
+a tightened price bound and the registration window narrow the count or leave it
 unchanged; a flat type may raise it, because the selected type's own median
-is compared against the price cap; list, map and status bar agree after every
+is compared against the price cap, and raising the maximum above its
+S$1,000,000 default widens the count (record the count at the upper limit,
+which must exceed S2.0's); list, map and status bar agree after every
 change, and Reset restores S2.0's default count (the default S$1,000,000
 maximum still applies, so this is not every address the API holds). Selection (F4): a map marker
 click selects the address it names; then, with that address selected, type a
