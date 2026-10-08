@@ -566,11 +566,11 @@ ApplicationWindow {
                                         ListView {
                                             id: transactionsList
                                             clip: true; model: Resales
-                                            // Pooled rows: scrolling 8,400 addresses created about 20 rows instead of 8,400, with
-                                            // no measurable frame-time change on Metal. Rows hold no state of their own: the selection
-                                            // and every text are bindings on the model data and the cursor is the list's highlight, so
-                                            // a reused row cannot go stale.
-                                            reuseItems: true
+                                            // Rows are not pooled. Pooling (reuseItems) cut the rows created while scrolling 8,400
+                                            // addresses from 8,400 to about 20, with no measurable frame-time change on Metal, but a
+                                            // reused row stays out of the platform's accessibility tree: on macOS the rows vanished
+                                            // for screen readers once the list had scrolled.
+                                            reuseItems: false
                                             activeFocusOnTab: true; keyNavigationEnabled: true
                                             currentIndex: -1
                                             // The keyboard cursor is Qt's current-item highlight, drawn as a ring while the list or
