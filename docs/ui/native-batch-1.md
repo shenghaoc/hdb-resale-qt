@@ -141,7 +141,12 @@ unchanged; a flat type may raise it, because the selected type's own median
 is compared against the price cap; list, map and status bar agree after every
 change, and Reset restores S2.0's default count (the default S$1,000,000
 maximum still applies, so this is not every address the API holds). Selection (F4): a map marker
-click selects the address it names. Exit (S2.15): as on the fixtures. Record
+click selects the address it names; then, with that address selected, type a
+search that does not match it (for example the postal code of another listed
+address) and confirm the list selection, the map highlight and the details
+pane clear together; clear the search, select the address again, pick a town
+other than its own and confirm the same three clear together; Reset restores
+the default count with nothing selected. Exit (S2.15): as on the fixtures. Record
 the production head's `generatedAt` from About.
 
 ### Captures
