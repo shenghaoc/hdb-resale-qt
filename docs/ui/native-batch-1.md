@@ -102,13 +102,13 @@ the default S$1,000,000 maximum).
 
 | # | Step | Expected |
 |---|---|---|
-| S3.1 | Select 748B, read the Sales group | Five facts at once and, when the details arrive, a sixth labelled "Middle half, all types" reading S$705,750–S$880,000 (the all-types interquartile range the contract's F5 requires); labels right-aligned in one column, values aligned, tabular figures; the note names the 24-month scope. |
-| S3.2 | Set the flat type filter to 4 ROOM | Sales facts switch to the 4 ROOM cohort; "Middle half, all types" keeps the all-type range; the chart and registrations are unchanged. |
-| S3.3 | Address group, with 748B selected | Town BEDOK; Flat types 3 ROOM, 4 ROOM, 5 ROOM; Models DBSS, MAX FLOOR 15; Postal code 472748; Nearest MRT BEDOK NORTH MRT STATION · 317 m, about 4 min walk; "Nearest MRT" and "Postal code" on one line each. |
-| S3.4 | Lease and Location groups | Commenced, "Remaining in <the current year>" (the label follows the clock; record the year); one block point; the two notes in the caption role. |
+| S3.1 | Select 748B, read the Sales group | Five facts at once, from 748B's recorded summary: Registrations 10; Latest 2026-09; Median price S$837,500; Median per m² S$9,832.82/m²; Floor area 67.0–105.0 m²; and, when the details arrive, a sixth labelled "Middle half, all types" reading S$705,750–S$880,000 (the all-types interquartile range the contract's F5 requires); labels right-aligned in one column, values aligned, tabular figures; the note reads "Sales of all flat types in the 24 source months to 2026-10." |
+| S3.2 | Set the flat type filter to 4 ROOM | Sales facts switch to the 4 ROOM cohort: Registrations 6; Latest 2026-02; Median price S$850,000; Median per m² S$9,770.11/m²; Floor area 87.0 m²; the note begins "4 ROOM sales"; "Middle half, all types" keeps S$705,750–S$880,000; the chart and registrations are unchanged. |
+| S3.3 | Address group, with 748B selected | Town BEDOK; Flat types 3 ROOM, 4 ROOM, 5 ROOM; Models DBSS (the summary's models, not the detail's); Postal code 472748; Nearest MRT BEDOK NORTH MRT STATION · 317 m, about 4 min walk; "Nearest MRT" and "Postal code" on one line each. |
+| S3.4 | Lease and Location groups | Commenced 2014; "Remaining in <the current year>" reading "about <99 − (year − 2014)> years of a 99-year lease", so "about 87 years" in 2026 (the label and figure follow the clock; record the year); one block point reading 1.33…, 103.9… to five decimals; the two notes in the caption role. |
 | S3.5 | Chart, in the light appearance (set it now if the session is dark) | At the display's scale (2 on Retina) the line, dots, text and the map's markers are crisp, with no pixelation or blur. Title, range caption, axis labels and the two month labels in the caption size; line and dots in the link colour; gaps for months without a sale. Values, from 748B's recorded `monthlyTrend` over the window 2024-11 to 2026-10: the caption reads "2024-11–2026-10 · 10 sales in 10 observed months", the month labels read 2024-11 and 2026-10, the y axis runs 600 to 1,150 (thousands), ten dots, the highest at 2026-05 (S$1,060,000) and the lowest at 2026-06 (S$653,000), the first at 2024-12 (S$850,000) and the last at 2026-09 (S$663,000); 2026-03 is an interior gap between the 2026-02 and 2026-04 dots, with no segment across it. |
 | S3.6 | Scroll the details so the chart is half out of view, in both directions | The chart is clipped at the details' edge; nothing is drawn over the list or the heading. **Record the result explicitly; this is the open question from the offscreen captures.** |
-| S3.7 | Latest registrations, with the flat type reset to All flat types | Heading, caption, 20 rows separated by hairlines, newest first: the first reads 2026-09 · 3 ROOM · S$663,000, the second 2026-06 · 3 ROOM · S$653,000, and months never increase down the list; headings demibold and tabular; details in the secondary colour. |
+| S3.7 | Latest registrations, with the flat type reset to All flat types | Heading, caption, 20 rows separated by hairlines, newest first: the first reads 2026-09 · 3 ROOM · S$663,000 with the detail lines "67.0 m² · S$9,895.52/m² · storey 13 TO 15", "DBSS · lease start 2014" and "Source remaining lease at resale application: 86 years 11 months"; the second 2026-06 · 3 ROOM · S$653,000 with "67.0 m² · S$9,746.27/m² · storey 04 TO 06", "DBSS · lease start 2014" and "… 87 years 03 months"; months never increase down the list; headings demibold and tabular; details in the secondary colour. |
 | S3.8 | Reset the flat type filter to All flat types, then select 727 ANG MO KIO AVE 6 | Chart replaced by the "No registrations … 24-month window" caption; the inspector still shows four groups. |
 | S3.9 | Reselect 748B, then switch to the dark appearance or colour scheme | Every label, value, note, chart element and separator remains readable; no hard-coded light colour shows; the chart's line and dots take the dark appearance's link colour (compare with a link in the platform's own dialog or settings, as S3.5 did in light) and the captions the dark secondary text colour. |
 | S3.10 | Raise the system text size or scale factor one step | Labels wrap rather than clip; the label column does not exceed two fifths of the pane; the chart captions scale. |
@@ -131,9 +131,11 @@ ownership is checked against the Worker API directly: with the address's
 `addressKey` read from `/api/block-summaries` (its `town`, `block` and
 `streetName` identify it), fetch
 `https://hdb-resale-visualizer.shenghaoc.workers.dev/api/details/<addressKey>`
-with `curl` and compare its `recentTransactions` (month, flat type, price, in
-order) with the rows shown; they must match one for one before F5 is
-recorded as passed. S3.8 on production: pick an address whose list row shows a
+with `curl` and compare its `recentTransactions` with the rows shown: the
+heading (month, flat type, price) of every row in order, and for at least the
+first two rows every detail line (`floorAreaSqm`, `pricePerSqm`,
+`storeyRange`, `flatModel`, `leaseCommenceDate`, `remainingLease`); they must
+match before F5 is recorded as passed. S3.8 on production: pick an address whose list row shows a
 latest month older than the 24-month window (search by town and sort by eye,
 or use the Any time window); if none exists on the day, record S3.8 as
 unverified for production. S2.0: the launch completes without
@@ -153,9 +155,14 @@ outside Ang Mo Kio; `ang mo kio avenue`
 returns the same results (abbreviation equivalence); the postal code read
 from a selected address's Address group, searched on its own, returns that
 address. Details (F5): selecting any result opens four populated groups whose
+Sales group matches that address's `/api/block-summaries` entry
+(`transactionCount`, `latestMonth`, `medianPrice`, `pricePerSqmMedian`,
+`floorAreaRange`; with a flat type selected, that type's `flatTypeCohorts`,
+`medianPriceByFlatType` and `medianPricePerSqmByFlatType` entries), whose
 Address group shows that address's own town, flat types, postal code and
-nearest MRT as its `/api/block-summaries` entry gives them (`town`,
-`flatTypes`, `postalCode`, `nearestMrt`), and whose
+nearest MRT as the same entry gives them (`town`, `flatTypes`, `postalCode`,
+`nearestMrt`), whose Lease group shows its `leaseCommenceRange` and
+99 minus the years since it, and whose
 Sales note names the dataset's latest month, and once the details arrive
 the Sales group shows "Middle half, all types" with a populated S$ range; an address with sales in the
 window shows a chart, one without shows the empty caption. Chart (F8, S3.5):
@@ -177,7 +184,11 @@ unchanged; a flat type may raise it, because the selected type's own median
 is compared against the price cap, and raising the maximum above its
 S$1,000,000 default widens the count (record the count at the upper limit,
 which must exceed S2.0's); list, map and status bar agree after every
-change, and Reset restores S2.0's default count (the default S$1,000,000
+change; after the town filter, map membership is checked by identity, as for
+F3: note two addresses from other towns that were listed before the filter,
+zoom to each location and confirm no marker remains there, and confirm a
+listed address in the chosen town has a marker whose click selects it; after
+Reset the two markers are back. Reset restores S2.0's default count (the default S$1,000,000
 maximum still applies, so this is not every address the API holds). Selection (F4): a map marker
 click selects the address it names; then, with that address selected, type a
 search that does not match it (for example the postal code of another listed
@@ -203,10 +214,12 @@ note the scale factor and the Qt Quick Controls style that loaded.
 - `QSG_INFO=1` is exported in section 1; its backend line must name Metal.
   Record it with the scale (2 on Retina). Without that line the macOS
   platform row stays unverified.
-- The Qt Quick Controls style must be `macOS`: `QT_QUICK_CONTROLS_STYLE` is
-  unset in the session (or set to `macOS`), and
-  `QT_LOGGING_RULES=qt.quick.controls*=true` on one launch names it. Record
-  it; Fusion or another style fails the platform row.
+- The Qt Quick Controls style must be `macOS` with `QT_QUICK_CONTROLS_STYLE`
+  unset for the acceptance launch (the variable overrides the bundle's own
+  style selection, so a forced `macOS` is diagnostic evidence only and does
+  not satisfy the row); `QT_LOGGING_RULES=qt.quick.controls*=true` on one
+  launch names the style that loaded. Record it; Fusion or another style
+  fails the platform row.
 - S3.5's crispness check is the Retina observation: no pixelated or blurred
   chart line, dots, text or map markers at scale 2.
 - Light and dark: System Settings › Appearance for S3.5 and S3.9. Then,
