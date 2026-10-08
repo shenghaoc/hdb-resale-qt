@@ -29,7 +29,7 @@ public sealed class BuyerPresentationTests
         Assert.Equal("S$837,500", Value(sections, "Sales", "Median price"));
         Assert.Equal("S$9,832.82/m²", Value(sections, "Sales", "Median per m²"));
         Assert.Equal("67.0–105.0 m²", Value(sections, "Sales", "Floor area"));
-        Assert.DoesNotContain(sections[0].Facts, f => f.Label == "Middle half of all sales");
+        Assert.DoesNotContain(sections[0].Facts, f => f.Label == "Middle half, all types");
         Assert.Equal("BEDOK", Value(sections, "Address", "Town"));
         Assert.Equal("3 ROOM, 4 ROOM, 5 ROOM", Value(sections, "Address", "Flat types"));
         Assert.Equal("DBSS", Value(sections, "Address", "Models"));
@@ -56,12 +56,12 @@ public sealed class BuyerPresentationTests
     public void TheDetailsAddTheMiddleHalfOfSales()
     {
         var sections = Sections(detail: BuyerTrendTests.Recorded("bedok-748b-bedok-reservoir-cres"));
-        Assert.Equal("S$705,750–S$880,000", Value(sections, "Sales", "Middle half of all sales"));
+        Assert.Equal("S$705,750–S$880,000", Value(sections, "Sales", "Middle half, all types"));
         using var json = System.Text.Json.JsonDocument.Parse(BuyerPresentation.InspectorJson(sections));
         var sales = json.RootElement[0];
         Assert.Equal("Sales", sales.GetProperty("title").GetString());
         var fact = sales.GetProperty("facts").EnumerateArray().Last();
-        Assert.Equal("Middle half of all sales", fact.GetProperty("label").GetString());
+        Assert.Equal("Middle half, all types", fact.GetProperty("label").GetString());
         Assert.Equal("S$705,750–S$880,000", fact.GetProperty("value").GetString());
     }
 

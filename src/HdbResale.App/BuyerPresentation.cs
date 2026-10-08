@@ -36,8 +36,10 @@ internal static class BuyerPresentation
             new("Median per m²", Money(AddressSemantics.EffectivePricePerSqm(address, flatType)) + "/m²"),
             new("Floor area", Range(cohort.FloorAreaRange[0], cohort.FloorAreaRange[1], " m²")),
         };
+        // The details' interquartile range covers every flat type at the address, whatever type is selected; the
+        // chart and the registrations below it do too. Only the facts above follow the selected type.
         if (detail is { Summary.PriceIqr: [var lower, var upper] })
-            sales.Add(new("Middle half of all sales", $"{Money(lower)}–{Money(upper)}"));
+            sales.Add(new("Middle half, all types", $"{Money(lower)}–{Money(upper)}"));
 
         var about = new List<Fact> { new("Town", address.Town), new("Flat types", string.Join(", ", address.FlatTypes)) };
         if (cohort.FlatModels.Count > 0) about.Add(new("Models", string.Join(", ", cohort.FlatModels)));

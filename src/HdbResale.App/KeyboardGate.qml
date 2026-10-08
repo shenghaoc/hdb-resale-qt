@@ -72,7 +72,7 @@ Item {
             if (selectionSignals !== 1) { fail("one selection signalled " + selectionSignals + " times"); return }
             // The details' middle half of sales (recorded priceIqr 705750–880000) reaches the inspector, whose four
             // sections are laid out as fact rows.
-            if (shownFact("Middle half of all sales") !== "S$705,750–S$880,000") {
+            if (shownFact("Middle half, all types") !== "S$705,750–S$880,000") {
                 fail("details missing from the shown inspector: " + shownInspector); return
             }
             if (w.inspectorView.count !== 4 || !w.inspectorView.itemAt(0) || w.inspectorView.itemAt(0).factCount !== 6) {
