@@ -3,8 +3,8 @@
 
 Lets the desktop app run without the network:
 
-    python3 tools/api_fixture_server.py --port 8787
-    HDB_API_BASE_URL=http://127.0.0.1:8787/ <app>
+    python3 tools/api_fixture_server.py            # prints its URL; --port fixes the port
+    HDB_API_BASE_URL=<that URL> <app>
 
 Only the read routes the app uses are served; anything else answers 404 like the Worker.
 `--fail-details 503` answers every detail request with that status instead, so the app's failed-detail state
@@ -78,7 +78,7 @@ def reserve_refusing_port() -> socket.socket:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--port", type=int, default=8787)
+    parser.add_argument("--port", type=int, default=0, help="listen on this port (default: an ephemeral one, printed)")
     parser.add_argument("--fail-details", type=int, metavar="STATUS", help="answer every detail request with this HTTP status")
     parser.add_argument("--fail-tiles", action="store_true", help="also serve a tile endpoint that answers every request 503")
     parser.add_argument("--refuse", action="store_true", help="also reserve a loopback port that refuses every connection")
@@ -90,7 +90,7 @@ def main() -> None:
         print(f"Refusing API endpoint at http://127.0.0.1:{refused.getsockname()[1]}/ "
               "(launch with HDB_API_BASE_URL=<that URL> for the unreachable state)", flush=True)
     with http.server.ThreadingHTTPServer(("127.0.0.1", port), Handler) as server:
-        print(f"Serving recorded API responses at http://127.0.0.1:{port}/", flush=True)
+        print(f"Serving recorded API responses at http://127.0.0.1:{server.server_port}/", flush=True)
         if args.fail_tiles:
             tiles = http.server.ThreadingHTTPServer(("127.0.0.1", 0), FailingTiles)
             threading.Thread(target=tiles.serve_forever, daemon=True).start()

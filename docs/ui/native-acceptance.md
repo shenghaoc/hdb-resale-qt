@@ -31,11 +31,13 @@ every scenario on every platform: **passed**, **failed**, **unverified**.
 
 ## Shared functional scenarios
 
-The same scenarios run on both platforms, against the recorded Worker API
-fixtures and the production API. For the fixtures, start
-`python3 tools/api_fixture_server.py --port 8787` and launch the application
-with `HDB_API_BASE_URL=http://127.0.0.1:8787/`; this is an ordinary interactive
-run. (`tools/api_native_smoke.py --mode recorded` is a readiness check: it sets
+The same scenarios run on both platforms. F1 to F5 and F7 to F10 run twice,
+against the recorded Worker API fixtures and against the production API. F6's
+injected failures run against the fixture backend only, since they replace
+the API with local endpoints; the production run of F6 covers nothing beyond
+a healthy load. For the fixtures, start `python3 tools/api_fixture_server.py`
+(it prints its URL; `--port` fixes the port) and launch the application with
+`HDB_API_BASE_URL` set to that URL; this is an ordinary interactive run. (`tools/api_native_smoke.py --mode recorded` is a readiness check: it sets
 `HDB_PACKAGE_SMOKE=1`, selects an address itself and exits, so it cannot be used
 for these scenarios.)
 
