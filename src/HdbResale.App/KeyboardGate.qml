@@ -118,6 +118,17 @@ Item {
         case 9:
             if (Resales.searchText !== "" || list.count !== 6) return
             list.forceActiveFocus(Qt.TabFocusReason)
+            // End and Home reach the last and first rows, Page Down and Page Up move a page; only the cursor moves.
+            key(Qt.Key_End)
+            if (list.currentIndex !== 5) { fail("End left the cursor at " + list.currentIndex); return }
+            key(Qt.Key_Home)
+            if (list.currentIndex !== 0) { fail("Home left the cursor at " + list.currentIndex); return }
+            key(Qt.Key_PageDown)
+            if (list.currentIndex <= 0) { fail("Page Down left the cursor at " + list.currentIndex); return }
+            key(Qt.Key_PageUp)
+            if (list.currentIndex !== 0 || Resales.selectedMapKey !== "") {
+                fail("Page Up left the cursor at " + list.currentIndex + ", selected " + Resales.selectedMapKey); return
+            }
             type("be")                                  // typing in the list continues in the search field
             advance("clear-search"); break
         case 10:

@@ -622,9 +622,17 @@ ApplicationWindow {
                                             Keys.onEnterPressed: window.selectResultCursor()
                                             Keys.onSpacePressed: window.selectResultCursor()
                                             Keys.onEscapePressed: (event) => { if (addressSearch.text.length > 0) window.clearSearch(); else event.accepted = false }
-                                            // Typing a character in the list continues in the search field.
+                                            // Page Up/Down move the cursor by the rows in view and Home/End to the first or last row, as
+                                            // the arrows move it (Qt's ListView handles only the arrows); the selection still waits for
+                                            // Return. Typing a character in the list continues in the search field.
                                             Keys.onPressed: (event) => {
-                                                if (event.text.length === 1 && event.text > " "
+                                                const page = Math.max(1, Math.floor(height / Math.max(1, contentHeight / Math.max(1, count))))
+                                                const step = event.key === Qt.Key_PageDown ? page : event.key === Qt.Key_PageUp ? -page
+                                                    : event.key === Qt.Key_End ? count : event.key === Qt.Key_Home ? -count : 0
+                                                if (step !== 0) {
+                                                    window.moveResultCursor(step)
+                                                    event.accepted = true
+                                                } else if (event.text.length === 1 && event.text > " "
                                                         && !(event.modifiers & (Qt.ControlModifier | Qt.MetaModifier | Qt.AltModifier))) {
                                                     addressSearch.forceActiveFocus(Qt.OtherFocusReason)
                                                     addressSearch.insert(addressSearch.length, event.text)
