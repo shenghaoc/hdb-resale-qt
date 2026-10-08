@@ -49,6 +49,7 @@
   </Target>
 
   <ItemGroup>
+    <Compile Include="AddressDetailState.cs" />
     <QtResource Include="assets/onemap-logo.png" Alias="hdb-resale/onemap-logo.png" />
     <None Include="Main.qml"/>
     <None Include="BuyerTrendChart.qml"/>

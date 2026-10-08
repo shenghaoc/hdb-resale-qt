@@ -36,6 +36,42 @@ ApplicationWindow {
             } else if (ticks > 600) { console.error("HDB_PACKAGE_FAIL readiness timeout"); stop(); Qt.quit() }
         }
     }
+    // Opt-in native regression checks over the recorded API; no screenshot or tile publication.
+    Timer {
+        interval: 50; repeat: true; running: Resales.apiGate.length > 0
+        property int ticks: 0
+        property bool configured: false
+        onTriggered: {
+            ticks++
+            if (Resales.apiGate === "unreachable" && Resales.canRetry && !Resales.busy
+                    && Resales.addressCount === 0 && !Resales.detailReady) {
+                console.log("HDB_API_UNREACHABLE_PASS " + Resales.statusText)
+                stop(); packageExit.start()
+            } else if (Resales.apiGate === "high-zoom" && Resales.addressCount > 0 && map.mapReady) {
+                if (!configured) {
+                    configured = true
+                    Resales.setTown("BEDOK")
+                    Resales.setMinimumPrice(448444)
+                    map.center = QtPositioning.coordinate(1.334, 103.929)
+                    map.zoomLevel = 15
+                } else if (map.zoomLevel === 15 && Resales.addressCount === 4
+                        && transactionsList.count === 4 && Resales.inViewAddressCount === 4
+                        && Resales.presentationCount === 4 && Resales.clusterCount === 0
+                        && map.mapItems.length === 4 && oneMapLogo.status === Image.Ready) {
+                    var keys = []
+                    for (var i = 0; i < map.mapItems.length; i++) keys.push(map.mapItems[i].mapKey)
+                    keys.sort()
+                    var expected = ["bedok-115-bedok-nth-rd", "bedok-747a-bedok-reservoir-cres",
+                        "bedok-748a-bedok-reservoir-cres", "bedok-748b-bedok-reservoir-cres"]
+                    if (JSON.stringify(keys) === JSON.stringify(expected)) {
+                        console.log("HDB_API_HIGH_ZOOM_PASS zoom=" + map.zoomLevel + " keys=" + JSON.stringify(keys))
+                        stop(); packageExit.start()
+                    }
+                }
+            }
+            if (ticks > 600) { console.error("HDB_API_GATE_FAIL " + Resales.apiGate); stop(); Qt.quit() }
+        }
+    }
     Timer { id: packageExit; interval: 350; onTriggered: Qt.quit() }
     Plugin {
         id: osm
@@ -359,6 +395,7 @@ ApplicationWindow {
                         Label { width: parent.width; text: Resales.selectedMetrics; wrapMode: Text.WordWrap; font.pixelSize: 13 }
                         Label { id: leaseLabel; width: parent.width; text: Resales.selectedLease; wrapMode: Text.WordWrap; font.pixelSize: 12; color: palette.windowText }
                         Label { width: parent.width; text: Resales.detailStatus; visible: text.length > 0; wrapMode: Text.WordWrap; font.pixelSize: 12; font.italic: true }
+                        Button { text: "Retry registrations"; visible: Resales.canRetryDetail; onClicked: Resales.retryDetail() }
                         Loader {
                             id: trendLoader; width: parent.width
                             active: Resales.detailReady

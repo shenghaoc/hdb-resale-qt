@@ -159,8 +159,9 @@ internal static class ApiValidation
     internal static DatasetManifest Manifest(DatasetManifest manifest)
     {
         if (manifest.DataWindow is null || manifest.FilterOptions is null || manifest.Counts is null) throw Invalid("manifest");
-        Month(manifest.DataWindow.MinMonth, "dataWindow.minMonth");
-        Month(manifest.DataWindow.MaxMonth, "dataWindow.maxMonth");
+        var min = Month(manifest.DataWindow.MinMonth, "dataWindow.minMonth");
+        var max = Month(manifest.DataWindow.MaxMonth, "dataWindow.maxMonth");
+        if ((min.Year, min.Month).CompareTo((max.Year, max.Month)) > 0) throw Invalid("dataWindow");
         if (manifest.FilterOptions.Towns is null || manifest.FilterOptions.FlatTypes is null || manifest.FilterOptions.FlatModels is null
             || manifest.FilterOptions.Towns.Any(string.IsNullOrWhiteSpace) || manifest.FilterOptions.FlatTypes.Any(string.IsNullOrWhiteSpace))
             throw Invalid("filterOptions");

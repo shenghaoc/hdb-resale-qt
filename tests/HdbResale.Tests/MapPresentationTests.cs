@@ -9,6 +9,32 @@ public sealed class MapPresentationTests
         new(key,latitude,longitude,"1 TEST ST "+key,count,150,"2026-09");
     private static string[] Members(MapPresentationPlan plan)=>plan.Rows.SelectMany(r=>JsonSerializer.Deserialize<string[]>(r.MembershipJson)!).Order(StringComparer.Ordinal).ToArray();
     private static MapViewport View(double zoom=11,double latitude=1.3521,double longitude=103.8198,double width=1000,double height=600)=>new(latitude,longitude,zoom,width,height);
+    [Theory]
+    [InlineData(15)]
+    [InlineData(16)]
+    public void RecordedBedokPriceOrderProjectsToOrdinalRowsWithoutChangingTheList(double zoom)
+    {
+        var explorer = AddressExplorerTests.Recorded();
+        explorer.Filter(AddressFilters.Default with { Town = "BEDOK" });
+        var original = explorer.Addresses.Select(a => a.AddressKey).ToArray();
+        Assert.Equal(new[] { "bedok-39-bedok-sth-rd", "bedok-115-bedok-nth-rd", "bedok-748a-bedok-reservoir-cres", "bedok-748b-bedok-reservoir-cres", "bedok-747a-bedok-reservoir-cres" }, original);
+        var addresses = explorer.Addresses.Select(a => new MapAddress(a.AddressKey, a.Coordinates.Lat,
+            a.Coordinates.Lng, a.Address, a.TransactionCount, a.MedianPrice, a.LatestMonth)).ToArray();
+        var viewport = View(zoom, 1.336, 103.928, 2400, 500);
+        var low = MapPresentation.Plan(addresses, viewport with { Zoom = 14 }, original[0]);
+        // The original median-ordered projection reproduces the reported exception.
+        var unsorted = addresses.Where(a => MapPresentation.Contains(viewport, a.Latitude, a.Longitude))
+            .Select(MapPresentationRow.AddressRow).ToArray();
+        Assert.Throws<ArgumentException>(() => PresentationDiff.Plan(low.Rows, unsorted));
+        var high = MapPresentation.Plan(addresses, viewport, original[0]);
+        Assert.Equal(4, high.InViewAddresses);
+        Assert.Equal(0, high.ClusterCount);
+        Assert.Equal(original.Skip(1).Order(StringComparer.Ordinal), high.Rows.Select(r => r.Key));
+        Assert.NotEmpty(PresentationDiff.Plan(low.Rows, high.Rows));
+        Assert.Empty(PresentationDiff.Plan(high.Rows, high.Rows));
+        Assert.NotEmpty(PresentationDiff.Plan(high.Rows, low.Rows));
+        Assert.Equal(original, explorer.Addresses.Select(a => a.AddressKey));
+    }
     [Fact] public void EveryInViewAddressAppearsExactlyOnceAndOutsideTruthIsNotDropped()
     {
         var rows=Enumerable.Range(0,9730).Select(i=>Row($"address-{i:D4}",1.26+i%90*0.002,103.63+i/90*0.004,i%20+1)).ToArray();

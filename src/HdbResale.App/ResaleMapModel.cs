@@ -18,11 +18,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     private AddressExplorer? explorer;
     private string loadError = "";
     private int loadGeneration;
-    private AddressDetail? detail;
-    private string detailKey = "";
-    private string detailError = "";
-    private bool detailLoading;
-    private BuyerTrendData trend = BuyerTrendData.Empty;
+    private readonly AddressDetailState details = new();
     private string[] towns = [AddressFilters.AllTowns];
     private string[] flatTypes = [AddressFilters.AllFlatTypes];
     private int maximumAvailablePrice = 1_000_000;
@@ -83,27 +79,6 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
             NotifyAll();
         });
         NotifyAll();
-    }
-
-    private void LoadDetail(string key)
-    {
-        requests.Start(cancellation => api!.GetAddressDetailAsync(key, cancellation), loaded =>
-        {
-            // A response for an address that is no longer selected is dropped.
-            if (key != detailKey) return;
-            detailLoading = false;
-            detail = loaded;
-            detailError = loaded is null ? "The API has no details for this address." : "";
-            trend = BuyerTrend.Build(detail, explorer!.LatestDatasetMonth);
-            NotifySelection();
-        }, error =>
-        {
-            if (key != detailKey) return;
-            detailLoading = false;
-            detailError = "Could not load this address's registrations. " + Explain(error);
-            NotifySelection();
-        });
-        Notify(nameof(Busy));
     }
 
     private static string Explain(Exception error) => error is WorkerApiException ? error.Message : "Unexpected error: " + error.GetType().Name;
@@ -187,22 +162,27 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     private void SelectionChanged()
     {
         var key = SelectedMapKey;
-        if (key != detailKey)
-        {
-            detailKey = key;
-            detail = null;
-            detailError = "";
-            detailLoading = key.Length > 0;
-            trend = BuyerTrendData.Empty;
-            if (detailLoading) LoadDetail(key);
-        }
+        if (explorer is not null && api is not null)
+            details.Select(key, explorer.LatestDatasetMonth, api.GetAddressDetailAsync, requests, DetailChanged);
         MapPoints.Select(key);
         NotifyPresentation();
         NotifySelection();
     }
     private void NotifySelection() => Notify(nameof(SelectedMapKey), nameof(SelectedAddressIndex), nameof(SelectedHeading),
-        nameof(SelectedMetrics), nameof(SelectedLease), nameof(SelectedLocation), nameof(DetailStatus), nameof(DetailReady),
+        nameof(SelectedMetrics), nameof(SelectedLease), nameof(SelectedLocation), nameof(DetailStatus), nameof(DetailReady), nameof(CanRetryDetail),
         nameof(RecentTransactionsJson), nameof(TrendJson));
+
+    public bool CanRetryDetail => details.CanRetry;
+    public void RetryDetail() => mutations.Enqueue(() =>
+    {
+        if (explorer is not null && api is not null)
+            details.Retry(explorer.LatestDatasetMonth, api.GetAddressDetailAsync, requests, DetailChanged);
+    });
+    private void DetailChanged()
+    {
+        Notify(nameof(Busy));
+        NotifySelection();
+    }
 
     public string SelectionMapStatus => Selected is null ? "" : MapPoints.SelectedInView
         ? "Selected address is highlighted on this map." : "Selected address is outside this map view.";
@@ -212,19 +192,20 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public string SelectedHeading => Selected?.Address ?? "Choose an address";
     public string SelectedMetrics => Selected is null
         ? "The list and map show the same addresses. Select one to see its registrations."
-        : BuyerPresentation.Metrics(Selected, FlatType, detail, explorer!.LatestDatasetMonth);
+        : BuyerPresentation.Metrics(Selected, FlatType, details.Detail, explorer!.LatestDatasetMonth);
     public string SelectedLease => Selected is null ? "" : BuyerPresentation.Lease(Selected, DateTime.Now.Year);
     public string SelectedLocation => Selected is null ? "" : BuyerPresentation.Location(Selected);
-    public bool DetailReady => detail is not null && detail.Summary.AddressKey == SelectedMapKey;
-    public string DetailStatus => Selected is null ? "" : detailLoading ? "Loading registrations…" : detailError;
-    public string TrendJson => System.Text.Json.JsonSerializer.Serialize(trend);
-    public string RecentTransactionsJson => BuyerPresentation.RecentJson(DetailReady ? detail : null);
+    public bool DetailReady => details.Detail is not null && details.Detail.Summary.AddressKey == SelectedMapKey;
+    public string DetailStatus => Selected is null ? "" : details.Loading ? "Loading registrations…" : details.Error;
+    public string TrendJson => System.Text.Json.JsonSerializer.Serialize(details.Trend);
+    public string RecentTransactionsJson => BuyerPresentation.RecentJson(DetailReady ? details.Detail : null);
 
     // ---- About ---------------------------------------------------------------------------------------
 
     public string AboutText => "HDB Resale Explorer 0.1.0 (release candidate)\nIndependent desktop research tool. Not affiliated with HDB, SLA or the Singapore Government.\nHistorical resale records are not current listings, valuations, affordability advice or eligibility decisions.\nApplication source: GPL-3.0-or-later. Qt Graphs: GPLv3; Qt/Bridge and other components retain their terms. Public data and OneMap assets are separate; see LICENSE and THIRD_PARTY_NOTICES.md.\nRepository: https://github.com/shenghaoc/hdb-resale-qt";
     public string DatasetSummary => explorer is null ? StatusText : string.Create(CultureInfo.InvariantCulture,
         $"Data: HDB Resale Explorer API ({api!.BaseAddress.Host}) · published {explorer.Manifest.GeneratedAt ?? "unknown"} · registrations {explorer.Manifest.DataWindow.MinMonth} to {explorer.Manifest.DataWindow.MaxMonth} · {explorer.Manifest.Counts.Transactions:N0} transactions at {explorer.Manifest.Counts.Blocks:N0} addresses.");
+    public string ApiGate => Environment.GetEnvironmentVariable("HDB_API_GATE") ?? "";
     public bool PackageSmoke => Environment.GetEnvironmentVariable("HDB_PACKAGE_SMOKE") == "1";
 
     private void NotifyAll() => Notify(nameof(Busy), nameof(Loading), nameof(CanRetry), nameof(StatusText), nameof(TownsJson),
