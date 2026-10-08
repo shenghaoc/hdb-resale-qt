@@ -67,7 +67,7 @@ launch the application from a second terminal with the printed URL.
 ```sh
 python3 tools/api_fixture_server.py                       # F1–F10 fixture pass
 python3 tools/api_fixture_server.py --refuse              # F6 unreachable API
-python3 tools/api_fixture_server.py --fail-details 503    # F6 failed details
+python3 tools/api_fixture_server.py --fail-details 503 --delay 3   # F6 failed details, held 3 s so the loading state is visible
 python3 tools/api_fixture_server.py --fail-tiles          # F6 tile failure (HDB_TILE_TEST=1, HDB_TEST_TILE_ENDPOINT)
 HDB_API_BASE_URL=<url> "$exe"
 ```
@@ -114,8 +114,8 @@ the default S$1,000,000 maximum).
 | S3.10 | Raise the system text size or scale factor one step | Labels wrap rather than clip; the label column does not exceed two fifths of the pane; the chart captions scale. |
 | S3.11 | Screen reader through the details | Each group reads as a named group with a heading; each fact reads once as "Label: value"; each registration reads once. |
 | S3.12 | Scroll the list and the details by wheel, trackpad and keyboard (↑/↓, Page Up/Down, Home/End); drag a row with the mouse | Both scroll smoothly and stop at their ends; a mouse drag on the list selects or does nothing but never flicks it. |
-| S3.13 | Against `--fail-details 503`: select two addresses, press Retry on one | Each selection shows the error and Retry; pressing Retry shows the loading state before the error returns, and the server's terminal logs a new `/api/details/…` request for that address (the recorded handler logs every request); the inspector's four groups still show. |
-| S3.14 | Against `--refuse`: launch, wait, press Retry; then stop the server, start `python3 tools/api_fixture_server.py --port <the refused port>` and press Retry again | The load error says the API could not be reached and offers Retry; the first Retry shows the loading state and the error returns (the refusing port cannot log, so the loading state is the evidence); the window stays responsive, filters and About still open; the second Retry, against the healthy server on the same port, loads the six addresses and the healthy server's terminal logs the requests. |
+| S3.13 | Against `--fail-details 503 --delay 3`: select two addresses, press Retry on one | Each selection shows the error and Retry; pressing Retry shows the loading state for about three seconds (the server holds every response that long) before the error returns, and the server's terminal logs a new `/api/details/…` request for that address (the recorded handler logs every request); the inspector's four groups still show. |
+| S3.14 | Against `--refuse`: launch, wait, press Retry; then stop the server, start `python3 tools/api_fixture_server.py --port <the refused port>` and press Retry again | The load error says the API could not be reached and offers Retry; the first Retry returns the same error (the refusing port rejects at once and cannot log, so the loading state may be too brief to see and is not required; the recovery below is the evidence that Retry re-requests); the window stays responsive, filters and About still open; the second Retry, against the healthy server on the same port, loads the six addresses and the healthy server's terminal logs the requests. |
 | S3.15 | Against `--fail-tiles` with `HDB_TILE_TEST=1` and `HDB_TEST_TILE_ENDPOINT`: launch, select 748B, search `bedok` | The tile-failure notice appears over an empty map; the list, search, selection and details keep working; the notice stays legible in light and dark. |
 
 ### Production pass
@@ -176,27 +176,35 @@ before blocks that merely begin with 10, such as 101 to 109, and no address
 outside Ang Mo Kio; `ang mo kio avenue`
 returns the same results (abbreviation equivalence); the postal code read
 from a selected address's Address group, searched on its own, returns that
-address. Details (F5): choose the production details address so S3.2 can
-act on it: its `flatTypeCohorts` in `summaries.json` must hold a `4 ROOM`
-entry and its `medianPriceByFlatType["4 ROOM"]` must not exceed the active
-maximum, or the correct filtering logic clears the selection at S3.2 and
-S3.2 to S3.7 inspect nothing. Selecting it opens four populated groups whose
+address. Quiet refinement (S2.4): select a result of `ang mo kio ave`, then
+extend the query with the next character of that address's street name so it
+still matches; the selection, its map highlight and its details stay, and
+with the screen reader on no second "Selected …" is announced. Details (F5): one address serves S3.1 to S3.9, so every detail
+comparison reads one saved response. Choose it so S3.2 can act on it (its
+`flatTypeCohorts` in `summaries.json` must hold a `4 ROOM` entry and its
+`medianPriceByFlatType["4 ROOM"]` must not exceed the active maximum, or the
+correct filtering logic clears the selection at S3.2) and so S3.5 can show a
+gap (its detail response must satisfy the interior-gap rule under Chart (F8)
+below); fetch its detail response once, before S3.1, and save it beside
+`summaries.json`. Selecting it opens four populated groups whose
 Sales group matches that address's `/api/block-summaries` entry
 (`transactionCount`, `latestMonth`, `medianPrice`, `pricePerSqmMedian`,
 `floorAreaRange`; with a flat type selected, that type's `flatTypeCohorts`,
 `medianPriceByFlatType` and `medianPricePerSqmByFlatType` entries), whose
 Address group shows that address's own town, flat types, postal code and
-nearest MRT as the same entry gives them (`town`, `flatTypes`, `flatModels`,
-`postalCode`, `nearestMrt`), whose Lease group shows its `leaseCommenceRange` and
+nearest MRT as the same entry gives them (`town`, `flatTypes`, `postalCode`,
+`nearestMrt`, and Models from that entry's `flatModels` with All flat types
+or from `flatTypeCohorts[<type>].flatModels` with a type selected; the detail
+response's `summary.flatModels` is not the source and may list more), whose Lease group shows its `leaseCommenceRange` and
 99 minus the years since it, whose Location group shows its `coordinates`
 to five decimals, and whose
 Sales note names the dataset's latest month, and once the details arrive
 the Sales group shows "Middle half, all types" whose two values equal the
 detail response's `summary.priceIqr` (the S3.7 curl); an address with sales in the
 window shows a chart, one without shows the empty caption. Chart (F8, S3.5):
-choose an address whose detail response's `monthlyTrend` (the same curl as
-S3.7; the list shows at most 20 registrations, so it cannot be read off the
-list) lacks at least one month inside the 24-month window that is bracketed by
+the details address's saved response must have a `monthlyTrend` (the list
+shows at most 20 registrations, so it cannot be read off the
+list) that lacks at least one month inside the 24-month window that is bracketed by
 populated months on both sides (a missing month before the first sale or
 after the last has no points to connect across, so it proves nothing); an
 address with a sale in every month cannot show a gap. Confirm the line is
@@ -219,7 +227,12 @@ below a listed address's median excludes that address, a minimum just above
 another's median excludes it, and a registration window shorter than the
 time since a listed address's latest month excludes it; each change must
 remove the named address and lower the count (a control that leaves the
-count unchanged fails), and for each of the three, zooming to the named
+count unchanged fails); the count after each change must equal the one
+computed from `summaries.json` (maximum M: entries with `medianPrice <= M`;
+minimum m: `m <= medianPrice <= 1000000`; window of N months: entries with
+`medianPrice <= 1000000` and `latestMonth` at or after the dataset's latest
+month minus N − 1 months), and three addresses from the computed set, spread
+through it, must be on the list; and for each of the three, zooming to the named
 address's location shows no marker there while a listed neighbour keeps its
 marker; town narrows to its own addresses; for the flat type,
 choose a type that one listed address advertises and a neighbouring listed
@@ -237,7 +250,8 @@ zoom to each location and confirm no marker remains there, and confirm a
 listed address in the chosen town has a marker whose click selects it; after
 Reset the two markers are back. Hidden-by-filters (S2.8): with the maximum
 set just below a listed address's median, search for that address by its
-block and street; the list shows the empty state explaining that a match is
+postal code (unique, unlike a block number, which also matches longer
+blocks); the list shows the empty state explaining that a match is
 hidden by the filters, and Clear Search works. Reset restores S2.0's default count (the default S$1,000,000
 maximum still applies, so this is not every address the API holds). Selection (F4): a map marker
 click selects the address it names; then, with that address selected, type a
