@@ -56,8 +56,15 @@ selection against recorded production responses (`tests/fixtures/worker-api`).
 
 ## Native checks
 
-The tests above run without Qt. These tools drive the real app; each needs a graphical session and a built
-`HdbResale.App`, keeps text logs only and sends the API nothing but GET requests.
+The tests above run without Qt. These tools drive the real app; each needs a built `HdbResale.App`, keeps text
+logs only and sends the API nothing but GET requests. Three kinds of verification stay separate:
+- **Functional.** Run unattended on Qt's offscreen platform (`QT_QPA_PLATFORM=offscreen`), so no window
+  appears on the desktop.
+- **Visual review.** Screenshots compared by a person.
+- **Native visual and input acceptance.** Real palette, contrast, native controls and appearance, run on
+  the real platform as a separate scheduled run with clean teardown.
+
+Checks of colour contrast are visual: offscreen they see Qt's generic palette, not the platform's.
 
 - **Buyer acceptance** (`tools/api_acceptance.py` with `ApiAcceptanceGate.qml`) runs sixteen steps over the
   recorded responses:
@@ -80,10 +87,13 @@ The tests above run without Qt. These tools drive the real app; each needs a gra
   defect's step.
 - **Smoke** (`tools/api_native_smoke.py`). `recorded` and `production` load data, select an address and wait
   for the map and chart. `unreachable` checks that a refused API is reported without readiness. `high-zoom`
-  checks the individual markers at zoom 15.
+  checks the individual markers at zoom 15. `tile-failure` also asserts 4.5:1 selection and notice contrast,
+  so it belongs to the native visual run: Qt's generic offscreen palette gives the selected row only 3.69:1.
 - **Linux package launch** (`tools/package/launch_check.py`) runs the relocated package with `--api recorded`
   (the default), `production` or `unreachable`. Packages bundle no data
-  ([packaging](product-rc/licensing-packaging.md)).
+  ([packaging](product-rc/licensing-packaging.md)). From macOS only the staging and launch-check logic can be
+  unit-tested (packaging/build-logic verification). Native Linux installation and runtime acceptance, including
+  RPM/DEB, runs on Fedora.
 
 ## Slices
 

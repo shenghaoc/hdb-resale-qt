@@ -213,6 +213,10 @@ build are not claimed byte-for-byte reproducible. Build outputs must match the
 current source before staging; the manifest states the source commit/dirty
 status and hashes the exact shipped bytes.
 
+Staging and the launch check are Linux-only. Unit tests of their logic also run on
+macOS and in CI; that is packaging/build-logic verification, not native Linux
+installation acceptance, which (including RPM/DEB) is planned for Fedora.
+
 Extract/copy the resulting package to a different location, then from a real
 X11 desktop session, in the checkout, run:
 
