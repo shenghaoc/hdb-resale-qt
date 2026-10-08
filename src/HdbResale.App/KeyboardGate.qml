@@ -13,6 +13,8 @@ Item {
     property int frames: 0
     property var remembered: ({})
     property int selectionSignals: 0
+    // A binding, like the details pane's label: it only sees what the model notifies.
+    readonly property string shownMetrics: Resales.selectedMetrics
     TestEvent { id: events }
     Connections { target: gate.targetWindow; function onFrameSwapped() { gate.frames++ } }
     Connections { target: Resales; function onSelectedMapKeyChanged() { gate.selectionSignals++ } }
@@ -64,27 +66,40 @@ Item {
             }
             // Loading the details must not signal the selection again (it would re-announce it and move the list).
             if (selectionSignals !== 1) { fail("one selection signalled " + selectionSignals + " times"); return }
-            type(" 747")                               // the selected 748B no longer matches
+            // The details' middle half of sales (recorded priceIqr 705750–880000) reaches the metrics.
+            if (shownMetrics.indexOf("Middle half of all sales S$705,750–S$880,000") < 0) {
+                fail("details missing from the shown metrics: " + JSON.stringify(shownMetrics)); return
+            }
+            selectionSignals = 0
+            type("e")                                  // "bedok rese" still matches the selected 748B
             advance("keyboard-select"); break
         }
         case 4:
-            if (Resales.searchText !== "bedok res 747" || list.count !== 1) return
+            if (Resales.searchText !== "bedok rese" || list.count !== 3) return
+            // Typing a refinement keeps the selection, so it is neither signalled nor announced again.
+            if (Resales.selectedMapKey !== "bedok-748b-bedok-reservoir-cres" || selectionSignals !== 0) {
+                fail("refining the search re-signalled the selection " + selectionSignals + " times"); return
+            }
+            type(" 747")                               // the selected 748B no longer matches
+            advance("refinement-keeps-selection"); break
+        case 5:
+            if (Resales.searchText !== "bedok rese 747" || list.count !== 1) return
             if (Resales.selectedMapKey !== "" || w.detailsView.visible || Resales.selectionMapStatus !== "") {
                 fail("hidden selection kept: " + Resales.selectedMapKey); return
             }
             key(Qt.Key_Escape)
             advance("hidden-selection-cleared"); break
-        case 5:
+        case 6:
             if (search.text !== "" || Resales.searchText !== "" || list.count !== 6) return
             if (Resales.selectedMapKey !== "") { fail("clearing the search restored a selection"); return }
             type("4717")
             advance("escape-clears"); break
-        case 6:
+        case 7:
             if (Resales.searchText !== "4717" || list.count !== 2) return
             if (!same(keys(), ["bedok-748a-bedok-reservoir-cres", "bedok-747a-bedok-reservoir-cres"])) { fail("postal " + keys()); return }
             search.selectAll(); type("588")
             advance("postal-code"); break
-        case 7:
+        case 8:
             // 588B and 588C exist but lie above the default S$1,000,000 maximum.
             if (Resales.searchText !== "588" || list.count !== 0) return
             if (!w.emptyResultsView.visible || Resales.searchMatchesOutsideFilters !== 2) {
@@ -92,30 +107,30 @@ Item {
             }
             w.clearSearch()
             advance("filtered-out-matches-explained"); break
-        case 8:
+        case 9:
             if (Resales.searchText !== "" || list.count !== 6) return
             list.forceActiveFocus(Qt.TabFocusReason)
             type("be")                                  // typing in the list continues in the search field
             advance("clear-search"); break
-        case 9:
+        case 10:
             if (!search.activeFocus || search.text !== "be" || Resales.searchText !== "be") return
             key(Qt.Key_Escape)
             remembered.focus = w.activeFocusItem
             w.showAbout()
             advance("type-to-search"); break
-        case 10:
+        case 11:
             if (!w.modalOpen) return
             key(Qt.Key_F, Qt.ControlModifier)
             if (search.activeFocus) { fail("find acted behind the About dialog"); return }
             key(Qt.Key_Escape)
             advance("modal-isolated"); break
-        case 11:
+        case 12:
             if (w.modalOpen) return
             if (w.activeFocusItem !== remembered.focus) { fail("focus not restored: " + w.activeFocusItem); return }
             remembered.row = list.itemAtIndex(0); remembered.height = remembered.row.height; remembered.frames = frames
             remembered.row.displayAddress = "A long address that must stay readable in a narrow list. ".repeat(4)
             advance("focus-restored"); break
-        case 12: {
+        case 13: {
             const row = remembered.row
             if (row.height <= remembered.height) {
                 if (frames === remembered.frames && Date.now() - started > 2500) { fail("no frames presented; layout unverifiable"); return }
@@ -126,15 +141,15 @@ Item {
             w.width = 640; w.height = 600
             advance("long-address-wraps"); break
         }
-        case 13:
+        case 14:
             if (!w.compact || w.mapView.height < 250) return
             key(Qt.Key_F, Qt.ControlModifier)
             advance("compact-layout"); break
-        case 14:
+        case 15:
             if (w.viewSwitch.currentIndex !== 1 || !search.activeFocus) return
             key(Qt.Key_Down); key(Qt.Key_Return)
             advance("compact-find"); break
-        case 15:
+        case 16:
             if (Resales.selectedMapKey !== "ang-mo-kio-727-ang-mo-kio-ave-6") return
             // The compact details replaced the list that held focus; focus must move into them, not vanish.
             if (!w.activeFocusItem || w.activeFocusItem.text !== "‹ All addresses") {
@@ -144,7 +159,7 @@ Item {
             remembered.key = Resales.selectedMapKey
             w.width = 1360; w.height = 900
             advance("compact-select"); break
-        case 16:
+        case 17:
             if (w.compact) return
             if (Resales.selectedMapKey !== remembered.key) { fail("resize lost the selection"); return }
             // Pooled or not, every visible row reflects its own address and the current selection.
@@ -155,7 +170,7 @@ Item {
                         || row.Accessible.name.indexOf(row.address) !== 0) { fail("stale row " + i + " " + row.addressKey); return }
             }
             advance("resize-keeps-selection"); break
-        case 17: {
+        case 18: {
             // Tab visits the window's regions in visual order, stops only on visible controls and cycles without a trap;
             // Shift+Tab steps back. Offscreen, Tab reaches every control; macOS by default stops only at text fields and
             // lists, in the same order.

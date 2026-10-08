@@ -110,13 +110,14 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public void SetSearchText(string text) => mutations.Enqueue(() =>
     {
         if (explorer is null || (text ?? "") == explorer.SearchText) return;
+        var selected = SelectedMapKey;
         BeginResetModel();
         try { explorer.Search(text); }
         finally { EndResetModel(); }
         MapPoints.Replace(MapAddresses(), SelectedMapKey);
         Notify(nameof(SearchText), nameof(AddressCount), nameof(MappedCount), nameof(FirstAddressKey), nameof(FilterSummary),
             nameof(SearchMatchesOutsideFilters));
-        SelectionChanged();
+        ListChanged(selected);
     });
     // When a search finds nothing, how many addresses it would find without the filters.
     public int SearchMatchesOutsideFilters => explorer is { SearchText.Length: > 0, Addresses.Count: 0 }
@@ -125,6 +126,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     private void ApplyFilter(AddressFilters next)
     {
         if (explorer is null || next == explorer.Filters) return;
+        var selected = SelectedMapKey;
         BeginResetModel();
         try { explorer.Filter(next); }
         finally { EndResetModel(); }
@@ -132,7 +134,17 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
         Notify(nameof(Town), nameof(TownIndex), nameof(FlatType), nameof(FlatTypeIndex), nameof(MinimumPrice),
             nameof(MaximumPrice), nameof(RecencyMonths), nameof(AddressCount), nameof(MappedCount), nameof(FirstAddressKey),
             nameof(FilterSummary), nameof(SearchMatchesOutsideFilters));
-        SelectionChanged();
+        ListChanged(selected);
+    }
+
+    // After a search or filter change. Only a different or cleared selection is a selection change; an address that
+    // still matches keeps its selection (and is not announced again), and may only have moved in the list, whose
+    // reset also cleared the view's current row. Its metrics follow the flat-type filter.
+    private void ListChanged(string selectedBefore)
+    {
+        if (SelectedMapKey != selectedBefore) { SelectionChanged(); return; }
+        NotifyPresentation();
+        Notify(nameof(SelectedAddressIndex), nameof(SelectedMetrics));
     }
 
     public int AddressCount => explorer?.Addresses.Count ?? 0;
@@ -196,14 +208,14 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     }
     private void NotifySelection()
     {
-        Notify(nameof(SelectedMapKey), nameof(SelectedAddressIndex), nameof(SelectedHeading), nameof(SelectedMetrics),
-            nameof(SelectedLease), nameof(SelectedLocation));
+        Notify(nameof(SelectedMapKey), nameof(SelectedAddressIndex), nameof(SelectedHeading), nameof(SelectedLease),
+            nameof(SelectedLocation));
         NotifyDetail();
     }
-    // A detail response leaves the selection as it was, so only what depends on the details changes: the list keeps
-    // its scroll position and the selection is not announced again.
-    private void NotifyDetail() => Notify(nameof(DetailStatus), nameof(DetailReady), nameof(CanRetryDetail),
-        nameof(RecentTransactionsJson), nameof(TrendJson));
+    // A detail response leaves the selection as it was, so only what depends on the details changes (the metrics gain
+    // the middle half of sales): the list keeps its scroll position and the selection is not announced again.
+    private void NotifyDetail() => Notify(nameof(SelectedMetrics), nameof(DetailStatus), nameof(DetailReady),
+        nameof(CanRetryDetail), nameof(RecentTransactionsJson), nameof(TrendJson));
 
     public bool CanRetryDetail => details.CanRetry;
     public void RetryDetail() => mutations.Enqueue(() =>
