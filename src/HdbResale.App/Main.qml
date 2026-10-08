@@ -23,7 +23,42 @@ ApplicationWindow {
 
     // Commands shared by the macOS menu bar and the in-window controls.
     readonly property int activeFilterCount: filterBar.activeCount
+    // While a dialog is open the window's commands wait; Qt's Popup returns focus where it was when it closes.
+    readonly property bool modalOpen: aboutDialog.visible
     function showAbout() { aboutDialog.open() }
+    function focusSearch() {
+        if (compact) {
+            viewTabs.currentIndex = 1
+            if (Resales.selectedMapKey !== "") Resales.selectAddress("")   // compact details cover the list
+        }
+        addressSearch.forceActiveFocus(Qt.ShortcutFocusReason)
+        addressSearch.selectAll()
+    }
+    function clearSearch() { addressSearch.clear() }
+    function focusFilters() {
+        if (compact) filterBar.expanded = true
+        Qt.callLater(() => filterBar.townPicker.forceActiveFocus(Qt.ShortcutFocusReason))
+    }
+    // The result cursor moves through the list from the search field or the list itself; Return selects it.
+    function moveResultCursor(step) {
+        if (transactionsList.count === 0) return
+        const from = transactionsList.currentIndex < 0 ? (step > 0 ? -1 : transactionsList.count) : transactionsList.currentIndex
+        transactionsList.currentIndex = Math.max(0, Math.min(transactionsList.count - 1, from + step))
+        transactionsList.positionViewAtIndex(transactionsList.currentIndex, ListView.Contain)
+    }
+    function selectResultCursor() {
+        if (transactionsList.count > 0) Resales.selectAddressAt(Math.max(0, transactionsList.currentIndex))
+    }
+    // For the opt-in keyboard gate (KeyboardGate.qml), loaded by URL so normal runs never import QtTest.
+    readonly property alias searchField: addressSearch
+    readonly property alias resultList: transactionsList
+    readonly property alias emptyResultsView: emptyResults
+    readonly property alias detailsView: detailsPane
+    readonly property alias viewSwitch: viewTabs
+    readonly property alias mapView: map
+    readonly property alias filtersView: filterBar
+    function finishGate() { packageExit.start() }
+    Loader { Component.onCompleted: if (Resales.apiGate === "keyboard") setSource("KeyboardGate.qml", { targetWindow: window }) }
     function showView(index) {
         if (compact) viewTabs.currentIndex = index
         if (index === 1) (compact && Resales.selectedMapKey !== "" ? detailsBack : transactionsList).forceActiveFocus(Qt.ShortcutFocusReason)
@@ -53,6 +88,8 @@ ApplicationWindow {
         }
         Menu {
             title: qsTr("Edit")
+            Action { text: qsTr("Find Address…"); shortcut: StandardKey.Find; enabled: !window.modalOpen; onTriggered: window.focusSearch() }
+            MenuSeparator {}
             Action { text: qsTr("Undo"); shortcut: StandardKey.Undo; enabled: menus.editorCan("undo") && menus.editor.canUndo === true; onTriggered: menus.editor.undo() }
             Action { text: qsTr("Redo"); shortcut: StandardKey.Redo; enabled: menus.editorCan("redo") && menus.editor.canRedo === true; onTriggered: menus.editor.redo() }
             MenuSeparator {}
@@ -63,17 +100,18 @@ ApplicationWindow {
         }
         Menu {
             title: qsTr("View")
-            Action { text: qsTr("Map"); shortcut: "Ctrl+1"; onTriggered: window.showView(0) }
-            Action { text: qsTr("Addresses"); shortcut: "Ctrl+2"; onTriggered: window.showView(1) }
+            Action { text: qsTr("Map"); shortcut: "Ctrl+1"; enabled: !window.modalOpen; onTriggered: window.showView(0) }
+            Action { text: qsTr("Addresses"); shortcut: "Ctrl+2"; enabled: !window.modalOpen; onTriggered: window.showView(1) }
+            Action { text: qsTr("Filters"); shortcut: "Ctrl+L"; enabled: !window.modalOpen; onTriggered: window.focusFilters() }
             MenuSeparator {}
             Action {
                 text: qsTr("Show Selected Address on Map")
-                enabled: Resales.selectedMapKey !== "" && Resales.selectedLocated
+                enabled: !window.modalOpen && Resales.selectedMapKey !== "" && Resales.selectedLocated
                 onTriggered: window.showSelectedOnMap()
             }
-            Action { text: qsTr("Return to Singapore"); onTriggered: window.recenterMap() }
+            Action { text: qsTr("Return to Singapore"); enabled: !window.modalOpen; onTriggered: window.recenterMap() }
             MenuSeparator {}
-            Action { text: qsTr("Reset Filters"); shortcut: "Ctrl+Shift+R"; enabled: window.activeFilterCount > 0; onTriggered: Resales.resetFilters() }
+            Action { text: qsTr("Reset Filters"); shortcut: "Ctrl+Shift+R"; enabled: !window.modalOpen && window.activeFilterCount > 0; onTriggered: Resales.resetFilters() }
             // AppKit adds Enter Full Screen to a menu titled View by itself.
         }
         Menu {
@@ -91,6 +129,10 @@ ApplicationWindow {
         else if (compact && Resales.selectedMapKey !== "") detailsBack.forceActiveFocus(Qt.OtherFocusReason)
         else transactionsList.forceActiveFocus(Qt.OtherFocusReason)
     }
+
+    // Other desktops have no menu bar here; the same commands keep their platform's standard keys.
+    Shortcut { sequences: [StandardKey.Find]; enabled: Qt.platform.os !== "osx" && !window.modalOpen; onActivated: window.focusSearch() }
+    Shortcut { sequence: "Ctrl+L"; enabled: Qt.platform.os !== "osx" && !window.modalOpen; onActivated: window.focusFilters() }
 
     // WCAG relative luminance and contrast ratio, for text drawn on a palette colour.
     function luminance(c) {
@@ -139,7 +181,7 @@ ApplicationWindow {
     }
     // Opt-in native regression checks over the recorded API; no screenshot or tile publication.
     Timer {
-        interval: 50; repeat: true; running: Resales.apiGate.length > 0
+        interval: 50; repeat: true; running: Resales.apiGate.length > 0 && Resales.apiGate !== "keyboard"
         property int ticks: 0
         property bool configured: false
         function contrast(text, surface) {
@@ -165,10 +207,10 @@ ApplicationWindow {
                 else if (Resales.tileFailuresRepeated && tileFailureLabel.visible && map.error === Map.NoError
                         && Resales.detailReady && transactionsList.count === Resales.addressCount
                         && row && row.highlighted && !Qt.colorEqual(row.background.color, row.palette.base)
-                        && legible(row.contentItem.color, row.background.color)
+                        && legible(row.textColor, row.background.color)
                         && legible(tileFailureLabel.color, tileFailureLabel.background.color)) {
                     console.log("HDB_API_TILE_NOTICE_PASS selection-contrast="
-                        + contrast(row.contentItem.color, row.background.color).toFixed(2)
+                        + contrast(row.textColor, row.background.color).toFixed(2)
                         + " notice-contrast=" + contrast(tileFailureLabel.color, tileFailureLabel.background.color).toFixed(2))
                     stop(); packageExit.start()
                 }
@@ -476,88 +518,235 @@ ApplicationWindow {
                                 visible: !(window.compact && Resales.selectedMapKey !== "")
                                 SplitView.fillHeight: true
                                 SplitView.minimumHeight: 7 * window.unit
-                                ListView {
-                                    id: transactionsList
-                                    anchors.fill: parent; anchors.margins: theme.xs
-                                    clip: true; spacing: 3; model: Resales
-                                    activeFocusOnTab: true; keyNavigationEnabled: true
-                                    currentIndex: -1
-                                    Connections {
-                                        target: Resales
-                                        function onSelectedAddressIndexChanged() {
-                                            transactionsList.currentIndex = Resales.selectedAddressIndex
-                                            if (transactionsList.currentIndex >= 0)
-                                                transactionsList.positionViewAtIndex(transactionsList.currentIndex, ListView.Contain)
+                                ColumnLayout {
+                                    anchors.fill: parent
+                                    spacing: 0
+                                    // Address search: the platform's text field over the loaded summaries, filtered in C#.
+                                    // Arrow keys move the result cursor from here, Return selects, Escape clears.
+                                    RowLayout {
+                                        Layout.fillWidth: true
+                                        Layout.leftMargin: theme.m; Layout.rightMargin: theme.m
+                                        Layout.topMargin: theme.s; Layout.bottomMargin: theme.s
+                                        spacing: theme.xs
+                                        TextField {
+                                            id: addressSearch
+                                            Layout.fillWidth: true
+                                            enabled: Resales.statusText.length === 0       // nothing to search while loading or failed
+                                            placeholderText: qsTr("Search block, street or postal code")
+                                            Accessible.name: qsTr("Search addresses")
+                                            onTextChanged: Resales.setSearchText(text)
+                                            Keys.onDownPressed: window.moveResultCursor(1)
+                                            Keys.onUpPressed: window.moveResultCursor(-1)
+                                            Keys.onReturnPressed: window.selectResultCursor()
+                                            Keys.onEnterPressed: window.selectResultCursor()
+                                            Keys.onEscapePressed: (event) => {
+                                                if (text.length > 0) window.clearSearch()
+                                                else if (transactionsList.count > 0) transactionsList.forceActiveFocus(Qt.OtherFocusReason)
+                                                else event.accepted = false
+                                            }
                                         }
-                                        // A compact selection hides the list; keep the keyboard position by moving into the details.
-                                        function onSelectedMapKeyChanged() {
-                                            if (window.compact && Resales.selectedMapKey !== "") Qt.callLater(window.keepFocusVisible)
+                                        Button {
+                                            id: clearSearchButton
+                                            visible: addressSearch.text.length > 0
+                                            flat: true
+                                            text: qsTr("Clear")
+                                            Accessible.name: qsTr("Clear search")
+                                            onClicked: { window.clearSearch(); addressSearch.forceActiveFocus(Qt.OtherFocusReason) }
                                         }
                                     }
-                                    Accessible.name: "Matching address results"
-                                    Accessible.description: "Arrow keys move through the addresses; Enter selects one."
-                                    ScrollBar.vertical: ScrollBar {}
-                                    Keys.onDownPressed: (event) => {
-                                        if (count > 0) { currentIndex = Math.min(count - 1, currentIndex + 1); positionViewAtIndex(currentIndex, ListView.Contain) }
-                                        event.accepted = true
+                                    // The style's scroll view keeps its scroll bar beside the rows, not over their right column,
+                                    // and on desktop leaves mouse drags to the rows instead of flicking the list.
+                                    ScrollView {
+                                        id: resultScroll
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: true
+                                        ScrollBar.vertical.Accessible.name: qsTr("Scroll addresses")
+                                        ListView {
+                                            id: transactionsList
+                                            clip: true; model: Resales
+                                            // Rows are not pooled. Pooling (reuseItems) cut the rows created while scrolling 8,400
+                                            // addresses from 8,400 to about 20, with no measurable frame-time change on Metal, but a
+                                            // reused row stays out of the platform's accessibility tree: on macOS the rows vanished
+                                            // for screen readers once the list had scrolled.
+                                            reuseItems: false
+                                            activeFocusOnTab: true; keyNavigationEnabled: true
+                                            currentIndex: -1
+                                            // The keyboard cursor is Qt's current-item highlight, drawn as a ring while the list or
+                                            // the search field has focus in the active window, as platforms show focus. It sits above
+                                            // the rows because the style's row backgrounds are opaque, and it moves and resizes with
+                                            // the current row at once.
+                                            highlight: Rectangle {
+                                                z: 2
+                                                visible: window.active && (transactionsList.activeFocus || addressSearch.activeFocus)
+                                                color: "transparent"; radius: theme.xs; border.width: 2
+                                                border.color: transactionsList.currentItem && transactionsList.currentItem.highlighted
+                                                    ? transactionsList.currentItem.textColor : window.palette.highlight
+                                            }
+                                            highlightMoveDuration: 0; highlightResizeDuration: 0
+                                            // A new selection keeps its row in view while the list's height changes (the details
+                                            // opening below it, a resize), until the user scrolls the list.
+                                            property bool revealSelection: false
+                                            function revealSelected() {
+                                                if (currentIndex >= 0) positionViewAtIndex(currentIndex, ListView.Contain)
+                                            }
+                                            onHeightChanged: if (revealSelection) revealSelected()
+                                            onMovementStarted: revealSelection = false
+                                            Connections {
+                                                target: resultScroll.ScrollBar.vertical
+                                                function onPressedChanged() { if (target.pressed) transactionsList.revealSelection = false }
+                                            }
+                                            Connections {
+                                                target: Resales
+                                                function onSelectedAddressIndexChanged() {
+                                                    transactionsList.currentIndex = Resales.selectedAddressIndex
+                                                    transactionsList.revealSelection = transactionsList.currentIndex >= 0
+                                                    transactionsList.revealSelected()
+                                                }
+                                                function onSelectedMapKeyChanged() {
+                                                    if (Resales.selectedMapKey === "") return
+                                                    // Screen readers hear which address is now selected, wherever it was chosen.
+                                                    transactionsList.Accessible.announce(qsTr("Selected %1").arg(Resales.selectedHeading))
+                                                    // A compact selection hides the list; keep the keyboard position by moving into the details.
+                                                    if (window.compact) Qt.callLater(window.keepFocusVisible)
+                                                }
+                                            }
+                                            // A list to screen readers and so to Qt's Tab chain: with macOS's default keyboard
+                                            // navigation Tab stops only at text fields and lists, which Qt recognises by this role.
+                                            Accessible.role: Accessible.List
+                                            Accessible.name: qsTr("Matching addresses")
+                                            Accessible.description: qsTr("Arrow keys move through the addresses; Return selects one; typing searches.")
+                                            Keys.onDownPressed: window.moveResultCursor(1)
+                                            Keys.onUpPressed: window.moveResultCursor(-1)
+                                            Keys.onReturnPressed: window.selectResultCursor()
+                                            Keys.onEnterPressed: window.selectResultCursor()
+                                            Keys.onSpacePressed: window.selectResultCursor()
+                                            Keys.onEscapePressed: (event) => { if (addressSearch.text.length > 0) window.clearSearch(); else event.accepted = false }
+                                            // Page Up/Down move the cursor by the rows in view and Home/End to the first or last row, as
+                                            // the arrows move it (Qt's ListView handles only the arrows); the selection still waits for
+                                            // Return. Typing a character in the list continues in the search field.
+                                            Keys.onPressed: (event) => {
+                                                const page = Math.max(1, Math.floor(height / Math.max(1, contentHeight / Math.max(1, count))))
+                                                const step = event.key === Qt.Key_PageDown ? page : event.key === Qt.Key_PageUp ? -page
+                                                    : event.key === Qt.Key_End ? count : event.key === Qt.Key_Home ? -count : 0
+                                                if (step !== 0) {
+                                                    window.moveResultCursor(step)
+                                                    event.accepted = true
+                                                } else if (event.text.length === 1 && event.text > " "
+                                                        && !(event.modifiers & (Qt.ControlModifier | Qt.MetaModifier | Qt.AltModifier))) {
+                                                    addressSearch.forceActiveFocus(Qt.OtherFocusReason)
+                                                    addressSearch.insert(addressSearch.length, event.text)
+                                                    event.accepted = true
+                                                }
+                                            }
+                                            delegate: ItemDelegate {
+                                                id: addressRow
+                                                required property int index
+                                                required property string addressKey
+                                                required property string address
+                                                required property string priceLabel
+                                                required property string townName
+                                                required property string locationLabel
+                                                required property int saleCount
+                                                required property string flatTypes
+                                                required property string latestMonth
+                                                // A long-address check can substitute text here without changing the model.
+                                                property string displayAddress: address
+                                                readonly property alias addressLabel: rowAddress
+                                                readonly property string salesText: saleCount === 1 ? qsTr("1 sale")
+                                                    : qsTr("%1 sales").arg(saleCount.toLocaleString(Qt.locale(), "f", 0))
+                                                // The palette's text on the style's selection unless that pair is below 4.5:1.
+                                                readonly property color textColor: highlighted
+                                                    ? window.readableOn(background.color, palette.highlightedText) : palette.text
+                                                readonly property color detailColor: highlighted ? textColor : theme.secondaryText
+                                                width: ListView.view.width
+                                                focusPolicy: Qt.NoFocus          // the list holds keyboard focus, never a row
+                                                leftPadding: theme.m; rightPadding: theme.m; topPadding: theme.s; bottomPadding: theme.s
+                                                highlighted: Resales.selectedMapKey === addressKey
+                                                Accessible.name: displayAddress + ", " + townName + ", median " + priceLabel + ", " + salesText
+                                                    + ", latest " + latestMonth
+                                                Accessible.description: locationLabel
+                                                Accessible.selectable: true
+                                                Accessible.selected: highlighted
+                                                onClicked: {
+                                                    transactionsList.currentIndex = index
+                                                    transactionsList.forceActiveFocus(Qt.MouseFocusReason)
+                                                    Resales.selectAddress(addressKey)
+                                                }
+                                                // Address and median first; town, flat types, sales and recency quieter beneath.
+                                                contentItem: GridLayout {
+                                                    columns: 2; columnSpacing: theme.m; rowSpacing: 1
+                                                    Label {
+                                                        id: rowAddress
+                                                        text: addressRow.displayAddress; color: addressRow.textColor; font.weight: Font.DemiBold
+                                                        wrapMode: Text.WordWrap; Layout.fillWidth: true; Layout.minimumWidth: 0; Accessible.ignored: true
+                                                    }
+                                                    Label {
+                                                        text: addressRow.priceLabel; color: addressRow.textColor; font.weight: Font.DemiBold
+                                                        font.features: { "tnum": 1 }; Layout.alignment: Qt.AlignRight | Qt.AlignTop; Accessible.ignored: true
+                                                    }
+                                                    Label {
+                                                        text: addressRow.townName + " · " + addressRow.flatTypes; color: addressRow.detailColor
+                                                        font.pointSize: window.font.pointSize * theme.captionScale; elide: Text.ElideRight
+                                                        Layout.fillWidth: true; Layout.minimumWidth: 0; Accessible.ignored: true
+                                                    }
+                                                    Label {
+                                                        text: addressRow.salesText + " · " + addressRow.latestMonth; color: addressRow.detailColor
+                                                        font.pointSize: window.font.pointSize * theme.captionScale; font.features: { "tnum": 1 }
+                                                        Layout.alignment: Qt.AlignRight; Accessible.ignored: true
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
-                                    Keys.onUpPressed: (event) => {
-                                        if (count > 0) { currentIndex = Math.max(0, currentIndex - 1); positionViewAtIndex(currentIndex, ListView.Contain) }
-                                        event.accepted = true
-                                    }
-                                    Keys.onReturnPressed: Resales.selectAddressAt(currentIndex)
-                                    Keys.onEnterPressed: Resales.selectAddressAt(currentIndex)
-                                    Keys.onSpacePressed: Resales.selectAddressAt(currentIndex)
-                                delegate: ItemDelegate {
-                                    id: addressDelegate
-                                    required property int index
-                                    required property string addressKey
-                                    required property string address
-                                    required property string priceLabel
-                                    required property string townName
-                                    required property string locationLabel
-                                    required property string summaryLabel
-                                    width: ListView.view.width
-                                    text: address + "\n" + townName + " · " + summaryLabel
-                                    font.pixelSize: 12
-                                    highlighted: Resales.selectedMapKey === addressKey
-                                    Accessible.name: text + ". " + locationLabel
-                                    onClicked: { transactionsList.forceActiveFocus(); Resales.selectAddress(addressKey) }
-                                    contentItem: Label {
-                                        text: addressDelegate.text; font: addressDelegate.font
-                                        color: window.readableOn(addressDelegate.background.color,
-                                                addressDelegate.highlighted ? addressDelegate.palette.highlightedText : addressDelegate.palette.text)
-                                    }
-                                    background: Rectangle {
-                                        readonly property color accent: addressDelegate.palette.highlight
-                                        // Selection, with the style's hover and pressed feedback kept as tints of the row surface.
-                                        color: addressDelegate.highlighted ? (addressDelegate.down ? Qt.darker(accent, 1.15) : accent)
-                                            : addressDelegate.down ? Qt.tint(addressDelegate.palette.base, Qt.rgba(accent.r, accent.g, accent.b, 0.2))
-                                            : addressDelegate.hovered ? Qt.tint(addressDelegate.palette.base, Qt.rgba(accent.r, accent.g, accent.b, 0.1))
-                                            : addressDelegate.palette.base
-                                        radius: 3
-                                        border.width: transactionsList.activeFocus && transactionsList.currentIndex === index ? 2 : 0
-                                        border.color: addressDelegate.highlighted ? addressDelegate.contentItem.color : addressDelegate.palette.highlight
-                                    }
-                                }
                                 }
                                 ColumnLayout {
+                                    id: emptyResults
                                     visible: Resales.addressCount === 0 && Resales.statusText.length === 0
                                     anchors.centerIn: parent
                                     width: Math.min(parent.width - theme.l * 2, 26 * window.unit)
                                     spacing: theme.s
-                                    Label { text: qsTr("No matching addresses"); font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignHCenter; wrapMode: Text.WordWrap }
+                                    readonly property bool searching: Resales.searchText.trim().length > 0
+                                    readonly property int hidden: Resales.searchMatchesOutsideFilters
                                     Label {
-                                        text: filterBar.priceInvalid ? qsTr("The minimum median is above the maximum. Adjust either bound to see results.")
-                                                                      : qsTr("No address matches these filters. Widen the price range, choose another town or flat type, or reset the filters.")
+                                        text: !parent.searching ? qsTr("No matching addresses")
+                                            : parent.hidden > 0 ? qsTr("No address matches “%1” with the current filters").arg(Resales.searchText.trim())
+                                            : qsTr("No address matches “%1”").arg(Resales.searchText.trim())
+                                        font.bold: true; Layout.fillWidth: true; horizontalAlignment: Text.AlignHCenter; wrapMode: Text.WordWrap
+                                    }
+                                    Label {
+                                        text: parent.searching
+                                            ? (parent.hidden === 1 ? qsTr("1 address matches without them. Check the price range and the other filters.")
+                                                : parent.hidden > 1 ? qsTr("%1 addresses match without them. Check the price range and the other filters.").arg(parent.hidden)
+                                                : qsTr("Search by block (58), street (Bedok Reservoir) or postal code (471748)."))
+                                            : filterBar.priceInvalid ? qsTr("The minimum median is above the maximum. Adjust either bound to see results.")
+                                            : qsTr("No address matches these filters. Widen the price range, choose another town or flat type, or reset the filters.")
                                         color: theme.secondaryText; Layout.fillWidth: true; horizontalAlignment: Text.AlignHCenter; wrapMode: Text.WordWrap
                                     }
-                                    Button { text: qsTr("Reset filters"); Layout.alignment: Qt.AlignHCenter; onClicked: Resales.resetFilters(); Accessible.name: qsTr("Reset all filters") }
+                                    RowLayout {
+                                        Layout.alignment: Qt.AlignHCenter
+                                        Button {
+                                            visible: emptyResults.searching; text: qsTr("Clear Search"); Accessible.name: qsTr("Clear search")
+                                            onClicked: { window.clearSearch(); addressSearch.forceActiveFocus(Qt.OtherFocusReason) }
+                                        }
+                                        Button {
+                                            visible: window.activeFilterCount > 0; text: qsTr("Reset Filters"); Accessible.name: qsTr("Reset all filters")
+                                            onClicked: Resales.resetFilters()
+                                        }
+                                    }
                                 }
                                 LoadStatus {
                                     anchors.centerIn: parent
                                     width: Math.min(parent.width - theme.l * 2, 22 * window.unit)
                                 }
+                                // A short pause after typing announces how many addresses the search found.
+                                Timer {
+                                    id: searchAnnouncement
+                                    interval: 700
+                                    onTriggered: if (Resales.searchText.trim().length > 0)
+                                        transactionsList.Accessible.announce(Resales.addressCount === 1 ? qsTr("1 address found")
+                                            : qsTr("%1 addresses found").arg(Resales.addressCount))
+                                }
+                                Connections { target: Resales; function onSearchTextChanged() { searchAnnouncement.restart() } }
                             }
                             Item {
                                 id: detailsPane
@@ -674,7 +863,7 @@ ApplicationWindow {
         }
     }
     Dialog {
-        id: aboutDialog; title: "About HDB Resale Explorer"; modal: true; anchors.centerIn: parent
+        id: aboutDialog; title: "About HDB Resale Explorer"; modal: true; focus: true; anchors.centerIn: parent
         width: Math.min(590, window.width - 32); standardButtons: Dialog.Close
         contentItem: Column {
             spacing: 12

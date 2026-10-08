@@ -15,7 +15,7 @@ import threading
 from api_fixture_server import Handler
 
 GATES = {"high-zoom": "HDB_API_HIGH_ZOOM_PASS", "unreachable": "HDB_API_UNREACHABLE_PASS",
-         "tile-failure": "HDB_API_TILE_NOTICE_PASS"}
+         "tile-failure": "HDB_API_TILE_NOTICE_PASS", "keyboard": "HDB_API_KEYBOARD_PASS"}
 # Qt Location fetches a failing tile once and retries it five times before giving up.
 ATTEMPTS_PER_EXHAUSTED_TILE = 6
 
@@ -54,7 +54,7 @@ def main() -> None:
     servers = []
     refused = None
     try:
-        if args.mode in ("recorded", "high-zoom", "tile-failure"):
+        if args.mode in ("recorded", "high-zoom", "tile-failure", "keyboard"):
             servers.append(serve(Handler))
             env["HDB_API_BASE_URL"] = f"http://127.0.0.1:{servers[-1].server_port}/"
         elif args.mode == "unreachable":
