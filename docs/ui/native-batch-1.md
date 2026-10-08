@@ -29,7 +29,7 @@ case "$(uname)" in
 esac
 export QSG_INFO=1      # the scene graph logs its backend; record it (macOS must say Metal)
 modes="recorded high-zoom unreachable tile-failure production"
-python3 tools/api_native_smoke.py --help | grep -q keyboard && modes="recorded keyboard $modes"   # Stage 2 adds the keyboard gate
+python3 tools/api_native_smoke.py --help | grep -q keyboard && modes="keyboard $modes"   # Stage 2 adds the keyboard gate
 failed=
 for mode in $modes; do
   python3 tools/api_native_smoke.py --executable "$exe" --mode "$mode" --log "/tmp/batch1-$mode.log" || failed="$failed $mode"
@@ -105,7 +105,7 @@ the default S$1,000,000 maximum).
 | S3.1 | Select 748B, read the Sales group | Five facts at once, from 748B's recorded summary: Registrations 10; Latest 2026-09; Median price S$837,500; Median per m² S$9,832.82/m²; Floor area 67.0–105.0 m²; and, when the details arrive, a sixth labelled "Middle half, all types" reading S$705,750–S$880,000 (the all-types interquartile range the contract's F5 requires); labels right-aligned in one column, values aligned, tabular figures; the note reads "Sales of all flat types in the 24 source months to 2026-10." |
 | S3.2 | Set the flat type filter to 4 ROOM | Sales facts switch to the 4 ROOM cohort: Registrations 6; Latest 2026-02; Median price S$850,000; Median per m² S$9,770.11/m²; Floor area 87.0 m²; the note begins "4 ROOM sales"; "Middle half, all types" keeps S$705,750–S$880,000; the chart and registrations are unchanged. |
 | S3.3 | Address group, with 748B selected | Town BEDOK; Flat types 3 ROOM, 4 ROOM, 5 ROOM; Models DBSS (the summary's models, not the detail's); Postal code 472748; Nearest MRT BEDOK NORTH MRT STATION · 317 m, about 4 min walk; "Nearest MRT" and "Postal code" on one line each. |
-| S3.4 | Lease and Location groups | Commenced 2014; "Remaining in <the current year>" reading "about <99 − (year − 2014)> years of a 99-year lease", so "about 87 years" in 2026 (the label and figure follow the clock; record the year); one block point reading 1.33…, 103.9… to five decimals; the two notes in the caption role. |
+| S3.4 | Lease and Location groups | Commenced 2014; "Remaining in <the current year>" reading "about <99 − (year − 2014)> years of a 99-year lease", so "about 87 years" in 2026 (the label and figure follow the clock; record the year); one block point reading exactly 1.33629, 103.92124 (748B's summary coordinates to five decimals); the two notes in the caption role. |
 | S3.5 | Chart, in the light appearance (set it now if the session is dark) | At the display's scale (2 on Retina) the line, dots, text and the map's markers are crisp, with no pixelation or blur. Title, range caption, axis labels and the two month labels in the caption size; line and dots in the link colour; gaps for months without a sale. Values, from 748B's recorded `monthlyTrend` over the window 2024-11 to 2026-10: the caption reads "2024-11–2026-10 · 10 sales in 10 observed months", the month labels read 2024-11 and 2026-10, the y axis runs 600 to 1,150 (thousands), ten dots, the highest at 2026-05 (S$1,060,000) and the lowest at 2026-06 (S$653,000), the first at 2024-12 (S$850,000) and the last at 2026-09 (S$663,000); 2026-03 is an interior gap between the 2026-02 and 2026-04 dots, with no segment across it. |
 | S3.6 | Scroll the details so the chart is half out of view, in both directions | The chart is clipped at the details' edge; nothing is drawn over the list or the heading. **Record the result explicitly; this is the open question from the offscreen captures.** |
 | S3.7 | Latest registrations, with the flat type reset to All flat types | Heading, caption, 20 rows separated by hairlines, newest first: the first reads 2026-09 · 3 ROOM · S$663,000 with the detail lines "67.0 m² · S$9,895.52/m² · storey 13 TO 15", "DBSS · lease start 2014" and "Source remaining lease at resale application: 86 years 11 months"; the second 2026-06 · 3 ROOM · S$653,000 with "67.0 m² · S$9,746.27/m² · storey 04 TO 06", "DBSS · lease start 2014" and "… 87 years 03 months"; months never increase down the list; headings demibold and tabular; details in the secondary colour. |
@@ -162,7 +162,8 @@ Sales group matches that address's `/api/block-summaries` entry
 Address group shows that address's own town, flat types, postal code and
 nearest MRT as the same entry gives them (`town`, `flatTypes`, `postalCode`,
 `nearestMrt`), whose Lease group shows its `leaseCommenceRange` and
-99 minus the years since it, and whose
+99 minus the years since it, whose Location group shows its `coordinates`
+to five decimals, and whose
 Sales note names the dataset's latest month, and once the details arrive
 the Sales group shows "Middle half, all types" with a populated S$ range; an address with sales in the
 window shows a chart, one without shows the empty caption. Chart (F8, S3.5):
