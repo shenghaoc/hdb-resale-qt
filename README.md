@@ -67,7 +67,7 @@ This app and the web app are independent implementations of one product over one
 
 ## Verification
 
-Debug and Release build and pass **251 C# tests each**, including the API client against recorded responses and the web app's golden filter fixtures; all **37 Python tests** pass. The app reaches its readiness markers against the production API and the recorded fixtures, and reports an unreachable API without claiming readiness. The native Linux acceptance gates of the 0.1.0 offline release candidate ran against local CSV data; they were retired with that data path and are to be rebuilt against the recorded API ([slices](docs/worker-api.md#slices)).
+Debug and Release build and pass **260 C# tests each**, including the API client against recorded responses and the web app's golden filter fixtures; all **37 Python tests** pass. The app reaches its readiness markers against the production API and the recorded fixtures, and reports an unreachable API without claiming readiness. The native Linux acceptance gates of the 0.1.0 offline release candidate ran against local CSV data; they were retired with that data path and are to be rebuilt against the recorded API ([slices](docs/worker-api.md#slices)).
 
 ## Platforms, licence and RC limits
 

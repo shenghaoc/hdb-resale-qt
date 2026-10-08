@@ -135,6 +135,26 @@ public sealed class WorkerApiClientTests
             await Assert.ThrowsAsync<WorkerApiException>(() => client.GetAddressDetailAsync("bedok-10d-bedok-sth-ave-2"));
     }
 
+    [Theory]
+    [InlineData("2026-10", "2026-10", true)]
+    [InlineData("2025-12", "2026-01", true)]
+    [InlineData("2026-01", "2025-12", false)]
+    [InlineData("2026-10", "2026-09", false)]
+    public async Task ValidatesManifestWindowOrder(string min, string max, bool accepted)
+    {
+        var json = System.Text.Json.Nodes.JsonNode.Parse(File.ReadAllText(FixturePath("manifest.json")))!;
+        json["dataWindow"]!["minMonth"] = min;
+        json["dataWindow"]!["maxMonth"] = max;
+        using var client = Client(new RecordedApi(_ => Json(json.ToJsonString())));
+        if (accepted)
+        {
+            var manifest = await client.GetManifestAsync();
+            Assert.Equal(min, manifest.DataWindow.MinMonth);
+            Assert.Equal(max, manifest.DataWindow.MaxMonth);
+        }
+        else Assert.Contains("dataWindow", (await Assert.ThrowsAsync<WorkerApiException>(() => client.GetManifestAsync())).Message);
+    }
+
     private sealed class Failing(Exception error) : HttpMessageHandler
     {
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellation) =>

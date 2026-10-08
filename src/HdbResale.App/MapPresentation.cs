@@ -54,7 +54,7 @@ internal static class MapPresentation
         var visible = all.Where(b => Contains(viewport, b.Latitude, b.Longitude)).ToArray();
         var selectedInView = visible.Any(b => b.Key == selectedKey);
         if (viewport.Zoom >= IndividualZoom)
-            return new(visible.Select(MapPresentationRow.AddressRow).ToArray(), all.Count, visible.Length, 0, selectedInView);
+            return new(visible.OrderBy(b => b.Key, StringComparer.Ordinal).Select(MapPresentationRow.AddressRow).ToArray(), all.Count, visible.Length, 0, selectedInView);
         var rows = new List<MapPresentationRow>();
         var gridZoom = (int)Math.Floor(viewport.Zoom);
         var groups = visible.Where(b => b.Key != selectedKey).GroupBy(b =>
