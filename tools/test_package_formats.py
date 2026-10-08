@@ -151,9 +151,9 @@ class RpmSpec(unittest.TestCase):
         spec = self.spec()
         for path in (common.INSTALL_PREFIX, "/usr/bin/hdb-resale-explorer",
                      "/usr/share/applications/io.github.shenghaoc.hdb-resale-qt.desktop",
-                     "/usr/share/metainfo/io.github.shenghaoc.hdb-resale-qt.metainfo.xml",
-                     "%dir /usr/share/doc/hdb-resale-explorer"):
+                     "/usr/share/metainfo/io.github.shenghaoc.hdb-resale-qt.metainfo.xml"):
             self.assertIn("\n" + path + "\n", spec)
+        self.assertNotIn("/usr/share/doc", spec)  # nodocs installs would skip it; licences live under /opt
 
 
 class Construction(unittest.TestCase):

@@ -28,7 +28,12 @@ ROOT = Path(INSTALL_PREFIX)
 OWNED = (INSTALL_PREFIX, f"/usr/bin/{PACKAGE_NAME}",
          f"/usr/share/applications/{APPLICATION_ID}.desktop",
          f"/usr/share/icons/hicolor/scalable/apps/{APPLICATION_ID}.svg",
-         f"/usr/share/metainfo/{APPLICATION_ID}.metainfo.xml", f"/usr/share/doc/{PACKAGE_NAME}")
+         f"/usr/share/metainfo/{APPLICATION_ID}.metainfo.xml")
+DEB_ONLY = (f"/usr/share/doc/{PACKAGE_NAME}",)  # RPM keeps its notices under /opt (nodocs installs skip /usr/share/doc)
+
+
+def owned(family: str) -> tuple[str, ...]:
+    return OWNED + (DEB_ONLY if family == "deb" else ())
 
 
 def capture(*command: str) -> str:
@@ -107,7 +112,7 @@ def verify_installed(family: str, packages: Path, report: Path) -> None:
     capture("appstreamcli", "validate", "--no-net", f"/usr/share/metainfo/{APPLICATION_ID}.metainfo.xml")
     if f"Exec={PACKAGE_NAME}" not in Path(desktop).read_text():
         raise ValueError("The desktop entry does not start the installed launcher")
-    for path in OWNED[2:]:
+    for path in owned(family)[2:]:
         if not Path(path).exists():
             raise ValueError("Missing installed file: " + path)
     release = Path("/etc/os-release").read_text()
@@ -122,7 +127,7 @@ def verify_installed(family: str, packages: Path, report: Path) -> None:
 
 
 def verify_removed(family: str) -> None:
-    left = [path for path in OWNED if os.path.lexists(path)]
+    left = [path for path in owned(family) if os.path.lexists(path)]
     if left:
         raise ValueError("Files remain after uninstall: " + ", ".join(left))
     command = ["dpkg-query", "-W", PACKAGE_NAME] if family == "deb" else ["rpm", "-q", PACKAGE_NAME]
