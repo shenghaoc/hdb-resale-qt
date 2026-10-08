@@ -35,7 +35,7 @@ elf_magic=$(printf '\177ELF')
 checked=0
 unresolved=""
 find "$root" -type f | while read -r file; do
-  [ "$(head -c4 "$file")" = "$elf_magic" ] || continue
+  [ "$(head -c4 "$file" | tr -d '\000')" = "$elf_magic" ] || continue
   printf '%s\n' "$file"
 done > "$out/elf-files.txt"
 while read -r file; do
