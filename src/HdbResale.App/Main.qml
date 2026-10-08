@@ -19,13 +19,20 @@ ApplicationWindow {
         return 0.2126 * linear(c.r) + 0.7152 * linear(c.g) + 0.0722 * linear(c.b)
     }
     function contrastRatio(a, b) { const x = luminance(a), y = luminance(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05) }
-    // The palette's own text colour where it reaches 4.5:1 on the surface, as macOS selections do; otherwise
-    // black or white, whichever reads better (one always reaches 4.58:1). Qt's generic palette pairs white
-    // with its #308cc6 highlight at only 3.69:1.
+    // A colour alpha-composited over an opaque one, as the scene graph draws it.
+    function over(top, bottom) {
+        return Qt.rgba(top.r * top.a + bottom.r * (1 - top.a), top.g * top.a + bottom.g * (1 - top.a),
+                       top.b * top.a + bottom.b * (1 - top.a), 1)
+    }
+    // Text for a surface drawn over the window: the preferred palette colour where it reaches 4.5:1 as both
+    // actually render (translucent colours composited), as macOS selections do; otherwise opaque black or white,
+    // whichever reads better (one always reaches 4.58:1). Qt's generic palette pairs white with its #308cc6
+    // highlight at only 3.69:1.
     function readableOn(surface, preferred) {
-        if (contrastRatio(preferred, surface) >= 4.5) return preferred
+        const background = over(surface, over(window.color, Qt.rgba(1, 1, 1, 1)))
+        if (contrastRatio(over(preferred, background), background) >= 4.5) return preferred
         const black = Qt.rgba(0, 0, 0, 1), white = Qt.rgba(1, 1, 1, 1)
-        return contrastRatio(black, surface) >= contrastRatio(white, surface) ? black : white
+        return contrastRatio(black, background) >= contrastRatio(white, background) ? black : white
     }
 
     // The pinned Bridge creates a parentless, JavaScript-owned model wrapper.
@@ -421,11 +428,16 @@ ApplicationWindow {
                         onClicked: { transactionsList.forceActiveFocus(); Resales.selectAddress(addressKey) }
                         contentItem: Label {
                             text: addressDelegate.text; font: addressDelegate.font
-                            color: addressDelegate.highlighted ? window.readableOn(addressDelegate.palette.highlight, addressDelegate.palette.highlightedText)
-                                                               : addressDelegate.palette.text
+                            color: window.readableOn(addressDelegate.background.color,
+                                addressDelegate.highlighted ? addressDelegate.palette.highlightedText : addressDelegate.palette.text)
                         }
                         background: Rectangle {
-                            color: addressDelegate.highlighted ? addressDelegate.palette.highlight : addressDelegate.palette.base
+                            readonly property color accent: addressDelegate.palette.highlight
+                            // Selection, with the style's hover and pressed feedback kept as tints of the row surface.
+                            color: addressDelegate.highlighted ? (addressDelegate.down ? Qt.darker(accent, 1.15) : accent)
+                                : addressDelegate.down ? Qt.tint(addressDelegate.palette.base, Qt.rgba(accent.r, accent.g, accent.b, 0.2))
+                                : addressDelegate.hovered ? Qt.tint(addressDelegate.palette.base, Qt.rgba(accent.r, accent.g, accent.b, 0.1))
+                                : addressDelegate.palette.base
                             radius: 3
                             border.width: transactionsList.activeFocus && transactionsList.currentIndex === index ? 2 : 0
                             border.color: addressDelegate.highlighted ? addressDelegate.contentItem.color : addressDelegate.palette.highlight
