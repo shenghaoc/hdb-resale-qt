@@ -38,8 +38,8 @@ void hdb_tile_status_start()
 {
     const std::lock_guard<std::mutex> lock(installation);
     if (installed) return;
-    exhausted.store(0, std::memory_order_relaxed);
-    // One atomic swap, so an application's custom handler is never removed, even briefly.
+    // Installed once, with one atomic swap, so an application's custom handler is never removed, and
+    // never uninstalled: diagnostics keep flowing to the replaced handler until the process exits.
     published.store(false, std::memory_order_release);
     const auto replaced = qInstallMessageHandler(observe);
     previous.store(replaced, std::memory_order_release);
@@ -52,14 +52,6 @@ void hdb_tile_status_start()
         return;
     }
     installed = true;
-}
-
-void hdb_tile_status_stop()
-{
-    const std::lock_guard<std::mutex> lock(installation);
-    if (!installed) return;
-    qInstallMessageHandler(previous.load(std::memory_order_acquire));
-    installed = false;
 }
 
 std::uint64_t hdb_tile_status_exhausted()
