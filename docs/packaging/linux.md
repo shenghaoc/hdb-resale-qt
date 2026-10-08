@@ -66,15 +66,24 @@ metadata, logs, os-release and image digests) for 14 days and **never the packag
 
 ## What is actually tested
 
+Verification record: workflow run [37769032611](https://github.com/shenghaoc/hdb-resale-qt/actions/runs/37769032611) on commit
+`3112641` (2026-10-08), GitHub-hosted `ubuntu-24.04` runner. All steps passed.
+
 | Format | Environment | Evidence |
 | --- | --- | --- |
-| DEB | `debian:13` container on GitHub's ubuntu-24.04 runner | installed with `apt`, launched on Xvfb (X11) through `/usr/bin/hdb-resale-explorer` |
-| RPM | `fedora:43` container on the same runner | installed with `dnf`, launched the same way |
-| tar.gz | the ubuntu-24.04 build host (relocated, spaces in path) | launched on Xvfb; has the build host's libraries installed, so it proves relocation, not dependencies |
+| DEB | `debian:13` container (tag; the image digest is in the run's `linux-package-verification` artifact) | installed with `apt` from the package alone, every ELF resolved, 46 dependency mappings matched `dpkg -S`, launched through `/usr/bin/hdb-resale-explorer` as an unprivileged user on Xvfb (X11) against the recorded API, unreachable-API negative control failed as required, `apt remove` left nothing behind. About 74 s |
+| RPM | `fedora:43` container | the same phases with `dnf` and `rpm -qf`. About 70 s |
+| tar.gz | the ubuntu-24.04 build host, extracted to a path with a space | launched on Xvfb. The host has the build libraries installed, so this proves relocation, not dependencies |
 
-The exact image digests are in each run's report. Nothing else is claimed: not other Debian/Ubuntu/Fedora releases, not
-RHEL-family rebuilds, not Wayland (staged but never launched under a compositor), not hardware GL, not arm64, and not
-tile pixels or tile network success.
+The first Fedora runs found real defects that the Debian run did not: the Fedora package name for the brotli libraries
+(`libbrotli`), and the `nodocs` policy of Fedora container images, which is why the RPM keeps its notices under
+`/opt/hdb-resale-explorer/licenses` and only the DEB installs `/usr/share/doc/.../copyright`.
+
+Nothing else is claimed: not other Debian/Ubuntu/Fedora releases, not RHEL-family rebuilds, not Wayland (the plugins are
+staged and audited but never launched under a compositor), not hardware GL (Mesa software rendering), not arm64, not a
+desktop menu launch or icon rendering, and not tile pixels or tile network success (the map still requests OneMap tiles
+during the smoke; the result is not asserted). The Ubuntu 24.04 container runs used while developing are a rehearsal, not
+a tested-distribution claim.
 
 ## Remaining blockers before any distribution
 
