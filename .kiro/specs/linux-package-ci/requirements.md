@@ -38,7 +38,7 @@
 ## R4 — DEB and RPM
 
 - **R4.1** x86_64/amd64 packages install the tree under `/opt/hdb-resale-explorer`, a launcher at
-  `/usr/bin/hdb-resale-explorer`, a desktop entry, an SVG icon, AppStream metadata and a copyright notice, under
+  `/usr/bin/hdb-resale-explorer`, a desktop entry, an SVG icon, AppStream metadata, and (DEB) a Debian copyright notice, under
   the id `io.github.shenghaoc.hdb-resale-qt`.
 - **R4.2** System dependencies are declared per family from `packaging/system-dependencies.json`, with glibc and
   libstdc++ floors computed from the binaries. An unmapped library fails construction. Bundled Qt/.NET sonames never

@@ -17,7 +17,7 @@ modules, ICU 73), the .NET 10.0.12 runtime, licences, a launcher and a hashed ma
 /usr/share/applications/io.github.shenghaoc.hdb-resale-qt.desktop
 /usr/share/icons/hicolor/scalable/apps/io.github.shenghaoc.hdb-resale-qt.svg
 /usr/share/metainfo/io.github.shenghaoc.hdb-resale-qt.metainfo.xml
-/usr/share/doc/hdb-resale-explorer/copyright
+/usr/share/doc/hdb-resale-explorer/copyright   (DEB only; the RPM keeps its notices in /opt/.../licenses)
 ```
 
 Not packaged: any resale data (the app reads the Worker API through `HDB_API_BASE_URL`, production by default),
