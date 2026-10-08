@@ -12,8 +12,7 @@ int main()
     qWarning("HDB_DEFAULT_SINK_BEFORE");
     qWarning("QGeoTileRequestManager: Failed to fetch tile (1614,1015,11) 5 times, giving up. Last error message was: 'Service Unavailable'");
     const auto counted = hdb_tile_status_exhausted();
-    hdb_tile_status_stop();
-    qWarning("HDB_DEFAULT_SINK_AFTER_STOP");
+    qWarning("HDB_DEFAULT_SINK_AFTER");
     if (counted != 1) {
         std::printf("HDB_TEST_FAILED exhausted=%llu\n", static_cast<unsigned long long>(counted));
         return 1;

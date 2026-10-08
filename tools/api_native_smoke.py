@@ -10,7 +10,6 @@ import os
 import pathlib
 import socket
 import subprocess
-import tempfile
 import threading
 
 from api_fixture_server import Handler
@@ -50,12 +49,10 @@ def main() -> None:
     parser.add_argument("--log", type=pathlib.Path, required=True)
     args = parser.parse_args()
     env = os.environ.copy()
-    for name in ("HDB_API_BASE_URL", "HDB_PACKAGE_SMOKE", "HDB_API_GATE",
-                 "HDB_TILE_TEST", "HDB_TEST_TILE_ENDPOINT", "HDB_TEST_TILE_CACHE_DIRECTORY"):
+    for name in ("HDB_API_BASE_URL", "HDB_PACKAGE_SMOKE", "HDB_API_GATE", "HDB_TILE_TEST", "HDB_TEST_TILE_ENDPOINT"):
         env.pop(name, None)
     servers = []
     refused = None
-    cache = None
     try:
         if args.mode in ("recorded", "high-zoom", "tile-failure"):
             servers.append(serve(Handler))
@@ -66,12 +63,10 @@ def main() -> None:
             refused.bind(("127.0.0.1", 0))
             env["HDB_API_BASE_URL"] = f"http://127.0.0.1:{refused.getsockname()[1]}/"
         if args.mode == "tile-failure":
-            # A fresh cache, so no previously cached tile can hide the failures.
-            cache = tempfile.TemporaryDirectory(prefix="hdb-tile-failure-")
+            # The app gives a tile-test launch a fresh cache of its own, so no earlier tile hides a failure.
             servers.append(serve(FailingTiles))
             env["HDB_TILE_TEST"] = "1"
             env["HDB_TEST_TILE_ENDPOINT"] = f"http://127.0.0.1:{servers[-1].server_port}/"
-            env["HDB_TEST_TILE_CACHE_DIRECTORY"] = cache.name
         if args.mode in GATES:
             env["HDB_API_GATE"] = args.mode
             markers = [GATES[args.mode]]
@@ -98,8 +93,6 @@ def main() -> None:
             server.server_close()
         if refused:
             refused.close()
-        if cache:
-            cache.cleanup()
 
 
 if __name__ == "__main__":

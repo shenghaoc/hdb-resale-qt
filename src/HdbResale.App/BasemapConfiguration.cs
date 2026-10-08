@@ -10,11 +10,20 @@ internal sealed record BasemapConfiguration(string TileEndpoint, string CacheDir
     // More links than this along one path is treated as a loop, as operating systems do.
     private const int MaximumLinks = 40;
 
-    internal static BasemapConfiguration FromEnvironment() => Create(
-        Environment.GetEnvironmentVariable("HDB_TILE_TEST") == "1",
-        Environment.GetEnvironmentVariable("HDB_TEST_TILE_ENDPOINT"),
-        Environment.GetEnvironmentVariable("HDB_TEST_TILE_CACHE_DIRECTORY"),
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "HdbResaleQt", "onemap-default-v1"));
+    internal static BasemapConfiguration FromEnvironment()
+    {
+        var production = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "HdbResaleQt", "onemap-default-v1");
+        if (Environment.GetEnvironmentVariable("HDB_TILE_TEST") != "1") return new(DefaultTileEndpoint, production);
+        // A test launch always gets a fresh, empty cache of its own, removed when the process exits: no
+        // earlier tile can hide a failure, and no supplied path has to be told apart from the production cache.
+        var cache = Directory.CreateTempSubdirectory("hdb-tile-test-").FullName;
+        AppDomain.CurrentDomain.ProcessExit += (_, _) =>
+        {
+            try { Directory.Delete(cache, recursive: true); }
+            catch (Exception e) when (e is IOException or UnauthorizedAccessException) { }
+        };
+        return Create(true, Environment.GetEnvironmentVariable("HDB_TEST_TILE_ENDPOINT"), cache, production);
+    }
 
     internal static BasemapConfiguration Create(bool testEnabled, string? endpoint, string? cacheDirectory, string defaultCacheDirectory)
     {
@@ -25,6 +34,8 @@ internal sealed record BasemapConfiguration(string TileEndpoint, string CacheDir
             throw new ArgumentException("Tile tests require a loopback HTTP(S) endpoint ending in / without credentials, query or fragment.");
         if (string.IsNullOrWhiteSpace(cacheDirectory) || !Path.IsPathFullyQualified(cacheDirectory))
             throw new ArgumentException("Tile tests require an absolute, isolated cache directory.");
+        // Defence in depth for the temporary directory (for example a temp directory set inside the production
+        // cache): neither may contain the other, wherever links, junctions or short names lead.
         var cache = Path.TrimEndingDirectorySeparator(Path.GetFullPath(cacheDirectory));
         // Compare where the directories really are: a symbolic link or junction could otherwise give the
         // production cache a second, lexically separate name.

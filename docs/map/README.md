@@ -107,21 +107,23 @@ visible; no raster tiles are bundled.
 
 Normal launches retain the OneMap Default URL, attribution, and
 `onemap-default-v1` cache. Only `HDB_TILE_TEST=1` enables the test-only endpoint
-override. Set both `HDB_TEST_TILE_ENDPOINT` to a loopback HTTP(S) URL prefix
-ending in `/` and `HDB_TEST_TILE_CACHE_DIRECTORY` to an absolute, separate fresh
-cache directory. Remote endpoints, URL credentials/query/fragment, and the
-production cache tree are rejected. Test variables are ignored without the
-explicit opt-in.
+override: set `HDB_TEST_TILE_ENDPOINT` to a loopback HTTP(S) URL prefix ending in
+`/`. Remote endpoints and URL credentials/query/fragment are rejected, and the
+variable is ignored without the explicit opt-in. A test launch always uses a
+fresh, empty cache of its own in the temporary directory, removed when the
+process exits, so no earlier tile can hide a failure. As defence in depth that
+directory must not contain, or lie inside, the production cache, wherever links,
+junctions or Windows short names lead.
 
 A loopback test server can return HTTP 503 for every XYZ request to reproduce
 missing tiles in the normal native app without modifying system networking or
 reading warm production tiles. The endpoint hook affects tile requests only; the
 repeated-failure notice below is runtime behavior, and tile failures do not set
 the existing map error overlay. `tools/api_native_smoke.py --mode tile-failure`
-runs exactly this: the recorded Worker API (`tools/api_fixture_server.py`), a
-loopback tile server answering 503 to every request, and a fresh temporary cache.
-The harness clears inherited test variables, removes the cache afterwards, and
-fails unless at least two tiles were refused through all of Qt's attempts.
+runs exactly this: the recorded Worker API (`tools/api_fixture_server.py`) and a
+loopback tile server answering 503 to every request. The harness clears inherited
+test variables and fails unless at least two tiles were refused through all of
+Qt's attempts.
 
 ### Repeated tile failures and selected-address contrast
 
@@ -145,14 +147,14 @@ Qt Location does not expose exhausted per-tile requests through `Map.error`.
 The small `Native/TileStatus.cmake` library uses the public Qt Core
 [`qInstallMessageHandler`](https://doc.qt.io/qt-6/qtlogging.html) API to count only
 the exhaustion warning emitted by the pinned Qt 6.12 tile request manager. It is
-installed with one atomic swap and forwards every diagnostic to the handler it
-replaced: Qt's own default handler unless the application installed another, so
-the platform's sink (the debugger for a Windows GUI app, the system log, stderr)
-is unchanged. It never formats or writes diagnostics itself. A message arriving
-before the replaced handler is published waits for it rather than being dropped.
-If Qt returned no handler, Qt's default is restored and monitoring stays off. The
-earlier handler is restored on normal teardown. The counter is atomic and polled
-on the QML/UI thread every 250 ms. No managed callback
+installed once at startup, with one atomic swap, and never removed. It forwards
+every diagnostic to the handler it replaced: Qt's own default handler unless the
+application installed another, so the platform's sink (the debugger for a Windows
+GUI app, the system log, stderr) is unchanged. It never formats or writes
+diagnostics itself. A message arriving before the replaced handler is published
+waits for it rather than being dropped. If Qt returned no handler, Qt's default
+is restored and monitoring stays off. The counter is atomic and polled on the
+QML/UI thread every 250 ms. No managed callback
 or native allocation crosses P/Invoke. If external logging rules suppress this
 warning, or a future Qt version changes its wording, this diagnostic-based notice
 cannot observe it; rerun the `tile-failure` gate after a Qt upgrade.
@@ -160,7 +162,6 @@ cannot observe it; rerun the `tile-failure` gate after a Qt upgrade.
 Builds install the native helper beside the managed app. Linux packaging copies
 this explicit P/Invoke dependency before collecting its ELF dependencies. Native
 `ctest --test-dir src/HdbResale.App/obj/Release/net10.0/qt/native/build
---output-on-failure` verifies classification, concurrent requests, diagnostic
-forwarding, idempotent installation and restoration; that diagnostics reach Qt's
-default sink when no custom handler exists; and that starting and stopping while
-another thread logs never bypasses or drops a message for a custom handler.
+--output-on-failure` verifies classification, concurrent requests, forwarding
+every diagnostic exactly once to an earlier handler, idempotent installation, and
+that diagnostics reach Qt's default sink when no custom handler exists.
