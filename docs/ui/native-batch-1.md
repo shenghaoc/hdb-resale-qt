@@ -108,7 +108,7 @@ the default S$1,000,000 maximum).
 | S3.4 | Lease and Location groups | Commenced 2014; "Remaining in <the current year>" reading "about <99 − (year − 2014)> years of a 99-year lease", so "about 87 years" in 2026 (the label and figure follow the clock; record the year); one block point reading exactly 1.33629, 103.92124 (748B's summary coordinates to five decimals); the two notes in the caption role. |
 | S3.5 | Chart, in the light appearance (set it now if the session is dark) | At the display's scale (2 on Retina) the line, dots, text and the map's markers are crisp, with no pixelation or blur. Title, range caption, axis labels and the two month labels in the caption size; line and dots in the link colour; gaps for months without a sale. Values, from 748B's recorded `monthlyTrend` over the window 2024-11 to 2026-10: the caption reads "2024-11–2026-10 · 10 sales in 10 observed months", the month labels read 2024-11 and 2026-10, the y axis runs 600 to 1,150 (thousands), ten dots, the highest at 2026-05 (S$1,060,000) and the lowest at 2026-06 (S$653,000), the first at 2024-12 (S$850,000) and the last at 2026-09 (S$663,000); 2026-03 is an interior gap between the 2026-02 and 2026-04 dots, with no segment across it. |
 | S3.6 | Scroll the details so the chart is half out of view, in both directions | The chart is clipped at the details' edge; nothing is drawn over the list or the heading. **Record the result explicitly; this is the open question from the offscreen captures.** |
-| S3.7 | Latest registrations, with the flat type reset to All flat types | Heading, caption, 20 rows separated by hairlines, newest first: the first reads 2026-09 · 3 ROOM · S$663,000 with the detail lines "67.0 m² · S$9,895.52/m² · storey 13 TO 15", "DBSS · lease start 2014" and "Source remaining lease at resale application: 86 years 11 months"; the second 2026-06 · 3 ROOM · S$653,000 with "67.0 m² · S$9,746.27/m² · storey 04 TO 06", "DBSS · lease start 2014" and "… 87 years 03 months"; months never increase down the list; headings demibold and tabular; details in the secondary colour. |
+| S3.7 | Latest registrations, with the flat type reset to All flat types | Heading, caption, 20 rows separated by hairlines, newest first: the first reads 2026-09 · 3 ROOM · S$663,000 with the detail lines "67.0 m² · S$9,895.52/m² · storey 13 TO 15", "DBSS · lease start 2014" and "Source remaining lease at resale application: 86 years 11 months"; the second 2026-06 · 3 ROOM · S$653,000 with "67.0 m² · S$9,746.27/m² · storey 04 TO 06", "DBSS · lease start 2014" and "… 87 years 03 months"; months never increase down the list, and every row's heading and detail lines match the fixture's `recentTransactions` (`tests/fixtures/worker-api/details/bedok-748b-bedok-reservoir-cres.json`) in order; headings demibold and tabular; details in the secondary colour. |
 | S3.8 | Reset the flat type filter to All flat types, then select 727 ANG MO KIO AVE 6 | Chart replaced by the "No registrations … 24-month window" caption; the inspector still shows four groups. |
 | S3.9 | Reselect 748B, then switch to the dark appearance or colour scheme | Every label, value, note, chart element and separator remains readable; no hard-coded light colour shows; the chart's line and dots take the dark appearance's link colour (compare with a link in the platform's own dialog or settings, as S3.5 did in light) and the captions the dark secondary text colour. |
 | S3.10 | Raise the system text size or scale factor one step | Labels wrap rather than clip; the label column does not exceed two fifths of the pane; the chart captions scale. |
@@ -137,10 +137,10 @@ ownership is checked against the Worker API directly: with the address's
 `streetName` identify it), fetch
 `https://hdb-resale-visualizer.shenghaoc.workers.dev/api/details/<addressKey>`
 with `curl` and compare its `recentTransactions` with the rows shown: the
-heading (month, flat type, price) of every row in order, and for at least the
-first two rows every detail line (`floorAreaSqm`, `pricePerSqm`,
-`storeyRange`, `flatModel`, `leaseCommenceDate`, `remainingLease`); they must
-match before F5 is recorded as passed. S3.8 on production: pick an address whose list row shows a
+heading (month, flat type, price) and every detail line (`floorAreaSqm`,
+`pricePerSqm`, `storeyRange`, `flatModel`, `leaseCommenceDate`,
+`remainingLease`) of every row in order; all must match before F5 is
+recorded as passed. S3.8 on production: pick an address whose list row shows a
 latest month older than the 24-month window (search by town and sort by eye,
 or use the Any time window); if none exists on the day, record S3.8 as
 unverified for production. S2.0: the launch completes without
@@ -183,7 +183,10 @@ with the screen reader on no second "Selected …" is announced. Details (F5): o
 comparison reads one saved response. Choose it so S3.2 can act on it (its
 `flatTypeCohorts` in `summaries.json` must hold a `4 ROOM` entry and its
 `medianPriceByFlatType["4 ROOM"]` must not exceed the active maximum, or the
-correct filtering logic clears the selection at S3.2) and so S3.5 can show a
+correct filtering logic clears the selection at S3.2), so the Address group
+has every fact the pass asserts (its entry must carry a `postalCode`, a
+`nearestMrt` and a non-empty `flatModels`; the inspector omits a fact whose
+value is absent, so an entry without them cannot fail those facts) and so S3.5 can show a
 gap (its detail response must satisfy the interior-gap rule under Chart (F8)
 below); fetch its detail response once, before S3.1, and save it beside
 `summaries.json`. Selecting it opens four populated groups whose
@@ -232,9 +235,13 @@ computed from `summaries.json` (maximum M: entries with `medianPrice <= M`;
 minimum m: `m <= medianPrice <= 1000000`; window of N months: entries with
 `medianPrice <= 1000000` and `latestMonth` at or after the dataset's latest
 month minus N − 1 months), and three addresses from the computed set, spread
-through it, must be on the list; and for each of the three, zooming to the named
-address's location shows no marker there while a listed neighbour keeps its
-marker; town narrows to its own addresses; for the flat type,
+through it, must be on the list (the complete membership of a live list of
+hundreds is not compared by hand: the predicate over the summaries is what
+`AddressExplorerTests` prove exhaustively, and this pass proves the native
+list, map and status bar follow it on the count, the named exclusion and the
+samples); and for each of the three excluded addresses (the maximum's, the
+minimum's and the window's), zooming to its location shows no marker there
+while a listed neighbour keeps its marker; town narrows to its own addresses; for the flat type,
 choose a type that one listed address advertises and a neighbouring listed
 address does not (read `flatTypes` off the list's addresses or the summaries):
 after selecting it the first address stays, the second leaves the list and
