@@ -124,10 +124,16 @@ Repeat S2.0 to S2.15 and S3.1 to S3.12 against production. The invariants
 below replace the fixture's data-dependent values; S2.9 to S2.11, S2.15,
 S3.6 and S3.9 to S3.12 keep their expectations as written, and S3.5 keeps
 them for the address chosen under Chart (F8) below. S3.7 on
-production, with the flat type reset to All flat types: every row belongs to
-the selected address, the first row's month is the address's latest month
-shown in the list (the all-types month), and months never increase down the
-list. S3.8 on production: pick an address whose list row shows a
+production, with the flat type reset to All flat types: the first row's month
+is the address's latest month shown in the list (the all-types month), and
+months never increase down the list. Registration rows carry no address, so
+ownership is checked against the Worker API directly: with the address's
+`addressKey` read from `/api/block-summaries` (its `town`, `block` and
+`streetName` identify it), fetch
+`https://hdb-resale-visualizer.shenghaoc.workers.dev/api/details/<addressKey>`
+with `curl` and compare its `recentTransactions` (month, flat type, price, in
+order) with the rows shown; they must match one for one before F5 is
+recorded as passed. S3.8 on production: pick an address whose list row shows a
 latest month older than the 24-month window (search by town and sort by eye,
 or use the Any time window); if none exists on the day, record S3.8 as
 unverified for production. S2.0: the launch completes without
