@@ -60,7 +60,7 @@ ApplicationWindow {
     }
     // Opt-in native regression checks over the recorded API; no screenshot or tile publication.
     Timer {
-        interval: 50; repeat: true; running: Resales.apiGate.length > 0
+        interval: 50; repeat: true; running: Resales.apiGate.length > 0 && Resales.apiGate !== "acceptance"
         property int ticks: 0
         property bool configured: false
         function contrast(text, surface) {
@@ -116,6 +116,24 @@ ApplicationWindow {
                 }
             }
             if (ticks > 600) { console.error("HDB_API_GATE_FAIL " + Resales.apiGate); stop(); Qt.quit() }
+        }
+    }
+    // Opt-in native buyer acceptance over the recorded API (tools/api_acceptance.py).
+    Loader {
+        active: Resales.apiGate === "acceptance"
+        sourceComponent: Component {
+            ApiAcceptanceGate {
+                targetMap: map; targetList: transactionsList
+                townControl: townPicker; typeControl: typePicker; minimumControl: minimumPicker
+                priceControl: pricePicker; recencyControl: recencyPicker
+                resetControl: resetButton; retryControl: retryDetailButton; emptyNotice: emptyLabel
+                attributionImage: oneMapLogo; targetTrendLoader: trendLoader; targetDetailsScroll: detailsScroll
+                textSurfacePairs: [
+                    [versionLabel, window], [introLabel, window], [windowHelpLabel, window], [priceWarningLabel, window],
+                    [keyboardHint, window], [leaseLabel, window], [attributionLabel, attributionSurface],
+                    [zoomLabel, zoomLabel.background], [mapErrorLabel, mapErrorLabel.background]
+                ]
+            }
         }
     }
     Timer { id: packageExit; interval: 350; onTriggered: Qt.quit() }
@@ -198,7 +216,7 @@ ApplicationWindow {
                     Accessible.name: "Latest registration window"
                 }
             }
-            Button { text: "Reset"; Layout.alignment: Qt.AlignBottom; Accessible.name: "Reset all filters"; onClicked: Resales.resetFilters() }
+            Button { id: resetButton; text: "Reset"; Layout.alignment: Qt.AlignBottom; Accessible.name: "Reset all filters"; onClicked: Resales.resetFilters() }
             Item { Layout.fillWidth: true }
         }
         Label { id: windowHelpLabel; text: "Price bounds apply to each address's median (the selected flat type's, when one is chosen) · figures cover the latest 24 source months · windows keep addresses with a registration since their start and end at source month " + Resales.datasetLatestMonth + " (may be partial)"; font.pixelSize: 12; color: palette.windowText; wrapMode: Text.WordWrap; Layout.fillWidth: true }
@@ -444,7 +462,7 @@ ApplicationWindow {
                         }
                     }
                 }
-                Label { visible: Resales.addressCount === 0 && !Resales.loading && !Resales.canRetry; text: "No matching addresses. Adjust the filters or reset."; wrapMode: Text.WordWrap; Layout.fillWidth: true }
+                Label { id: emptyLabel; visible: Resales.addressCount === 0 && !Resales.loading && !Resales.canRetry; text: "No matching addresses. Adjust the filters or reset."; wrapMode: Text.WordWrap; Layout.fillWidth: true }
                 Rectangle { Layout.fillWidth: true; height: 1; color: "#ccd5da" }
                 Label { text: Resales.selectedHeading; font.bold: true; font.pixelSize: 17; wrapMode: Text.WordWrap; Layout.fillWidth: true }
                 Label { text: Resales.selectionMapStatus; font.pixelSize: 12; wrapMode: Text.WordWrap; Layout.fillWidth: true }
@@ -465,7 +483,7 @@ ApplicationWindow {
                         Label { width: parent.width; text: Resales.selectedMetrics; wrapMode: Text.WordWrap; font.pixelSize: 13 }
                         Label { id: leaseLabel; width: parent.width; text: Resales.selectedLease; wrapMode: Text.WordWrap; font.pixelSize: 12; color: palette.windowText }
                         Label { width: parent.width; text: Resales.detailStatus; visible: text.length > 0; wrapMode: Text.WordWrap; font.pixelSize: 12; font.italic: true }
-                        Button { text: "Retry registrations"; visible: Resales.canRetryDetail; onClicked: Resales.retryDetail() }
+                        Button { id: retryDetailButton; text: "Retry registrations"; visible: Resales.canRetryDetail; onClicked: Resales.retryDetail() }
                         Loader {
                             id: trendLoader; width: parent.width
                             active: Resales.detailReady

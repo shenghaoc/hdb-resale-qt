@@ -1,5 +1,9 @@
 # M11 buyer workflow and bounded 0.1.0 RC
 
+> Historical record of the offline 0.1.0 release candidate, which imported bundled CSV data. The current app
+> reads the Worker API ([worker-api.md](../worker-api.md)). Its native checks run over the recorded API, and its
+> Linux package bundles no data ([licensing-packaging.md](licensing-packaging.md)).
+
 Base: clean exact M10 `ff5cc7d1f8a61664408f35455e19a7fb8fff5227`, branch `milestone-11-product-rc`. No stale remote branch, push, tag, official release or automatic next milestone.
 
 ## Product decisions

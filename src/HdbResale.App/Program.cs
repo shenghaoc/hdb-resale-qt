@@ -71,6 +71,7 @@ internal static class Program
         Qml.LoadFromRootModule("Main");
         Qml.WaitForExit();
         if (Environment.GetEnvironmentVariable("HDB_PACKAGE_SMOKE") == "1") Console.WriteLine("HDB_PACKAGE_EXIT");
+        if (Environment.GetEnvironmentVariable("HDB_API_GATE") is { Length: > 0 }) Console.WriteLine("HDB_API_GATE_EXIT");
     }
     private static void WriteReport<T>(string path, T value)
     {

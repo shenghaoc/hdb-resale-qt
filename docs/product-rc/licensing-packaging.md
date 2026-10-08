@@ -129,14 +129,16 @@ modification/use. This required attribution is not a general trademark licence
 or permission to use the logo as the application's brand. Do not imply SLA
 endorsement or assume that data licensing makes the logo MIT.
 
-The small canonical fixture uses HDB/ACRA sources listed in
-[data/provenance.json](../../data/provenance.json). Preserve dataset names,
-source links, access dates and the
-[Singapore Open Data Licence link](https://data.gov.sg/open-data-licence).
-The licence requires source acknowledgement and does not grant rights in
-personal data, third-party rights or trademarks. The package uses only the
-checked-in fixture and provenance, not the 241,920-row local research corpus.
-Basemap availability and network access remain external runtime conditions.
+The package bundles no resale data. At runtime the app reads the HDB Resale
+Explorer Worker API (`HDB_API_BASE_URL`, production by default), which serves
+HDB resale records from data.gov.sg. The app shows that source and the
+[Singapore Open Data Licence link](https://data.gov.sg/open-data-licence);
+preserve both. The licence requires source acknowledgement and does not grant
+rights in personal data, third-party rights or trademarks. Staging fails if
+any CSV or GeoJSON file, or a `data` directory, reaches the application tree,
+so neither the checked-in research fixture nor the local research corpus can
+be shipped by accident. The manifest records the API as the data source. API,
+basemap and network availability remain external runtime conditions.
 
 ## What the Linux recipe does
 
@@ -146,7 +148,7 @@ contained absolute build-prefix RUNPATHs, `qt.conf` was under a different
 depended on the developer's installation. `tools/package/linux_rc.py` stages
 an explicit independent directory and tar.gz from a previously built Release:
 
-- Native host and managed application/Bridge assemblies; canonical fixture
+- Native host and managed application/Bridge assemblies, and no data
 - Scanner-selected QML modules, including Controls styles, Layouts, Graphs and
   their actual Quick 3D dependencies
 - X11 xcb platform, GLX/EGL integration, PNG support in QtGui, image plugins,
@@ -212,24 +214,35 @@ current source before staging; the manifest states the source commit/dirty
 status and hashes the exact shipped bytes.
 
 Extract/copy the resulting package to a different location, then from a real
-X11 desktop session run:
+X11 desktop session, in the checkout, run:
 
 ```sh
-python3 tools/package/launch_check.py \
-  --package /relocated/hdb-resale-explorer-0.1.0-linux-x64-private-rc \
-  --log /outside/repository/package-launch.log \
-  --report /outside/repository/package-launch.json
+for api in recorded production unreachable; do
+  python3 tools/package/launch_check.py --api "$api" \
+    --package /relocated/hdb-resale-explorer-0.1.0-linux-x64-private-rc \
+    --log "/outside/repository/package-launch-$api.log" \
+    --report "/outside/repository/package-launch-$api.json" || exit
+done
 ```
 
 The 30-second bounded check verifies file hashes, starts from an unrelated
 working directory with fresh HOME/XDG directories, removes inherited
-Qt/.NET/loader/data overrides, preserves the legitimate X11 session, and
-requires ordered shell/data/map-engine/chart readiness and managed/native clean-exit
-markers. The smoke selects a canonical address and checks the instantiated
-LineSeries against its C# points, including missing-month gaps. `/proc` library
-observations must show Graphs, Qt, ICU, .NET and the OSM
-plugin inside the relocated package. Loader/QML errors, timeout, nonzero exit
-or missing markers fail the check. **Map readiness is not tile-pixel evidence.**
+Qt/.NET/loader/API overrides, preserves the legitimate X11 session, and
+chooses the API address itself:
+- `recorded` (the default) serves `tests/fixtures/worker-api` on a loopback
+  port, so the check is deterministic and offline apart from map tiles;
+- `production` reads the production API with GET requests only, proving that
+  the packaged runtime reaches it over TLS;
+- `unreachable` points at a reserved, non-listening loopback port.
+
+The first two require ordered shell/data/map-engine/chart readiness and
+managed/native clean-exit markers. The smoke selects the first address and
+checks the instantiated LineSeries against its C# points, including
+missing-month gaps. `unreachable` requires the reported failure, a clean
+exit and no data readiness. `/proc` library observations must show Qt, ICU,
+.NET and the OSM plugin inside the relocated package, and Graphs too wherever
+the chart loads. Loader/QML errors, timeout, nonzero exit or missing markers
+fail the check. **Map readiness is not tile-pixel evidence.**
 Visual inspection of the packaged UI remains a separate check.
 
 ## rowplay-qt reference and platform limits

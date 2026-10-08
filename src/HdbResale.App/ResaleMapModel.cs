@@ -215,6 +215,10 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public string DatasetSummary => explorer is null ? StatusText : string.Create(CultureInfo.InvariantCulture,
         $"Data: HDB Resale Explorer API ({api!.BaseAddress.Host}) · published {explorer.Manifest.GeneratedAt ?? "unknown"} · registrations {explorer.Manifest.DataWindow.MinMonth} to {explorer.Manifest.DataWindow.MaxMonth} · {explorer.Manifest.Counts.Transactions:N0} transactions at {explorer.Manifest.Counts.Blocks:N0} addresses.");
     public string ApiGate => Environment.GetEnvironmentVariable("HDB_API_GATE") ?? "";
+    // The acceptance gate's independently derived expectations (tools/api_acceptance.py); test opt-in only.
+    public string ApiGateExpectationJson => ApiGate == "acceptance" && Environment.GetEnvironmentVariable("HDB_API_EXPECTATION") is { Length: > 0 } path
+        ? File.ReadAllText(path) : "null";
+    public int GateMaximumQueuedMutations => mutations.MaximumPendingCount;
     public bool PackageSmoke => Environment.GetEnvironmentVariable("HDB_PACKAGE_SMOKE") == "1";
 
     private void NotifyAll() => Notify(nameof(Busy), nameof(Loading), nameof(CanRetry), nameof(StatusText), nameof(TownsJson),

@@ -21,8 +21,9 @@ import tarfile
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[2]
-DATA_FILES = ("transactions.csv", "address-evidence.csv", "postal-address-evidence.csv",
-              "building-evidence.geojson", "provenance.json", "README.md")
+# The app reads every resale record from the Worker API at runtime; a package bundles no data.
+API_BASE_URL = "https://hdb-resale-visualizer.shenghaoc.workers.dev/"
+DATA_SUFFIXES = (".csv", ".geojson")
 PLUGIN_FILES = (
     "platforms/libqxcb.so", "xcbglintegrations/libqxcb-glx-integration.so",
     "xcbglintegrations/libqxcb-egl-integration.so", "geoservices/libqtgeoservices_osm.so",
@@ -80,6 +81,15 @@ def copy_app_native_libraries(build, app):
     copy(build / "libhdb_tile_status.so", app / "libhdb_tile_status.so")
 
 
+def refuse_bundled_data(package: Path) -> None:
+    """Fail staging if resale data or the local research corpus reached the application tree."""
+    app = package / "app"
+    found = sorted(str(path.relative_to(package)) for path in app.rglob("*")
+                   if path.is_file() and (path.suffix.lower() in DATA_SUFFIXES or path.relative_to(app).parts[0] == "data"))
+    if found:
+        raise ValueError("The package must not bundle resale data; the app reads the Worker API: " + ", ".join(found))
+
+
 def configure_app_local_icu(package: Path) -> None:
     """Configure only staged files; never alter host libraries or globalization."""
     runtime_dir = package / "dotnet/shared/Microsoft.NETCore.App/10.0.12"
@@ -130,8 +140,6 @@ def stage(args: argparse.Namespace) -> Path:
     for source in sorted((build / "Application").iterdir()):
         if source.is_file() and (source.suffix == ".qml" or source.name == "qmldir"):
             copy(source, app / "Application" / source.name)
-    for name in DATA_FILES:
-        copy(ROOT / "data" / name, app / "data" / name)
 
     # Do not recursively scan stale obj/bin copies beneath the source folder.
     scan_root = output / "qml-inputs"
@@ -231,7 +239,8 @@ def stage(args: argparse.Namespace) -> Path:
         "Original application is GPL-3.0-or-later. Complete exact application/Qt/Bridge corresponding-source provision,\n"
         "relinking/rebuild instructions (including compiled Bridge headers), and all third-party\n"
         "copyright/license notices before distributing. SBOM files are inventory, not a substitute\n"
-        "for the license texts or corresponding source. OneMap logo/data keep their own terms.\n")
+        "for the license texts or corresponding source. The OneMap logo and the public data the app\n"
+        "reads from the HDB Resale Explorer API keep their own terms.\n")
     launcher = package / "hdb-resale-explorer"
     launcher.write_text('''#!/bin/sh
 set -eu
@@ -244,6 +253,7 @@ export QML_IMPORT_PATH="$here/qt/qml"
 exec "$here/app/HdbResale.App" "$@"
 ''')
     launcher.chmod(0o755)
+    refuse_bundled_data(package)
     elf_files = [path for path in package.rglob("*") if path.is_file() and elf(path)]
     dependencies: set[str] = set()
     optional_unresolved = []
@@ -274,7 +284,7 @@ exec "$here/app/HdbResale.App" "$@"
     manifest = {
         "product": "HDB Resale Explorer", "version": args.version,
         "application_license": application_license,
-        "scope": "private local Linux x64 RC; system ABI/graphics/X11 dependencies remain",
+        "scope": "private local Linux x64 RC; system ABI/graphics/X11 dependencies remain; data is read from the network",
         "qt": "6.12.0", "bridge": "0.4.0-beta", "dotnet_runtime": "10.0.12",
         "packaging_runtime_overrides": {"System.Globalization.AppLocalIcu": "73",
             "icu_source": "Unmodified ICU 73.2 runtime from the pinned official Qt archive"},
@@ -289,7 +299,8 @@ exec "$here/app/HdbResale.App" "$@"
         "qml_modules": sorted(set(modules)), "qt_libraries": sorted(copied_libraries),
         "qt_library_license_choices_from_sbom": selected_qt_licenses,
         "system_dependencies": sorted(dependencies), "optional_unresolved": optional_unresolved,
-        "data_files": list(DATA_FILES),
+        "data_source": {"kind": "HDB Resale Explorer Worker API", "default_base_url": API_BASE_URL,
+                        "override_environment": "HDB_API_BASE_URL", "bundled_data_files": []},
         "distribution_cleared": False, "launch_verified": False,
         "files": {str(p.relative_to(package)): hashlib.sha256(p.read_bytes()).hexdigest()
                   for p in sorted(package.rglob("*")) if p.is_file()},

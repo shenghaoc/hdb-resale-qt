@@ -93,6 +93,9 @@ session with ordinary process IPC; **no offscreen platform was used**.
   Existing differential
   and aggregation tests passed.
 
+These CSV gates were retired with the local data path (#8). The current native checks run over the
+recorded API; see [native checks](worker-api.md#native-checks).
+
 ```sh
 exe="$PWD/src/HdbResale.App/bin/Release/net10.0/HdbResale.App"
 python3 tools/native_gate.py --executable "$exe" --log /tmp/linux-canonical.log
