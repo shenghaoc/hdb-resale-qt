@@ -54,6 +54,10 @@
     <QtResource Include="assets/onemap-logo.png" Alias="hdb-resale/onemap-logo.png" />
     <None Include="Main.qml"/>
     <None Include="BuyerTrendChart.qml"/>
+    <None Include="Theme.qml"/>
+    <None Include="Section.qml"/>
+    <None Include="FilterField.qml"/>
+    <None Include="FilterBar.qml"/>
     <Compile Include="Program.cs" />
     <Compile Include="ApiRequests.cs" />
     <Compile Include="BuyerPresentation.cs" />
