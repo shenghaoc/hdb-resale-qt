@@ -104,6 +104,8 @@ scenario per platform; "unverified" is a valid and expected entry.
 
 ### Batch 1 — Stage 2 and Stage 3 (pending)
 
+Runbook: [native-batch-1.md](native-batch-1.md).
+
 | Scenario | macOS | KDE Plasma/Wayland |
 |---|---|---|
 | F1 Launch and load | unverified | unverified |
