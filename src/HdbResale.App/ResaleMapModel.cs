@@ -105,6 +105,23 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public void SetRecencyMonths(int months) => mutations.Enqueue(() => ApplyFilter(Filters with { RecencyMonths = months }));
     public void ResetFilters() => mutations.Enqueue(() => ApplyFilter(AddressFilters.Default));
 
+    // Address search narrows the loaded summaries locally; typing never calls the API.
+    public string SearchText => explorer?.SearchText ?? "";
+    public void SetSearchText(string text) => mutations.Enqueue(() =>
+    {
+        if (explorer is null || (text ?? "") == explorer.SearchText) return;
+        BeginResetModel();
+        try { explorer.Search(text); }
+        finally { EndResetModel(); }
+        MapPoints.Replace(MapAddresses(), SelectedMapKey);
+        Notify(nameof(SearchText), nameof(AddressCount), nameof(MappedCount), nameof(FirstAddressKey), nameof(FilterSummary),
+            nameof(SearchMatchesOutsideFilters));
+        SelectionChanged();
+    });
+    // When a search finds nothing, how many addresses it would find without the filters.
+    public int SearchMatchesOutsideFilters => explorer is { SearchText.Length: > 0, Addresses.Count: 0 }
+        ? explorer.CountSearchMatchesIgnoringFilters() : 0;
+
     private void ApplyFilter(AddressFilters next)
     {
         if (explorer is null || next == explorer.Filters) return;
@@ -114,7 +131,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
         MapPoints.Replace(MapAddresses(), SelectedMapKey);
         Notify(nameof(Town), nameof(TownIndex), nameof(FlatType), nameof(FlatTypeIndex), nameof(MinimumPrice),
             nameof(MaximumPrice), nameof(RecencyMonths), nameof(AddressCount), nameof(MappedCount), nameof(FirstAddressKey),
-            nameof(FilterSummary));
+            nameof(FilterSummary), nameof(SearchMatchesOutsideFilters));
         SelectionChanged();
     }
 
@@ -220,7 +237,8 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     private void NotifyAll() => Notify(nameof(Busy), nameof(Loading), nameof(CanRetry), nameof(StatusText), nameof(TownsJson),
         nameof(TownIndex), nameof(FlatTypesJson), nameof(FlatTypeIndex), nameof(Town), nameof(FlatType), nameof(MinimumPrice),
         nameof(MaximumPrice), nameof(MaximumAvailablePrice), nameof(RecencyMonths), nameof(DatasetLatestMonth), nameof(AddressCount),
-        nameof(MappedCount), nameof(FirstAddressKey), nameof(FilterSummary), nameof(DatasetSummary));
+        nameof(MappedCount), nameof(FirstAddressKey), nameof(FilterSummary), nameof(DatasetSummary), nameof(SearchText),
+        nameof(SearchMatchesOutsideFilters));
     private void Notify(params string[] names)
     {
         foreach (var name in names) PropertyChanged?.Invoke(this, new(name));
@@ -237,7 +255,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public override Dictionary<int, string> RoleNames() => new()
     {
         [259] = "address", [260] = "priceLabel", [261] = "townName", [262] = "locationLabel",
-        [263] = "addressKey", [264] = "summaryLabel"
+        [263] = "addressKey", [265] = "saleCount", [266] = "flatTypes", [267] = "latestMonth"
     };
     public override object? Data(ModelIndex index, int role)
     {
@@ -250,7 +268,9 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
             259 => a.Address, 260 => median, 261 => a.Town,
             262 => "Approximate block location" + (string.IsNullOrWhiteSpace(a.PostalCode) ? "" : ", postal code " + a.PostalCode),
             263 => a.AddressKey,
-            264 => $"{cohort.TransactionCount:N0} {(cohort.TransactionCount == 1 ? "sale" : "sales")} · median {median}\n{string.Join(", ", a.FlatTypes)} · latest {cohort.LatestMonth}",
+            265 => cohort.TransactionCount,
+            266 => string.Join(", ", a.FlatTypes),
+            267 => cohort.LatestMonth,
             _ => null
         };
     }
