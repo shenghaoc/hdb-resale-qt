@@ -20,6 +20,7 @@ import pathlib
 import re
 import socket
 import threading
+import time
 import urllib.parse
 
 FIXTURES = pathlib.Path(__file__).resolve().parent.parent / "tests" / "fixtures" / "worker-api"
@@ -43,8 +44,11 @@ def resolve(path: str, root: pathlib.Path = FIXTURES) -> pathlib.Path | None:
 
 class Handler(http.server.BaseHTTPRequestHandler):
     fail_details: int | None = None
+    delay: float = 0.0
 
     def do_GET(self) -> None:
+        if self.delay:
+            time.sleep(self.delay)  # hold the request so a loading state stays visible
         found = resolve(self.path)
         status = 200 if found else 404
         if self.fail_details and urllib.parse.urlsplit(self.path).path.startswith("/api/details/"):
@@ -82,9 +86,12 @@ def main() -> None:
     parser.add_argument("--fail-details", type=int, metavar="STATUS", help="answer every detail request with this HTTP status")
     parser.add_argument("--fail-tiles", action="store_true", help="also serve a tile endpoint that answers every request 503")
     parser.add_argument("--refuse", action="store_true", help="also reserve a loopback port that refuses every connection")
+    parser.add_argument("--delay", type=float, default=0.0, metavar="SECONDS",
+                        help="hold every API response this long before answering, so a loading state can be observed")
     args = parser.parse_args()
     port = args.port
     Handler.fail_details = args.fail_details
+    Handler.delay = args.delay
     refused = reserve_refusing_port() if args.refuse else None
     if refused is not None:
         print(f"Refusing API endpoint at http://127.0.0.1:{refused.getsockname()[1]}/ "

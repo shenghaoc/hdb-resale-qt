@@ -48,6 +48,31 @@ class FailDetailsTests(unittest.TestCase):
             finally:
                 httpd.shutdown()
 
+    def test_delay_holds_every_response(self):
+        import http.client
+        import http.server
+        import threading
+        import time
+
+        class Slow(server.Handler):
+            delay = 0.3
+
+            def log_message(self, *args):
+                pass
+
+        with http.server.ThreadingHTTPServer(("127.0.0.1", 0), Slow) as httpd:
+            threading.Thread(target=httpd.serve_forever, daemon=True).start()
+            try:
+                connection = http.client.HTTPConnection("127.0.0.1", httpd.server_port, timeout=5)
+                started = time.monotonic()
+                connection.request("GET", "/api/manifest")
+                response = connection.getresponse()
+                response.read()
+                self.assertEqual(response.status, 200)
+                self.assertGreaterEqual(time.monotonic() - started, 0.3)
+            finally:
+                httpd.shutdown()
+
     def test_failing_tiles_answer_503_to_every_path(self):
         import http.client
         import http.server
