@@ -93,7 +93,7 @@ the default S$1,000,000 maximum).
 | S2.9 | ⌘L / Ctrl+L | Focus lands on the town filter; in a compact window the filters expand. |
 | S2.10 | Narrow the window below the breakpoint with the filters collapsed; type `748` in the search (748A and 748B) and focus the list; open About from the platform's surface (the application menu on macOS, the status bar's About button on KDE); press ⌘F / Ctrl+F, then ⌘L / Ctrl+L, then Escape; widen the window again | No shortcut acts behind the dialog: the search field is not focused and the collapsed filters neither expand nor take focus; Escape closes About and nothing else, so the search still reads `748` with its two results and the status bar count unchanged (Escape clearing the search behind the dialog fails F10); on closing, focus returns to the list; a further Escape, with About closed, now clears the search. |
 | S2.11 | Select 748B, then narrow the window below the breakpoint; click the Map toggle, then the Addresses toggle; press ⌘L / Ctrl+L; widen it again | Map/Addresses toggles appear; the Map toggle shows the map and moves focus into it (the marker or the map itself reads as focused), the Addresses toggle shows the list and moves focus to it with 748B still current; in the compact layout the Filters shortcut expands the collapsed filters and focuses the town picker; 748B stays selected throughout. |
-| S2.12 | Screen reader on (VoiceOver, Orca): move through three rows, select one, type `b` | One name per row with address, town, median, sales and month; "Selected …" once; the result count announced after a pause. Then Escape until the search is empty and six addresses show. |
+| S2.12 | Screen reader on (VoiceOver, Orca): move through three rows, select one, type `b` | One name per row with address, town, median, sales and month; "Selected …" once; after a pause the result count announced is five (the Bedok matches 747A, 748B, 748A, 115, 39), not the stale six; on production the spoken value equals the visible status bar count. Then Escape until the search is empty and six addresses show. |
 | S2.13 | Select 748B, then set town ANG MO KIO; Reset. Then each filter from the defaults (Reset between them): town ANG MO KIO; flat type 4 ROOM; maximum S$500,000; minimum S$500,000; minimum S$600,000 with maximum S$500,000; maximum raised to its upper limit; Latest 12 months; then Reset | The excluded selection clears from the list, the map highlight and the details together. Then counts, with the list, the map and the status bar agreeing each time: 1 (727); 5 (747A, 748B, 748A, 115, 39); 3 (115, 39, 727); 3 (747A, 748B, 748A); 0 with the reversed-range explanation; 11 (relaxing the default S$1,000,000 cap widens the list: 58, 46, 588B, 10D and 588C appear on the list and the map); 4 (747A, 748B, 748A, 39: the window starts at 2025-11, and 115's latest sale is 2025-10); Reset restores six and every default. |
 | S2.14 | Click a map marker (zoom in until 748B is an individual marker) | The list highlights and scrolls to 748B, the details open, and the marker is highlighted; "Show on map" from the details recentres on it. |
 | S2.15 | Quit through the platform, twice with a relaunch between: macOS the application menu's Quit item, then ⌘Q; KDE the window frame's close button, then Alt+F4 | The window closes at once, the process exits with status 0 in the launching terminal, no error is printed, and nothing is left running. Launch again afterwards for the Stage 3 steps. |
@@ -142,9 +142,14 @@ unverified for production. S2.0: the launch completes without
 a load error, the status bar's count matches the list and the map shows
 markers; the count also equals the default filter applied to the API's own
 summaries (every town and flat type, no window, median at most S$1,000,000):
-`curl -s https://hdb-resale-visualizer.shenghaoc.workers.dev/api/block-summaries | python3 -c "import json,sys; print(sum(1 for a in json.load(sys.stdin) if a['medianPrice'] <= 1000000))"`
-run within the same hour; a lower count in the window means a partial load
-and fails F1. Search (F3): the map must hold exactly the result list's addresses,
+pin the snapshot first, because the Worker's dataset can refresh under a
+running session: `base=https://hdb-resale-visualizer.shenghaoc.workers.dev; curl -s $base/api/manifest > manifest.json; curl -s $base/api/block-summaries > summaries.json; python3 -c "import json; print(json.load(open('manifest.json'))['generatedAt'])"`,
+and the printed `generatedAt` must equal the one About shows (if not,
+relaunch the application and fetch again until they agree); every API
+comparison in this pass then reads the saved `summaries.json`, and the detail
+fetches of S3.7 are made in the same session. The count equals
+`python3 -c "import json; print(sum(1 for a in json.load(open('summaries.json')) if a['medianPrice'] <= 1000000))"`;
+a lower count in the window means a partial load and fails F1. Search (F3): the map must hold exactly the result list's addresses,
 and below zoom 15 the map groups results while above it shows only the
 viewport, so counts prove nothing; identity is checked on the two small
 queries instead: for `ang mo kio 10`, zoom to the Ang Mo Kio results until
@@ -162,7 +167,11 @@ before blocks that merely begin with 10, such as 101 to 109, and no address
 outside Ang Mo Kio; `ang mo kio avenue`
 returns the same results (abbreviation equivalence); the postal code read
 from a selected address's Address group, searched on its own, returns that
-address. Details (F5): selecting any result opens four populated groups whose
+address. Details (F5): choose the production details address so S3.2 can
+act on it: its `flatTypeCohorts` in `summaries.json` must hold a `4 ROOM`
+entry and its `medianPriceByFlatType["4 ROOM"]` must not exceed the active
+maximum, or the correct filtering logic clears the selection at S3.2 and
+S3.2 to S3.7 inspect nothing. Selecting it opens four populated groups whose
 Sales group matches that address's `/api/block-summaries` entry
 (`transactionCount`, `latestMonth`, `medianPrice`, `pricePerSqmMedian`,
 `floorAreaRange`; with a flat type selected, that type's `flatTypeCohorts`,
@@ -199,7 +208,9 @@ below a listed address's median excludes that address, a minimum just above
 another's median excludes it, and a registration window shorter than the
 time since a listed address's latest month excludes it; each change must
 remove the named address and lower the count (a control that leaves the
-count unchanged fails); town narrows to its own addresses; for the flat type,
+count unchanged fails), and for each of the three, zooming to the named
+address's location shows no marker there while a listed neighbour keeps its
+marker; town narrows to its own addresses; for the flat type,
 choose a type that one listed address advertises and a neighbouring listed
 address does not (read `flatTypes` off the list's addresses or the summaries):
 after selecting it the first address stays, the second leaves the list and
