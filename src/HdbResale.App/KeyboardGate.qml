@@ -180,8 +180,9 @@ Item {
             advance("resize-keeps-selection"); break
         case 18: {
             // Tab visits the window's regions in visual order, stops only on visible controls and cycles without a trap;
-            // Shift+Tab steps back. Offscreen, Tab reaches every control; macOS by default stops only at text fields and
-            // lists, in the same order.
+            // Shift+Tab steps back. Where Tab reaches every control (offscreen, and macOS with keyboard navigation on) it
+            // stops in every region. macOS by default stops only at text fields and lists, so the map and the details
+            // drop out, but the price fields, the search field and the result list keep their order.
             const regions = [["filters", w.filtersView], ["map", w.mapView.parent], ["search", search], ["list", list], ["details", w.detailsView]]
             const owner = (item) => { for (let p = item; p; p = p.parent) for (const [name, region] of regions) if (p === region) return name; return "" }
             w.filtersView.townPicker.forceActiveFocus(Qt.TabFocusReason)
@@ -195,9 +196,10 @@ Item {
                 if (name === "filters" && seen.length > 2) break
             }
             const order = seen.join(">")
-            console.log("HDB_KEYBOARD_TABS " + order)
+            const everyControl = Qt.styleHints.tabFocusBehavior === Qt.TabFocusAllControls
+            console.log("HDB_KEYBOARD_TABS " + order + (everyControl ? "" : " (text fields and lists only)"))
             let at = -1
-            for (const stop of ["filters", "map", "search", "list", "details", "filters"]) {
+            for (const stop of everyControl ? ["filters", "map", "search", "list", "details", "filters"] : ["filters", "search", "list", "filters"]) {
                 const next = seen.indexOf(stop, at + 1)
                 if (next < 0) { fail("tab order missing or out of order at " + stop + ": " + order); return }
                 at = next

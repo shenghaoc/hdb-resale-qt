@@ -611,6 +611,9 @@ ApplicationWindow {
                                                     if (window.compact) Qt.callLater(window.keepFocusVisible)
                                                 }
                                             }
+                                            // A list to screen readers and so to Qt's Tab chain: with macOS's default keyboard
+                                            // navigation Tab stops only at text fields and lists, which Qt recognises by this role.
+                                            Accessible.role: Accessible.List
                                             Accessible.name: qsTr("Matching addresses")
                                             Accessible.description: qsTr("Arrow keys move through the addresses; Return selects one; typing searches.")
                                             Keys.onDownPressed: window.moveResultCursor(1)
