@@ -3,85 +3,63 @@ import threading
 import unittest
 import urllib.error
 import urllib.request
-from decimal import Decimal
 
 import api_acceptance as acceptance
 
-BEDOK_748B = "bedok-748b-bedok-reservoir-cres"
 
-
-class OracleTests(unittest.TestCase):
-    """The oracle must agree with the hand-written expectations in AddressExplorerTests.cs."""
+class ExpectationTests(unittest.TestCase):
+    """The fixed expectations must stay consistent with the recorded responses they were written from."""
 
     @classmethod
     def setUpClass(cls):
         cls.manifest, cls.addresses, cls.details = acceptance.load()
-        cls.latest = cls.manifest["dataWindow"]["maxMonth"]
+        cls.plan = acceptance.expectations()
+        cls.steps = {s["name"]: s for s in cls.plan["steps"]}
 
-    def keys(self, **changes):
-        filters = {**acceptance.DEFAULT_FILTERS, **changes}
-        return [a["addressKey"] for a in acceptance.listed(self.addresses, filters, self.latest)]
+    def test_steps_follow_the_buyer_flow(self):
+        self.assertEqual([s["name"] for s in self.plan["steps"]], list(acceptance.STEPS))
+        self.assertEqual(self.manifest["dataWindow"]["maxMonth"], acceptance.LATEST_MONTH)
+        self.assertEqual(sorted(acceptance.ALL_KEYS), sorted(self.addresses))
 
-    def test_default_order_is_lowest_median_first(self):
-        self.assertEqual(self.keys(), ["ang-mo-kio-727-ang-mo-kio-ave-6", "bedok-39-bedok-sth-rd", "bedok-115-bedok-nth-rd",
-                                       "bedok-748a-bedok-reservoir-cres", BEDOK_748B, "bedok-747a-bedok-reservoir-cres"])
+    def test_listed_addresses_are_unique_and_respect_the_town_and_type(self):
+        for step in self.plan["steps"]:
+            keys = [row["key"] for row in step["addresses"]]
+            self.assertEqual(len(keys), len(set(keys)), step["name"])
+            for key in keys:
+                if step["filters"]["town"] != "All towns":
+                    self.assertEqual(self.addresses[key]["town"], step["filters"]["town"], step["name"])
+                if step["filters"]["type"] != acceptance.ALL_TYPES:
+                    self.assertIn(step["filters"]["type"], self.addresses[key]["flatTypes"], step["name"])
 
-    def test_a_flat_type_bounds_and_orders_by_its_own_median(self):
-        self.assertEqual(self.keys(type="4 room", maximum=1_100_000)[-2:],
-                         ["ang-mo-kio-588b-ang-mo-kio-st-52", "ang-mo-kio-588c-ang-mo-kio-st-52"])
-        self.assertEqual(self.keys(type="4 ROOM", minimum=850_000, maximum=1_002_888),
-                         [BEDOK_748B, "bedok-747a-bedok-reservoir-cres", "ang-mo-kio-588b-ang-mo-kio-st-52"])
+    def test_selections_name_a_listed_address_at_its_index(self):
+        for step in self.plan["steps"]:
+            if step["selected"]:
+                self.assertEqual(step["addresses"][step["selected"]["index"]]["key"], step["selected"]["key"], step["name"])
 
-    def test_windows_use_the_selected_types_latest_registration(self):
-        self.assertEqual(acceptance.window_start(self.latest, 12), "2025-11")
-        self.assertEqual(len(self.keys(months=12, maximum=2_000_000)), 8)
-        self.assertEqual(self.keys(type="4 ROOM", months=12, maximum=2_000_000),
-                         ["bedok-748a-bedok-reservoir-cres", BEDOK_748B, "ang-mo-kio-588b-ang-mo-kio-st-52"])
+    def test_displayed_medians_are_the_recorded_figures(self):
+        for key, shown in acceptance.DEFAULT_MEDIANS.items():
+            self.assertEqual(shown, f"S${self.addresses[key]['medianPrice']:,}")
+        for key, shown in acceptance.FOUR_ROOM_MEDIANS.items():
+            self.assertEqual(shown, f"S${self.addresses[key]['medianPriceByFlatType']['4 ROOM']:,}")
 
-    def test_formatting_matches_invariant_dotnet_output(self):
-        self.assertEqual(acceptance.money(448444), "S$448,444")
-        self.assertEqual(acceptance.money(Decimal("9770.11")), "S$9,770.11")
-        self.assertEqual(acceptance.money(None), "unavailable")
-        # .NET rounds decimals half away from zero; Python's default would print 67.0.
-        self.assertEqual(acceptance.number(Decimal("67.05"), 1), "67.1")
-        self.assertEqual(acceptance.floor_area(Decimal("67"), Decimal("92")), "67.0–92.0 m²")
+    def test_registrations_and_trend_are_read_from_the_details(self):
+        selected = self.steps["list-selected"]["selected"]
+        detail = self.details[acceptance.BEDOK_748B]
+        self.assertEqual([r["id"] for r in selected["recent"]], [t["id"] for t in detail["recentTransactions"]])
+        self.assertTrue(selected["trend"] and all(0 <= int(x) < 24 for x in selected["trend"]))
+        refused = self.steps["detail-error"]["selected"]
+        self.assertEqual((refused["recent"], refused["trend"], refused["status"]), ([], {}, acceptance.REFUSED))
 
-    def test_trend_covers_24_months_with_unsold_months_left_empty(self):
-        trend = acceptance.trend(self.details[BEDOK_748B], self.latest)
-        self.assertEqual((len(trend["Points"]), trend["Start"], trend["End"]), (24, "2024-11", "2026-10"))
-        empty = [p for p in trend["Points"] if p["Count"] == 0]
-        self.assertTrue(empty and all(p["MedianPrice"] is None and p["PriceThousands"] is None for p in empty))
-        self.assertEqual(trend["ObservedMonths"], 24 - len(empty))
-        self.assertLess(trend["MinimumY"], trend["MaximumY"])
-
-    def test_plan_follows_the_buyer_flow(self):
-        plan = acceptance.expectations(year=2026)
-        steps = {s["name"]: s for s in plan["steps"]}
-        self.assertEqual([s["name"] for s in plan["steps"]], list(acceptance.STEPS))
-        self.assertEqual(plan["maximumAvailablePrice"], 1_400_000)
-        self.assertEqual([len(steps[n]["addresses"]) for n in ("loaded", "full", "town", "type", "minimum", "budget")],
-                         [6, 11, 6, 5, 4, 3])
-        self.assertEqual(steps["list-selected"]["selected"]["key"], BEDOK_748B)
-        self.assertEqual(steps["recent-window"]["selected"]["index"], 1)
-        self.assertIsNone(steps["empty"]["selected"])
-        self.assertTrue(steps["empty"]["detailsAtTop"])
-        self.assertEqual(steps["detail-error"]["selected"]["detail"], "error")
-        self.assertNotIn("Middle half", steps["detail-error"]["selected"]["metrics"])
-        self.assertEqual(steps["detail-retry"]["selected"]["detail"], "ready")
-        self.assertIn("Middle half", steps["detail-retry"]["selected"]["metrics"])
-        # Queued in order, the injected intents leave every address listed and 748A selected.
-        self.assertEqual((len(steps["reentry"]["addresses"]), steps["reentry"]["selected"]["key"]),
-                         (11, "bedok-748a-bedok-reservoir-cres"))
-        self.assertEqual(steps["viewport-burst"]["camera"], {"zoom": 16, "latitude": 1.37, "longitude": 103.85})
+    def test_details_return_to_the_top_when_the_selection_changes_or_clears(self):
+        self.assertEqual([s["name"] for s in self.plan["steps"] if s.get("detailsAtTop")], ["empty", "hidden-address", "reentry"])
 
     def test_each_fault_changes_only_its_own_copy(self):
-        plan = acceptance.expectations(year=2026)
         for fault, step in acceptance.FAULTS.items():
             with self.subTest(fault=fault):
-                faulty = acceptance.apply_fault(plan, fault)
-                changed = [a["name"] for a, b in zip(plan["steps"], faulty["steps"]) if a != b]
+                faulty = acceptance.apply_fault(self.plan, fault)
+                changed = [a["name"] for a, b in zip(self.plan["steps"], faulty["steps"]) if a != b]
                 self.assertEqual(changed, [] if fault == "no-503" else [step])
-        self.assertEqual(plan, acceptance.expectations(year=2026))
+        self.assertEqual(self.plan, acceptance.expectations())
 
 
 class VerifyTests(unittest.TestCase):

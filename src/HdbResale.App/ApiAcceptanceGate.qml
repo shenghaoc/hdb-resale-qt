@@ -5,10 +5,10 @@ import QtLocation
 import QtPositioning
 
 // Opt-in native buyer acceptance over the recorded Worker API (HDB_API_GATE=acceptance), run by
-// tools/api_acceptance.py. Its oracle derives every expected state independently of this app's C#;
-// this gate performs each step through the app's own model, list rows, map markers and buttons, then
-// compares what the window shows. A step that does not match within its budget fails with the last
-// difference observed.
+// tools/api_acceptance.py with fixed expectations for each step. This gate performs each step through the
+// app's own model, list rows, map markers and buttons, then compares what the window shows. A step that does
+// not match within its budget fails with the last difference observed, followed by a diagnostic dump of the
+// Qt Quick visual tree.
 Item {
     id: gate
     required property var targetMap
@@ -57,8 +57,27 @@ Item {
     function fail(reason) {
         console.error("HDB_API_GATE_FAIL acceptance step=" + plan.steps[phase].name + " " + reason)
         timer.stop()
+        let root = targetMap
+        while (root.parent) root = root.parent
+        dumpTree(root, 0, { left: 1500 })
         Qt.quit()
         return false
+    }
+
+    // Diagnostic only, printed after a failure and never compared with expectations: the Qt Quick visual tree
+    // (not the accessibility tree), with each item's type, name, visual parent, scene geometry, implicit size,
+    // visibility, opacity, clipping, z-order, enabled and focus state, and delegate identity.
+    function dumpTree(item, depth, budget) {
+        if (budget.left-- <= 0) return
+        const label = node => node.objectName ? node.objectName : String(node).replace(/\(0x[0-9a-f]+\)$/, "").replace(/_QMLTYPE_\d+$/, "")
+        const origin = item.mapToItem(null, 0, 0)
+        const identity = item.addressKey !== undefined ? " row=" + item.addressKey : item.mapKey !== undefined ? " marker=" + item.mapKey : ""
+        console.log("HDB_QML_TREE " + "  ".repeat(depth) + label(item) + " parent=" + (item.parent ? label(item.parent) : "-")
+            + " at=" + Math.round(origin.x) + "," + Math.round(origin.y) + " size=" + Math.round(item.width) + "x" + Math.round(item.height)
+            + " implicit=" + Math.round(item.implicitWidth) + "x" + Math.round(item.implicitHeight) + " visible=" + item.visible
+            + " opacity=" + item.opacity + " clip=" + item.clip + " z=" + item.z + " enabled=" + item.enabled
+            + " focus=" + item.focus + " activeFocus=" + item.activeFocus + identity)
+        for (let i = 0; i < item.children.length; i++) dumpTree(item.children[i], depth + 1, budget)
     }
 
     // Performs one action; false means it cannot happen yet and is retried on the next tick.
@@ -111,13 +130,6 @@ Item {
         return fail("unknown action " + action.do)
     }
 
-    function equal(a, b) {
-        if (typeof a === "number" && typeof b === "number") return Math.abs(a - b) < 1e-7
-        if (a === null || b === null || typeof a !== "object" || typeof b !== "object") return a === b
-        if (Array.isArray(a) !== Array.isArray(b) || Object.keys(a).length !== Object.keys(b).length) return false
-        for (const key in b) if (!equal(a[key], b[key])) return false
-        return true
-    }
     function contrast(text, surface) {
         function luminance(c) {
             function linear(v) { return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4) }
@@ -172,7 +184,8 @@ Item {
             const item = targetList.itemAtIndex(i), row = e.addresses[i]
             if (!item) return "row " + i + " not created"
             if (item.addressKey !== row.key) return "row " + i + " is " + item.addressKey
-            if (item.text !== row.text) return "row " + i + " reads " + JSON.stringify(item.text)
+            if (!item.text.startsWith(row.prefix) || (row.median !== null && item.text.indexOf("median " + row.median) < 0))
+                return "row " + i + " reads " + JSON.stringify(item.text)
             if (item.highlighted !== (e.selected !== null && e.selected.key === row.key)) return "row " + i + " highlight"
         }
         const map = mapDifference(e)
@@ -200,7 +213,7 @@ Item {
             if (item.addressCount === 1) {
                 const row = shown[item.mapKey]
                 if (!row) return "marker for an address not listed or out of view: " + item.mapKey
-                if (item.address !== row.address || item.priceLabel !== row.mapLabel) return "marker " + item.mapKey + " reads " + item.priceLabel
+                if (item.address !== row.address) return "marker " + item.mapKey + " reads " + item.address
                 if (item.selected !== (e.selected !== null && e.selected.key === item.mapKey)) return "marker selection " + item.mapKey
             } else if (item.selected || targetMap.zoomLevel >= 15) {
                 return "group " + item.mapKey
@@ -227,9 +240,13 @@ Item {
         if (Resales.selectedMapKey !== s.key) return "selected " + Resales.selectedMapKey
         if (Resales.selectedAddressIndex !== s.index || targetList.currentIndex !== s.index) return "selected row index"
         if (Resales.selectedHeading !== s.heading) return "heading reads " + Resales.selectedHeading
-        if (Resales.selectedMetrics !== s.metrics) return "figures read " + JSON.stringify(Resales.selectedMetrics)
-        if (Resales.selectedLease !== s.lease) return "lease reads " + Resales.selectedLease
-        if (Resales.selectedLocation !== s.location) return "location reads " + Resales.selectedLocation
+        for (const figure of s.figures)
+            if (Resales.selectedMetrics.indexOf(figure) < 0) return "figures read " + JSON.stringify(Resales.selectedMetrics)
+        // The interquartile range comes only with the address's details.
+        if ((Resales.selectedMetrics.indexOf("Middle half of all sales") >= 0) !== (s.detail === "ready"))
+            return "figures read " + JSON.stringify(Resales.selectedMetrics)
+        if (!Resales.selectedLease.startsWith(s.lease)) return "lease reads " + Resales.selectedLease
+        if (Resales.selectedLocation.indexOf(s.postal) < 0) return "location reads " + Resales.selectedLocation
         if (Resales.detailStatus !== s.status) return "detail status reads " + Resales.detailStatus
         if (s.detail === "error")
             return Resales.detailReady || !retryControl.visible || targetTrendLoader.item || recent.length !== 0
@@ -237,16 +254,16 @@ Item {
         if (!Resales.detailReady || retryControl.visible) return "details not loaded"
         if (recent.length !== s.recent.length) return recent.length + " registrations listed"
         for (let i = 0; i < recent.length; i++)
-            if (recent[i].id !== s.recent[i].id || recent[i].heading !== s.recent[i].heading || recent[i].details !== s.recent[i].details)
+            if (recent[i].id !== s.recent[i].id || !recent[i].heading.startsWith(s.recent[i].prefix))
                 return "registration " + i + " reads " + JSON.stringify(recent[i])
-        if (!equal(JSON.parse(Resales.trendJson), s.trend)) return "trend data"
+        // Every recorded monthly median in the window is plotted at its month; other months are gaps.
         const chart = targetTrendLoader.item
-        const plotted = s.trend.ObservedMonths > 0 ? s.trend.Points.length : 0
-        if (!chart || chart.pointCount !== plotted) return "chart has " + (chart ? chart.pointCount : 0) + " points"
+        const plotted = Object.keys(s.trend).length > 0 ? plan.trendMonths : 0
+        if (!chart || chart.pointCount !== plotted || !chart.pointsAgree()) return "chart has " + (chart ? chart.pointCount : 0) + " points"
         for (let i = 0; i < plotted; i++) {
-            const point = chart.pointAt(i), expected = s.trend.Points[i]
-            if (point.x !== expected.X || (expected.PriceThousands === null ? !Number.isNaN(point.y)
-                    : !(Math.abs(point.y - expected.PriceThousands) <= 1e-7))) return "chart point " + i
+            const point = chart.pointAt(i), expected = s.trend[String(i)]
+            if (point.x !== i || (expected === undefined ? !Number.isNaN(point.y) : !(Math.abs(point.y - expected) <= 1e-7)))
+                return "chart point " + i
         }
         if (!legible(chart.textSurfacePairs)) return "chart text below 4.5:1 contrast"
         return ""

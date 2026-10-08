@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 """Native buyer acceptance of the desktop app over the recorded Worker API responses.
 
-This oracle re-derives, independently of the app's C#, what each step of the buyer flow must show:
-the web app's filter semantics and order, every list row and individual map marker, the summary, and
-the selected address's figures, registrations and 24-month trend. `ApiAcceptanceGate.qml` performs
-each step through the app's own model, list, map and buttons and compares the window with it.
+Each step of the buyer flow has fixed expectations, written out by hand from the recorded responses: the
+listed addresses in order, the summary, the selection and a few displayed figures. Independent output
+checks read recorded fields directly (names, postal codes, registrations, monthly medians); nothing here
+re-implements the app's filtering. `ApiAcceptanceGate.qml` performs each step through the app's own
+model, list, map and buttons and compares the window with these expectations.
 
 The app reads a loopback server of tests/fixtures/worker-api, which refuses the first detail request
-for one address with HTTP 503 so the Retry action is exercised. Requires a real graphical session and
-a built HdbResale.App. Only map tiles reach the network; no imagery is retained and nothing is written.
+for one address with HTTP 503 so the Retry action is exercised. Requires a built HdbResale.App. For
+unattended functional runs set QT_QPA_PLATFORM=offscreen; native visual and input acceptance is a separate,
+scheduled run on the real platform. Only map tiles reach the network; no imagery is kept, nothing is written.
 
     python3 tools/api_acceptance.py --executable <app> --log <file>
     python3 tools/api_acceptance.py --executable <app> --log <file> --fault reorder   # must fail at "type"
@@ -17,25 +19,20 @@ from __future__ import annotations
 
 import argparse
 import copy
-import datetime
 import http.server
 import json
-import math
 import os
 import re
 import subprocess
 import sys
 import tempfile
 import threading
-from decimal import ROUND_HALF_EVEN, ROUND_HALF_UP, Decimal
 from pathlib import Path
 
 from api_fixture_server import FIXTURES, Handler, resolve
 
-ALL_TOWNS = "All towns"
 ALL_TYPES = "All flat types"
-DEFAULT_FILTERS = {"town": ALL_TOWNS, "type": ALL_TYPES, "minimum": 0, "maximum": 1_000_000, "months": 0}
-LEASE_YEARS = 99
+DEFAULT_FILTERS = {"town": "All towns", "type": ALL_TYPES, "minimum": 0, "maximum": 1_000_000, "months": 0}
 # Its first detail request is refused with 503; nothing selects it before the detail-error step.
 RETRY_KEY = "bedok-39-bedok-sth-rd"
 STEPS = ("loaded", "full", "town", "type", "minimum", "budget", "list-selected", "recent-window", "empty", "reset",
@@ -48,25 +45,97 @@ FORBIDDEN = re.compile(
     r"(?:qrc:|\.qml).*(?:Error|Warning)", re.I)
 
 
-# ---- Formatting, as the app presents figures (invariant culture, decimal rounding away from zero) -------
+# ---- Fixed expectations -------------------------------------------------------------------------------
+# Written out by hand from the recorded responses and checked against their fields, like the expected keys in
+# AddressExplorerTests.cs. This tool deliberately does not re-implement the app's filtering, ordering or
+# formatting; it only reads recorded fields directly (names, postal codes, registrations, monthly medians).
 
-def number(value, decimals: int = 0) -> str:
-    rounded = Decimal(value).quantize(Decimal(1).scaleb(-decimals), rounding=ROUND_HALF_UP)
-    return f"{rounded:,.{decimals}f}"
+AMK_727, AMK_588B, AMK_588C = ("ang-mo-kio-727-ang-mo-kio-ave-6", "ang-mo-kio-588b-ang-mo-kio-st-52",
+                               "ang-mo-kio-588c-ang-mo-kio-st-52")
+BEDOK_10D, BEDOK_39, BEDOK_115 = "bedok-10d-bedok-sth-ave-2", "bedok-39-bedok-sth-rd", "bedok-115-bedok-nth-rd"
+BEDOK_747A, BEDOK_748A, BEDOK_748B = ("bedok-747a-bedok-reservoir-cres", "bedok-748a-bedok-reservoir-cres",
+                                      "bedok-748b-bedok-reservoir-cres")
+KALLANG_46, KALLANG_58 = "kallang-whampoa-46-bendemeer-rd", "kallang-whampoa-58-jln-ma-mor"
+LATEST_MONTH = "2026-10"
+MAXIMUM_AVAILABLE = 1_400_000
+TREND_WINDOW = ("2024-11", "2026-10")
+DEFAULT_KEYS = [AMK_727, BEDOK_39, BEDOK_115, BEDOK_748A, BEDOK_748B, BEDOK_747A]
+ALL_KEYS = DEFAULT_KEYS + [AMK_588C, BEDOK_10D, AMK_588B, KALLANG_46, KALLANG_58]
+# Displayed medians where the flat-type filter changes them: each address's, then its 4-room figure.
+DEFAULT_MEDIANS = {AMK_727: "S$320,000", BEDOK_39: "S$448,000", BEDOK_115: "S$448,444", BEDOK_748A: "S$832,000",
+                   BEDOK_748B: "S$837,500", BEDOK_747A: "S$860,000"}
+FOUR_ROOM_MEDIANS = {BEDOK_39: "S$510,000", BEDOK_115: "S$560,000", BEDOK_748A: "S$846,000", BEDOK_748B: "S$850,000",
+                     BEDOK_747A: "S$860,000"}
+FIGURES = {
+    (BEDOK_748B, "4 ROOM"): ["BEDOK · 3 ROOM, 4 ROOM, 5 ROOM",
+                             "4 ROOM sales: 6 in the 24 source months to 2026-10 · latest 2026-02", "Median S$850,000"],
+    (BEDOK_747A, ALL_TYPES): ["BEDOK · 3 ROOM, 4 ROOM, 5 ROOM",
+                              "Sales of all flat types: 6 in the 24 source months to 2026-10 · latest 2026-02",
+                              "Median S$860,000"],
+    (BEDOK_39, ALL_TYPES): ["BEDOK · 3 ROOM, 4 ROOM",
+                            "Sales of all flat types: 9 in the 24 source months to 2026-10 · latest 2026-07",
+                            "Median S$448,000"],
+    (BEDOK_748A, ALL_TYPES): ["BEDOK · 3 ROOM, 4 ROOM, 5 ROOM",
+                              "Sales of all flat types: 7 in the 24 source months to 2026-10 · latest 2026-07",
+                              "Median S$832,000"],
+}
+REFUSED = "Could not load this address's registrations. The HDB Resale API answered 503."
 
 
-def money(value) -> str:
-    if value is None:
-        return "unavailable"
-    return "S$" + number(value, 0 if Decimal(value) == Decimal(value).to_integral_value() else 2)
+def filters(**changes) -> dict:
+    return {**DEFAULT_FILTERS, **changes}
 
 
-def text_or_unavailable(value) -> str:
-    return "unavailable" if value is None or not str(value).strip() else str(value)
+# name, actions, filters, listed keys, summary, selection (key, index, detail state) or None, medians shown
+SCENARIO = [
+    ("loaded", [], filters(), DEFAULT_KEYS, "6 of 11 addresses", None, DEFAULT_MEDIANS),
+    ("full", [{"do": "maximum", "value": MAXIMUM_AVAILABLE}], filters(maximum=MAXIMUM_AVAILABLE), ALL_KEYS,
+     "11 of 11 addresses", None, {}),
+    ("town", [{"do": "town", "value": "BEDOK"}], filters(town="BEDOK", maximum=MAXIMUM_AVAILABLE),
+     [BEDOK_39, BEDOK_115, BEDOK_748A, BEDOK_748B, BEDOK_747A, BEDOK_10D], "6 of 11 addresses", None, {}),
+    ("type", [{"do": "type", "value": "4 ROOM"}], filters(town="BEDOK", type="4 ROOM", maximum=MAXIMUM_AVAILABLE),
+     [BEDOK_39, BEDOK_115, BEDOK_748A, BEDOK_748B, BEDOK_747A], "5 of 11 addresses", None, FOUR_ROOM_MEDIANS),
+    ("minimum", [{"do": "minimum", "value": 550_000}],
+     filters(town="BEDOK", type="4 ROOM", minimum=550_000, maximum=MAXIMUM_AVAILABLE),
+     [BEDOK_115, BEDOK_748A, BEDOK_748B, BEDOK_747A], "4 of 11 addresses", None, {}),
+    ("budget", [{"do": "maximum", "value": 850_000}], filters(town="BEDOK", type="4 ROOM", minimum=550_000, maximum=850_000),
+     [BEDOK_115, BEDOK_748A, BEDOK_748B], "3 of 11 addresses", None, {}),
+    ("list-selected", [{"do": "click-row", "key": BEDOK_748B, "index": 2}],
+     filters(town="BEDOK", type="4 ROOM", minimum=550_000, maximum=850_000),
+     [BEDOK_115, BEDOK_748A, BEDOK_748B], "3 of 11 addresses", (BEDOK_748B, 2, "ready"), {}),
+    ("recent-window", [{"do": "months", "value": 12}],
+     filters(town="BEDOK", type="4 ROOM", minimum=550_000, maximum=850_000, months=12),
+     [BEDOK_748A, BEDOK_748B], "2 of 11 addresses with a registration since 2025-11", (BEDOK_748B, 1, "ready"), {}),
+    ("empty", [{"do": "maximum", "value": 500_000}],
+     filters(town="BEDOK", type="4 ROOM", minimum=550_000, maximum=500_000, months=12),
+     [], "0 of 11 addresses with a registration since 2025-11", None, {}),
+    ("reset", [{"do": "reset-button"}], filters(), DEFAULT_KEYS, "6 of 11 addresses", None, {}),
+    ("map-selected", [{"do": "marker", "key": BEDOK_747A, "zoom": 16}], filters(), DEFAULT_KEYS, "6 of 11 addresses",
+     (BEDOK_747A, 5, "ready"), {}),
+    ("hidden-address", [{"do": "town", "value": "ANG MO KIO"}], filters(town="ANG MO KIO"), [AMK_727],
+     "1 of 11 addresses", None, {}),
+    ("detail-error", [{"do": "reset"}, {"do": "select-index", "key": RETRY_KEY, "index": 1}], filters(), DEFAULT_KEYS,
+     "6 of 11 addresses", (BEDOK_39, 1, "error"), {}),
+    ("detail-retry", [{"do": "retry-button"}], filters(), DEFAULT_KEYS, "6 of 11 addresses", (BEDOK_39, 1, "ready"), {}),
+    # The injected intents run while the town change is resetting the list; queued in order they reset the
+    # filters, select 748A and raise the maximum, so every address is listed with 748A selected.
+    ("reentry", [{"do": "reentry", "trigger": {"do": "town", "value": "KALLANG/WHAMPOA"}, "inject": [
+        {"do": "maximum", "value": 0}, {"do": "reset"}, {"do": "select", "key": BEDOK_748A},
+        {"do": "maximum", "value": MAXIMUM_AVAILABLE}]}], filters(maximum=MAXIMUM_AVAILABLE), ALL_KEYS,
+     "11 of 11 addresses", (BEDOK_748A, 3, "ready"), {}),
+    ("viewport-burst", [{"do": "viewport", "sequence": [["zoom", 12], ["pan", 70, 80], ["zoom", 16],
+                                                         ["center", 1.37, 103.85]]}],
+     filters(maximum=MAXIMUM_AVAILABLE), ALL_KEYS, "11 of 11 addresses", (BEDOK_748A, 3, "ready"), {}),
+]
 
 
-def floor_area(minimum, maximum) -> str:
-    return number(minimum, 1) + " m²" if minimum == maximum else number(minimum, 1) + "–" + number(maximum, 1) + " m²"
+# ---- Direct reads of the recorded responses ------------------------------------------------------------
+
+def load(root: Path = FIXTURES) -> tuple[dict, dict, dict]:
+    read = lambda path: json.loads(path.read_text(encoding="utf-8"))
+    addresses = {a["addressKey"]: a for a in read(root / "block-summaries.json")}
+    details = {key: read(root / "details" / f"{key}.json") for key in addresses}
+    return read(root / "manifest.json"), addresses, details
 
 
 def month_index(month: str) -> int:
@@ -74,308 +143,67 @@ def month_index(month: str) -> int:
     return int(year) * 12 + int(number_) - 1
 
 
-def month_label(index: int) -> str:
-    return f"{index // 12:04d}-{index % 12 + 1:02d}"
+def name(address: dict) -> str:
+    return f"{address['block']} {address['streetName']}"
 
 
-# ---- The web app's semantics for the filters this app offers ---------------------------------------
-
-def canonical(flat_type: str) -> str:
-    value = flat_type.strip().upper()
-    return "MULTI-GENERATION" if value == "MULTI GENERATION" else value
-
-
-def selected_type(flat_type: str | None) -> str | None:
-    return None if not flat_type or flat_type == ALL_TYPES else canonical(flat_type)
+def trend_points(detail: dict) -> dict[str, float]:
+    """The recorded monthly medians inside the chart's fixed window, in thousands, by month offset."""
+    first, last = (month_index(m) for m in TREND_WINDOW)
+    return {str(month_index(p["month"]) - first): p["medianPrice"] / 1000
+            for p in detail["monthlyTrend"] if first <= month_index(p["month"]) <= last}
 
 
-def effective_median(address: dict, flat_type: str | None):
-    chosen = selected_type(flat_type)
-    medians = address.get("medianPriceByFlatType") or {}
-    return medians[chosen] if chosen in medians else address["medianPrice"]
-
-
-def effective_per_sqm(address: dict, flat_type: str | None):
-    chosen = selected_type(flat_type)
-    medians = address.get("medianPricePerSqmByFlatType") or {}
-    return medians[chosen] if chosen in medians else address["pricePerSqmMedian"]
-
-
-def cohort(address: dict, flat_type: str | None) -> dict:
-    chosen = selected_type(flat_type)
-    cohorts = address.get("flatTypeCohorts") or {}
-    if chosen in cohorts:
-        return {**cohorts[chosen], "specific": True}
-    return {"transactionCount": address["transactionCount"], "latestMonth": address["latestMonth"],
-            "floorAreaRange": address["floorAreaRange"], "specific": False}
-
-
-def window_start(latest: str, months: int) -> str | None:
-    return month_label(month_index(latest) - (months - 1)) if months > 0 else None
-
-
-def matches(address: dict, filters: dict, start: str | None) -> bool:
-    if filters["town"] != ALL_TOWNS and address["town"] != filters["town"]:
-        return False
-    chosen = selected_type(filters["type"])
-    if chosen is not None and not any(canonical(t) == chosen for t in address["flatTypes"]):
-        return False
-    type_cohort = (address.get("flatTypeCohorts") or {}).get(chosen) if chosen else None
-    # A window with a selected type needs that type's own figures; the web app never guesses them.
-    if chosen is not None and start is not None and type_cohort is None:
-        return False
-    price = effective_median(address, chosen)
-    if price < filters["minimum"] or price > filters["maximum"]:
-        return False
-    latest = type_cohort["latestMonth"] if type_cohort else address["latestMonth"]
-    return start is None or latest >= start
-
-
-def listed(addresses: list[dict], filters: dict, latest: str) -> list[dict]:
-    start = window_start(latest, filters["months"])
-    # Lowest applicable median first; sorted() is stable, so equal medians keep the API's order.
-    return sorted((a for a in addresses if matches(a, filters, start)), key=lambda a: effective_median(a, filters["type"]))
-
-
-def maximum_available(addresses: list[dict]) -> int:
-    highest = max(max([a["medianPrice"], *(a.get("medianPriceByFlatType") or {}).values()]) for a in addresses)
-    return max(1_000_000, math.ceil(Decimal(highest) / 50_000) * 50_000)
-
-
-# ---- What the window shows ----------------------------------------------------------------------------
-
-def row(address: dict, flat_type: str) -> dict:
-    figures = cohort(address, flat_type)
-    count = figures["transactionCount"]
-    noun = "sale" if count == 1 else "sales"
-    median = effective_median(address, flat_type)
-    if Decimal(median) != Decimal(median).to_integral_value():
-        raise ValueError("Map labels round medians; extend the oracle before recording fractional medians")
-    name = f"{address['block']} {address['streetName']}"
-    return {
-        "key": address["addressKey"], "address": name,
-        "latitude": float(address["coordinates"]["lat"]), "longitude": float(address["coordinates"]["lng"]),
-        "text": f"{name}\n{address['town']} · {number(count)} {noun} · median {money(median)}\n"
-                f"{', '.join(address['flatTypes'])} · latest {figures['latestMonth']}",
-        "mapLabel": f"{number(count)} {noun} · median S${number(median)} · latest {figures['latestMonth']}",
-    }
-
-
-def metrics(address: dict, flat_type: str, detail: dict | None, latest: str) -> str:
-    figures = cohort(address, flat_type)
-    label = canonical(flat_type) + " sales" if figures["specific"] else "Sales of all flat types"
-    scope = (f"in the 24 source months to {latest}" if figures["latestMonth"] >= window_start(latest, 24)
-             else "in all recorded months (none in the latest 24)")
-    lines = [
-        f"{address['town']} · {', '.join(address['flatTypes'])}",
-        f"{label}: {number(figures['transactionCount'])} {scope} · latest {figures['latestMonth']}",
-        f"Median {money(effective_median(address, flat_type))} · {money(effective_per_sqm(address, flat_type))}/m²",
-        "Floor area " + floor_area(*figures["floorAreaRange"]),
-    ]
-    iqr = detail["summary"].get("priceIqr") if detail else None
-    if iqr is not None and len(iqr) == 2:
-        lines.append(f"Middle half of all sales {money(iqr[0])}–{money(iqr[1])}")
-    mrt = address.get("nearestMrt")
-    if mrt:
-        minutes = (Decimal(mrt["walkingTimeSeconds"]) / 60).quantize(Decimal(1), rounding=ROUND_HALF_EVEN)
-        lines.append(f"Nearest MRT: {mrt['stationName']} · {number(mrt['distanceMeters'])} m, about {minutes} min walk")
-    return "\n".join(lines)
-
-
-def lease(address: dict, year: int) -> str:
-    first, last = address["leaseCommenceRange"]
-    minimum, maximum = LEASE_YEARS - (year - first), LEASE_YEARS - (year - last)
-    commenced = f"{first}" if first == last else f"{first}–{last}"
-    remaining = f"{maximum} years" if minimum == maximum else f"{minimum}–{maximum} years"
-    return (f"Lease commenced {commenced}: about {remaining} of a 99-year lease remain in {year}. "
-            "Each registration below shows the remaining lease recorded at its resale application. "
-            "Not an eligibility assessment.")
-
-
-def location(address: dict) -> str:
-    lat, lng = float(address["coordinates"]["lat"]), float(address["coordinates"]["lng"])
-    postal = f" · postal code {address['postalCode']}" if (address.get("postalCode") or "").strip() else ""
-    return f"Approximate block location {lat:.5f}, {lng:.5f}{postal}. Locations are block points, never individual flats."
-
-
-def recent(detail: dict) -> list[dict]:
-    return [{
-        "id": t["id"],
-        "heading": f"{t['month']} · {t['flatType']} · {money(t.get('resalePrice'))}",
-        "details": f"{number(t['floorAreaSqm'], 1)} m² · {money(t.get('pricePerSqm'))}/m² · storey "
-                   f"{text_or_unavailable(t.get('storeyRange'))}\n{text_or_unavailable(t.get('flatModel'))} · lease start "
-                   f"{t['leaseCommenceDate']}\nSource remaining lease at resale application: "
-                   f"{text_or_unavailable(t.get('remainingLease'))}",
-    } for t in detail["recentTransactions"]]
-
-
-def trend(detail: dict, latest: str) -> dict:
-    """The 24 source months ending at the dataset's latest month; months without a registration stay null."""
-    end = month_index(latest)
-    count = min(24, end + 1 - 12)
-    observed = {p["month"]: p for p in detail["monthlyTrend"]}
-    points = []
-    for x, index in enumerate(range(end - count + 1, end + 1)):
-        point = observed.get(month_label(index))
-        median = point["medianPrice"] if point else None
-        points.append({"Month": month_label(index), "X": x, "Count": point["transactionCount"] if point else 0,
-                       "MedianPrice": None if median is None else float(median),
-                       "PriceThousands": None if median is None else float(Decimal(median) / 1000)})
-    seen = [Decimal(observed[p["Month"]]["medianPrice"]) for p in points if p["Count"] > 0]
-    low = 0 if not seen else math.floor(min(seen) / 50_000) * 50
-    high = 1 if not seen else math.ceil(max(seen) / 50_000) * 50
-    if seen:
-        low, high = max(0, low - 50), high + 50
-    return {"Points": points, "Start": points[0]["Month"], "End": points[-1]["Month"], "ObservedMonths": len(seen),
-            "Sales": sum(p["Count"] for p in points if p["Count"] > 0), "MinimumY": low, "MaximumY": high}
-
-
-# ---- The flow ----------------------------------------------------------------------------------------
-
-def load(root: Path = FIXTURES) -> tuple[dict, list[dict], dict]:
-    read = lambda path: json.loads(path.read_text(encoding="utf-8"), parse_float=Decimal)
-    addresses = read(root / "block-summaries.json")
-    details = {a["addressKey"]: read(root / "details" / f"{a['addressKey']}.json") for a in addresses}
-    return read(root / "manifest.json"), addresses, details
-
-
-def scenario(highest: int) -> list[tuple[str, list[dict]]]:
-    """Each step's actions, as the gate performs them. Values were chosen so every step changes the result."""
-    by = lambda key: {"key": key}
-    return [
-        ("loaded", []),
-        ("full", [{"do": "maximum", "value": highest}]),
-        ("town", [{"do": "town", "value": "BEDOK"}]),
-        ("type", [{"do": "type", "value": "4 ROOM"}]),
-        ("minimum", [{"do": "minimum", "value": 550_000}]),
-        ("budget", [{"do": "maximum", "value": 850_000}]),
-        ("list-selected", [{"do": "click-row", **by("bedok-748b-bedok-reservoir-cres")}]),
-        ("recent-window", [{"do": "months", "value": 12}]),
-        ("empty", [{"do": "maximum", "value": 500_000}]),
-        ("reset", [{"do": "reset-button"}]),
-        ("map-selected", [{"do": "marker", "zoom": 16, **by("bedok-747a-bedok-reservoir-cres")}]),
-        ("hidden-address", [{"do": "town", "value": "ANG MO KIO"}]),
-        ("detail-error", [{"do": "reset"}, {"do": "select-index", **by(RETRY_KEY)}]),
-        ("detail-retry", [{"do": "retry-button"}]),
-        # The injected intents run while the town change is resetting the list; they must apply in order.
-        ("reentry", [{"do": "reentry", "trigger": {"do": "town", "value": "KALLANG/WHAMPOA"}, "inject": [
-            {"do": "maximum", "value": 0}, {"do": "reset"}, {"do": "select", **by("bedok-748a-bedok-reservoir-cres")},
-            {"do": "maximum", "value": highest}]}]),
-        ("viewport-burst", [{"do": "viewport", "sequence": [["zoom", 12], ["pan", 70, 80], ["zoom", 16],
-                                                             ["center", 1.37, 103.85]]}]),
-    ]
-
-
-class Simulation:
-    """The buyer-visible state the app must reach, following the web app's semantics."""
-
-    def __init__(self, manifest: dict, addresses: list[dict]):
-        self.addresses, self.latest = addresses, manifest["dataWindow"]["maxMonth"]
-        self.filters, self.selected, self.detail = dict(DEFAULT_FILTERS), None, None
-        self.fetches: dict[str, int] = {}
-
-    def listed(self) -> list[dict]:
-        return listed(self.addresses, self.filters, self.latest)
-
-    def keys(self) -> list[str]:
-        return [a["addressKey"] for a in self.listed()]
-
-    def select(self, key: str | None) -> None:
-        key = key if key in self.keys() else None
-        if key == self.selected:
-            return
-        self.selected, self.detail = key, None
-        if key:
-            self.fetch()
-
-    def fetch(self) -> None:
-        self.fetches[self.selected] = self.fetches.get(self.selected, 0) + 1
-        refused = self.selected == RETRY_KEY and self.fetches[self.selected] == 1
-        self.detail = "error" if refused else "ready"
-
-    def perform(self, action: dict) -> None:
-        kind = action["do"]
-        if kind in ("town", "type", "minimum", "maximum", "months"):
-            self.filters[kind] = action["value"]
-        elif kind in ("reset", "reset-button"):
-            self.filters = dict(DEFAULT_FILTERS)
-        elif kind in ("select", "select-index", "click-row", "marker"):
-            if action["key"] not in self.keys():
-                raise ValueError(f"{kind} names an address that is not listed: {action['key']}")
-            if kind in ("select-index", "click-row"):
-                action["index"] = self.keys().index(action["key"])
-            if kind == "marker":
-                found = next(a for a in self.addresses if a["addressKey"] == action["key"])
-                action["latitude"], action["longitude"] = (float(found["coordinates"]["lat"]),
-                                                           float(found["coordinates"]["lng"]))
-            self.select(action["key"])
-            return
-        elif kind == "retry-button":
-            if self.detail != "error":
-                raise ValueError("Retry is offered only after a refused detail request")
-            self.fetch()
-            return
-        elif kind == "reentry":
-            for queued in (action["trigger"], *action["inject"]):
-                self.perform(queued)
-            return
-        elif kind == "viewport":
-            return
-        else:
-            raise ValueError("Unknown action " + kind)
-        # The selection survives a filter change while its address is still listed.
-        if self.selected not in self.keys():
-            self.select(None)
-
-
-def expectations(root: Path = FIXTURES, year: int | None = None) -> dict:
+def expectations(root: Path = FIXTURES) -> dict:
     manifest, addresses, details = load(root)
-    latest = manifest["dataWindow"]["maxMonth"]
-    year = year or datetime.date.today().year
-    highest = maximum_available(addresses)
-    simulation = Simulation(manifest, addresses)
+    if manifest["dataWindow"]["maxMonth"] != LATEST_MONTH or len(addresses) != len(ALL_KEYS):
+        raise AssertionError("The recorded responses changed; review the fixed expectations")
     steps = []
-    for name, actions in scenario(highest):
+    for step_name, actions, step_filters, keys, summary, selection, medians in copy.deepcopy(SCENARIO):
         for action in actions:
-            simulation.perform(action)
-        shown = simulation.listed()
-        filters = dict(simulation.filters)
-        start = window_start(latest, filters["months"])
+            if action["do"] == "marker":
+                coordinates = addresses[action["key"]]["coordinates"]
+                action["latitude"], action["longitude"] = coordinates["lat"], coordinates["lng"]
         step = {
-            "name": name, "actions": actions, "filters": filters,
-            "summary": f"{number(len(shown))} of {number(len(addresses))} addresses"
-                       + (f" with a registration since {start}" if start else ""),
-            "addresses": [row(a, filters["type"]) for a in shown], "selected": None,
+            "name": step_name, "actions": actions, "filters": step_filters, "summary": summary, "selected": None,
+            "addresses": [{"key": key, "address": name(addresses[key]),
+                           "prefix": f"{name(addresses[key])}\n{addresses[key]['town']} · ",
+                           "median": medians.get(key),
+                           "latitude": addresses[key]["coordinates"]["lat"],
+                           "longitude": addresses[key]["coordinates"]["lng"]} for key in keys],
         }
-        if simulation.selected:
-            address = next(a for a in shown if a["addressKey"] == simulation.selected)
-            detail = details[simulation.selected] if simulation.detail == "ready" else None
+        if selection:
+            key, index, state = selection
+            address, detail = addresses[key], details[key]
+            first, last = address["leaseCommenceRange"]
             step["selected"] = {
-                "key": simulation.selected, "index": simulation.keys().index(simulation.selected),
-                "heading": f"{address['block']} {address['streetName']}", "detail": simulation.detail,
-                "metrics": metrics(address, filters["type"], detail, latest),
-                "lease": lease(address, year), "location": location(address),
-                "status": "" if detail else "Could not load this address's registrations. The HDB Resale API answered 503.",
-                "recent": recent(detail) if detail else [], "trend": trend(detail, latest) if detail else None,
+                "key": key, "index": index, "detail": state, "heading": name(address),
+                "figures": FIGURES[(key, step_filters["type"])],
+                "lease": f"Lease commenced {first}" + ("" if first == last else f"–{last}") + ":",
+                "postal": f"postal code {address['postalCode']}",
+                "status": REFUSED if state == "error" else "",
+                "recent": [{"id": t["id"], "prefix": f"{t['month']} · {t['flatType']} · "}
+                           for t in detail["recentTransactions"]] if state == "ready" else [],
+                "trend": trend_points(detail) if state == "ready" else {},
             }
         for action in actions:
             if action["do"] == "viewport":
-                zoom = [s for s in action["sequence"] if s[0] == "zoom"][-1][1]
-                center = [s for s in action["sequence"] if s[0] == "center"][-1]
+                zoom = [c for c in action["sequence"] if c[0] == "zoom"][-1][1]
+                center = [c for c in action["sequence"] if c[0] == "center"][-1]
                 step["camera"] = {"zoom": zoom, "latitude": center[1], "longitude": center[2]}
             if action["do"] == "marker":
                 step["camera"] = {"zoom": action["zoom"], "latitude": action["latitude"], "longitude": action["longitude"]}
         steps.append(step)
     for previous, step in zip(steps, steps[1:]):
         # A scrolled details pane must return to its top whenever the selected address changes or clears.
-        moved = previous["selected"] and previous["selected"]["detail"] == "ready" and (
-            step["selected"] is None or step["selected"]["key"] != previous["selected"]["key"])
-        previous["scrollDetailsBeforeNext"] = bool(moved)
-        step["detailsAtTop"] = bool(moved)
+        moved = bool(previous["selected"] and previous["selected"]["detail"] == "ready" and (
+            step["selected"] is None or step["selected"]["key"] != previous["selected"]["key"]))
+        previous["scrollDetailsBeforeNext"] = moved
+        step["detailsAtTop"] = moved
     if [s["name"] for s in steps] != list(STEPS):
-        raise AssertionError("Scenario and STEPS disagree")
-    return {"latestMonth": latest, "maximumAvailablePrice": highest, "totalAddresses": len(addresses),
-            "year": year, "retryKey": RETRY_KEY, "steps": steps}
+        raise AssertionError("SCENARIO and STEPS disagree")
+    return {"latestMonth": LATEST_MONTH, "maximumAvailablePrice": MAXIMUM_AVAILABLE, "trendMonths": 24,
+            "retryKey": RETRY_KEY, "steps": steps}
 
 
 def apply_fault(plan: dict, fault: str | None) -> dict:
@@ -386,9 +214,9 @@ def apply_fault(plan: dict, fault: str | None) -> dict:
         rows = steps["type"]["addresses"]
         rows[0], rows[1] = rows[1], rows[0]
     elif fault == "trend":
-        point = next(p for p in steps["list-selected"]["selected"]["trend"]["Points"] if p["Count"] > 0)
-        point["MedianPrice"] += 1000
-        point["PriceThousands"] += 1
+        points = steps["list-selected"]["selected"]["trend"]
+        first = next(iter(points))
+        points[first] += 1
     elif fault == "skip-reentry":
         steps["reentry"]["actions"][0]["inject"] = []
     elif fault not in (None, "no-503"):

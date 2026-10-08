@@ -174,7 +174,7 @@ ApplicationWindow {
                 spacing: 2
                 Label { text: "Town" }
                 ComboBox {
-                    id: townPicker; Layout.preferredWidth: 210
+                    id: townPicker; objectName: "townFilter"; Layout.preferredWidth: 210
                     model: JSON.parse(Resales.townsJson); currentIndex: Resales.townIndex
                     onActivated: Resales.setTown(currentText); Accessible.name: "Town filter"
                 }
@@ -183,7 +183,7 @@ ApplicationWindow {
                 spacing: 2
                 Label { text: "Flat type" }
                 ComboBox {
-                    id: typePicker; Layout.preferredWidth: 180
+                    id: typePicker; objectName: "flatTypeFilter"; Layout.preferredWidth: 180
                     model: JSON.parse(Resales.flatTypesJson); currentIndex: Resales.flatTypeIndex
                     onActivated: Resales.setFlatType(currentText); Accessible.name: "Flat type filter"
                 }
@@ -192,7 +192,7 @@ ApplicationWindow {
                 spacing: 2
                 Label { text: "Minimum median (S$)" }
                 SpinBox {
-                    id: minimumPicker; from: 0; to: Resales.maximumAvailablePrice; stepSize: 50000
+                    id: minimumPicker; objectName: "minimumMedianFilter"; from: 0; to: Resales.maximumAvailablePrice; stepSize: 50000
                     value: Resales.minimumPrice; editable: true
                     onValueModified: Resales.setMinimumPrice(value); Accessible.name: "Minimum median resale price"
                 }
@@ -201,7 +201,7 @@ ApplicationWindow {
                 spacing: 2
                 Label { text: "Maximum median (S$)" }
                 SpinBox {
-                    id: pricePicker; from: 0; to: Resales.maximumAvailablePrice; stepSize: 50000
+                    id: pricePicker; objectName: "maximumMedianFilter"; from: 0; to: Resales.maximumAvailablePrice; stepSize: 50000
                     value: Resales.maximumPrice; editable: true
                     onValueModified: Resales.setMaximumPrice(value); Accessible.name: "Maximum median resale price"
                 }
@@ -210,18 +210,18 @@ ApplicationWindow {
                 spacing: 2
                 Label { text: "Latest registration" }
                 ComboBox {
-                    id: recencyPicker; Layout.minimumWidth: 174; model: ["Any time", "Sold in latest 12 months", "Sold in latest 24 months"]
+                    id: recencyPicker; objectName: "registrationWindowFilter"; Layout.minimumWidth: 174; model: ["Any time", "Sold in latest 12 months", "Sold in latest 24 months"]
                     currentIndex: Resales.recencyMonths === 12 ? 1 : Resales.recencyMonths === 24 ? 2 : 0
                     onActivated: Resales.setRecencyMonths(currentIndex === 1 ? 12 : currentIndex === 2 ? 24 : 0)
                     Accessible.name: "Latest registration window"
                 }
             }
-            Button { id: resetButton; text: "Reset"; Layout.alignment: Qt.AlignBottom; Accessible.name: "Reset all filters"; onClicked: Resales.resetFilters() }
+            Button { id: resetButton; objectName: "resetFilters"; text: "Reset"; Layout.alignment: Qt.AlignBottom; Accessible.name: "Reset all filters"; onClicked: Resales.resetFilters() }
             Item { Layout.fillWidth: true }
         }
         Label { id: windowHelpLabel; text: "Price bounds apply to each address's median (the selected flat type's, when one is chosen) · figures cover the latest 24 source months · windows keep addresses with a registration since their start and end at source month " + Resales.datasetLatestMonth + " (may be partial)"; font.pixelSize: 12; color: palette.windowText; wrapMode: Text.WordWrap; Layout.fillWidth: true }
         Label { id: priceWarningLabel; visible: Resales.minimumPrice > Resales.maximumPrice; text: "Minimum exceeds maximum. Adjust either bound to show results."; color: palette.windowText; font.bold: true }
-        Label { text: Resales.filterSummary; font.bold: true; Accessible.name: text }
+        Label { objectName: "filterSummary"; text: Resales.filterSummary; font.bold: true; Accessible.name: text }
         RowLayout {
             Label { text: Resales.presentationSummary; Layout.fillWidth: true; wrapMode: Text.WordWrap }
             Label { text: "Map groups count addresses. Individual pins count sales."; font.pixelSize: 12 }
@@ -236,6 +236,7 @@ ApplicationWindow {
                 Layout.preferredWidth: 800
                 Map {
                     id: map
+                    objectName: "map"
                     anchors.fill: parent
                     plugin: osm
                     activeMapType: supportedMapTypes[supportedMapTypes.length - 1]
@@ -266,6 +267,7 @@ ApplicationWindow {
                         // No undocumented incubateDelegates setting is used.
                         model: window.locatedMapModel
                         delegate: MapQuickItem {
+                            objectName: "mapMarker"
                             required property double latitude
                             required property double longitude
                             required property string priceLabel
@@ -331,6 +333,7 @@ ApplicationWindow {
                 }
                 Rectangle {
                     id: attributionSurface
+                    objectName: "attribution"
                     anchors.left: parent.left; anchors.bottom: parent.bottom
                     width: attributionRow.implicitWidth + 12; height: 30
                     color: window.palette.window
@@ -359,10 +362,11 @@ ApplicationWindow {
                 Row {
                     id: mapControls
                     anchors.top: parent.top; anchors.right: parent.right; anchors.margins: 8; spacing: 6
-                    Button { id: zoomIn; text: "+"; Accessible.name: "Zoom in"; onClicked: map.zoomLevel += 1 }
-                    Button { text: "−"; Accessible.name: "Zoom out"; onClicked: map.zoomLevel -= 1 }
+                    Button { id: zoomIn; objectName: "zoomIn"; text: "+"; Accessible.name: "Zoom in"; onClicked: map.zoomLevel += 1 }
+                    Button { objectName: "zoomOut"; text: "−"; Accessible.name: "Zoom out"; onClicked: map.zoomLevel -= 1 }
                     Button {
                         id: recenter
+                        objectName: "recenter"
                         text: "Singapore"
                         onClicked: { map.center = QtPositioning.coordinate(1.3521, 103.8198); map.zoomLevel = 11 }
                     }
@@ -376,6 +380,7 @@ ApplicationWindow {
                 }
                 Label {
                     id: tileFailureLabel
+                    objectName: "tileFailureNotice"
                     visible: Resales.tileFailuresRepeated
                     anchors.left: parent.left; anchors.right: parent.right
                     anchors.top: zoomLabel.bottom; anchors.margins: 8
@@ -386,7 +391,7 @@ ApplicationWindow {
                     background: Rectangle { color: window.palette.window }
                 }
                 Label {
-                    id: mapErrorLabel; color: palette.windowText
+                    id: mapErrorLabel; objectName: "mapError"; color: palette.windowText
                     anchors.centerIn: parent
                     visible: map.error !== Map.NoError
                     text: "Map error: " + map.errorString
@@ -404,6 +409,7 @@ ApplicationWindow {
                 }
                 ListView {
                     id: transactionsList
+                    objectName: "addressList"
                     Layout.fillWidth: true; Layout.preferredHeight: Resales.selectedMapKey !== "" ? 140 : 220; Layout.minimumHeight: 120
                     clip: true; spacing: 3; model: Resales
                     activeFocusOnTab: true; keyNavigationEnabled: true
@@ -431,6 +437,7 @@ ApplicationWindow {
                     Keys.onSpacePressed: Resales.selectAddressAt(currentIndex)
                     delegate: ItemDelegate {
                         id: addressDelegate
+                        objectName: "addressRow"
                         required property int index
                         required property string addressKey
                         required property string address
@@ -462,14 +469,14 @@ ApplicationWindow {
                         }
                     }
                 }
-                Label { id: emptyLabel; visible: Resales.addressCount === 0 && !Resales.loading && !Resales.canRetry; text: "No matching addresses. Adjust the filters or reset."; wrapMode: Text.WordWrap; Layout.fillWidth: true }
+                Label { id: emptyLabel; objectName: "emptyNotice"; visible: Resales.addressCount === 0 && !Resales.loading && !Resales.canRetry; text: "No matching addresses. Adjust the filters or reset."; wrapMode: Text.WordWrap; Layout.fillWidth: true }
                 Rectangle { Layout.fillWidth: true; height: 1; color: "#ccd5da" }
-                Label { text: Resales.selectedHeading; font.bold: true; font.pixelSize: 17; wrapMode: Text.WordWrap; Layout.fillWidth: true }
+                Label { objectName: "selectedHeading"; text: Resales.selectedHeading; font.bold: true; font.pixelSize: 17; wrapMode: Text.WordWrap; Layout.fillWidth: true }
                 Label { text: Resales.selectionMapStatus; font.pixelSize: 12; wrapMode: Text.WordWrap; Layout.fillWidth: true }
                 Button { text: "Show selected address"; visible: Resales.selectedLocated; Accessible.name: text
                     onClicked: { map.center = QtPositioning.coordinate(Resales.selectedLatitude, Resales.selectedLongitude); map.zoomLevel = 16 } }
                 ScrollView {
-                    id: detailsScroll; Layout.fillWidth: true; Layout.fillHeight: true; clip: true
+                    id: detailsScroll; objectName: "selectedDetails"; Layout.fillWidth: true; Layout.fillHeight: true; clip: true
                     contentWidth: availableWidth; activeFocusOnTab: true; Accessible.name: "Selected address details and recent transactions"
                     function resetPosition() {
                         contentItem.cancelFlick()
@@ -483,9 +490,9 @@ ApplicationWindow {
                         Label { width: parent.width; text: Resales.selectedMetrics; wrapMode: Text.WordWrap; font.pixelSize: 13 }
                         Label { id: leaseLabel; width: parent.width; text: Resales.selectedLease; wrapMode: Text.WordWrap; font.pixelSize: 12; color: palette.windowText }
                         Label { width: parent.width; text: Resales.detailStatus; visible: text.length > 0; wrapMode: Text.WordWrap; font.pixelSize: 12; font.italic: true }
-                        Button { id: retryDetailButton; text: "Retry registrations"; visible: Resales.canRetryDetail; onClicked: Resales.retryDetail() }
+                        Button { id: retryDetailButton; objectName: "retryRegistrations"; text: "Retry registrations"; visible: Resales.canRetryDetail; onClicked: Resales.retryDetail() }
                         Loader {
-                            id: trendLoader; width: parent.width
+                            id: trendLoader; objectName: "trendChart"; width: parent.width
                             active: Resales.detailReady
                             sourceComponent: Component { BuyerTrendChart {} }
                         }
