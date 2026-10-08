@@ -60,6 +60,14 @@ They retain the [Singapore Open Data Licence](https://data.gov.sg/open-data-lice
 and applicable exclusions, not the application's GPL. Attribution must remain
 conspicuous. Neither completeness nor current availability is guaranteed.
 
+At runtime the app reads the HDB Resale Explorer API, which serves the same
+HDB resale data, with block locations and MRT distances it derived from OneMap.
+The recorded responses in `tests/fixtures/worker-api` are that output and keep
+the same terms ([fixture notes](tests/fixtures/README.md)).
+`tests/fixtures/web-parity/product-core-golden.json` is copied from
+[hdb-resale-visualizer](https://github.com/shenghaoc/hdb-resale-visualizer)
+under its MIT License, Copyright (c) 2026 Shenghao Chen.
+
 OneMap basemap: **OneMap © contributors | Singapore Land Authority**.
 The unchanged official OneMap attribution logo retains SLA/other applicable
 rights. Its origin and hash are in

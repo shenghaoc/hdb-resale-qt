@@ -1,6 +1,5 @@
 using System.Globalization;
 using System.Text.Json;
-using HdbResale.Domain;
 
 namespace HdbResale.App;
 
@@ -13,14 +12,17 @@ internal sealed record MapViewport(double Latitude, double Longitude, double Zoo
         && double.IsFinite(Zoom) && Zoom is >= 0 and <= 22
         && double.IsFinite(Width) && Width > 0 && double.IsFinite(Height) && Height > 0;
 }
-internal sealed record MapPresentationRow(string Key, string TransactionId, double Latitude, double Longitude,
+// One listed address on the map, with the figures the list shows for it (the selected flat type's, when one is).
+internal sealed record MapAddress(string Key, double Latitude, double Longitude, string Address, int SalesCount,
+    decimal MedianPrice, string LatestMonth);
+internal sealed record MapPresentationRow(string Key, double Latitude, double Longitude,
     string Address, string PriceLabel, int TransactionCount, int AddressCount, string MembershipJson)
 {
     internal bool IsCluster => AddressCount > 1;
-    internal static MapPresentationRow AddressRow(BlockSummary block) => new(block.Key, block.Latest.Id,
-        block.Latest.Location.Point!.Latitude, block.Latest.Location.Point.Longitude, block.Latest.Address,
-        $"{block.Count} transactions · median S${block.MedianPrice.ToString("N0", CultureInfo.InvariantCulture)} · latest {block.Latest.Facts.Month}",
-        block.Count, 1, JsonSerializer.Serialize(new[] { block.Key }));
+    internal static MapPresentationRow AddressRow(MapAddress address) => new(address.Key, address.Latitude, address.Longitude,
+        address.Address,
+        $"{address.SalesCount:N0} {(address.SalesCount == 1 ? "sale" : "sales")} · median S${address.MedianPrice.ToString("N0", CultureInfo.InvariantCulture)} · latest {address.LatestMonth}",
+        address.SalesCount, 1, JsonSerializer.Serialize(new[] { address.Key }));
 }
 internal sealed record MapPresentationPlan(IReadOnlyList<MapPresentationRow> Rows, int MappedAddresses,
     int InViewAddresses, int ClusterCount, bool SelectedInView)
@@ -46,10 +48,10 @@ internal static class MapPresentation
         var dx = Math.Abs(point.X - center.X); dx = Math.Min(dx, size - dx);
         return dx <= viewport.Width / 2 && Math.Abs(point.Y - center.Y) <= viewport.Height / 2;
     }
-    internal static MapPresentationPlan Plan(IReadOnlyList<BlockSummary> all, MapViewport? viewport, string selectedKey)
+    internal static MapPresentationPlan Plan(IReadOnlyList<MapAddress> all, MapViewport? viewport, string selectedKey)
     {
         if (viewport is not { IsValid: true }) return new([], all.Count, 0, 0, false);
-        var visible = all.Where(b => Contains(viewport, b.Latest.Location.Point!.Latitude, b.Latest.Location.Point.Longitude)).ToArray();
+        var visible = all.Where(b => Contains(viewport, b.Latitude, b.Longitude)).ToArray();
         var selectedInView = visible.Any(b => b.Key == selectedKey);
         if (viewport.Zoom >= IndividualZoom)
             return new(visible.Select(MapPresentationRow.AddressRow).ToArray(), all.Count, visible.Length, 0, selectedInView);
@@ -57,17 +59,17 @@ internal static class MapPresentation
         var gridZoom = (int)Math.Floor(viewport.Zoom);
         var groups = visible.Where(b => b.Key != selectedKey).GroupBy(b =>
         {
-            var p = World(b.Latest.Location.Point!.Latitude, b.Latest.Location.Point.Longitude, gridZoom);
+            var p = World(b.Latitude, b.Longitude, gridZoom);
             return (X: (long)Math.Floor(p.X / CellPixels), Y: (long)Math.Floor(p.Y / CellPixels));
         });
         foreach (var group in groups)
         {
             var members = group.ToArray();
             if (members.Length == 1) { rows.Add(MapPresentationRow.AddressRow(members[0])); continue; }
-            var count = members.Sum(b => b.Count);
-            rows.Add(new($"@cell:{gridZoom}:{group.Key.X}:{group.Key.Y}", "",
-                members.Average(b => b.Latest.Location.Point!.Latitude), members.Average(b => b.Latest.Location.Point!.Longitude),
-                $"{members.Length} mapped addresses", $"{members.Length} addresses · {count} transactions · zoom in",
+            var count = members.Sum(b => b.SalesCount);
+            rows.Add(new($"@cell:{gridZoom}:{group.Key.X}:{group.Key.Y}",
+                members.Average(b => b.Latitude), members.Average(b => b.Longitude),
+                $"{members.Length} mapped addresses", $"{members.Length} addresses · {count} sales · zoom in",
                 count, members.Length, JsonSerializer.Serialize(members.Select(b => b.Key))));
         }
         if (selectedInView) rows.Add(MapPresentationRow.AddressRow(visible.First(b => b.Key == selectedKey)));
@@ -121,7 +123,6 @@ internal static class PresentationDiff
         for(var i=0;i<edit.Count;i++)
         {
             var a=previous[edit.First+i]; var b=edit.Rows[i];
-            if(a.TransactionId!=b.TransactionId)roles.Add(256);
             if(a.Latitude!=b.Latitude)roles.Add(257);
             if(a.Longitude!=b.Longitude)roles.Add(258);
             if(a.Address!=b.Address)roles.Add(259);

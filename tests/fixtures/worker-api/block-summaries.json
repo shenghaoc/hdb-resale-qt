@@ -1,0 +1,981 @@
+[
+ {
+  "addressKey": "kallang-whampoa-58-jln-ma-mor",
+  "town": "KALLANG/WHAMPOA",
+  "block": "58",
+  "streetName": "JLN MA'MOR",
+  "displayName": null,
+  "coordinates": {
+   "lat": 1.32836065642983,
+   "lng": 103.857167196711
+  },
+  "medianPrice": 1398888,
+  "pricePerSqmMedian": 8025.75,
+  "transactionCount": 1,
+  "floorAreaRange": [
+   174.3,
+   174.3
+  ],
+  "leaseCommenceRange": [
+   1972,
+   1972
+  ],
+  "latestMonth": "2025-08",
+  "availableDateRange": [
+   "1990-08",
+   "2025-08"
+  ],
+  "flatTypes": [
+   "3 ROOM"
+  ],
+  "flatModels": [
+   "TERRACE"
+  ],
+  "medianPriceByFlatType": {
+   "3 ROOM": 1398888
+  },
+  "medianPricePerSqmByFlatType": {
+   "3 ROOM": 8025.75
+  },
+  "flatTypeCohorts": {
+   "3 ROOM": {
+    "flatModels": [
+     "TERRACE"
+    ],
+    "latestMonth": "2025-08",
+    "floorAreaRange": [
+     174.3,
+     174.3
+    ],
+    "transactionCount": 1
+   }
+  },
+  "nearestMrt": {
+   "stationName": "BOON KENG MRT STATION",
+   "distanceMeters": 1037,
+   "walkingTimeSeconds": 830
+  },
+  "nearbyMrts": [
+   {
+    "stationName": "BOON KENG MRT STATION",
+    "distanceMeters": 1037,
+    "walkingTimeSeconds": 830
+   },
+   {
+    "stationName": "TOA PAYOH MRT STATION",
+    "distanceMeters": 1141,
+    "walkingTimeSeconds": 913
+   },
+   {
+    "stationName": "POTONG PASIR MRT STATION",
+    "distanceMeters": 1317,
+    "walkingTimeSeconds": 1054
+   }
+  ],
+  "postalCode": "320058"
+ },
+ {
+  "addressKey": "kallang-whampoa-46-bendemeer-rd",
+  "town": "KALLANG/WHAMPOA",
+  "block": "46",
+  "streetName": "BENDEMEER RD",
+  "displayName": null,
+  "coordinates": {
+   "lat": 1.32290623334055,
+   "lng": 103.866028945394
+  },
+  "medianPrice": 1346000,
+  "pricePerSqmMedian": 9347.22,
+  "transactionCount": 2,
+  "floorAreaRange": [
+   144,
+   144
+  ],
+  "leaseCommenceRange": [
+   1994,
+   1994
+  ],
+  "latestMonth": "2026-08",
+  "availableDateRange": [
+   "1999-01",
+   "2026-08"
+  ],
+  "flatTypes": [
+   "EXECUTIVE"
+  ],
+  "flatModels": [
+   "APARTMENT"
+  ],
+  "medianPriceByFlatType": {
+   "EXECUTIVE": 1346000
+  },
+  "medianPricePerSqmByFlatType": {
+   "EXECUTIVE": 9347.22
+  },
+  "flatTypeCohorts": {
+   "EXECUTIVE": {
+    "flatModels": [
+     "APARTMENT"
+    ],
+    "latestMonth": "2026-08",
+    "floorAreaRange": [
+     144,
+     144
+    ],
+    "transactionCount": 2
+   }
+  },
+  "nearestMrt": {
+   "stationName": "BOON KENG MRT STATION",
+   "distanceMeters": 592,
+   "walkingTimeSeconds": 474
+  },
+  "nearbyMrts": [
+   {
+    "stationName": "BOON KENG MRT STATION",
+    "distanceMeters": 592,
+    "walkingTimeSeconds": 474
+   },
+   {
+    "stationName": "GEYLANG BAHRU MRT STATION",
+    "distanceMeters": 632,
+    "walkingTimeSeconds": 506
+   },
+   {
+    "stationName": "POTONG PASIR MRT STATION",
+    "distanceMeters": 955,
+    "walkingTimeSeconds": 764
+   }
+  ],
+  "postalCode": "330046"
+ },
+ {
+  "addressKey": "ang-mo-kio-588b-ang-mo-kio-st-52",
+  "town": "ANG MO KIO",
+  "block": "588B",
+  "streetName": "ANG MO KIO ST 52",
+  "displayName": "PARK CENTRAL @ AMK",
+  "coordinates": {
+   "lat": 1.37197571261128,
+   "lng": 103.853150894936
+  },
+  "medianPrice": 1220000,
+  "pricePerSqmMedian": 10666.67,
+  "transactionCount": 11,
+  "floorAreaRange": [
+   90,
+   120
+  ],
+  "leaseCommenceRange": [
+   2011,
+   2011
+  ],
+  "latestMonth": "2026-09",
+  "availableDateRange": [
+   "2016-09",
+   "2026-09"
+  ],
+  "flatTypes": [
+   "4 ROOM",
+   "5 ROOM"
+  ],
+  "flatModels": [
+   "DBSS"
+  ],
+  "medianPriceByFlatType": {
+   "4 ROOM": 1002888,
+   "5 ROOM": 1222500
+  },
+  "medianPricePerSqmByFlatType": {
+   "4 ROOM": 11143.2,
+   "5 ROOM": 10645.83
+  },
+  "flatTypeCohorts": {
+   "4 ROOM": {
+    "flatModels": [
+     "DBSS"
+    ],
+    "latestMonth": "2025-11",
+    "floorAreaRange": [
+     90,
+     90
+    ],
+    "transactionCount": 1
+   },
+   "5 ROOM": {
+    "flatModels": [
+     "DBSS"
+    ],
+    "latestMonth": "2026-09",
+    "floorAreaRange": [
+     112,
+     120
+    ],
+    "transactionCount": 10
+   }
+  },
+  "nearestMrt": {
+   "stationName": "ANG MO KIO MRT STATION",
+   "distanceMeters": 437,
+   "walkingTimeSeconds": 350
+  },
+  "nearbyMrts": [
+   {
+    "stationName": "ANG MO KIO MRT STATION",
+    "distanceMeters": 437,
+    "walkingTimeSeconds": 350
+   },
+   {
+    "stationName": "YIO CHU KANG MRT STATION",
+    "distanceMeters": 1402,
+    "walkingTimeSeconds": 1122
+   },
+   {
+    "stationName": "MAYFLOWER MRT STATION",
+    "distanceMeters": 1753,
+    "walkingTimeSeconds": 1402
+   }
+  ],
+  "postalCode": "562588"
+ },
+ {
+  "addressKey": "bedok-10d-bedok-sth-ave-2",
+  "town": "BEDOK",
+  "block": "10D",
+  "streetName": "BEDOK STH AVE 2",
+  "displayName": null,
+  "coordinates": {
+   "lat": 1.3217708591015,
+   "lng": 103.936326570445
+  },
+  "medianPrice": 1204444,
+  "pricePerSqmMedian": 8480.66,
+  "transactionCount": 2,
+  "floorAreaRange": [
+   141,
+   143
+  ],
+  "leaseCommenceRange": [
+   1995,
+   1995
+  ],
+  "latestMonth": "2026-09",
+  "availableDateRange": [
+   "1999-07",
+   "2026-09"
+  ],
+  "flatTypes": [
+   "EXECUTIVE"
+  ],
+  "flatModels": [
+   "APARTMENT"
+  ],
+  "medianPriceByFlatType": {
+   "EXECUTIVE": 1204444
+  },
+  "medianPricePerSqmByFlatType": {
+   "EXECUTIVE": 8480.66
+  },
+  "flatTypeCohorts": {
+   "EXECUTIVE": {
+    "flatModels": [
+     "APARTMENT"
+    ],
+    "latestMonth": "2026-09",
+    "floorAreaRange": [
+     141,
+     143
+    ],
+    "transactionCount": 2
+   }
+  },
+  "nearestMrt": {
+   "stationName": "BEDOK MRT STATION",
+   "distanceMeters": 790,
+   "walkingTimeSeconds": 632
+  },
+  "nearbyMrts": [
+   {
+    "stationName": "BEDOK MRT STATION",
+    "distanceMeters": 790,
+    "walkingTimeSeconds": 632
+   },
+   {
+    "stationName": "BAYSHORE MRT STATION",
+    "distanceMeters": 1035,
+    "walkingTimeSeconds": 828
+   },
+   {
+    "stationName": "TANAH MERAH MRT STATION",
+    "distanceMeters": 1195,
+    "walkingTimeSeconds": 956
+   }
+  ],
+  "postalCode": "463010"
+ },
+ {
+  "addressKey": "ang-mo-kio-588c-ang-mo-kio-st-52",
+  "town": "ANG MO KIO",
+  "block": "588C",
+  "streetName": "ANG MO KIO ST 52",
+  "displayName": "PARK CENTRAL @ AMK",
+  "coordinates": {
+   "lat": 1.37183157010083,
+   "lng": 103.853670978083
+  },
+  "medianPrice": 1185444,
+  "pricePerSqmMedian": 11269.44,
+  "transactionCount": 10,
+  "floorAreaRange": [
+   90,
+   120
+  ],
+  "leaseCommenceRange": [
+   2011,
+   2011
+  ],
+  "latestMonth": "2026-10",
+  "availableDateRange": [
+   "2016-09",
+   "2026-10"
+  ],
+  "flatTypes": [
+   "4 ROOM",
+   "5 ROOM"
+  ],
+  "flatModels": [
+   "DBSS"
+  ],
+  "medianPriceByFlatType": {
+   "4 ROOM": 1025500,
+   "5 ROOM": 1240444
+  },
+  "medianPricePerSqmByFlatType": {
+   "4 ROOM": 11394.44,
+   "5 ROOM": 11024.8
+  },
+  "flatTypeCohorts": {
+   "4 ROOM": {
+    "flatModels": [
+     "DBSS"
+    ],
+    "latestMonth": "2025-09",
+    "floorAreaRange": [
+     90,
+     90
+    ],
+    "transactionCount": 2
+   },
+   "5 ROOM": {
+    "flatModels": [
+     "DBSS"
+    ],
+    "latestMonth": "2026-10",
+    "floorAreaRange": [
+     112,
+     120
+    ],
+    "transactionCount": 8
+   }
+  },
+  "nearestMrt": {
+   "stationName": "ANG MO KIO MRT STATION",
+   "distanceMeters": 479,
+   "walkingTimeSeconds": 383
+  },
+  "nearbyMrts": [
+   {
+    "stationName": "ANG MO KIO MRT STATION",
+    "distanceMeters": 479,
+    "walkingTimeSeconds": 383
+   },
+   {
+    "stationName": "YIO CHU KANG MRT STATION",
+    "distanceMeters": 1452,
+    "walkingTimeSeconds": 1162
+   },
+   {
+    "stationName": "MAYFLOWER MRT STATION",
+    "distanceMeters": 1812,
+    "walkingTimeSeconds": 1450
+   }
+  ],
+  "postalCode": "563588"
+ },
+ {
+  "addressKey": "bedok-747a-bedok-reservoir-cres",
+  "town": "BEDOK",
+  "block": "747A",
+  "streetName": "BEDOK RESERVOIR CRES",
+  "displayName": "BELVIA",
+  "coordinates": {
+   "lat": 1.3366395590937,
+   "lng": 103.921284387946
+  },
+  "medianPrice": 860000,
+  "pricePerSqmMedian": 9962.69,
+  "transactionCount": 6,
+  "floorAreaRange": [
+   67,
+   105
+  ],
+  "leaseCommenceRange": [
+   2014,
+   2014
+  ],
+  "latestMonth": "2026-02",
+  "availableDateRange": [
+   "2019-11",
+   "2026-02"
+  ],
+  "flatTypes": [
+   "3 ROOM",
+   "4 ROOM",
+   "5 ROOM"
+  ],
+  "flatModels": [
+   "DBSS"
+  ],
+  "medianPriceByFlatType": {
+   "3 ROOM": 657500,
+   "4 ROOM": 860000,
+   "5 ROOM": 1135000
+  },
+  "medianPricePerSqmByFlatType": {
+   "3 ROOM": 9813.43,
+   "4 ROOM": 9885.06,
+   "5 ROOM": 10809.53
+  },
+  "flatTypeCohorts": {
+   "3 ROOM": {
+    "flatModels": [
+     "DBSS"
+    ],
+    "latestMonth": "2025-09",
+    "floorAreaRange": [
+     67,
+     67
+    ],
+    "transactionCount": 2
+   },
+   "4 ROOM": {
+    "flatModels": [
+     "DBSS"
+    ],
+    "latestMonth": "2025-09",
+    "floorAreaRange": [
+     87,
+     87
+    ],
+    "transactionCount": 2
+   },
+   "5 ROOM": {
+    "flatModels": [
+     "DBSS"
+    ],
+    "latestMonth": "2026-02",
+    "floorAreaRange": [
+     105,
+     105
+    ],
+    "transactionCount": 2
+   }
+  },
+  "nearestMrt": {
+   "stationName": "BEDOK NORTH MRT STATION",
+   "distanceMeters": 347,
+   "walkingTimeSeconds": 278
+  },
+  "nearbyMrts": [
+   {
+    "stationName": "BEDOK NORTH MRT STATION",
+    "distanceMeters": 347,
+    "walkingTimeSeconds": 278
+   },
+   {
+    "stationName": "BEDOK RESERVOIR MRT STATION",
+    "distanceMeters": 1290,
+    "walkingTimeSeconds": 1032
+   },
+   {
+    "stationName": "KAKI BUKIT MRT STATION",
+    "distanceMeters": 1329,
+    "walkingTimeSeconds": 1063
+   }
+  ],
+  "postalCode": "471747"
+ },
+ {
+  "addressKey": "bedok-748b-bedok-reservoir-cres",
+  "town": "BEDOK",
+  "block": "748B",
+  "streetName": "BEDOK RESERVOIR CRES",
+  "displayName": "BELVIA",
+  "coordinates": {
+   "lat": 1.33629391354583,
+   "lng": 103.921242294579
+  },
+  "medianPrice": 837500,
+  "pricePerSqmMedian": 9832.82,
+  "transactionCount": 10,
+  "floorAreaRange": [
+   67,
+   105
+  ],
+  "leaseCommenceRange": [
+   2014,
+   2014
+  ],
+  "latestMonth": "2026-09",
+  "availableDateRange": [
+   "2020-01",
+   "2026-09"
+  ],
+  "flatTypes": [
+   "3 ROOM",
+   "4 ROOM",
+   "5 ROOM"
+  ],
+  "flatModels": [
+   "DBSS"
+  ],
+  "medianPriceByFlatType": {
+   "3 ROOM": 663000,
+   "4 ROOM": 850000,
+   "5 ROOM": 1060000
+  },
+  "medianPricePerSqmByFlatType": {
+   "3 ROOM": 9895.52,
+   "4 ROOM": 9770.11,
+   "5 ROOM": 10095.24
+  },
+  "flatTypeCohorts": {
+   "3 ROOM": {
+    "flatModels": [
+     "DBSS"
+    ],
+    "latestMonth": "2026-09",
+    "floorAreaRange": [
+     67,
+     67
+    ],
+    "transactionCount": 3
+   },
+   "4 ROOM": {
+    "flatModels": [
+     "DBSS"
+    ],
+    "latestMonth": "2026-02",
+    "floorAreaRange": [
+     87,
+     87
+    ],
+    "transactionCount": 6
+   },
+   "5 ROOM": {
+    "flatModels": [
+     "DBSS"
+    ],
+    "latestMonth": "2026-05",
+    "floorAreaRange": [
+     105,
+     105
+    ],
+    "transactionCount": 1
+   }
+  },
+  "nearestMrt": {
+   "stationName": "BEDOK NORTH MRT STATION",
+   "distanceMeters": 317,
+   "walkingTimeSeconds": 254
+  },
+  "nearbyMrts": [
+   {
+    "stationName": "BEDOK NORTH MRT STATION",
+    "distanceMeters": 317,
+    "walkingTimeSeconds": 254
+   },
+   {
+    "stationName": "BEDOK RESERVOIR MRT STATION",
+    "distanceMeters": 1294,
+    "walkingTimeSeconds": 1035
+   },
+   {
+    "stationName": "KAKI BUKIT MRT STATION",
+    "distanceMeters": 1320,
+    "walkingTimeSeconds": 1056
+   }
+  ],
+  "postalCode": "472748"
+ },
+ {
+  "addressKey": "bedok-748a-bedok-reservoir-cres",
+  "town": "BEDOK",
+  "block": "748A",
+  "streetName": "BEDOK RESERVOIR CRES",
+  "displayName": "BELVIA",
+  "coordinates": {
+   "lat": 1.33641902814806,
+   "lng": 103.920993282716
+  },
+  "medianPrice": 832000,
+  "pricePerSqmMedian": 9696.97,
+  "transactionCount": 7,
+  "floorAreaRange": [
+   66,
+   105
+  ],
+  "leaseCommenceRange": [
+   2014,
+   2014
+  ],
+  "latestMonth": "2026-07",
+  "availableDateRange": [
+   "2019-11",
+   "2026-07"
+  ],
+  "flatTypes": [
+   "3 ROOM",
+   "4 ROOM",
+   "5 ROOM"
+  ],
+  "flatModels": [
+   "DBSS"
+  ],
+  "medianPriceByFlatType": {
+   "3 ROOM": 646250,
+   "4 ROOM": 846000,
+   "5 ROOM": 998000
+  },
+  "medianPricePerSqmByFlatType": {
+   "3 ROOM": 9791.67,
+   "4 ROOM": 9724.14,
+   "5 ROOM": 9504.76
+  },
+  "flatTypeCohorts": {
+   "3 ROOM": {
+    "flatModels": [
+     "DBSS"
+    ],
+    "latestMonth": "2026-07",
+    "floorAreaRange": [
+     66,
+     66
+    ],
+    "transactionCount": 2
+   },
+   "4 ROOM": {
+    "flatModels": [
+     "DBSS"
+    ],
+    "latestMonth": "2026-06",
+    "floorAreaRange": [
+     87,
+     87
+    ],
+    "transactionCount": 4
+   },
+   "5 ROOM": {
+    "flatModels": [
+     "DBSS"
+    ],
+    "latestMonth": "2026-01",
+    "floorAreaRange": [
+     105,
+     105
+    ],
+    "transactionCount": 1
+   }
+  },
+  "nearestMrt": {
+   "stationName": "BEDOK NORTH MRT STATION",
+   "distanceMeters": 307,
+   "walkingTimeSeconds": 246
+  },
+  "nearbyMrts": [
+   {
+    "stationName": "BEDOK NORTH MRT STATION",
+    "distanceMeters": 307,
+    "walkingTimeSeconds": 246
+   },
+   {
+    "stationName": "KAKI BUKIT MRT STATION",
+    "distanceMeters": 1294,
+    "walkingTimeSeconds": 1035
+   },
+   {
+    "stationName": "BEDOK RESERVOIR MRT STATION",
+    "distanceMeters": 1322,
+    "walkingTimeSeconds": 1058
+   }
+  ],
+  "postalCode": "471748"
+ },
+ {
+  "addressKey": "bedok-115-bedok-nth-rd",
+  "town": "BEDOK",
+  "block": "115",
+  "streetName": "BEDOK NTH RD",
+  "displayName": null,
+  "coordinates": {
+   "lat": 1.33143368026417,
+   "lng": 103.936865404278
+  },
+  "medianPrice": 448444,
+  "pricePerSqmMedian": 6048.41,
+  "transactionCount": 6,
+  "floorAreaRange": [
+   73,
+   98
+  ],
+  "leaseCommenceRange": [
+   1978,
+   1978
+  ],
+  "latestMonth": "2025-10",
+  "availableDateRange": [
+   "1990-01",
+   "2025-10"
+  ],
+  "flatTypes": [
+   "3 ROOM",
+   "4 ROOM",
+   "EXECUTIVE"
+  ],
+  "flatModels": [
+   "NEW GENERATION"
+  ],
+  "medianPriceByFlatType": {
+   "3 ROOM": 445888,
+   "4 ROOM": 560000,
+   "EXECUTIVE": 595000
+  },
+  "medianPricePerSqmByFlatType": {
+   "3 ROOM": 6108.05,
+   "4 ROOM": 5714.29,
+   "EXECUTIVE": 3380.69
+  },
+  "flatTypeCohorts": {
+   "3 ROOM": {
+    "flatModels": [
+     "NEW GENERATION"
+    ],
+    "latestMonth": "2025-10",
+    "floorAreaRange": [
+     73,
+     73
+    ],
+    "transactionCount": 5
+   },
+   "4 ROOM": {
+    "flatModels": [
+     "NEW GENERATION"
+    ],
+    "latestMonth": "2025-05",
+    "floorAreaRange": [
+     98,
+     98
+    ],
+    "transactionCount": 1
+   },
+   "EXECUTIVE": {
+    "flatModels": [
+     "ADJOINED FLAT"
+    ],
+    "latestMonth": "2022-12",
+    "floorAreaRange": [
+     161,
+     176
+    ],
+    "transactionCount": 4
+   }
+  },
+  "nearestMrt": {
+   "stationName": "BEDOK RESERVOIR MRT STATION",
+   "distanceMeters": 682,
+   "walkingTimeSeconds": 546
+  },
+  "nearbyMrts": [
+   {
+    "stationName": "BEDOK RESERVOIR MRT STATION",
+    "distanceMeters": 682,
+    "walkingTimeSeconds": 546
+   },
+   {
+    "stationName": "TANAH MERAH MRT STATION",
+    "distanceMeters": 1098,
+    "walkingTimeSeconds": 878
+   },
+   {
+    "stationName": "BEDOK MRT STATION",
+    "distanceMeters": 1129,
+    "walkingTimeSeconds": 903
+   }
+  ],
+  "postalCode": "460115"
+ },
+ {
+  "addressKey": "bedok-39-bedok-sth-rd",
+  "town": "BEDOK",
+  "block": "39",
+  "streetName": "BEDOK STH RD",
+  "displayName": "BEDOK SOUTH PARKVIEW",
+  "coordinates": {
+   "lat": 1.32139766306096,
+   "lng": 103.93973036061
+  },
+  "medianPrice": 448000,
+  "pricePerSqmMedian": 6014.93,
+  "transactionCount": 9,
+  "floorAreaRange": [
+   67,
+   92
+  ],
+  "leaseCommenceRange": [
+   1978,
+   1978
+  ],
+  "latestMonth": "2026-07",
+  "availableDateRange": [
+   "1990-10",
+   "2026-07"
+  ],
+  "flatTypes": [
+   "3 ROOM",
+   "4 ROOM"
+  ],
+  "flatModels": [
+   "NEW GENERATION"
+  ],
+  "medianPriceByFlatType": {
+   "3 ROOM": 430000,
+   "4 ROOM": 510000
+  },
+  "medianPricePerSqmByFlatType": {
+   "3 ROOM": 6119.4,
+   "4 ROOM": 5543.48
+  },
+  "flatTypeCohorts": {
+   "3 ROOM": {
+    "flatModels": [
+     "NEW GENERATION"
+    ],
+    "latestMonth": "2026-07",
+    "floorAreaRange": [
+     67,
+     82
+    ],
+    "transactionCount": 7
+   },
+   "4 ROOM": {
+    "flatModels": [
+     "NEW GENERATION"
+    ],
+    "latestMonth": "2025-07",
+    "floorAreaRange": [
+     92,
+     92
+    ],
+    "transactionCount": 2
+   }
+  },
+  "nearestMrt": {
+   "stationName": "BAYSHORE MRT STATION",
+   "distanceMeters": 878,
+   "walkingTimeSeconds": 702
+  },
+  "nearbyMrts": [
+   {
+    "stationName": "BAYSHORE MRT STATION",
+    "distanceMeters": 878,
+    "walkingTimeSeconds": 702
+   },
+   {
+    "stationName": "TANAH MERAH MRT STATION",
+    "distanceMeters": 907,
+    "walkingTimeSeconds": 726
+   },
+   {
+    "stationName": "BEDOK MRT STATION",
+    "distanceMeters": 1163,
+    "walkingTimeSeconds": 930
+   }
+  ],
+  "postalCode": "460039"
+ },
+ {
+  "addressKey": "ang-mo-kio-727-ang-mo-kio-ave-6",
+  "town": "ANG MO KIO",
+  "block": "727",
+  "streetName": "ANG MO KIO AVE 6",
+  "displayName": null,
+  "coordinates": {
+   "lat": 1.37265516270327,
+   "lng": 103.846063281992
+  },
+  "medianPrice": 320000,
+  "pricePerSqmMedian": 4776.12,
+  "transactionCount": 5,
+  "floorAreaRange": [
+   67,
+   67
+  ],
+  "leaseCommenceRange": [
+   1980,
+   1980
+  ],
+  "latestMonth": "2022-07",
+  "availableDateRange": [
+   "2003-08",
+   "2022-07"
+  ],
+  "flatTypes": [
+   "3 ROOM"
+  ],
+  "flatModels": [
+   "NEW GENERATION"
+  ],
+  "medianPriceByFlatType": {
+   "3 ROOM": 320000
+  },
+  "medianPricePerSqmByFlatType": {
+   "3 ROOM": 4776.12
+  },
+  "flatTypeCohorts": {
+   "3 ROOM": {
+    "flatModels": [
+     "NEW GENERATION"
+    ],
+    "latestMonth": "2022-07",
+    "floorAreaRange": [
+     67,
+     67
+    ],
+    "transactionCount": 5
+   }
+  },
+  "nearestMrt": {
+   "stationName": "ANG MO KIO MRT STATION",
+   "distanceMeters": 511,
+   "walkingTimeSeconds": 409
+  },
+  "nearbyMrts": [
+   {
+    "stationName": "ANG MO KIO MRT STATION",
+    "distanceMeters": 511,
+    "walkingTimeSeconds": 409
+   },
+   {
+    "stationName": "MAYFLOWER MRT STATION",
+    "distanceMeters": 961,
+    "walkingTimeSeconds": 769
+   },
+   {
+    "stationName": "YIO CHU KANG MRT STATION",
+    "distanceMeters": 997,
+    "walkingTimeSeconds": 798
+   }
+  ],
+  "postalCode": "560727"
+ }
+]

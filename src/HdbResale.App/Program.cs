@@ -7,24 +7,8 @@ internal static class Program
 {
     private static void Main(string[] args)
     {
-        if (args.Length == 3 && args[0] == "--sync-snapshot")
-        {
-            try
-            {
-                var directory = HttpSnapshot.SynchronizeAsync(new Uri(args[1]), args[2]).GetAwaiter().GetResult();
-                Console.WriteLine(directory);
-            }
-            catch (Exception e) when (e is IOException or InvalidDataException or UriFormatException or HttpRequestException or System.Text.Json.JsonException or
-                UnauthorizedAccessException or ArgumentException or OperationCanceledException)
-            { Console.Error.WriteLine("Snapshot synchronization failed: " + e.Message); Environment.ExitCode = 1; }
-            return;
-        }
-        if (args.Length == 2 && args[0] == "--snapshot-cache")
-        {
-            try { Environment.SetEnvironmentVariable("HDB_DATA_DIRECTORY", HttpSnapshot.ActiveDirectory(args[1])); }
-            catch (Exception e) when (e is IOException or InvalidDataException or System.Text.Json.JsonException or UnauthorizedAccessException)
-            { Console.Error.WriteLine("Snapshot cache unavailable: " + e.Message); Environment.ExitCode = 1; return; }
-        }
+        // The window reads the HDB Resale Explorer Worker API (HDB_API_BASE_URL, production by default). The
+        // modes below are offline research tools over a prepared source directory; the window never uses one.
         if (args.Length == 3 && args[0] is "--address-coverage" or "--address-coverage-baseline")
         {
             WriteReport(args[2], AddressCoverageStudy.Run(args[1], supportMultiPolygon: args[0] != "--address-coverage-baseline"));
@@ -83,10 +67,8 @@ internal static class Program
             WriteReport(args[2], StartupStudy.Run(args[1]));
             return;
         }
-        Qml.LoadFromRootModule(Environment.GetEnvironmentVariable("HDB_STARTUP_PROFILE") == "1" &&
-            Environment.GetEnvironmentVariable("HDB_STARTUP_VIEW") == "qml-shell" ? "StartupShell" : "Main");
+        Qml.LoadFromRootModule("Main");
         Qml.WaitForExit();
-        if (Environment.GetEnvironmentVariable("HDB_RUNTIME_GATE") == "1" || Environment.GetEnvironmentVariable("HDB_SCALE_GATE") == "1" || Environment.GetEnvironmentVariable("HDB_STARTUP_PROFILE") == "1" || Environment.GetEnvironmentVariable("HDB_BUYER_GATE") == "1") Console.WriteLine("HDB_GATE_EXIT");
         if (Environment.GetEnvironmentVariable("HDB_PACKAGE_SMOKE") == "1") Console.WriteLine("HDB_PACKAGE_EXIT");
     }
     private static void WriteReport<T>(string path, T value)

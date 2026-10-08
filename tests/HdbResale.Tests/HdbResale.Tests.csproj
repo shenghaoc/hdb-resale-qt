@@ -12,11 +12,14 @@
     <Compile Include="../../src/HdbResale.App/MapRowDiff.cs" Link="MapRowDiff.cs" />
     <Compile Include="../../src/HdbResale.App/MapPresentation.cs" Link="MapPresentation.cs" />
     <Compile Include="../../src/HdbResale.App/UiMutationQueue.cs" Link="UiMutationQueue.cs" />
+    <Compile Include="../../src/HdbResale.App/ApiRequests.cs" Link="ApiRequests.cs" />
     <Compile Include="../../src/HdbResale.App/BuyerTrend.cs" Link="BuyerTrend.cs" />
     <Compile Include="../../src/HdbResale.App/BuyerPresentation.cs" Link="BuyerPresentation.cs" />
     <Compile Include="../../src/HdbResale.App/LegacyFactsJsonConverter.cs" Link="LegacyFactsJsonConverter.cs" />
     <None Include="../../docs/coverage/sample/*" Link="coverage/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../docs/coverage/onemap/historical/benchmark.json" Link="historical/benchmark.json" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../data/*" Link="data/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../fixtures/worker-api/**/*.json" Link="fixtures/worker-api/%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../fixtures/web-parity/*.json" Link="fixtures/web-parity/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>
