@@ -13,6 +13,21 @@ ApplicationWindow {
     minimumHeight: 760
     title: "HDB Resale Explorer · 0.1.0 RC"
 
+    // WCAG relative luminance and contrast ratio, for text drawn on a palette colour.
+    function luminance(c) {
+        function linear(v) { return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4) }
+        return 0.2126 * linear(c.r) + 0.7152 * linear(c.g) + 0.0722 * linear(c.b)
+    }
+    function contrastRatio(a, b) { const x = luminance(a), y = luminance(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05) }
+    // The palette's own text colour where it reaches 4.5:1 on the surface, as macOS selections do; otherwise
+    // black or white, whichever reads better (one always reaches 4.58:1). Qt's generic palette pairs white
+    // with its #308cc6 highlight at only 3.69:1.
+    function readableOn(surface, preferred) {
+        if (contrastRatio(preferred, surface) >= 4.5) return preferred
+        const black = Qt.rgba(0, 0, 0, 1), white = Qt.rgba(1, 1, 1, 1)
+        return contrastRatio(black, surface) >= contrastRatio(white, surface) ? black : white
+    }
+
     // The pinned Bridge creates a parentless, JavaScript-owned model wrapper.
     // Keep its JS reference alive across QML GC, including all filter updates.
     readonly property var locatedMapModel: Resales.mapPoints
@@ -406,13 +421,14 @@ ApplicationWindow {
                         onClicked: { transactionsList.forceActiveFocus(); Resales.selectAddress(addressKey) }
                         contentItem: Label {
                             text: addressDelegate.text; font: addressDelegate.font
-                            color: addressDelegate.highlighted ? addressDelegate.palette.highlightedText : addressDelegate.palette.text
+                            color: addressDelegate.highlighted ? window.readableOn(addressDelegate.palette.highlight, addressDelegate.palette.highlightedText)
+                                                               : addressDelegate.palette.text
                         }
                         background: Rectangle {
                             color: addressDelegate.highlighted ? addressDelegate.palette.highlight : addressDelegate.palette.base
                             radius: 3
                             border.width: transactionsList.activeFocus && transactionsList.currentIndex === index ? 2 : 0
-                            border.color: addressDelegate.highlighted ? addressDelegate.palette.highlightedText : addressDelegate.palette.highlight
+                            border.color: addressDelegate.highlighted ? addressDelegate.contentItem.color : addressDelegate.palette.highlight
                         }
                     }
                 }
