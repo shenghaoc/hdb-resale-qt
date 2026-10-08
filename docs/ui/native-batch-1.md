@@ -45,7 +45,10 @@ rejects it. On Fedora, export `QT_QPA_PLATFORM=wayland` before this block
 
 ## 2. Interactive runs (both platforms)
 
-Two passes of F1 to F10. The numbered steps below are the **fixture pass**:
+Two passes of F1 to F10. Run the `case` block from section 1 in the launch
+terminal too (or `export exe` there and open the second terminal from it), so
+`"$exe"` is defined where the application is launched. The numbered steps
+below are the **fixture pass**:
 their addresses, counts and orderings are the recorded snapshot's. The
 **production pass** repeats the same actions against the live API and checks
 only the invariants in "Production pass" below, since production data moves.
@@ -96,7 +99,7 @@ the default S$1,000,000 maximum).
 | S3.4 | Lease and Location groups | Commenced, "Remaining in 2026"; one block point; the two notes in the caption role. |
 | S3.5 | Chart, in the light appearance (set it now if the session is dark) | Title, range caption, axis labels and the two month labels in the caption size; line and dots in the link colour; gaps for months without a sale. |
 | S3.6 | Scroll the details so the chart is half out of view, in both directions | The chart is clipped at the details' edge; nothing is drawn over the list or the heading. **Record the result explicitly; this is the open question from the offscreen captures.** |
-| S3.7 | Latest registrations | Heading, caption, rows separated by hairlines; headings demibold and tabular; details in the secondary colour. |
+| S3.7 | Latest registrations | Heading, caption, 20 rows separated by hairlines, newest first: the first reads 2026-09 · 3 ROOM · S$663,000, the second 2026-06 · 3 ROOM · S$653,000, and months never increase down the list; headings demibold and tabular; details in the secondary colour. |
 | S3.8 | Reset the flat type filter to All flat types, then select 727 ANG MO KIO AVE 6 | Chart replaced by the "No registrations … 24-month window" caption; the inspector still shows four groups. |
 | S3.9 | Reselect 748B, then switch to the dark appearance or colour scheme | Every label, value, note, chart element and separator remains readable; no hard-coded light colour shows. |
 | S3.10 | Raise the system text size or scale factor one step | Labels wrap rather than clip; the label column does not exceed two fifths of the pane; the chart captions scale. |
@@ -112,7 +115,9 @@ Repeat S2.0 to S2.15 and S3.1 to S3.12 against production with these
 invariants instead of the fixture values. S2.0: the launch completes without
 a load error, the status bar's count matches the list and the map shows
 markers. Search (F3): `ang mo kio ave` returns results whose addresses all
-contain those words, ranked with exact-word matches first; `ang mo kio avenue`
+contain those words; `ang mo kio 10` returns block 10 (an exact word match)
+before blocks that merely begin with 10, such as 101 to 109, and no address
+outside Ang Mo Kio; `ang mo kio avenue`
 returns the same results (abbreviation equivalence); the postal code read
 from a selected address's Address group, searched on its own, returns that
 address. Details (F5): selecting any result opens four populated groups whose
@@ -175,8 +180,10 @@ native defect to fix before Stage 4.
 
 Scenario mapping: F1 S2.0 (section 1's `recorded` and `production` are
 supporting evidence, never sufficient); F2 S2.8, S2.13, S3.2; F3 S2.1–S2.8;
-F4 S2.3, S2.5, S2.14; F5 S3.1–S3.5, S3.7, S3.8; F6 S3.13, S3.14, S3.15; F7
+F4 S2.3, S2.5, S2.13 (clearing through a filter), S2.14; F5 S3.1–S3.5, S3.7, S3.8; F6 S3.13, S3.14, S3.15; F7
 S3.6, S3.12; F8 S3.5, S3.8, S3.9 (light and dark both observed); F9 S2.11;
-F10 S2.10. Platform-specific items: S2.0 (window chrome, OSM tiles), S2.3
-(inactive-window rings), S2.9, S2.12, S2.15 (clean exit through the
-platform's own quit or close), S3.9–S3.11 and the platform notes. A scenario's production column needs the production pass too.
+F10 S2.10. Platform-specific items: S2.0 (window chrome, OSM tiles), S2.1 (the
+platform's Find command), S2.3 (inactive-window rings), S2.9, S2.12, S2.15
+(clean exit through the platform's own quit or close), S3.9–S3.11, S3.12
+(wheel, trackpad, keyboard and pointer input, under Wayland on KDE) and the
+platform notes. A scenario's production column needs the production pass too.
