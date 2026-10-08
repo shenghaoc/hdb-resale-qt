@@ -15,71 +15,25 @@ ApplicationWindow {
 
     // The pinned Bridge creates a parentless, JavaScript-owned model wrapper.
     // Keep its JS reference alive across QML GC, including all filter updates.
-    readonly property var locatedMapModel: Resales.startupProbe && Resales.startupView !== "full" ? null : Resales.mapPoints
+    readonly property var locatedMapModel: Resales.mapPoints
 
-    Loader {
-        active: Resales.runtimeGate
-        sourceComponent: Component {
-            RuntimeGate {
-                targetMap: map; targetList: transactionsList
-                townControl: townPicker; priceControl: pricePicker
-                zoomControl: zoomIn; recenterControl: recenter; attributionImage: oneMapLogo
-            }
-        }
-    }
-
-    Loader {
-        active: Resales.scaleGate && !Resales.presentationGate && !Resales.buyerGate
-        sourceComponent: Component { ScaleGate { targetMap: map; targetList: transactionsList; townControl: townPicker; priceControl: pricePicker; attributionImage: oneMapLogo } }
-    }
-
-    Loader {
-        active: Resales.presentationGate
-        sourceComponent: Component { PresentationGate { targetMap: map; targetList: transactionsList; townControl: townPicker; priceControl: pricePicker; attributionImage: oneMapLogo } }
-    }
-
-    Loader {
-        active: Resales.buyerGate
-        sourceComponent: Component { BuyerGate { targetMap: map; targetList: transactionsList; townControl: townPicker; typeControl: typePicker; minimumControl: minimumPicker; priceControl: pricePicker; recencyControl: recencyPicker; attributionImage: oneMapLogo; targetTrendLoader: trendLoader; targetDetailsScroll: detailsScroll; textSurfacePairs: [
-            [versionLabel, window], [introLabel, window], [windowHelpLabel, window], [priceWarningLabel, window],
-            [keyboardHint, window], [leaseLabel, window], [attributionLabel, attributionSurface], [zoomLabel, zoomLabel.background], [mapErrorLabel, mapErrorLabel.background]
-        ] } }
-    }
-
-    Loader {
-        active: Resales.startupProbe
-        sourceComponent: Component {
-            Timer {
-                interval: 25; repeat: true; running: true
-                property double started: Date.now()
-                onTriggered: {
-                    const expected = Resales.startupView === "full" ? Resales.presentationCount : 0
-                    const mapReady = Resales.startupView === "qml-shell" || map.mapReady
-                    if (mapReady && (Resales.startupView !== "full" || Resales.mapViewportReady) && map.mapItems.length === expected && transactionsList.count === Resales.addressCount
-                            && oneMapLogo.status === Image.Ready) {
-                        stop(); Resales.startupReady(); Qt.quit()
-                    } else if (Date.now() - started > 10000) {
-                        console.error("HDB_STARTUP_TIMEOUT"); stop(); Qt.quit()
-                    }
-                }
-            }
-        }
-    }
+    // API responses arrive off the UI thread; apply them here while any request is outstanding.
+    Timer { interval: 50; repeat: true; running: Resales.busy; onTriggered: Resales.pump() }
 
     Timer {
         interval: 50; repeat: true; running: Resales.packageSmoke
         property int ticks: 0
         onTriggered: {
             ticks++
-            if (Resales.selectedMapKey === "") Resales.selectAddress(Resales.firstAddressKey)
-            if (map.mapReady && map.error === Map.NoError && transactionsList.count === Resales.addressCount && Resales.visibleCount === 6 && oneMapLogo.status === Image.Ready
-                    && trendLoader.item && trendLoader.item.pointCount === 24 && trendLoader.item.pointsAgree()) {
+            if (Resales.selectedMapKey === "" && Resales.addressCount > 0) Resales.selectAddress(Resales.firstAddressKey)
+            if (map.mapReady && map.error === Map.NoError && Resales.addressCount > 0 && transactionsList.count === Resales.addressCount
+                    && Resales.detailReady && oneMapLogo.status === Image.Ready && trendLoader.item && trendLoader.item.pointsAgree()) {
                 console.log("HDB_PACKAGE_SHELL")
                 console.log("HDB_PACKAGE_DATA")
                 console.log("HDB_PACKAGE_MAP_READY")
                 console.log("HDB_PACKAGE_CHART_READY")
                 stop(); packageExit.start()
-            } else if (ticks > 100) { console.error("HDB_PACKAGE_FAIL readiness timeout"); stop(); Qt.quit() }
+            } else if (ticks > 600) { console.error("HDB_PACKAGE_FAIL readiness timeout"); stop(); Qt.quit() }
         }
     }
     Timer { id: packageExit; interval: 350; onTriggered: Qt.quit() }
@@ -109,6 +63,11 @@ ApplicationWindow {
         }
         Label { id: introLabel; text: "Explore historical resale records by address. Approximate block locations; not current listings."; color: palette.windowText }
         RowLayout {
+            visible: Resales.statusText.length > 0
+            Label { text: Resales.statusText; font.bold: true; wrapMode: Text.WordWrap; Layout.fillWidth: true; Accessible.name: text }
+            Button { text: "Retry"; visible: Resales.canRetry; Accessible.name: "Retry loading addresses"; onClicked: Resales.retry() }
+        }
+        RowLayout {
             spacing: 12
             ColumnLayout {
                 spacing: 2
@@ -130,48 +89,41 @@ ApplicationWindow {
             }
             ColumnLayout {
                 spacing: 2
-                Label { text: "Minimum price (S$)" }
+                Label { text: "Minimum median (S$)" }
                 SpinBox {
                     id: minimumPicker; from: 0; to: Resales.maximumAvailablePrice; stepSize: 50000
                     value: Resales.minimumPrice; editable: true
-                    onValueModified: Resales.setMinimumPrice(value); Accessible.name: "Minimum resale price"
+                    onValueModified: Resales.setMinimumPrice(value); Accessible.name: "Minimum median resale price"
                 }
             }
             ColumnLayout {
                 spacing: 2
-                Label { text: "Maximum price (S$)" }
+                Label { text: "Maximum median (S$)" }
                 SpinBox {
                     id: pricePicker; from: 0; to: Resales.maximumAvailablePrice; stepSize: 50000
                     value: Resales.maximumPrice; editable: true
-                    onValueModified: Resales.setMaximumPrice(value); Accessible.name: "Maximum resale price"
+                    onValueModified: Resales.setMaximumPrice(value); Accessible.name: "Maximum median resale price"
                 }
             }
             ColumnLayout {
                 spacing: 2
-                Label { text: "Registration window" }
+                Label { text: "Latest registration" }
                 ComboBox {
-                    id: recencyPicker; Layout.minimumWidth: 174; model: ["All months", "Latest 12 months", "Latest 24 months"]
+                    id: recencyPicker; Layout.minimumWidth: 174; model: ["Any time", "Sold in latest 12 months", "Sold in latest 24 months"]
                     currentIndex: Resales.recencyMonths === 12 ? 1 : Resales.recencyMonths === 24 ? 2 : 0
                     onActivated: Resales.setRecencyMonths(currentIndex === 1 ? 12 : currentIndex === 2 ? 24 : 0)
-                    Accessible.name: "Registration month window"
+                    Accessible.name: "Latest registration window"
                 }
             }
             Button { text: "Reset"; Layout.alignment: Qt.AlignBottom; Accessible.name: "Reset all filters"; onClicked: Resales.resetFilters() }
             Item { Layout.fillWidth: true }
         }
-        Label { id: windowHelpLabel; text: "Inclusive price bounds · all statistics use matching transactions · time windows end at source month " + Resales.datasetLatestMonth + " (may be partial)"; font.pixelSize: 12; color: palette.windowText }
+        Label { id: windowHelpLabel; text: "Price bounds apply to each address's median (the selected flat type's, when one is chosen) · figures cover the latest 24 source months · windows keep addresses with a registration since their start and end at source month " + Resales.datasetLatestMonth + " (may be partial)"; font.pixelSize: 12; color: palette.windowText; wrapMode: Text.WordWrap; Layout.fillWidth: true }
         Label { id: priceWarningLabel; visible: Resales.minimumPrice > Resales.maximumPrice; text: "Minimum exceeds maximum. Adjust either bound to show results."; color: palette.windowText; font.bold: true }
         Label { text: Resales.filterSummary; font.bold: true; Accessible.name: text }
         RowLayout {
             Label { text: Resales.presentationSummary; Layout.fillWidth: true; wrapMode: Text.WordWrap }
             Label { text: "Map groups count addresses. Individual pins count sales."; font.pixelSize: 12 }
-        }
-        Flickable {
-            id: diagnosticScroll; contentWidth: width; contentHeight: diagnosticText.implicitHeight
-            ScrollBar.vertical: ScrollBar {}
-            visible: Resales.importDiagnostics.length > 0
-            Layout.fillWidth: true; Layout.preferredHeight: 60; Layout.maximumHeight: 60; clip: true
-            Label { id: diagnosticText; width: diagnosticScroll.width; text: Resales.importDiagnostics; wrapMode: Text.WordWrap }
         }
         RowLayout {
             Layout.fillWidth: true
@@ -183,11 +135,6 @@ ApplicationWindow {
                 Layout.preferredWidth: 800
                 Map {
                     id: map
-                    property int createdDelegates: 0
-                    property int destroyedDelegates: 0
-                    property double lastDelegateCreatedMs: 0
-                    property double lastDelegateDestroyedMs: 0
-                    property bool traceDelegates: Resales.scaleLifecycle
                     anchors.fill: parent
                     plugin: osm
                     activeMapType: supportedMapTypes[supportedMapTypes.length - 1]
@@ -218,9 +165,6 @@ ApplicationWindow {
                         // No undocumented incubateDelegates setting is used.
                         model: window.locatedMapModel
                         delegate: MapQuickItem {
-                            Component.onCompleted: if (map.traceDelegates) { map.createdDelegates++; map.lastDelegateCreatedMs = Date.now() }
-                            Component.onDestruction: if (map.traceDelegates) { map.destroyedDelegates++; map.lastDelegateDestroyedMs = Date.now() }
-                            required property string transactionId
                             required property double latitude
                             required property double longitude
                             required property string priceLabel
@@ -376,7 +320,6 @@ ApplicationWindow {
                     delegate: ItemDelegate {
                         required property int index
                         required property string addressKey
-                        required property string transactionId
                         required property string address
                         required property string priceLabel
                         required property string townName
@@ -395,7 +338,7 @@ ApplicationWindow {
                         }
                     }
                 }
-                Label { visible: Resales.addressCount === 0; text: "No matching addresses. Adjust the filters or reset."; wrapMode: Text.WordWrap; Layout.fillWidth: true }
+                Label { visible: Resales.addressCount === 0 && !Resales.loading && !Resales.canRetry; text: "No matching addresses. Adjust the filters or reset."; wrapMode: Text.WordWrap; Layout.fillWidth: true }
                 Rectangle { Layout.fillWidth: true; height: 1; color: "#ccd5da" }
                 Label { text: Resales.selectedHeading; font.bold: true; font.pixelSize: 17; wrapMode: Text.WordWrap; Layout.fillWidth: true }
                 Label { text: Resales.selectionMapStatus; font.pixelSize: 12; wrapMode: Text.WordWrap; Layout.fillWidth: true }
@@ -415,12 +358,13 @@ ApplicationWindow {
                         width: detailsScroll.availableWidth; spacing: 8
                         Label { width: parent.width; text: Resales.selectedMetrics; wrapMode: Text.WordWrap; font.pixelSize: 13 }
                         Label { id: leaseLabel; width: parent.width; text: Resales.selectedLease; wrapMode: Text.WordWrap; font.pixelSize: 12; color: palette.windowText }
+                        Label { width: parent.width; text: Resales.detailStatus; visible: text.length > 0; wrapMode: Text.WordWrap; font.pixelSize: 12; font.italic: true }
                         Loader {
                             id: trendLoader; width: parent.width
-                            active: Resales.selectedMapKey !== ""
+                            active: Resales.detailReady
                             sourceComponent: Component { BuyerTrendChart {} }
                         }
-                        Label { width: parent.width; text: "Recent matching transactions (up to 15)"; visible: Resales.selectedMapKey !== ""; font.bold: true }
+                        Label { width: parent.width; text: "Latest registrations at this address (up to 20, every flat type)"; visible: Resales.detailReady; font.bold: true; wrapMode: Text.WordWrap }
                         Repeater {
                             model: JSON.parse(Resales.recentTransactionsJson)
                             delegate: Column {
@@ -431,14 +375,14 @@ ApplicationWindow {
                                 Rectangle { width: parent.width; height: 1; color: "#e3e8eb" }
                             }
                         }
-                        Label { width: parent.width; text: "Address evidence"; visible: Resales.selectedMapKey !== ""; font.bold: true }
-                        Label { width: parent.width; text: Resales.selectedEvidence; wrapMode: Text.WordWrap; font.pixelSize: 11 }
+                        Label { width: parent.width; text: "Location"; visible: Resales.selectedMapKey !== ""; font.bold: true }
+                        Label { width: parent.width; text: Resales.selectedLocation; wrapMode: Text.WordWrap; font.pixelSize: 11 }
                     }
                 }
             }
         }
         Label {
-            text: 'Independent research tool · HDB / ACRA via data.gov.sg · <a href="https://data.gov.sg/open-data-licence">Singapore Open Data Licence</a>'
+            text: 'Independent research tool · HDB resale prices via data.gov.sg, served by the HDB Resale Explorer API · <a href="https://data.gov.sg/open-data-licence">Singapore Open Data Licence</a>'
             font.pixelSize: 11; onLinkActivated: (link) => Qt.openUrlExternally(link)
         }
     }
@@ -448,7 +392,7 @@ ApplicationWindow {
         contentItem: Column {
             spacing: 12
             Label { width: parent.width; text: Resales.aboutText; wrapMode: Text.WordWrap }
-            Label { width: parent.width; text: Resales.importSummary; wrapMode: Text.WordWrap }
+            Label { width: parent.width; text: Resales.datasetSummary; wrapMode: Text.WordWrap }
             Label { text: '<a href="https://github.com/shenghaoc/hdb-resale-qt">Source and licence notices</a>'; onLinkActivated: (link) => Qt.openUrlExternally(link) }
         }
     }

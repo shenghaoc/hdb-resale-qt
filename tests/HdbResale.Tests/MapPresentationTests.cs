@@ -5,22 +5,22 @@ using Xunit;
 namespace HdbResale.Tests;
 public sealed class MapPresentationTests
 {
-    private static readonly ResaleTransaction Transaction=ExplorerStateTests.Fixture().Accepted[0];
-    private static BlockSummary Row(string key,double latitude=1.35,double longitude=103.82,int count=1)=>new(key,
-        Transaction with {Id="tx-"+key,Location=new(new(latitude,longitude),CoordinateQuality.BlockApproximation,"test")},count,100,200,150);
+    private static MapAddress Row(string key,double latitude=1.35,double longitude=103.82,int count=1)=>
+        new(key,latitude,longitude,"1 TEST ST "+key,count,150,"2026-09");
     private static string[] Members(MapPresentationPlan plan)=>plan.Rows.SelectMany(r=>JsonSerializer.Deserialize<string[]>(r.MembershipJson)!).Order(StringComparer.Ordinal).ToArray();
     private static MapViewport View(double zoom=11,double latitude=1.3521,double longitude=103.8198,double width=1000,double height=600)=>new(latitude,longitude,zoom,width,height);
     [Fact] public void EveryInViewAddressAppearsExactlyOnceAndOutsideTruthIsNotDropped()
     {
-        var rows=Enumerable.Range(0,7618).Select(i=>Row($"address-{i:D4}",1.26+i%90*0.002,103.63+i/90*0.004,i%20+1)).ToArray();
+        var rows=Enumerable.Range(0,9730).Select(i=>Row($"address-{i:D4}",1.26+i%90*0.002,103.63+i/90*0.004,i%20+1)).ToArray();
         var plan=MapPresentation.Plan(rows,View(),"");
-        Assert.Equal(7618,plan.MappedAddresses);
-        Assert.Equal(7618,plan.InViewAddresses);
-        Assert.Equal(rows.Select(r=>r.Key),Members(plan));
+        Assert.Equal(9730,plan.MappedAddresses);
+        Assert.Equal(rows.Length,plan.InViewAddresses+rows.Count(r=>!MapPresentation.Contains(View(),r.Latitude,r.Longitude)));
+        Assert.Equal(rows.Where(r=>MapPresentation.Contains(View(),r.Latitude,r.Longitude)).Select(r=>r.Key),Members(plan));
         Assert.True(plan.ClusterCount>0);
         Assert.True(plan.Rows.Count<200);
-        Assert.Equal(rows.Sum(r=>r.Count),plan.Rows.Sum(r=>r.TransactionCount));
         Assert.Equal(plan.InViewAddresses,plan.Rows.Sum(r=>r.AddressCount));
+        Assert.Equal(rows.Length,plan.InViewAddresses);
+        Assert.Equal(rows.Sum(r=>r.SalesCount),plan.Rows.Sum(r=>r.TransactionCount));
         var close=MapPresentation.Plan(rows,View(16),"");
         Assert.Equal(rows.Length,close.MappedAddresses);
         Assert.True(close.InViewAddresses<rows.Length);
@@ -29,22 +29,23 @@ public sealed class MapPresentationTests
         foreach(var row in close.Rows)
         {
             var source=rows.Single(r=>r.Key==row.Key);
-            Assert.Equal(source.Latest.Id,row.TransactionId);
-            Assert.Equal(source.Latest.Location.Point!.Latitude,row.Latitude);
-            Assert.Equal(source.Latest.Location.Point.Longitude,row.Longitude);
+            Assert.Equal(source.Latitude,row.Latitude);
+            Assert.Equal(source.Longitude,row.Longitude);
+            Assert.Equal(source.SalesCount,row.TransactionCount);
         }
     }
-    [Fact] public void LowZoomGroupingIsDeterministicAndDoesNotInventAnAddressOrTransaction()
+    [Fact] public void LowZoomGroupingIsDeterministicAndDoesNotInventAnAddressOrSale()
     {
         var rows=new[]{Row("a"),Row("b",1.3501,103.8201,3),Row("c",1.3502,103.8202,7)};
         var first=MapPresentation.Plan(rows,View(),"");
         var second=MapPresentation.Plan(rows,View(),"");
         Assert.Equal(first.Rows,second.Rows);
         var cluster=Assert.Single(first.Rows);
-        Assert.True(cluster.IsCluster);Assert.Equal("",cluster.TransactionId);
+        Assert.True(cluster.IsCluster);
         Assert.Equal(3,cluster.AddressCount);Assert.Equal(11,cluster.TransactionCount);
         Assert.StartsWith("@cell:",cluster.Key);
         Assert.Contains("mapped addresses",cluster.Address);
+        Assert.Equal("3 addresses · 11 sales · zoom in",cluster.PriceLabel);
         Assert.Equal(new[]{"a","b","c"},Members(first));
     }
     [Fact] public void SelectedAddressIsExtractedWithoutDoubleCountingAndOffscreenSelectionIsPreserved()
@@ -54,13 +55,11 @@ public sealed class MapPresentationTests
         Assert.True(plan.SelectedInView);
         Assert.Equal(new[]{"a","b","c"},Members(plan));
         var pin=Assert.Single(plan.Rows,r=>r.Key=="b");
-        Assert.False(pin.IsCluster);Assert.Equal("tx-b",pin.TransactionId);
-        var state=new ExplorerState(rows.Select(r=>r.Latest).ToArray());state.Select("tx-b");
+        Assert.False(pin.IsCluster);
+        Assert.Equal("1 sale · median S$150 · latest 2026-09",pin.PriceLabel);
         var elsewhere=MapPresentation.Plan(rows,View(16,1.2,103.6),"b");
         Assert.False(elsewhere.SelectedInView);Assert.Empty(elsewhere.Rows);
-        Assert.Equal("tx-b",state.Selected!.Id);
         Assert.Equal(rows.Length,elsewhere.MappedAddresses);
-        state.Filter("All towns",0);Assert.Null(state.Selected);
     }
     [Fact] public void NullInvalidAndEmptyViewportNeverChangesCompleteTruth()
     {
@@ -83,17 +82,23 @@ public sealed class MapPresentationTests
     }
     [Fact] public void ViewportAndFilterReentryRemainFifoWithoutChangingSelectionForCameraOnlyInput()
     {
-        var state=new ExplorerState(ExplorerStateTests.Fixture().Accepted);var id=state.Visible[0].Id;state.Select(id);
+        var explorer=AddressExplorerTests.Recorded();
+        var key=explorer.Addresses[0].AddressKey;explorer.Select(key);
         var queue=new UiMutationQueue();var observed=new List<string>();MapPresentationPlan? plan=null;
-        void Project(MapViewport viewport){plan=MapPresentation.Plan(BlockSummaries.Located(state.Visible),viewport,state.Selected is null?"":BlockSummaries.Key(state.Selected));observed.Add(state.Selected?.Id??"empty");}
+        void Project(MapViewport viewport)
+        {
+            var rows=explorer.Addresses.Select(a=>new MapAddress(a.AddressKey,a.Coordinates.Lat,a.Coordinates.Lng,a.Address,
+                a.TransactionCount,a.MedianPrice,a.LatestMonth)).ToArray();
+            plan=MapPresentation.Plan(rows,viewport,explorer.Selected?.AddressKey??"");observed.Add(explorer.Selected?.AddressKey??"empty");
+        }
         queue.Enqueue(()=>{
             queue.Enqueue(()=>Project(View(16,1.2,103.6)));
-            queue.Enqueue(()=>state.Filter("All towns",0));
+            queue.Enqueue(()=>explorer.Filter(AddressFilters.Default with{MaximumPrice=0}));
             queue.Enqueue(()=>Project(View()));
-            queue.Enqueue(()=>state.Reset());
+            queue.Enqueue(()=>explorer.Reset());
             queue.Enqueue(()=>Project(View()));
         });
-        Assert.Equal(new[]{id,"empty","empty"},observed);Assert.Null(state.Selected);
+        Assert.Equal(new[]{key,"empty","empty"},observed);Assert.Null(explorer.Selected);
         Assert.Equal(6,plan!.MappedAddresses);Assert.Equal(5,queue.MaximumPendingCount);
     }
     [Fact] public void PresentationDiffRetainsKeysAndNotifiesOnlyChangedRoles()

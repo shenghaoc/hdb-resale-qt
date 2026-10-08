@@ -16,10 +16,6 @@ Column {
             for (const point of trend.Points)
                 points.push(Qt.point(point.X, point.PriceThousands === null ? NaN : point.PriceThousands))
         }
-        if (Resales.runtimeGateFault === "buyer-drop-trend" && points.length > 0) points.pop()
-        if (Resales.runtimeGateFault === "buyer-nan-trend") {
-            for(let i=0;i<points.length;i++) if(Number.isFinite(points[i].y)) { points[i]=Qt.point(points[i].x,NaN);break }
-        }
         medianSeries.replace(points)
     }
     function pointsAgree() {
@@ -35,7 +31,7 @@ Column {
     }
     onTrendChanged: if(completed) refreshSeries()
     Component.onCompleted: { completed=true; refreshSeries() }
-    Label { text: "Monthly median price · matching sales"; font.bold: true; width: parent.width; wrapMode: Text.WordWrap }
+    Label { text: "Monthly median price · every registration at this address"; font.bold: true; width: parent.width; wrapMode: Text.WordWrap }
     Label {
         id: metadataLabel
         width: parent.width; font.pixelSize: 11; color: palette.windowText; wrapMode: Text.WordWrap
@@ -45,7 +41,7 @@ Column {
         id: graph
         width: parent.width; height: visible ? 130 : 0
         visible: root.trend.ObservedMonths > 0
-        Accessible.name: "Monthly median resale prices in thousands of Singapore dollars. Gaps mean no matching sale."
+        Accessible.name: "Monthly median resale prices in thousands of Singapore dollars. Gaps mean no sale that month."
         marginLeft: 4; marginRight: 8; marginTop: 4; marginBottom: 2
         theme: GraphsTheme {
             colorScheme: GraphsTheme.ColorScheme.Automatic
@@ -81,7 +77,7 @@ Column {
     Label {
         id: cautionLabel
         width: parent.width; wrapMode: Text.WordWrap; font.pixelSize: 11; color: palette.windowText
-        text: graph.visible ? "Gaps mean no matching sale; dots show observed monthly medians. Flat-type and price filters change this cohort."
-                            : "No matching registrations in this 24-month display window."
+        text: graph.visible ? "Gaps mean no sale that month; dots show observed monthly medians across every flat type."
+                            : "No registrations at this address in this 24-month display window."
     }
 }
