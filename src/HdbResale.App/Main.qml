@@ -641,7 +641,10 @@ ApplicationWindow {
                     spacing: theme.m
                     Label {
                         visible: text.length > 0
-                        Layout.minimumWidth: 0; elide: Text.ElideRight
+                        // fillWidth lets the layout shrink it (a non-filling item keeps its preferred width); the
+                        // maximum keeps it from growing past its text, rounded up so whole pixels never elide it.
+                        Layout.fillWidth: true; Layout.maximumWidth: Math.ceil(implicitWidth); Layout.minimumWidth: 0
+                        elide: Text.ElideRight
                         text: Resales.filterSummary; font.pointSize: window.font.pointSize * theme.captionScale; Accessible.name: text
                     }
                     // Compact windows keep the count and the licence; About has the rest.
