@@ -19,8 +19,8 @@ in-process, not through the platform's input path. Expected: every mode prints
 `PASS`, with no QML warning in its log.
 
 ```sh
-dotnet build -c Release -m:1
-dotnet test -c Release --no-build -m:1
+dotnet build -c Release -m:1 && dotnet test -c Release --no-build -m:1 || { echo "build or tests failed: stop here, the smoke modes would exercise a stale executable"; false; }
+# continue only after the line above printed nothing
 case "$(uname)" in
   Darwin) # the staged bundle, so macOS and its accessibility tools see the application, not a bare host
     exe="$PWD/src/HdbResale.App/obj/Release/net10.0/HdbResale.app/Contents/MacOS/HdbResale.App" ;;
@@ -121,9 +121,12 @@ the default S$1,000,000 maximum).
 ### Production pass
 
 Repeat S2.0 to S2.15 and S3.1 to S3.12 against production. The invariants
-below replace the fixture's data-dependent values; S2.9 to S2.11, S2.15,
-S3.6 and S3.9 to S3.12 keep their expectations as written, and S3.5 keeps
-them for the address chosen under Chart (F8) below. S3.7 on
+below replace the fixture's data-dependent values; S2.9, S2.11, S2.15,
+S3.6 and S3.9 to S3.12 keep their expectations as written; S2.10 prepares
+its search from the pinned summaries instead of `748`: type the postal code
+of a listed address (one result) and require that text, that one identity
+and the count of one to be unchanged after Escape behind About; S3.5 keeps
+its expectations for the address chosen under Chart (F8) below. S3.7 on
 production, with the flat type reset to All flat types: the first row's month
 is the address's latest month shown in the list (the all-types month), and
 months never increase down the list. Registration rows carry no address, so
@@ -205,8 +208,10 @@ highest and lowest `medianPrice`; the y axis runs from
 floor(min ÷ 50,000) × 50 − 50 to ceiling(max ÷ 50,000) × 50 + 50 thousand
 (min and max over the window's `medianPrice`, the lower bound never below 0),
 so a chart keeping the fixture's 600 to 1,150 scale for a differently priced
-address fails; and the highest dot sits visibly nearer the top bound than
-the lowest dot sits, in proportion to their `medianPrice` values. Filters
+address fails; and the highest and lowest dots each sit at the proportional
+height (value − lower bound) ÷ (upper bound − lower bound) of the plot area,
+judged against the axis labels (no ordering between their two margins is
+implied; the bounds round outward independently). Filters
 (F2): choose each bound from the live list so it must act: a maximum just
 below a listed address's median excludes that address, a minimum just above
 another's median excludes it, and a registration window shorter than the
