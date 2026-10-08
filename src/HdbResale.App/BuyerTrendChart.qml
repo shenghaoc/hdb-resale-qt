@@ -45,47 +45,59 @@ Column {
         font.features: { "tnum": 1 }
         text: root.trend.Start + "–" + root.trend.End + " · " + root.trend.Sales + " sales in " + root.trend.ObservedMonths + " observed months"
     }
-    GraphsView {
-        id: graph
-        width: parent.width; height: visible ? 130 : 0
-        visible: root.trend.ObservedMonths > 0
-        Accessible.name: "Monthly median resale prices in thousands of Singapore dollars. Gaps mean no sale that month."
-        marginLeft: 4; marginRight: 8; marginTop: 4; marginBottom: 2
-        theme: GraphsTheme {
-            colorScheme: GraphsTheme.ColorScheme.Automatic
-            backgroundVisible: false
-            plotAreaBackgroundVisible: false
-            axisYLabelFont.pointSize: root.captionSize
-            axisXLabelFont.pointSize: root.captionSize
-            axisX.labelTextColor: root.palette.windowText
-            axisY.labelTextColor: root.palette.windowText
-            labelTextColor: root.palette.windowText
-            grid.mainColor: root.palette.mid
-        }
-        axisX: ValueAxis { min: 0; max: Math.max(1, root.trend.Points.length - 1); labelsVisible: false; gridVisible: false; subGridVisible: false }
-        axisY: ValueAxis {
-            min: root.trend.MinimumY; max: root.trend.MaximumY
-            tickInterval: (max-min)/4; labelDecimals: 0; subGridVisible: false
-            titleText: "S$000"; titleFont.pointSize: root.captionSize
-        }
-        LineSeries {
-            id: medianSeries; color: root.palette.link; width: 2
-            pointDelegate: Rectangle {
-                property real pointValueY
-                width: 5; height: 5; radius: 2.5; color: root.palette.link
-                visible: Number.isFinite(pointValueY)
+    Item {
+        id: plot
+        readonly property bool shown: root.trend.ObservedMonths > 0
+        width: parent.width; height: shown ? 130 : 0
+        visible: shown
+        GraphsView {
+            id: graph
+            anchors.fill: parent
+            Accessible.name: "Monthly median resale prices in thousands of Singapore dollars. Gaps mean no sale that month."
+            marginLeft: 4; marginRight: 8; marginTop: 4; marginBottom: 2
+            theme: GraphsTheme {
+                colorScheme: GraphsTheme.ColorScheme.Automatic
+                backgroundVisible: false
+                plotAreaBackgroundVisible: false
+                axisYLabelFont.pointSize: root.captionSize
+                axisXLabelFont.pointSize: root.captionSize
+                axisX.labelTextColor: root.palette.windowText
+                axisY.labelTextColor: root.palette.windowText
+                labelTextColor: root.palette.windowText
+                grid.mainColor: root.palette.mid
+            }
+            axisX: ValueAxis { min: 0; max: Math.max(1, root.trend.Points.length - 1); labelsVisible: false; gridVisible: false; subGridVisible: false }
+            axisY: ValueAxis {
+                min: root.trend.MinimumY; max: root.trend.MaximumY
+                // Ticks start at the lower bound (Qt Graphs starts them at zero), so the labels mark both bounds and
+                // the middle. The bounds are multiples of 50 (thousand), so every label is a whole number.
+                tickAnchor: min; tickInterval: (max - min) / 2; labelDecimals: 0; subGridVisible: false
+                titleText: "S$000"; titleFont.pointSize: root.captionSize
+            }
+            LineSeries {
+                id: medianSeries; color: root.palette.link; width: 2
+                pointDelegate: Rectangle {
+                    property real pointValueY
+                    width: 5; height: 5; radius: 2.5; color: root.palette.link
+                    visible: Number.isFinite(pointValueY)
+                }
             }
         }
-    }
-    Row {
-        width: parent.width; visible: graph.visible
-        Label { width: root.width/2; text: root.trend.Start; font.pointSize: root.captionSize; color: root.theme.secondaryText; font.features: { "tnum": 1 } }
-        Label { width: root.width/2; text: root.trend.End; horizontalAlignment: Text.AlignRight; font.pointSize: root.captionSize; color: root.theme.secondaryText; font.features: { "tnum": 1 } }
+        // The first and last months label the ends of the x axis, in the band Qt Graphs keeps below it for labels
+        // of its own (hidden: a value axis would print month indices), rather than in a row under the chart.
+        Label {
+            x: graph.plotArea.x; anchors.bottom: parent.bottom; anchors.bottomMargin: graph.marginBottom
+            text: root.trend.Start; font.pointSize: root.captionSize; color: root.theme.secondaryText; font.features: { "tnum": 1 }
+        }
+        Label {
+            x: graph.plotArea.x + graph.plotArea.width - width; anchors.bottom: parent.bottom; anchors.bottomMargin: graph.marginBottom
+            text: root.trend.End; font.pointSize: root.captionSize; color: root.theme.secondaryText; font.features: { "tnum": 1 }
+        }
     }
     Label {
         id: cautionLabel
         width: parent.width; wrapMode: Text.WordWrap; font.pointSize: root.captionSize; color: root.theme.secondaryText
-        text: graph.visible ? qsTr("Every flat type. Gaps mean no sale that month; dots are observed monthly medians.")
-                            : qsTr("No registrations at this address in this 24-month window.")
+        text: plot.shown ? qsTr("Every flat type. Gaps mean no sale that month; dots are observed monthly medians.")
+                         : qsTr("No registrations at this address in this 24-month window.")
     }
 }
