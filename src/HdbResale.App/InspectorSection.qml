@@ -50,14 +50,19 @@ ColumnLayout {
             }
         }
     }
-    // The label column is as wide as the widest label, capped at two fifths of the section so values keep room.
-    TextMetrics { id: labels; font: root.Window.window.font; text: root.widestLabel() }
-    readonly property int labelWidth: Math.min(Math.ceil(labels.advanceWidth), Math.floor(root.width * 0.4))
-    function widestLabel() {
-        let widest = ""
-        for (const fact of root.facts) if (fact.label.length > widest.length) widest = fact.label
-        return widest
+    // The label column is as wide as the widest label measured in the platform font (character counts mislead with
+    // proportional fonts), capped at two fifths of the section so values keep room.
+    TextMetrics { id: labels; font: root.Window.window.font; onFontChanged: root.measureLabels() }
+    property int widestLabel: 0
+    readonly property int labelWidth: Math.min(widestLabel, Math.floor(root.width * 0.4))
+    // Measured imperatively: a binding that set the metrics' text would read its own result back.
+    function measureLabels() {
+        let widest = 0
+        for (const fact of root.facts) { labels.text = fact.label; widest = Math.max(widest, labels.advanceWidth) }
+        widestLabel = Math.ceil(widest)
     }
+    onFactsChanged: measureLabels()
+    Component.onCompleted: measureLabels()
     Label {
         visible: root.note !== ""; text: root.note; color: root.theme.secondaryText
         font.pointSize: Window.window.font.pointSize * root.theme.captionScale
