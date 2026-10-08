@@ -1,8 +1,11 @@
 # Native UI acceptance: macOS and Linux KDE
 
 The native-first UI redesign is accepted on **two platforms with equal standing**:
-macOS and Linux KDE Plasma on Wayland. The application was first developed and
-tested on Fedora KDE; the redesign emphasises macOS. Neither is secondary.
+macOS and Linux KDE Plasma on Wayland. The owner develops on Fedora KDE; the
+checked-in Linux records are a Debian 13 XFCE/X11 run ([docs/linux.md](../linux.md))
+and a Fedora KDE run through XWayland ([docs/pr8-review-verification.md](../pr8-review-verification.md)).
+No native KDE/Wayland acceptance has been recorded yet. The redesign emphasises
+macOS. Neither platform is secondary.
 
 Acceptance is recorded per platform. A scenario that passed on one platform
 is not accepted on the other, and the record says so. Three outcomes exist for
@@ -13,18 +16,28 @@ every scenario on every platform: **passed**, **failed**, **unverified**.
 - A real desktop session on the platform: Cocoa on macOS, a KDE Plasma
   Wayland session on Linux. Interaction through the real menu bar, keyboard and
   pointer.
-- The platform's own Qt style: the `macOS` style on macOS, the style KDE
-  selects (Breeze through the platform theme) on Plasma. Neither platform's
-  styling is forced onto the other, and no custom control is introduced to make
-  the two look alike.
-- Offscreen, Xvfb and headless runs are regression checks. They run in the
-  web coding environment and in CI, and they catch functional regressions. They
-  establish neither macOS nor KDE/Wayland acceptance.
+- The platform's own Qt style, with nothing set by the application: the
+  `macOS` style on macOS; on Plasma, whatever the session selects for Qt Quick
+  Controls applications. Plasma exports `QT_QUICK_CONTROLS_STYLE=org.kde.desktop`
+  when qqc2-desktop-style is installed, which draws the controls with Breeze;
+  without it Qt's Linux default is Fusion with Plasma's palette. The record
+  names the style that loaded. Neither platform's styling is forced onto the
+  other, and no custom control is introduced to make the two look alike.
+- Offscreen runs are regression checks: the smoke modes of
+  `tools/api_native_smoke.py` run offscreen in the web coding environment, by
+  hand, before each push. CI (`.github/workflows/domain.yml`) builds and runs
+  the C# and Python unit tests only; it does not build or run the application.
+  Neither establishes macOS or KDE/Wayland acceptance.
 
 ## Shared functional scenarios
 
 The same scenarios run on both platforms, against the recorded Worker API
-fixtures (`tools/api_native_smoke.py --mode recorded`) and the production API.
+fixtures and the production API. For the fixtures, start
+`python3 tools/api_fixture_server.py --port 8787` and launch the application
+with `HDB_API_BASE_URL=http://127.0.0.1:8787/`; this is an ordinary interactive
+run. (`tools/api_native_smoke.py --mode recorded` is a readiness check: it sets
+`HDB_PACKAGE_SMOKE=1`, selects an address itself and exits, so it cannot be used
+for these scenarios.)
 
 | # | Scenario | Expected on both platforms |
 |---|---|---|
@@ -69,7 +82,7 @@ window id). A run through XWayland does not satisfy any row below.
 - Map tiles render through the OSM plugin; markers and the selection highlight are visible.
 - Light and dark colour schemes follow Plasma's scheme, including the chart.
 - Accessibility: the application is visible to AT-SPI (Orca or Accerciser) with row names, selection state and inspector facts.
-- Desktop integration: application menu entry and icon, window title, and clean exit from the window frame's close.
+- Window title, and clean exit from the window frame's close. (The application menu entry and icon arrive with the package; see the packaging milestone.)
 
 ## Linux packaging acceptance (separate milestone)
 
@@ -77,6 +90,7 @@ RPM and DEB installation and launch are accepted separately from the UI stages:
 
 - The package stages the Wayland and XCB platform plugins with their runtime dependencies, so a Plasma Wayland session runs it natively.
 - Install the package on a clean system (Fedora for RPM, Debian or Ubuntu for DEB).
+- The package installs a `.desktop` entry and an application icon; the application appears in the menu with that icon.
 - Launch from the application menu and from the terminal; the Worker API loads; the chart renders (Qt Graphs and its Quick 3D runtime are bundled or depended on).
 - Uninstall leaves no application files behind.
 
@@ -91,7 +105,16 @@ scenario per platform; "unverified" is a valid and expected entry.
 
 | Scenario | macOS | KDE Plasma/Wayland |
 |---|---|---|
-| F1–F10 | unverified | unverified |
+| F1 Launch and load | unverified | unverified |
+| F2 Filters | unverified | unverified |
+| F3 Search | unverified | unverified |
+| F4 Selection sync | unverified | unverified |
+| F5 Details | unverified | unverified |
+| F6 Loading and errors | unverified | unverified |
+| F7 Scrolling | unverified | unverified |
+| F8 Chart | unverified | unverified |
+| F9 Compact layout | unverified | unverified |
+| F10 About and modal isolation | unverified | unverified |
 | Platform-specific items | unverified | unverified |
 | RPM/DEB packaging | — | unverified |
 
