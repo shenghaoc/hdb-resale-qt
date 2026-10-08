@@ -194,8 +194,15 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
         NotifyPresentation();
         NotifySelection();
     }
-    private void NotifySelection() => Notify(nameof(SelectedMapKey), nameof(SelectedAddressIndex), nameof(SelectedHeading),
-        nameof(SelectedMetrics), nameof(SelectedLease), nameof(SelectedLocation), nameof(DetailStatus), nameof(DetailReady), nameof(CanRetryDetail),
+    private void NotifySelection()
+    {
+        Notify(nameof(SelectedMapKey), nameof(SelectedAddressIndex), nameof(SelectedHeading), nameof(SelectedMetrics),
+            nameof(SelectedLease), nameof(SelectedLocation));
+        NotifyDetail();
+    }
+    // A detail response leaves the selection as it was, so only what depends on the details changes: the list keeps
+    // its scroll position and the selection is not announced again.
+    private void NotifyDetail() => Notify(nameof(DetailStatus), nameof(DetailReady), nameof(CanRetryDetail),
         nameof(RecentTransactionsJson), nameof(TrendJson));
 
     public bool CanRetryDetail => details.CanRetry;
@@ -207,7 +214,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     private void DetailChanged()
     {
         Notify(nameof(Busy));
-        NotifySelection();
+        NotifyDetail();
     }
 
     public string SelectionMapStatus => Selected is null ? "" : MapPoints.SelectedInView

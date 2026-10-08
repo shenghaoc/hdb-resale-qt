@@ -12,8 +12,10 @@ Item {
     property double started: Date.now()
     property int frames: 0
     property var remembered: ({})
+    property int selectionSignals: 0
     TestEvent { id: events }
     Connections { target: gate.targetWindow; function onFrameSwapped() { gate.frames++ } }
+    Connections { target: Resales; function onSelectedMapKeyChanged() { gate.selectionSignals++ } }
     readonly property var w: targetWindow
     readonly property var list: targetWindow.resultList
     readonly property var search: targetWindow.searchField
@@ -49,7 +51,9 @@ Item {
             if (Resales.searchText !== "bedok res" || list.count !== 3) return
             if (!same(keys(), expected)) { fail("search order " + keys()); return }
             if (Resales.mappedCount !== 3) { fail("map shows " + Resales.mappedCount + " of the 3 listed addresses"); return }
-            key(Qt.Key_Down); key(Qt.Key_Down); key(Qt.Key_Return)
+            key(Qt.Key_Down); key(Qt.Key_Down)
+            selectionSignals = 0
+            key(Qt.Key_Return)
             advance("search-filters-list-and-map"); break
         }
         case 3: {
@@ -58,6 +62,8 @@ Item {
             if (!w.detailsView.visible || !row.highlighted || !row.Accessible.selected || !search.activeFocus) {
                 fail("selection not shown: details=" + w.detailsView.visible + " highlighted=" + row.highlighted); return
             }
+            // Loading the details must not signal the selection again (it would re-announce it and move the list).
+            if (selectionSignals !== 1) { fail("one selection signalled " + selectionSignals + " times"); return }
             type(" 747")                               // the selected 748B no longer matches
             advance("keyboard-select"); break
         }
