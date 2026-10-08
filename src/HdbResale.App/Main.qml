@@ -21,6 +21,13 @@ ApplicationWindow {
     FontMetrics { id: textMetrics; font: window.font }
     Theme { id: theme; unit: window.unit }
 
+    // When a compact selection hides the focused list, the details' back button takes the keyboard focus.
+    function keepFocusInCompactDetails() {
+        const item = activeFocusItem
+        if (compact && Resales.selectedMapKey !== "" && (!item || !item.visible || item === contentItem || item === contentItem.parent))
+            detailsBack.forceActiveFocus(Qt.OtherFocusReason)
+    }
+
     // WCAG relative luminance and contrast ratio, for text drawn on a palette colour.
     function luminance(c) {
         function linear(v) { return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4) }
@@ -173,7 +180,8 @@ ApplicationWindow {
                     visible: !window.compact || viewTabs.currentIndex === 0
                     clip: true
                     SplitView.fillWidth: true
-                    SplitView.minimumWidth: window.compact ? 0 : 22 * window.unit
+                    // Never narrower than the one-line OneMap and SLA attribution, which must stay visible.
+                    SplitView.minimumWidth: window.compact ? 0 : Math.max(22 * window.unit, attributionSurface.width)
                     Map {
                         id: map
                         anchors.fill: parent
@@ -233,7 +241,11 @@ ApplicationWindow {
                                     Text { anchors.centerIn: parent; text: cluster ? addressCount : transactionCount > 1 ? transactionCount : ""; color: "white"; font.pixelSize: 10 }
                                     function activateMarker() {
                                         if (cluster) { map.center = QtPositioning.coordinate(latitude, longitude); map.zoomLevel = Math.min(19, map.zoomLevel + 2) }
-                                        else Resales.selectAddress(mapKey)
+                                        else {
+                                            Resales.selectAddress(mapKey)
+                                            // Compact windows show the map or the details; a chosen address opens its details.
+                                            if (window.compact) viewTabs.currentIndex = 1
+                                        }
                                     }
                                     TapHandler { onTapped: pin.activateMarker() }
                                 }
@@ -393,6 +405,10 @@ ApplicationWindow {
                                             if (transactionsList.currentIndex >= 0)
                                                 transactionsList.positionViewAtIndex(transactionsList.currentIndex, ListView.Contain)
                                         }
+                                        // A compact selection hides the list; keep the keyboard position by moving into the details.
+                                        function onSelectedMapKeyChanged() {
+                                            if (window.compact && Resales.selectedMapKey !== "") Qt.callLater(window.keepFocusInCompactDetails)
+                                        }
                                     }
                                     Accessible.name: "Matching address results"
                                     Accessible.description: "Arrow keys move through the addresses; Enter selects one."
@@ -469,6 +485,7 @@ ApplicationWindow {
                                     RowLayout {
                                         Layout.fillWidth: true
                                         Button {
+                                            id: detailsBack
                                             text: qsTr("‹ All addresses"); flat: true
                                             Accessible.name: qsTr("Back to all addresses")
                                             onClicked: { Resales.selectAddress(""); transactionsList.forceActiveFocus(Qt.OtherFocusReason) }
