@@ -82,8 +82,9 @@ the default S$1,000,000 maximum).
 | S2.10 | Open About, press ⌘F / Ctrl+F, close About | The shortcut does nothing behind the dialog; focus returns where it was. |
 | S2.11 | Select 748B, then narrow the window below the breakpoint and widen it again | Map/Addresses toggles appear; focus moves to the pane shown; 748B stays selected throughout. |
 | S2.12 | Screen reader on (VoiceOver, Orca): move through three rows, select one, type `b` | One name per row with address, town, median, sales and month; "Selected …" once; the result count announced after a pause. Then Escape until the search is empty and six addresses show. |
-| S2.13 | Filters, each from the defaults (Reset between them): town ANG MO KIO; flat type 4 ROOM; maximum S$500,000; minimum S$600,000 with maximum S$500,000; Latest 12 months; then Reset | Counts, with the list, the map and the status bar agreeing each time: 1 (727); 5 (747A, 748B, 748A, 115, 39); 3 (115, 39, 727); 0 with the reversed-range explanation; 5 (the same five as 4 ROOM); Reset restores six and every default. |
+| S2.13 | Filters, each from the defaults (Reset between them): town ANG MO KIO; flat type 4 ROOM; maximum S$500,000; minimum S$500,000; minimum S$600,000 with maximum S$500,000; Latest 12 months; then Reset | Counts, with the list, the map and the status bar agreeing each time: 1 (727); 5 (747A, 748B, 748A, 115, 39); 3 (115, 39, 727); 3 (747A, 748B, 748A); 0 with the reversed-range explanation; 4 (747A, 748B, 748A, 39: the window starts at 2025-11, and 115's latest sale is 2025-10); Reset restores six and every default. |
 | S2.14 | Click a map marker (zoom in until 748B is an individual marker) | The list highlights and scrolls to 748B, the details open, and the marker is highlighted; "Show on map" from the details recentres on it. |
+| S2.15 | Quit through the platform: macOS ⌘Q or the application menu's Quit; KDE the window frame's close button (and once more with Alt+F4) | The window closes at once, the process exits with status 0 in the launching terminal, no error is printed, and nothing is left running. Launch again afterwards for the Stage 3 steps. |
 
 ### Stage 3: inspector, chart, clipping, typography, accessibility
 
@@ -107,16 +108,22 @@ the default S$1,000,000 maximum).
 
 ### Production pass
 
-Repeat S2.1 to S2.14 and S3.1 to S3.12 against production with these
-invariants instead of the fixture values: the status bar's count matches the
-list; searching `ang mo kio ave` returns results whose addresses all contain
-those words, ranked with exact-word matches first; selecting any result opens
-details whose four groups are populated and whose Sales note names the
-dataset's latest month; an address with sales in the window shows a chart,
-one without shows the empty caption; every filter narrows the count or leaves
-it unchanged, never raises it, and Reset restores the unfiltered count; a map
-marker click selects the address it names. Record the production head's
-`generatedAt` from About.
+Repeat S2.0 to S2.15 and S3.1 to S3.12 against production with these
+invariants instead of the fixture values. S2.0: the launch completes without
+a load error, the status bar's count matches the list and the map shows
+markers. Search (F3): `ang mo kio ave` returns results whose addresses all
+contain those words, ranked with exact-word matches first; `ang mo kio avenue`
+returns the same results (abbreviation equivalence); the postal code read
+from a selected address's Address group, searched on its own, returns that
+address. Details (F5): selecting any result opens four populated groups whose
+Sales note names the dataset's latest month; an address with sales in the
+window shows a chart, one without shows the empty caption. Filters (F2): town,
+price bounds and the registration window narrow the count or leave it
+unchanged; a flat type may raise it, because the selected type's own median
+is compared against the price cap; list, map and status bar agree after every
+change, and Reset restores the unfiltered count. Selection (F4): a map marker
+click selects the address it names. Exit (S2.15): as on the fixtures. Record
+the production head's `generatedAt` from About.
 
 ### Captures
 
@@ -169,5 +176,5 @@ Scenario mapping: F1 S2.0 (section 1's `recorded` and `production` are
 supporting evidence, never sufficient); F2 S2.8, S2.13, S3.2; F3 S2.1–S2.8;
 F4 S2.3, S2.5, S2.14; F5 S3.1–S3.5, S3.7, S3.8; F6 S3.13, S3.14, S3.15; F7
 S3.6, S3.12; F8 S3.5, S3.8, S3.9 (light and dark both observed); F9 S2.11;
-F10 S2.10. Platform-specific items: S2.9, S2.12, S3.9–S3.11 and the platform
-notes. A scenario's production column needs the production pass too.
+F10 S2.10. Platform-specific items: S2.9, S2.12, S2.15 (clean exit through
+the platform's own quit or close), S3.9–S3.11 and the platform notes. A scenario's production column needs the production pass too.
