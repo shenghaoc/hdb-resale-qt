@@ -2,11 +2,11 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-// Loading progress or a load error with Retry, shown where the addresses would be.
+// Loading progress or a load error (with Retry when retrying can help), shown where the addresses would be.
 ColumnLayout {
     id: root
     readonly property var theme: Window.window.theme
-    visible: Resales.loading || Resales.canRetry
+    visible: Resales.statusText.length > 0
     spacing: theme.m
     ProgressBar {
         visible: Resales.loading
