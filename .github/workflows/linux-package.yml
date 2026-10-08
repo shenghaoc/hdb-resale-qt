@@ -148,13 +148,13 @@ jobs:
           docker pull -q "$DEBIAN_IMAGE"
           docker image inspect --format '{{index .RepoDigests 0}}' "$DEBIAN_IMAGE" | tee "$RUNNER_TEMP/reports/debian-image.txt"
           docker run --rm -v "$RUNNER_TEMP/dist:/pkg:ro" -v "$PWD:/work:ro" -v "$RUNNER_TEMP/reports/deb:/out" \
-            "$DEBIAN_IMAGE" sh /work/tools/package/verify_installed.sh deb /pkg/hdb-resale-explorer_*_amd64.deb /work /out
+            "$DEBIAN_IMAGE" sh /work/tools/package/verify_installed.sh deb "/pkg/$(basename "$RUNNER_TEMP"/dist/*.deb)" /work /out
       - name: Install and verify the RPM on Fedora 43
         run: |
           docker pull -q "$FEDORA_IMAGE"
           docker image inspect --format '{{index .RepoDigests 0}}' "$FEDORA_IMAGE" | tee "$RUNNER_TEMP/reports/fedora-image.txt"
           docker run --rm -v "$RUNNER_TEMP/dist:/pkg:ro" -v "$PWD:/work:ro" -v "$RUNNER_TEMP/reports/rpm:/out" \
-            "$FEDORA_IMAGE" sh /work/tools/package/verify_installed.sh rpm /pkg/hdb-resale-explorer-*.x86_64.rpm /work /out
+            "$FEDORA_IMAGE" sh /work/tools/package/verify_installed.sh rpm "/pkg/$(basename "$RUNNER_TEMP"/dist/*.rpm)" /work /out
 
       - name: Collect verification reports (never the package binaries)
         if: always()
