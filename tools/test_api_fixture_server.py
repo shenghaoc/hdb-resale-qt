@@ -48,6 +48,23 @@ class FailDetailsTests(unittest.TestCase):
             finally:
                 httpd.shutdown()
 
+    def test_failing_tiles_answer_503_to_every_path(self):
+        import http.client
+        import http.server
+        import threading
+
+        with http.server.ThreadingHTTPServer(("127.0.0.1", 0), server.FailingTiles) as httpd:
+            threading.Thread(target=httpd.serve_forever, daemon=True).start()
+            try:
+                connection = http.client.HTTPConnection("127.0.0.1", httpd.server_port, timeout=5)
+                for path in ("/11/1612/1014.png", "/"):
+                    connection.request("GET", path)
+                    response = connection.getresponse()
+                    response.read()
+                    self.assertEqual(response.status, 503, path)
+            finally:
+                httpd.shutdown()
+
 
 if __name__ == "__main__":
     unittest.main()

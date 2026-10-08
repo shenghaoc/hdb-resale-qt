@@ -46,7 +46,7 @@ for these scenarios.)
 | F3 | Search (Stage 2) | Typing narrows the list and the map locally; ranking, abbreviations and postal codes behave as in PR #12; clearing restores the list without restoring a hidden selection. |
 | F4 | Selection sync | List, map marker and details show the same address; a selection hidden by a search or filter clears everywhere. |
 | F5 | Details | The inspector shows the address's figures, lease, chart and latest registrations; "Middle half of all sales" appears once the details arrive. |
-| F6 | Loading and errors | An unreachable API reports and offers Retry (`--mode unreachable`); a failed detail request shows the error and offers Retry, reached with `python3 tools/api_fixture_server.py --fail-details 503` and `HDB_API_BASE_URL` pointing at it (the list loads, every selection fails); tile failures show the notice without blocking the list (`--mode tile-failure`). |
+| F6 | Loading and errors | Three states, each an ordinary interactive launch so Retry can be exercised. Unreachable API: `HDB_API_BASE_URL=http://127.0.0.1:9/` (a closed port) reports and offers Retry. Failed details: `python3 tools/api_fixture_server.py --fail-details 503` with `HDB_API_BASE_URL` pointing at it; the list loads and every selection shows the error and Retry. Tile failures: `python3 tools/api_fixture_server.py --fail-tiles` prints a tile endpoint; launch with `HDB_TILE_TEST=1` and `HDB_TEST_TILE_ENDPOINT` set to it; the notice appears and the list stays usable. (The `unreachable` and `tile-failure` smoke modes exit on detection and are regression checks only.) |
 | F7 | Scrolling | The list and details scroll by wheel, trackpad and keyboard; a mouse drag does not flick the list on desktop. |
 | F8 | Chart | The 24-month median chart renders with gaps for months without a sale, in the platform palette, in light and dark appearance. |
 | F9 | Compact layout | Narrowing below the breakpoint switches to Map/Addresses toggles; focus moves to the pane shown. |
@@ -66,16 +66,15 @@ for these scenarios.)
 ### Linux KDE Plasma (Wayland)
 
 Prerequisite: the build must run as a native Wayland client. The official Qt 6.12
-`linux_gcc_64` install carries `plugins/platforms/libqwayland.so`, but the
-documented Linux setup verifies only the XCB plugin and the local RC package
+`linux_gcc_64` install carries `plugins/platforms/libqwayland.so`, and the
+documented Linux setup checks its dependencies resolve; the local RC package
 stages only XCB, so until the packaging milestone stages the Wayland plugin,
-this acceptance runs from the source build. Verify `ldd` resolves
-`libqwayland.so` as it does `libqxcb.so`, launch with `QT_QPA_PLATFORM=wayland`
+this acceptance runs from the source build. Launch with `QT_QPA_PLATFORM=wayland`
 so a missing plugin fails loudly instead of falling back to XWayland, and
 confirm the window is a Wayland client (KWin's window information shows no X11
 window id). A run through XWayland does not satisfy any row below.
 
-- Qt's platform theme selects KDE's style and colour scheme; controls look like Breeze, not like macOS.
+- The controls are drawn by the style the session selected, as recorded (`org.kde.desktop`, or Fusion with Plasma's palette); the window uses Plasma's colour scheme and fonts, and nothing looks like macOS.
 - Ctrl+F focuses search; Ctrl+L focuses Filters; About is in the status bar.
 - Window resizing, including the compact breakpoint, works through the Plasma window frame; focus follows the pane shown.
 - Keyboard and pointer input, including wheel scrolling and trackpad, behave under Wayland (not XWayland).
