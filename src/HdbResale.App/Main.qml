@@ -35,10 +35,51 @@ ApplicationWindow {
     }
     function recenterMap() { map.center = QtPositioning.coordinate(1.3521, 103.8198); map.zoomLevel = 11 }
     function toggleZoom() { visibility = visibility === Window.Maximized ? Window.Windowed : Window.Maximized }
-    // macOS has one menu bar per application; other desktops keep About in the status bar. Loaded by URL so
-    // that other desktops never resolve Qt.labs.platform.
-    Loader {
-        Component.onCompleted: if (Qt.platform.os === "osx") setSource("MacMenuBar.qml", { appWindow: window })
+    // macOS has one menu bar per application. Qt Quick's MenuBar is native there (Qt 6.8+) and Qt's text roles put
+    // About and Quit in the application menu; other desktops keep their in-window controls and About button.
+    menuBar: Qt.platform.os === "osx" ? applicationMenus : null
+    property MenuBar applicationMenus: MenuBar {
+        id: menus
+        // The focused text field, for the Edit menu; every other control lacks these functions.
+        readonly property var editor: window.activeFocusItem
+        function editorCan(action) { return !!editor && typeof editor[action] === "function" }
+        readonly property bool editorHasSelection: editorCan("copy") && (editor.selectedText || "").length > 0
+        Menu {
+            title: qsTr("File")
+            Action { text: qsTr("About HDB Resale Explorer"); onTriggered: window.showAbout() }
+            Action { text: qsTr("Close Window"); shortcut: StandardKey.Close; onTriggered: window.close() }
+            Action { text: qsTr("Quit HDB Resale Explorer"); shortcut: StandardKey.Quit; onTriggered: Qt.quit() }
+        }
+        Menu {
+            title: qsTr("Edit")
+            Action { text: qsTr("Undo"); shortcut: StandardKey.Undo; enabled: menus.editorCan("undo") && menus.editor.canUndo === true; onTriggered: menus.editor.undo() }
+            Action { text: qsTr("Redo"); shortcut: StandardKey.Redo; enabled: menus.editorCan("redo") && menus.editor.canRedo === true; onTriggered: menus.editor.redo() }
+            MenuSeparator {}
+            Action { text: qsTr("Cut"); shortcut: StandardKey.Cut; enabled: menus.editorHasSelection && menus.editor.readOnly === false; onTriggered: menus.editor.cut() }
+            Action { text: qsTr("Copy"); shortcut: StandardKey.Copy; enabled: menus.editorHasSelection; onTriggered: menus.editor.copy() }
+            Action { text: qsTr("Paste"); shortcut: StandardKey.Paste; enabled: menus.editorCan("paste") && menus.editor.canPaste === true; onTriggered: menus.editor.paste() }
+            Action { text: qsTr("Select All"); shortcut: StandardKey.SelectAll; enabled: menus.editorCan("selectAll"); onTriggered: menus.editor.selectAll() }
+        }
+        Menu {
+            title: qsTr("View")
+            Action { text: qsTr("Map"); shortcut: "Ctrl+1"; onTriggered: window.showView(0) }
+            Action { text: qsTr("Addresses"); shortcut: "Ctrl+2"; onTriggered: window.showView(1) }
+            MenuSeparator {}
+            Action {
+                text: qsTr("Show Selected Address on Map")
+                enabled: Resales.selectedMapKey !== "" && Resales.selectedLocated
+                onTriggered: window.showSelectedOnMap()
+            }
+            Action { text: qsTr("Return to Singapore"); onTriggered: window.recenterMap() }
+            MenuSeparator {}
+            Action { text: qsTr("Reset Filters"); shortcut: "Ctrl+Shift+R"; enabled: window.activeFilterCount > 0; onTriggered: Resales.resetFilters() }
+            // AppKit adds Enter Full Screen to a menu titled View by itself.
+        }
+        Menu {
+            title: qsTr("Window")
+            Action { text: qsTr("Minimize"); shortcut: "Ctrl+M"; onTriggered: window.showMinimized() }
+            Action { text: qsTr("Zoom"); onTriggered: window.toggleZoom() }
+        }
     }
     // When a compact selection hides the focused list, the details' back button takes the keyboard focus.
     function keepFocusInCompactDetails() {
@@ -175,16 +216,21 @@ ApplicationWindow {
             anchors.fill: parent
             spacing: 0
             FilterBar { id: filterBar; Layout.fillWidth: true }
-            // Compact windows show the map or the addresses, switched under the filters.
+            // Compact windows show the map or the addresses. Qt's macOS style has no segmented control and draws
+            // TabBar with its Fusion fallback, so the views are two checkable buttons in an exclusive group.
             Item {
                 visible: window.compact
                 Layout.fillWidth: true
                 implicitHeight: viewTabs.implicitHeight + theme.s * 2
-                SegmentedControl {
+                RowLayout {
                     id: viewTabs
+                    property int currentIndex: 0
                     anchors.centerIn: parent
-                    model: [qsTr("Map"), qsTr("Addresses")]
-                    Accessible.name: qsTr("View")
+                    spacing: theme.xs
+                    onCurrentIndexChanged: (currentIndex === 1 ? addressesView : mapView).checked = true
+                    ButtonGroup { id: views; onClicked: (button) => viewTabs.currentIndex = button === addressesView ? 1 : 0 }
+                    Button { id: mapView; text: qsTr("Map"); checkable: true; checked: true; ButtonGroup.group: views }
+                    Button { id: addressesView; text: qsTr("Addresses"); checkable: true; ButtonGroup.group: views }
                 }
             }
             Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; color: theme.separator }
