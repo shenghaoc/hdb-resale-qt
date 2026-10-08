@@ -15,6 +15,11 @@ target_compile_features(hdb_tile_status_tests PRIVATE cxx_std_17)
 target_link_libraries(hdb_tile_status_tests PRIVATE hdb_tile_status Qt6::Core)
 add_test(NAME hdb_tile_status COMMAND hdb_tile_status_tests)
 
+add_executable(hdb_tile_status_handoff_tests "${HDB_TILE_STATUS_SOURCE_DIR}/tile_status_handoff_tests.cpp")
+target_compile_features(hdb_tile_status_handoff_tests PRIVATE cxx_std_17)
+target_link_libraries(hdb_tile_status_handoff_tests PRIVATE hdb_tile_status Qt6::Core)
+add_test(NAME hdb_tile_status_handoff COMMAND hdb_tile_status_handoff_tests)
+
 add_executable(hdb_tile_status_default_sink_tests "${HDB_TILE_STATUS_SOURCE_DIR}/tile_status_default_sink_tests.cpp")
 target_compile_features(hdb_tile_status_default_sink_tests PRIVATE cxx_std_17)
 target_link_libraries(hdb_tile_status_default_sink_tests PRIVATE hdb_tile_status Qt6::Core)

@@ -97,6 +97,27 @@ public sealed class BasemapConfigurationTests
         finally { Directory.Delete(root, recursive: true); }
     }
 
+    // "..": the filesystem applies it to the directory a link leads to, not to the link's own name.
+    [Fact]
+    public void TestAppliesParentSegmentsAfterLinksAsTheFilesystemDoes()
+    {
+        var root = Directory.CreateTempSubdirectory("hdb-tile-links-").FullName;
+        try
+        {
+            var production = Path.Combine(root, "actual", "onemap");
+            Directory.CreateDirectory(production);
+            Directory.CreateDirectory(Path.Combine(root, "actual", "child"));
+            if (!TryLink(Path.Combine(root, "jump"), Path.Combine("actual", "child"))) return;
+            Assert.True(TryLink(Path.Combine(root, "cache"), Path.Combine("jump", "..", "onemap")));
+            // Lexically these name root/onemap; physically both are the production cache.
+            foreach (var cache in new[] { Path.Combine(root, "cache"), Path.Combine(root, "jump", "..", "onemap") })
+                Assert.Throws<ArgumentException>(() => BasemapConfiguration.Create(true, Endpoint, cache, production));
+            Assert.Equal(Path.Combine(root, "elsewhere"),
+                BasemapConfiguration.Create(true, Endpoint, Path.Combine(root, "elsewhere"), production).CacheDirectory);
+        }
+        finally { Directory.Delete(root, recursive: true); }
+    }
+
     private const string Endpoint = "http://127.0.0.1:12345/tiles/";
 
     private static bool TryLink(string link, string target)
