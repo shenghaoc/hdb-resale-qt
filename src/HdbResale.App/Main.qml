@@ -6,6 +6,7 @@ import QtPositioning
 
 ApplicationWindow {
     id: window
+    objectName: "hdbWindow"
     visible: true
     width: 1360
     height: 900
@@ -60,7 +61,14 @@ ApplicationWindow {
     readonly property alias mapView: map
     readonly property alias filtersView: filterBar
     function finishGate() { packageExit.start() }
-    Loader { Component.onCompleted: if (Resales.apiGate === "keyboard") setSource("KeyboardGate.qml", { targetWindow: window }) }
+    Loader {
+        Component.onCompleted: {
+            if (Resales.apiGate === "keyboard") setSource("KeyboardGate.qml", { targetWindow: window })
+            else if (Resales.apiGate === "acceptance-poc") setSource("AcceptanceGate.qml", { targetWindow: window })
+            else if (Resales.apiGate === "acceptance-fixture" || Resales.apiGate === "acceptance-production")
+                setSource("AcceptanceSuite.qml", { targetWindow: window })
+        }
+    }
     function showView(index) {
         if (compact) viewTabs.currentIndex = index
         if (index === 1) (compact && Resales.selectedMapKey !== "" ? detailsBack : transactionsList).forceActiveFocus(Qt.ShortcutFocusReason)
@@ -183,7 +191,7 @@ ApplicationWindow {
     }
     // Opt-in native regression checks over the recorded API; no screenshot or tile publication.
     Timer {
-        interval: 50; repeat: true; running: Resales.apiGate.length > 0 && Resales.apiGate !== "keyboard"
+        interval: 50; repeat: true; running: Resales.apiGate.length > 0 && Resales.apiGate !== "keyboard" && !Resales.apiGate.startsWith("acceptance-")
         property int ticks: 0
         property bool configured: false
         function contrast(text, surface) {
@@ -263,7 +271,7 @@ ApplicationWindow {
         ColumnLayout {
             anchors.fill: parent
             spacing: 0
-            FilterBar { id: filterBar; Layout.fillWidth: true }
+            FilterBar { id: filterBar; objectName: "filterBar"; Layout.fillWidth: true }
             // Compact windows show the map or the addresses. Qt's macOS style has no segmented control and draws
             // TabBar with its Fusion fallback, so the views are two checkable buttons in an exclusive group.
             Item {
@@ -271,7 +279,7 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 implicitHeight: viewTabs.implicitHeight + theme.s * 2
                 RowLayout {
-                    id: viewTabs
+                    id: viewTabs; objectName: "viewTabs"
                     property int currentIndex: 0
                     anchors.centerIn: parent
                     spacing: theme.xs
@@ -280,8 +288,8 @@ ApplicationWindow {
                         Qt.callLater(window.keepFocusVisible)
                     }
                     ButtonGroup { id: views; onClicked: (button) => viewTabs.currentIndex = button === addressesView ? 1 : 0 }
-                    Button { id: mapView; text: qsTr("Map"); checkable: true; checked: true; ButtonGroup.group: views }
-                    Button { id: addressesView; text: qsTr("Addresses"); checkable: true; ButtonGroup.group: views }
+                    Button { id: mapView; objectName: "mapToggle"; text: qsTr("Map"); checkable: true; checked: true; ButtonGroup.group: views }
+                    Button { id: addressesView; objectName: "addressesToggle"; text: qsTr("Addresses"); checkable: true; ButtonGroup.group: views }
                 }
             }
             Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; color: theme.separator }
@@ -297,7 +305,7 @@ ApplicationWindow {
                     // Never narrower than the one-line OneMap and SLA attribution, which must stay visible.
                     SplitView.minimumWidth: window.compact ? 0 : Math.max(22 * window.unit, attributionSurface.width)
                     Map {
-                        id: map
+                        id: map; objectName: "map"
                         anchors.fill: parent
                         plugin: osm
                         activeMapType: supportedMapTypes[supportedMapTypes.length - 1]
@@ -493,7 +501,7 @@ ApplicationWindow {
                     }
                 }
                 Pane {
-                    id: inspector
+                    id: inspector; objectName: "inspector"
                     padding: 0
                     visible: !window.compact || viewTabs.currentIndex === 1
                     SplitView.fillWidth: window.compact
@@ -531,7 +539,7 @@ ApplicationWindow {
                                         Layout.topMargin: theme.s; Layout.bottomMargin: theme.s
                                         spacing: theme.xs
                                         TextField {
-                                            id: addressSearch
+                                            id: addressSearch; objectName: "addressSearch"
                                             Layout.fillWidth: true
                                             enabled: Resales.statusText.length === 0       // nothing to search while loading or failed
                                             placeholderText: qsTr("Search block, street or postal code")
@@ -564,7 +572,7 @@ ApplicationWindow {
                                         Layout.fillHeight: true
                                         ScrollBar.vertical.Accessible.name: qsTr("Scroll addresses")
                                         ListView {
-                                            id: transactionsList
+                                            id: transactionsList; objectName: "transactionsList"
                                             clip: true; model: Resales
                                             // Rows are not pooled. Pooling (reuseItems) cut the rows created while scrolling 8,400
                                             // addresses from 8,400 to about 20, with no measurable frame-time change on Metal, but a
@@ -642,6 +650,7 @@ ApplicationWindow {
                                             }
                                             delegate: ItemDelegate {
                                                 id: addressRow
+                                                objectName: "addressRow-" + addressKey
                                                 required property int index
                                                 required property string addressKey
                                                 required property string address
@@ -751,7 +760,7 @@ ApplicationWindow {
                                 Connections { target: Resales; function onSearchTextChanged() { searchAnnouncement.restart() } }
                             }
                             Item {
-                                id: detailsPane
+                                id: detailsPane; objectName: "detailsPane"
                                 visible: Resales.selectedMapKey !== ""
                                 // Clearing the selection hides the details; keyboard focus inside them moves to the list.
                                 onVisibleChanged: if (!visible) Qt.callLater(window.keepFocusVisible)
@@ -766,7 +775,7 @@ ApplicationWindow {
                                     RowLayout {
                                         Layout.fillWidth: true
                                         Button {
-                                            id: detailsBack
+                                            id: detailsBack; objectName: "detailsBack"
                                             text: qsTr("‹ All addresses"); flat: true
                                             Accessible.name: qsTr("Back to all addresses")
                                             onClicked: { Resales.selectAddress(""); transactionsList.forceActiveFocus(Qt.OtherFocusReason) }
@@ -787,7 +796,7 @@ ApplicationWindow {
                                         font.pointSize: window.font.pointSize * theme.captionScale; wrapMode: Text.WordWrap; Layout.fillWidth: true
                                     }
                                     ScrollView {
-                                        id: detailsScroll; Layout.fillWidth: true; Layout.fillHeight: true; clip: true
+                                        id: detailsScroll; objectName: "detailsScroll"; Layout.fillWidth: true; Layout.fillHeight: true; clip: true
                                         contentWidth: availableWidth; activeFocusOnTab: true; Accessible.name: "Selected address details and recent transactions"
                                         // A click gives the details keyboard focus as well as Tab, which macOS's default keyboard
                                         // navigation keeps for text fields and lists (the press never reaches the ScrollView itself,
@@ -831,7 +840,7 @@ ApplicationWindow {
                                             }
                                             Button { text: qsTr("Retry registrations"); visible: Resales.canRetryDetail; onClicked: Resales.retryDetail() }
                                             Loader {
-                                                id: trendLoader; Layout.fillWidth: true
+                                                id: trendLoader; objectName: "trendLoader"; Layout.fillWidth: true
                                                 active: Resales.detailReady
                                                 sourceComponent: Component { BuyerTrendChart {} }
                                             }
@@ -906,14 +915,14 @@ ApplicationWindow {
                     }
                     ToolButton {
                         visible: Qt.platform.os !== "osx"      // in the application menu on macOS
-                        text: qsTr("About"); Accessible.name: "About HDB Resale Explorer"; onClicked: window.showAbout()
+                        objectName: "aboutButton"; text: qsTr("About"); Accessible.name: "About HDB Resale Explorer"; onClicked: window.showAbout()
                     }
                 }
             }
         }
     }
     Dialog {
-        id: aboutDialog; title: "About HDB Resale Explorer"; modal: true; focus: true; anchors.centerIn: parent
+        id: aboutDialog; objectName: "aboutDialog"; title: "About HDB Resale Explorer"; modal: true; focus: true; anchors.centerIn: parent
         width: Math.min(590, window.width - 32); standardButtons: Dialog.Close
         contentItem: Column {
             spacing: 12

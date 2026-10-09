@@ -26,14 +26,14 @@ ColumnLayout {
             id: rows
             model: root.facts
             delegate: Item {
-                id: row
+                id: row; objectName: "fact-" + modelData.label
                 required property var modelData
                 Layout.fillWidth: true
                 implicitHeight: Math.max(factLabel.implicitHeight, factValue.implicitHeight)
                 Accessible.role: Accessible.StaticText
                 Accessible.name: modelData.label + ": " + modelData.value
                 Label {
-                    id: factLabel
+                    id: factLabel; objectName: "factLabel"
                     anchors.left: parent.left; anchors.top: parent.top
                     width: root.labelWidth
                     text: row.modelData.label; color: root.theme.secondaryText
@@ -41,7 +41,7 @@ ColumnLayout {
                     Accessible.ignored: true
                 }
                 Label {
-                    id: factValue
+                    id: factValue; objectName: "factValue"
                     anchors.left: factLabel.right; anchors.leftMargin: root.theme.s; anchors.right: parent.right; anchors.top: parent.top
                     text: row.modelData.value; wrapMode: Text.WordWrap
                     font.features: { "tnum": 1 }

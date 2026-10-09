@@ -51,7 +51,7 @@ Column {
         width: parent.width; height: shown ? 130 : 0
         visible: shown
         GraphsView {
-            id: graph
+            id: graph; objectName: "trendGraph"
             anchors.fill: parent
             Accessible.name: "Monthly median resale prices in thousands of Singapore dollars. Gaps mean no sale that month."
             marginLeft: 4; marginRight: 8; marginTop: 4; marginBottom: 2
@@ -75,7 +75,7 @@ Column {
                 titleText: "S$000"; titleFont.pointSize: root.captionSize
             }
             LineSeries {
-                id: medianSeries; color: root.palette.link; width: 2
+                id: medianSeries; objectName: "medianSeries"; color: root.palette.link; width: 2
                 pointDelegate: Rectangle {
                     property real pointValueY
                     width: 5; height: 5; radius: 2.5; color: root.palette.link
