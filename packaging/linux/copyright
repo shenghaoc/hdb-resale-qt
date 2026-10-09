@@ -1,0 +1,13 @@
+HDB Resale Explorer
+
+The original application code is licensed GPL-3.0-or-later. See
+/opt/hdb-resale-explorer/licenses/APPLICATION-LICENSE.
+
+This package bundles third-party components that keep their own terms: the Qt
+runtime (LGPL-3.0-only, with Qt Graphs and Quick 3D under GPL-3.0-only), Qt Bridge for C#
+(LGPL-3.0-only), the .NET runtime (MIT) and the OneMap logo (see its provenance note).
+Full texts, notices and the Qt SBOMs are in /opt/hdb-resale-explorer/licenses/.
+
+This build is technically packaged. It is NOT a distribution clearance: corresponding
+source delivery, relinking instructions and third-party notice review are still open.
+See /opt/hdb-resale-explorer/licenses/DISTRIBUTION-BLOCKERS.txt.

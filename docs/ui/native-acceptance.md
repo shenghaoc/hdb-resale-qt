@@ -95,7 +95,11 @@ RPM and DEB installation and launch are accepted separately from the UI stages:
 - Launch from the application menu and from the terminal; the Worker API loads; the chart renders (Qt Graphs and its Quick 3D runtime are bundled or depended on).
 - Uninstall leaves no application files behind.
 
-This milestone is unverified until recorded here.
+Status (2026-10-08, see [docs/packaging/linux.md](../packaging/linux.md)): the packages stage the Wayland and XCB
+platform plugins, install a `.desktop` entry, SVG icon and AppStream metadata, and CI installs the DEB on Debian 13 and
+the RPM on Fedora 43, launches them through `/usr/bin/hdb-resale-explorer` on X11 (Xvfb) against the recorded Worker API,
+and checks uninstall. **Still unverified, by hand:** a Plasma Wayland session (the Wayland plugin is staged, never launched
+under a compositor), menu launch and the icon in a real desktop, and the window/desktop-entry association on Wayland.
 
 ## Record
 
