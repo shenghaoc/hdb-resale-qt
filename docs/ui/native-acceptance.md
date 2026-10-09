@@ -4,7 +4,9 @@ The native-first UI redesign is accepted on **two platforms with equal standing*
 macOS and Linux KDE Plasma on Wayland. The owner develops on Fedora KDE; the
 checked-in Linux records are a Debian 13 XFCE/X11 run ([docs/linux.md](../linux.md))
 and a Fedora KDE run through XWayland ([docs/pr8-review-verification.md](../pr8-review-verification.md)).
-No native KDE/Wayland acceptance has been recorded yet. The redesign emphasises
+Fedora readiness and its native-tool blockers are recorded in
+[native-batch-1-fedora.md](native-batch-1-fedora.md); native KDE/Wayland
+acceptance remains unverified. The redesign emphasises
 macOS. Neither platform is secondary.
 
 Acceptance is recorded per platform. A scenario that passed on one platform
@@ -102,26 +104,30 @@ This milestone is unverified until recorded here.
 Each batch of native verification adds a dated section below. One row per
 scenario per platform; "unverified" is a valid and expected entry.
 
-### Batch 1 — Stage 2 and Stage 3 (macOS recorded 2026-10-09; KDE pending)
+### Batch 1 — Stage 2 and Stage 3 (macOS recorded 2026-10-09; KDE readiness recorded 2026-10-09)
 
 Runbook: [native-batch-1.md](native-batch-1.md).
 
 | Scenario | macOS | KDE Plasma/Wayland |
 |---|---|---|
-| F1 Launch and load | passed | unverified (pending: KDE batch not run) |
-| F2 Filters | passed | unverified (pending) |
-| F3 Search | unverified: fixture and production native alphabetic typing/type-to-search and genuine production block ranking passed; quiet VoiceOver refinement remains unverified | unverified (pending) |
-| F4 Selection sync | passed | unverified (pending) |
-| F5 Details | passed | unverified (pending) |
-| F6 Loading and errors | passed | unverified (pending) |
-| F7 Scrolling | unverified: ordinary fixture list/details and production list/details wheel scrolling observed; prior keyboard and pointer evidence retained; genuine trackpad pinch/momentum remains manual | unverified (pending) |
-| F8 Chart | passed | unverified (pending) |
-| F9 Compact layout | unverified: fixture/production compact master/detail and Addresses/Back/list/filter focus observed; Map-specific native focus remains unverified | unverified (pending) |
-| F10 About and modal isolation | passed | unverified (pending) |
-| Platform-specific items | unverified: fixture/production system Light/Dark following and supported production scale check passed; VoiceOver and Map-specific compact focus remain unverified; genuine trackpad pinch/momentum remains manual | unverified (pending) |
+| F1 Launch and load | passed | unverified (native observation blocked; Fedora readiness passed) |
+| F2 Filters | passed | unverified (native observation blocked) |
+| F3 Search | unverified: fixture and production native alphabetic typing/type-to-search and genuine production block ranking passed; quiet VoiceOver refinement remains unverified | unverified (native observation blocked) |
+| F4 Selection sync | passed | unverified (native observation blocked) |
+| F5 Details | passed | unverified (native observation blocked) |
+| F6 Loading and errors | passed | unverified (native observation blocked) |
+| F7 Scrolling | unverified: ordinary fixture list/details and production list/details wheel scrolling observed; prior keyboard and pointer evidence retained; genuine trackpad pinch/momentum remains manual | unverified (native observation blocked) |
+| F8 Chart | passed | unverified (native observation blocked) |
+| F9 Compact layout | unverified: fixture/production compact master/detail and Addresses/Back/list/filter focus observed; Map-specific native focus remains unverified | unverified (native observation blocked) |
+| F10 About and modal isolation | passed | unverified (native observation blocked) |
+| Platform-specific items | unverified: fixture/production system Light/Dark following and supported production scale check passed; VoiceOver and Map-specific compact focus remain unverified; genuine trackpad pinch/momentum remains manual | unverified (native observation blocked) |
 | RPM/DEB packaging | — | unverified |
 
 Nothing in the macOS column is carried into the KDE column.
+
+Fedora details and the separate fixture/production step ledger:
+[2026-10-09 Fedora readiness and blocked native acceptance](native-batch-1-fedora.md).
+The six automated modes passed; no native scenario is promoted to passed.
 
 #### macOS run
 
