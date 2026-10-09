@@ -110,15 +110,15 @@ Runbook: [native-batch-1.md](native-batch-1.md).
 |---|---|---|
 | F1 Launch and load | passed | unverified (pending: KDE batch not run) |
 | F2 Filters | passed | unverified (pending) |
-| F3 Search | unverified: fixture alphabetic key paths rerun; production keyboard paths and a real exact-block/prefix-block ranking rerun remain pending | unverified (pending) |
+| F3 Search | unverified: fixture and production native alphabetic typing/type-to-search and genuine production block ranking passed; quiet VoiceOver refinement remains unverified | unverified (pending) |
 | F4 Selection sync | passed | unverified (pending) |
 | F5 Details | passed | unverified (pending) |
 | F6 Loading and errors | passed | unverified (pending) |
-| F7 Scrolling | unverified: fixture details wheel scrolling observed; remaining list/production wheel checks and genuine trackpad pinch/momentum remain pending; prior keyboard and pointer evidence retained | unverified (pending) |
+| F7 Scrolling | unverified: ordinary fixture list/details and production list/details wheel scrolling observed; prior keyboard and pointer evidence retained; genuine trackpad pinch/momentum remains manual | unverified (pending) |
 | F8 Chart | passed | unverified (pending) |
-| F9 Compact layout | unverified: intended master/detail criterion corrected; native fixture and production reruns remain pending | unverified (pending) |
+| F9 Compact layout | unverified: fixture/production compact master/detail and Addresses/Back/list/filter focus observed; Map-specific native focus remains unverified | unverified (pending) |
 | F10 About and modal isolation | passed | unverified (pending) |
-| Platform-specific items | unverified: VoiceOver, supported larger-text/scale, compact reruns and production system-appearance checks remain pending; fixture system Light/Dark following observed; genuine trackpad pinch/momentum manually unverified | unverified (pending) |
+| Platform-specific items | unverified: fixture/production system Light/Dark following and supported production scale check passed; VoiceOver and Map-specific compact focus remain unverified; genuine trackpad pinch/momentum remains manual | unverified (pending) |
 | RPM/DEB packaging | — | unverified |
 
 Nothing in the macOS column is carried into the KDE column.
@@ -247,3 +247,114 @@ product source was edited.
   remain required. The Keyboard Shortcuts sheet was open when native
   Computer Use failed again with `Transport closed`; reset also failed.
   No remaining native result can be inferred from that failure.
+
+
+#### Native tool recovery and narrow rerun — 2026-10-09
+
+This follow-up supersedes the pending production keyboard/ranking/appearance,
+supported scale and restoration statements in the correction sessions above.
+Compact master/detail behavior was subsequently rerun in both passes; Map-specific
+native focus and screen-reader checks remain unverified.
+
+- **Recovery and provenance:** this fresh Mac task had directly registered
+  `cua_repl` controls. Native System Settings screenshots, AX clicks, individual
+  keys and ordinary wheel actions worked. The docs worktree began clean at
+  `9f5212c59f522c08cde239ee7e43cfb4428705eb`; the frozen Stage 3 bundle,
+  Stage 2 ancestor and apphost hash are unchanged from the provenance above.
+  The ordinary fixture and production launches logged Metal, scale 2.
+- **Pinned production ranking — passed:** manifests fetched before summaries,
+  after summaries and after the native reruns all reported
+  `2026-10-04T15:30:00.000Z`, matching native About. The saved summaries give
+  9,297 default-eligible addresses. They contain two exact block-30 matches,
+  not just Cassia: 30 BALAM RD (S$325,888) and 30 CASSIA CRES (S$950,000).
+  Native `geylang 30` returned those two first, then 304, 305, 301, 302 UBI
+  AVE 1 (S$324,000, S$465,000, S$480,000, S$485,000), all GEYLANG. Both
+  exact blocks precede every prefix even though 304 is cheaper than either.
+- **Production native keyboard — functional paths passed:** with ABC selected,
+  individual key events after Command-F entered `geylang 30`; the same query
+  typed from the focused list entered search and gave the same six identities.
+  Down, Down, Return selected 30 CASSIA CRES. Extending to `geylang 30 c`
+  retained its selection, details and highlight; appending `zz` gave zero and
+  cleared all three. Escape twice restored defaults and list focus. Numeric
+  type-to-search `560121` returned and selected 121 ANG MO KIO AVE 3. No paste
+  or AX text assignment supplied these queries. The earlier fixture native
+  keystroke results and historical abbreviation/marker checks are retained;
+  quiet VoiceOver refinement is still unverified, so F3 is not yet fully passed.
+- **Production system appearance — passed:** Computer Use selected Light,
+  then Dark in System Settings. The same running 121 inspector/chart changed
+  palette; facts, notes, axis/month captions, line and dots remained readable.
+  This used the system controls, not the historical per-app light override.
+- **Supported scale, S3.10 — passed on production:** the built-in display was
+  originally 1512 × 982 (Default). One step toward Larger Text selected
+  1352 × 878. The running inspector kept aligned facts, wrapped the long MRT
+  and lease text, and kept its label column below two fifths of the pane;
+  the chart captions remained readable at the larger physical scale.
+  Default resolution was restored and visibly verified. This establishes
+  the runbook's scale alternative; it does not reinterpret the earlier
+  unsupported accessibility-text-size attempt as a pass.
+- **Ordinary wheel:** native wheel actions scrolled the fixture list and exposed its details chart
+  and production chart/registrations; the production list moved from its
+  initial 346 JURONG EAST ST 31 row into the Tanglin Halt/MacPherson rows and
+  returned upward. An AX scrollbar assignment positioned the scaled chart
+  capture separately and is not counted as wheel or keyboard evidence.
+  No wheel or zoom-button action establishes genuine trackpad gestures.
+- **Compact master/detail — functional paths passed, F9 still unverified:**
+  raising the native window and dragging its right edge reduced the production
+  and fixture window from 1,360 to approximately 721 logical points, visibly
+  exposing Map/Addresses tabs and collapsed filters. With 121 ANG MO KIO AVE 3
+  selected on production, and 748B BEDOK RESERVOIR CRES on fixtures, Addresses
+  showed selected details and the Back button had native AX focus and a visible
+  focus ring. Map/Addresses switching preserved those selections; Back cleared
+  selection and showed the list with a focused row. Without a selection,
+  Addresses returned to the list. Command-L expanded filters and focused Town;
+  production widening restored the side-by-side layout while preserving its
+  selected row, details and map highlight. In the fixture, Return after clearing
+  selection selected the first address (727 ANG MO KIO AVE 6), as the source
+  resets the keyboard index on deselection; Command-L then focused Town.
+  The fixture reverse edge drags did not widen the window before exit, so that
+  transition is established on production only. Map switching reports the
+  standard window as the focused native AX element; it does not independently
+  prove Map-specific focus. F9 therefore remains unverified for that criterion.
+  Earlier failed corner/interior drags are superseded by the successful right
+  edge drags; no hidden window-size protocol was used.
+- **VoiceOver — unverified:** System Settings was visibly toggled on; Utility
+  already had Show caption panel and Show VoiceOver cursor enabled, so those
+  preferences were not changed. No readable caption or focus traversal was
+  obtained. Native VoiceOver lookup timed out and the inventory reported it
+  not running despite the enabled settings switch. S2.12/S3.11 and quiet
+  refinement therefore remain unverified; AX names alone are not speech.
+- **Restoration — verified:** Auto appearance, VoiceOver off, Default
+  accessibility text size (slider 4) and Default display resolution were
+  visually reverified. Control-Space restored Chinese Pinyin; actual `n`,
+  `i`, Space produced `你` in the search field, then Escape twice cleared it.
+  A read-only selected-source preference also named
+  `com.apple.inputmethod.SCIM.ITABC`. All owned interactive app sessions exited
+  with status 0 and the owned fixture server was stopped. The final Pinyin
+  relaunch logged an `IMKCFRunLoopWakeUpReliable` mach-port diagnostic on exit;
+  no QML failure or product defect was established by it.
+- **Evidence:** native screenshots/AX observations are retained in the
+  recovery task transcript, not committed or saved as standalone image files.
+  Local snapshot JSON and result ledger are in the recovery task's
+  `evidence/` directory. Only narrow acceptance corrections were run; no
+  product source, production snapshot or deployment changed.
+- **Remaining handoff:** manual Mac Map-specific compact focus and fixture compact-to-wide transition,
+  VoiceOver captions/focus/announcements and genuine trackpad pinch/momentum.
+  PR #18 remains held until these requested checks are complete. Fedora KDE
+  is untouched: run the separate native Wayland batch from the same frozen
+  Stage 3 head, prove Wayland rather than XWayland, record loaded style,
+  Plasma scheme/font/scale and Orca results; carry no Mac pass into KDE.
+
+- **Resumed validation:** domain build completed with zero warnings/errors;
+  all 278 C# tests passed. Six frozen-bundle regression modes (keyboard,
+  recorded, high-zoom, unreachable, tile-failure and production) exited 0;
+  their logs had no matching QML warning/error patterns. These automated modes
+  supplement the native observations and do not establish gestures or VoiceOver.
+  Python 3.14 discovery ran 42 tests with one error:
+  `FailDetailsTests.test_the_reserved_port_refuses_connections` expected
+  `ConnectionRefusedError`, but the unchanged loopback socket call timed out.
+  A focused repeat produced the same `TimeoutError`; its cause is undetermined.
+  This is a failed local Mac check, not an all-green validation claim. No test
+  or product source was altered to bypass it. The two final owned app sessions
+  exited 0, the fixture server was stopped, and a filtered process check found
+  no remaining HDB/fixture/tile-failure process. No system preference changed
+  during these compact reruns.
