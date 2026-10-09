@@ -191,22 +191,62 @@ were run for this follow-up. No readiness mode establishes physical acceptance.
 Only task-owned rootless containers in `external/openqa-storage` are used.
 Existing `/dev/kvm` access succeeds (API 12); no group/device/SELinux changes.
 Official runner digest `sha256:6cdfea91f06d2627c78da3be1690b1352346fbc595925cc845ece7915b449966`,
-QEMU 11.0.3, unchanged [os-autoinst](https://github.com/os-autoinst/os-autoinst)
+Initial QEMU 11.0.3, unchanged [os-autoinst](https://github.com/os-autoinst/os-autoinst)
 ref `fa267c159a95c274f98514d4810e0250d02cce22` built with `-j1`.
 The [official Fedora 45 KDE beta ISO](https://fedoraproject.org/kde/download/beta/)
 passes Fedora signature and SHA-256 verification
 (`cd2321a8537667e0017efc3371bac191d7747f834da8fc8c30c88f00a480811e`).
-The guest is limited to two CPUs, 2,304 MiB RAM, within a 3 GiB container; initial
-host available memory was about 3.8 GiB with swap full.
+The guest remains limited to two CPUs and 2,304 MiB RAM; only one VM runs at a
+time. Initial host available memory was about 3.8 GiB with swap full.
 
 Boot-loader/needle setup failures and quoted direct-kernel arguments are retained
 as harness failures. Ordinary GRUB boot plus guest serial logging mounts the live
-root and reaches Fedora 45/kernel 7.2.0-61.fc45 login. GUI captures remain black;
-engine exit zero is not a desktop PASS. Full VM desktop, appearance/scale,
-actual Orca speech and RPM/DEB checks remain UNVERIFIED. No host appearance,
-scale, reader, security or input source is changed. Gesture replay is never
-physical pinch/momentum acceptance. The historical F1–F10/platform rows in #19
-remain incomplete; this tooling record adds no physical PASS.
+root and reaches Fedora 45/kernel 7.2.0-61.fc45 login. Engine exit zero is not a
+desktop PASS. The resumed runs retain these separate outcomes:
+
+| Attempt | Observed outcome |
+|---|---|
+| 11 | Interrupted UI evidence excluded; completed serial diagnostics retained |
+| 12–14 | Plasma startup timeouts, EGL/DRI failures or black output; standard VGA had no render node |
+| 15 | Runner prerequisite failure: the egl-headless display module was missing |
+| 16 | Virgl rendered the greeter/wallpaper; the 3 GiB container recorded one QEMU OOM kill; ordinary app retry interrupted, engine exit 1/canceled |
+| 17 | Normal live-user login reached active tty2 Wayland; ordinary frozen HDB resolved Fusion, created OpenGL/virgl QRhi and fetched fixture summaries/manifest with HTTP 200; no usable visible Plasma/HDB window |
+
+For virgl, only the already accessible host `renderD128` was mapped into a new
+task-owned rootless container. No privileged mode, device/group permission or
+SELinux change was used. Official `qemu-ui-opengl` installation inside that
+container also updated its runner to QEMU **11.1.1**. Run 17 used a 4 GiB container
+cap with no swap after the owned failed VM exited and about 5.2 GiB was available;
+guest RAM, CPU count and concurrency stayed unchanged. Its memory peak was
+3,876,286,464 bytes, and `oom_kill` stayed at the run-16 baseline of one.
+
+The guest uses PlasmaLoginManager, KWin 6.7.4 and system Qt 6.11.1. Initial KWin
+startup could not determine an active graphical session/open DRM; the ordinary
+blank-password live-user login subsequently established a session. Failed
+user-level Plasma components were retried without changing their configuration.
+Guest app staging failures are retained separately: missing runtime PATH, then
+missing matching Qt libraries. The frozen apphost hash stayed unchanged; official
+Qt 6.12 Wayland plugins and QML library dependencies were staged from the pinned
+host toolchain. Interrupted extraction exhausted the live overlay and was retried
+after removing only the verified guest transfer archive (local original retained).
+
+Run 17's VNC/openQA capture remained black with a cursor, and the independent
+[documented QEMU screendump](https://www.qemu.org/docs/master/interop/qemu-qmp-ref.html#command-screendump)
+returned `GenericError: no surface`. KWin's debug-console request did not yield a
+viewable Windows tab; `xlsclients` is absent in the guest too. The exact app log
+also retains a real QML diagnostic at `Main.qml:303`: `Unable to assign [undefined]
+to QGeoMapType`; the copied guest payload lacks the pinned GeoServices plugins.
+This attempt cannot establish a clean native load or attribute that warning to
+the frozen UI. No full-session assertion or actual Orca speech check ran.
+
+Exact guest logs, captures, resource counters and the explicit cancellation result
+were saved before scoped cleanup. The owned HDB service, single VM and transfer
+container are stopped; run 17's exit 1/canceled is intentional cleanup, not a
+product failure. Full native desktop, appearance/scale, speech and RPM/DEB checks
+remain UNVERIFIED. No host appearance, scale, reader, security or input source
+changed, so none needed restoration. Gesture replay is never physical
+pinch/momentum acceptance. The historical F1–F10/platform rows in #19 remain
+incomplete; this tooling record adds no physical PASS.
 
 ## Local evidence
 
