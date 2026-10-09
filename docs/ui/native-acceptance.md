@@ -358,3 +358,94 @@ native focus and screen-reader checks remain unverified.
   exited 0, the fixture server was stopped, and a filtered process check found
   no remaining HDB/fixture/tile-failure process. No system preference changed
   during these compact reruns.
+
+
+#### Replacement-agent bounded checks — 2026-10-09
+
+This section supersedes the outstanding fixture compact-to-wide item and the
+undetermined PR-regression status of the Mac Python failure above. It does not
+complete F3, F9 or screen-reader acceptance.
+
+- **Current provenance:** docs head before this update was
+  `53f42619cfece10de4ee78c94242d310181284d9`, clean. The frozen UI worktree was
+  clean at `6ca00e51038811c305b77ab2db32061cf4650871`, with Stage 2
+  `c880920f76604337070ecc2ea376f7e29baa0b55` verified as an ancestor. Apphost
+  SHA-256 remained
+  `8a5b806b267918f4c87866e31b1dfbafc568328355cb6b18db25d600c34da86d`.
+  Direct native Computer Use screenshots and controls worked. No applicable
+  `AGENTS.md` or `.agents/skills` was present in these checkouts.
+- **Fixture compact-to-wide — passed:** the preceding agent's final native
+  observation established Back/list focus, explicit 748B reselection, Command-L
+  Town focus and widening with selection retained. The replacement also opened
+  the already-running bundle through native Finder to foreground it, narrowed
+  the left window frame from 3,024 to 1,424 screenshot pixels, and switched
+  Addresses/Map with 748B retained. Addresses focused “Back to all addresses”.
+  The exposed native “zoom the window” action restored 3,024 pixels; the
+  screenshot showed the selected 748B row, inspector and highlighted marker
+  together. This is native window sizing, not map zoom or a trackpad gesture.
+- **Map-specific focus — unverified:** after switching from the focused Back
+  button to Map, native AX reported only the standard window as focused.
+  One Tab did not expose map-specific focus. The screenshot showed the map
+  and retained highlight, but no independently identifiable map focus. The
+  earlier production observation has the same limitation. Source focus calls
+  and hidden-control disappearance are not promoted to native focus evidence.
+- **VoiceOver — unverified:** original state was off. Original caption panel
+  was on, font 22 pt (slider 3); those preferences were read and left unchanged.
+  Native System Settings enabled VoiceOver and a read-only process check
+  confirmed its reader running. VO-Shift-F4, VO-Right and VO-H produced no
+  readable caption/focus sequence in the supported app observations, including
+  a retry after HDB was foregrounded through Finder. Binding VoiceOver by its
+  full system app path timed out. A Dock lookup also timed out after several
+  minutes. No supported desktop-wide caption capture or genuine multitouch
+  control was exposed. No custom native-control protocol or permission bypass
+  was used. S2.12 row/selection/count announcements, S2.4 quiet refinement and
+  S3.11 spoken detail traversal remain unverified in both passes; the fixture
+  observation limit was not treated as a production pass or a product defect.
+- **Text-size distinction:** S3.10's production display-scale alternative
+  remains passed. The separate accessibility preferred-text-size mechanism
+  remains unverified: the earlier Default→13 pt attempt caused no visible HDB
+  text change. Display scaling does not establish that mechanism's response.
+- **Genuine gestures — manual:** the exposed controls support pointer drag,
+  ordinary wheel and keys, but no genuine trackpad pinch/magnify or inertial
+  scroll gesture. S3.12/F7 and requested map pinch remain explicitly manual.
+  Wheel and zoom-button results are not substituted.
+- **Python diagnosis retained:** the held bound/non-listening port test at
+  `tools/test_api_fixture_server.py:99` also timed out on unchanged base
+  `9723df1bfc85f5e4d1cd1cb785a1558cc4757268`, with byte-identical helper/test
+  files. Python 3.14.7 and Apple Python 3.9.6 reproduced it; controls refused
+  immediately after the port closed and connected immediately when listening.
+  Read-only firewall inspection found it disabled and stealth off. This is a
+  pre-existing fixture assumption mismatch with this Mac, not a #18 regression;
+  the lower-level cause remains undetermined. The failed local discovery result
+  (42 tests, one error) is preserved; no tests or security settings were changed.
+- **Cleanup:** both owned fixture app launches exited 0; the fixture server
+  stopped with Ctrl-C (130). VoiceOver off was visually and natively verified,
+  and caption panel on/22 pt was re-read. The filtered process check found no
+  remaining HDB/fixture/VoiceOver reader. Chinese Pinyin, Auto appearance,
+  Default accessibility text size and Default display scale were not changed;
+  their prior restoration evidence remains applicable. Native screenshots/AX
+  observations are retained in this replacement task transcript, and its
+  `fixture-app.log` records Metal and Retina scale 2. No full batch, product
+  change, deployment, production data mutation or Fedora operation occurred.
+
+**Minimal remaining physical Mac checks, on this same frozen bundle:**
+
+1. In fixture and production compact layout, select an address, switch
+   Addresses→Map and observe the native keyboard/VoiceOver focus on the map.
+2. Enable VoiceOver with its caption panel and use ABC for actual typing.
+   On fixtures traverse three rows, select once, type `b`, and observe one name
+   per row, one “Selected …”, settled five rather than stale six, then Escape
+   back to six. Select 748B from `bedok res` and append `e`: no repeated
+   selection announcement. On production repeat with counts equal to the
+   visible status bar and a retained-selection refinement (the verified
+   `geylang 30`→`geylang 30 c` case retains Cassia).
+3. On each selected inspector, traverse the named groups/headings, each
+   “Label: value” once, and each latest registration once.
+4. Physically pinch the map and perform inertial trackpad scrolling in the
+   list/details on both passes, recording the actual response. Restore Pinyin
+   and VoiceOver off afterward, preserving the original caption preference.
+
+PR #18 stays unmerged pending those substantive focus/VoiceOver observations
+or an explicit owner decision about the remaining gaps. Pinch/momentum remains
+the separately allowed manual tool limitation. KDE/Wayland acceptance and
+RPM/DEB packaging remain unverified; no Mac pass carries over.
