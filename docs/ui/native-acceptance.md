@@ -110,15 +110,15 @@ Runbook: [native-batch-1.md](native-batch-1.md).
 |---|---|---|
 | F1 Launch and load | passed | unverified (pending: KDE batch not run) |
 | F2 Filters | passed | unverified (pending) |
-| F3 Search | passed | unverified (pending) |
+| F3 Search | unverified: fixture alphabetic key paths rerun; production keyboard paths and a real exact-block/prefix-block ranking rerun remain pending | unverified (pending) |
 | F4 Selection sync | passed | unverified (pending) |
 | F5 Details | passed | unverified (pending) |
 | F6 Loading and errors | passed | unverified (pending) |
-| F7 Scrolling | unverified: S3.12 wheel and trackpad scrolling need the owner's input; S3.6 and S3.12's keyboard and pointer steps passed | unverified (pending) |
+| F7 Scrolling | unverified: fixture details wheel scrolling observed; remaining list/production wheel checks and genuine trackpad pinch/momentum remain pending; prior keyboard and pointer evidence retained | unverified (pending) |
 | F8 Chart | passed | unverified (pending) |
-| F9 Compact layout | passed | unverified (pending) |
+| F9 Compact layout | unverified: intended master/detail criterion corrected; native fixture and production reruns remain pending | unverified (pending) |
 | F10 About and modal isolation | passed | unverified (pending) |
-| Platform-specific items | unverified: VoiceOver (S2.12, S3.11), larger system text (S3.10), wheel and trackpad (S3.12) need the owner's input; every other item passed | unverified (pending) |
+| Platform-specific items | unverified: VoiceOver, supported larger-text/scale, compact reruns and production system-appearance checks remain pending; fixture system Light/Dark following observed; genuine trackpad pinch/momentum manually unverified | unverified (pending) |
 | RPM/DEB packaging | — | unverified |
 
 Nothing in the macOS column is carried into the KDE column.
@@ -175,10 +175,75 @@ Nothing in the macOS column is carried into the KDE column.
   - S2.11: in the compact layout, Addresses shows the selected address's
     details, by design, with focus on "‹ All addresses". It does not show the
     list.
-  - Production has no block 10 in Ang Mo Kio. The ranking rule held: the
-    exact "AVE 10" matches came before blocks 101 to 109.
+  - Production has no block 10 in Ang Mo Kio. Matches on "AVE 10" do not
+    establish exact-block-before-prefix-block ranking. That production
+    invariant remains unverified until rerun with a snapshot-derived case.
   - Section 1's backend grep misses Qt 6.12's wording; the line reads
     "Creating QRhi with backend Metal".
 - **Captures** (light and dark, not committed): S2.3 (active, inactive and
   reactivated), S2.8, S2.11, S3.1, S3.5, S3.6 (both directions), S3.7,
   S3.8, S3.9 and S3.15, plus the chart before and after `e3822a3`.
+
+#### Narrow correction sessions — 2026-10-09
+
+This section supersedes the passed claims for F3/F9 and system-appearance
+following above. The historical run remains recorded; its AX text assignments
+and per-app light override do not establish native alphabetic keystrokes or
+system-appearance following. No full batch was repeated and no Stage 2/3
+product source was edited.
+
+- **Provenance:** acceptance branch `docs/native-batch-1-macos` at
+  `fc8d24ebfaf3f3e17ff946688638b27589c03895` before these corrections;
+  existing Stage 3 Release bundle in
+  `hdb-resale-qt-worktrees/batch1/src/HdbResale.App/obj/Release/net10.0/HdbResale.app`,
+  source `6ca00e51038811c305b77ab2db32061cf4650871`, containing Stage 2
+  `c880920f76604337070ecc2ea376f7e29baa0b55`. Apphost SHA-256
+  `8a5b806b267918f4c87866e31b1dfbafc568328355cb6b18db25d600c34da86d`;
+  native library `5c8724827730e93a683f4fdc06fb7b3f7582e52d4053815bf913b32de2e272ca`;
+  managed DLL `aa0dc223f0156280b7df452105f60704b3be02e9dc7818d476ea621922638588`.
+  Existing macOS 27.0.1 (26A434), M5, Retina scale 2 provenance applies.
+- **Native input, fixture:** input source switched from Chinese Pinyin to ABC.
+  Computer Use sent individual key events, without AX text assignment or paste.
+  Command-F and `bedok res` yielded 748A, 748B, 747A, count three; Down,
+  Down, Return selected 748B. Appending `e` retained it; appending
+  ` 747` left 747A, count one, and cleared selection/details/highlight.
+  Escape twice restored six and focused the list. Alphabetic type-to-search
+  from that list repeated the three-result query. Numeric `4717` returned
+  748A and 747A; `588` showed zero with two matches hidden by filters.
+  Production keyboard paths were not rerun.
+- **Ranking preparation only:** saved production summaries pinned at
+  `generatedAt=2026-10-04T15:30:00.000Z` contain the real default-price-cap
+  case `geylang 30`: exact block 30 CASSIA CRES and prefix blocks
+  301, 302, 304, 305 UBI AVE 1. This was derived from summary block fields,
+  not street-number words. The native search and live snapshot-coherence
+  check remain pending; this derivation is not a native pass.
+- **Compact:** native frame-drag attempts did not establish a below-breakpoint
+  rerun. F9 remains unverified. Expected selected master/detail behavior:
+  Addresses shows selected details and focuses “All addresses”; Map/Addresses
+  switching retains selection. Back clears selection and returns focus to
+  the list. After reselecting, Filters and widening preserve selection.
+- **System appearance, fixture:** Computer Use selected Light and then Dark
+  in System Settings. The same running app visibly changed its inspector
+  and chart palette; labels, line and dots remained readable. Original
+  appearance was Auto and was restored, visibly verified. Production
+  system-appearance following remains pending.
+- **Wheel and text:** ordinary native wheel scrolling exposed the fixture
+  details chart and registrations. No wheel action establishes a trackpad
+  gesture. System accessibility text size was Default, raised one step to
+  13 pt; HDB was not listed among supported apps and its text did not visibly
+  change. S3.10 remains unverified until a supported text/scale check.
+  Default was restored and visibly verified before the initial disconnect.
+- **VoiceOver:** initially visibly off. Opening VoiceOver Utility stalled;
+  no successful on-toggle, caption/focus setting change or spoken reading
+  check occurred. S2.12/S3.11 remain unverified. No exposed Computer Use API
+  provides genuine pinch/magnify or momentum; those remain explicitly manual.
+- **Cleanup and reconnection:** the first session lost its native transport
+  and then host connection. On the authorized resume, shell inspection found
+  no HDB app or fixture server still running; old sessions 42825/45740 must
+  not be blindly signalled. System Settings again visibly showed VoiceOver
+  off and Appearance Auto. A Control-Space input-source restoration attempt
+  did not establish Pinyin; the subsequently read selected-source preference
+  still named ABC. Pinyin restoration and Default-text-size re-verification
+  remain required. The Keyboard Shortcuts sheet was open when native
+  Computer Use failed again with `Transport closed`; reset also failed.
+  No remaining native result can be inferred from that failure.
