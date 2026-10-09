@@ -181,7 +181,7 @@ exact block and cannot substitute. In the 2026-10-04T15:30:00.000Z snapshot,
 UBI AVE 1 under the default price cap. Derive the case again if the snapshot
 changes; if no eligible case exists, record ranking as unverified. The
 `ang mo kio 10` marker-membership check above is separate from ranking;
-`ang mo kio avenue` `ang mo kio avenue`
+`ang mo kio avenue`
 returns the same results (abbreviation equivalence); the postal code read
 from a selected address's Address group, searched on its own, returns that
 address. Quiet refinement (S2.4): select a result of `ang mo kio ave`, then
