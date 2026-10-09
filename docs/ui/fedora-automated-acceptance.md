@@ -211,6 +211,7 @@ desktop PASS. The resumed runs retain these separate outcomes:
 | 15 | Runner prerequisite failure: the egl-headless display module was missing |
 | 16 | Virgl rendered the greeter/wallpaper; the 3 GiB container recorded one QEMU OOM kill; ordinary app retry interrupted, engine exit 1/canceled |
 | 17 | Normal live-user login reached active tty2 Wayland; ordinary frozen HDB resolved Fusion, created OpenGL/virgl QRhi and fetched fixture summaries/manifest with HTTP 200; no usable visible Plasma/HDB window |
+| 18 | Focused basic-desktop probe only: non-GL virtio-vga, graphical startup before serial login; QEMU screendump succeeds, but native framebuffer and VNC both remain black with a cursor; no visible launcher response |
 
 For virgl, only the already accessible host `renderD128` was mapped into a new
 task-owned rootless container. No privileged mode, device/group permission or
@@ -232,16 +233,69 @@ after removing only the verified guest transfer archive (local original retained
 
 Run 17's VNC/openQA capture remained black with a cursor, and the independent
 [documented QEMU screendump](https://www.qemu.org/docs/master/interop/qemu-qmp-ref.html#command-screendump)
-returned `GenericError: no surface`. KWin's debug-console request did not yield a
+returned `GenericError: no surface`. This alone does not establish an unusable
+desktop: QEMU's current [screendump implementation](https://raw.githubusercontent.com/qemu/qemu/master/ui/ui-qmp-cmds.c)
+requires a pixel surface, and [console.c](https://raw.githubusercontent.com/qemu/qemu/master/ui/console.c)
+returns none for other scanout kinds, including GL. These are upstream source
+observations, not proof of the exact installed binary's failure cause.
+KWin's debug-console request did not yield a
 viewable Windows tab; `xlsclients` is absent in the guest too. The exact app log
 also retains a real QML diagnostic at `Main.qml:303`: `Unable to assign [undefined]
 to QGeoMapType`; the copied guest payload lacks the pinned GeoServices plugins.
 This attempt cannot establish a clean native load or attribute that warning to
 the frozen UI. No full-session assertion or actual Orca speech check ran.
 
+### Focused graphics diagnosis after run 17
+
+The user selected the isolated VM route; completion does not depend on granting
+access to the everyday host desktop. The maintained
+[Fedora KDE desktop_browser job 7140696](https://openqa.stg.fedoraproject.org/tests/7140696)
+passed on 2026-10-09. Its actual log sends `super`, recognizes the launcher,
+clicks it, types a Fedora Accounts URL and recognizes the resulting browser page.
+The downloaded screenshot independently shows that page and Plasma panel.
+Its machine uses `virtio-vga`, q35/secure UEFI, two CPUs and 4,096 MiB, and boots
+an installed disk from the current Fedora 45 compose. Configuration and test
+source were also read from the official Fedora repository, pinned at
+`9c442ba4c32f3b6b78fdc29f63f37e0d4f9ee242`.
+That is upstream evidence; the same full example has not passed locally.
+The generic os-autoinst example's no-media path only matches firmware and exits,
+so it cannot establish KDE compositor input.
+
+Earlier local non-GL attempts were identified before retrying. Run 18 specifically
+tests the serial-first startup hypothesis: it leaves graphical startup alone,
+uses the maintained VNC/QMP backend, and logs into the serial console only after
+the black-screen/basic-input observations. No HDB staging or launch occurs.
+Actual QEMU topology has one `virtio-vga` device with one output; VNC is connected
+to that same VM on internal port 5999. Both native QMP framebuffer capture and
+openQA VNC capture show black output with a cursor. The `super` key produces no
+visible launcher. Thus a wrong capture endpoint is not supported by this probe;
+successful capture is not successful compositor-delivered desktop input.
+
+Guest logs show Plasma startup failures before serial login: ksplash/kcminit
+timeouts, EGL/DRI failures, portal timeouts and a temporarily hanging KWin thread.
+KWin reports Wayland, OpenGL/llvmpipe, Virtual-1 at 1024×768 and scale 1. DRM card
+and render nodes exist. Active Wayland and active compositing do not establish a
+usable desktop. The guest reports 849 MiB of zram swap use; container memory peaks
+at 4,055,547,904 bytes with zero `max`, `oom` and `oom_kill` events and no container
+swap. This run is a guest startup/rendering failure, not an HDB product failure
+or proof that VM input is unsupported. The exact cause remains unresolved.
+
+The source-grounded next step is a faithful replay of the maintained Fedora job's
+installed-image/firmware configuration when resources permit its 4 GiB guest,
+while preserving the agreed single-VM/two-CPU scope. The local Beta 1.3 live media,
+BIOS machine and 2,304 MiB differ from that passing baseline. No further equivalent
+boot, backend override, package update or host security change was attempted.
+The staged Qt GeoServices repair is deferred until basic desktop capture and
+input work, as requested. No frozen source, toolchain pin or Bridge task changes.
+
+Run 18 ends with explicit TERM cleanup, engine exit 1 and result `canceled`;
+its VM exits before the idle owned container is stopped. Full-session S2/S3,
+F1–F10/platform, appearance/scale, actual Orca speech and gestures remain
+UNVERIFIED. Previously completed app tests were not repeated.
+
 Exact guest logs, captures, resource counters and the explicit cancellation result
 were saved before scoped cleanup. The owned HDB service, single VM and transfer
-container are stopped; run 17's exit 1/canceled is intentional cleanup, not a
+container are stopped; runs 17 and 18's exit 1/canceled are intentional cleanup, not a
 product failure. Full native desktop, appearance/scale, speech and RPM/DEB checks
 remain UNVERIFIED. No host appearance, scale, reader, security or input source
 changed, so none needed restoration. Gesture replay is never physical
@@ -255,6 +309,10 @@ Workspace `/home/sheng/Documents/Codex/2026-10-09/task/`, under
 `hdb-production-verified` (affected ordinary production validation),
 `qt-gate-fixture-final`, `qt-gate-production-final`, `isolate-*`,
 `openqa-vm-*`, signed-media verification and helper/build logs. Earlier failed
-harness attempts remain separately named. Original app-level evidence remains
+harness attempts remain separately named. Run 18 adds native/VNC captures,
+QEMU topology/endpoint logs, guest journals, KWin support information, resource
+counters and cancellation results; `upstream-fedora-*` preserves the passing
+official example's actual configuration, input log and browser screenshot.
+Original app-level evidence remains
 under `evidence/acceptance-*-final`. Frozen UI/record worktrees, unrelated local
 work and all oxpinyin lanes are preserved. Screenshots are not committed.
