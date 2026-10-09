@@ -177,8 +177,9 @@ filters: there must be an eligible exact `block` and eligible blocks whose
 `block` begins with it. The exact block must precede the prefix blocks, with
 no result outside the named town. A street word such as `AVE 10` is not an
 exact block and cannot substitute. In the 2026-10-04T15:30:00.000Z snapshot,
-`geylang 30` provides exact 30 CASSIA CRES and prefix 301, 302, 304, 305
-UBI AVE 1 under the default price cap. Derive the case again if the snapshot
+`geylang 30` provides exact 30 BALAM RD and 30 CASSIA CRES, and prefix
+301, 302, 304, 305 UBI AVE 1 under the default price cap. Both exact block-30
+addresses must precede every prefix block. Derive the case again if the snapshot
 changes; if no eligible case exists, record ranking as unverified. The
 `ang mo kio 10` marker-membership check above is separate from ranking;
 `ang mo kio avenue`
