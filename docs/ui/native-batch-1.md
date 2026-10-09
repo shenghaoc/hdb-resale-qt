@@ -92,7 +92,7 @@ the default S$1,000,000 maximum).
 | S2.8 | Replace with `588` | Empty state explains two matches hidden by the filters; Clear Search works. |
 | S2.9 | ⌘L / Ctrl+L | Focus lands on the town filter; in a compact window the filters expand. |
 | S2.10 | Narrow the window below the breakpoint with the filters collapsed; type `748` in the search (748A and 748B) and focus the list; open About from the platform's surface (the application menu on macOS, the status bar's About button on KDE); press ⌘F / Ctrl+F, then ⌘L / Ctrl+L, then Escape; widen the window again | No shortcut acts behind the dialog: the search field is not focused and the collapsed filters neither expand nor take focus; Escape closes About and nothing else, so the search still reads `748` with its two results and the status bar count unchanged (Escape clearing the search behind the dialog fails F10); on closing, focus returns to the list; a further Escape, with About closed, now clears the search. |
-| S2.11 | Select 748B, then narrow the window below the breakpoint; click the Map toggle, then the Addresses toggle; press ⌘L / Ctrl+L; widen it again | Map/Addresses toggles appear; the Map toggle shows the map and moves focus into it (the marker or the map itself reads as focused), the Addresses toggle shows the list and moves focus to it with 748B still current; in the compact layout the Filters shortcut expands the collapsed filters and focuses the town picker; 748B stays selected throughout. |
+| S2.11 | Select 748B, then narrow the window below the breakpoint; click Map, then Addresses; activate “All addresses”; select 748B again; press ⌘L / Ctrl+L; widen again | Map/Addresses toggles appear. Map shows the map and focuses it; Addresses shows the selected address’s details and focuses “All addresses”. Switching panes retains selection. “All addresses” clears selection and returns focus to the list. After reselecting, Filters expands the collapsed filters and focuses the town picker; selection survives Filters and widening. With no selection, Addresses shows and focuses the list. |
 | S2.12 | Screen reader on (VoiceOver, Orca): move through three rows, select one, type `b` | One name per row with address, town, median, sales and month; "Selected …" once; after a pause the result count announced is five (the Bedok matches 747A, 748B, 748A, 115, 39), not the stale six; on production the spoken value equals the visible status bar count. Then Escape until the search is empty and six addresses show. |
 | S2.13 | Select 748B, then set town ANG MO KIO; Reset. Then each filter from the defaults (Reset between them): town ANG MO KIO; flat type 4 ROOM; maximum S$500,000; minimum S$500,000; minimum S$600,000 with maximum S$500,000; maximum raised to its upper limit; Latest 12 months; then Reset | The excluded selection clears from the list, the map highlight and the details together. Then counts, with the list, the map and the status bar agreeing each time: 1 (727); 5 (747A, 748B, 748A, 115, 39); 3 (115, 39, 727); 3 (747A, 748B, 748A); 0 with the reversed-range explanation; 11 (relaxing the default S$1,000,000 cap widens the list: 58, 46, 588B, 10D and 588C appear on the list and the map); 4 (747A, 748B, 748A, 39: the window starts at 2025-11, and 115's latest sale is 2025-10); Reset restores six and every default. |
 | S2.14 | Click a map marker (zoom in until 748B is an individual marker) | The list highlights and scrolls to 748B, the details open, and the marker is highlighted; "Show on map" from the details recentres on it. |
@@ -171,9 +171,17 @@ one marker outside Ang Mo Kio (the S2.0 selection's location serves), and
 after the query zoom to that location and confirm no marker remains there.
 A marker that selects an address not on the list, a listed address without
 one, or a marker surviving outside the results, fails F3. `ang mo kio ave` returns results whose addresses all
-contain those words; `ang mo kio 10` returns block 10 (an exact word match)
-before blocks that merely begin with 10, such as 101 to 109, and no address
-outside Ang Mo Kio; `ang mo kio avenue`
+contain those words. For exact-block-before-prefix-block ranking, derive a
+town and block-number query from the pinned summaries under the active
+filters: there must be an eligible exact `block` and eligible blocks whose
+`block` begins with it. The exact block must precede the prefix blocks, with
+no result outside the named town. A street word such as `AVE 10` is not an
+exact block and cannot substitute. In the 2026-10-04T15:30:00.000Z snapshot,
+`geylang 30` provides exact 30 CASSIA CRES and prefix 301, 302, 304, 305
+UBI AVE 1 under the default price cap. Derive the case again if the snapshot
+changes; if no eligible case exists, record ranking as unverified. The
+`ang mo kio 10` marker-membership check above is separate from ranking;
+`ang mo kio avenue` `ang mo kio avenue`
 returns the same results (abbreviation equivalence); the postal code read
 from a selected address's Address group, searched on its own, returns that
 address. Quiet refinement (S2.4): select a result of `ang mo kio ave`, then
