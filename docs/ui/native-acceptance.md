@@ -7,6 +7,9 @@ and a Fedora KDE run through XWayland ([docs/pr8-review-verification.md](../pr8-
 No native KDE/Wayland acceptance has been recorded yet. The redesign emphasises
 macOS. Neither platform is secondary.
 
+Windows UI acceptance is TODO for the foreseeable future and does not gate
+Stages 2–3.
+
 Acceptance is recorded per platform. A scenario that passed on one platform
 is not accepted on the other, and the record says so. Three outcomes exist for
 every scenario on every platform: **passed**, **failed**, **unverified**.
