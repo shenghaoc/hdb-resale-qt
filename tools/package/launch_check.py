@@ -7,8 +7,9 @@ inherited Qt, .NET, loader, data and test override removed. The only deliberate 
 HDB_API_BASE_URL, which points at tools/api_fixture_server.py's recorded responses, so the
 check never depends on the production Worker.
 
-It tests shell/data/map-engine/chart readiness and clean teardown over real X11. It does not
-test tile pixels, network success, visual quality, Wayland or distributions it was not run on.
+It tests shell/data/map-engine/chart readiness, the app id the window reports to the X server,
+and clean teardown over real X11. It does not test tile pixels, network success, visual quality,
+Wayland or distributions it was not run on.
 """
 from __future__ import annotations
 
@@ -28,7 +29,7 @@ import time
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from package_common import verify_manifest  # noqa: E402
+from package_common import APPLICATION_ID, verify_manifest  # noqa: E402
 
 MARKERS = ("HDB_PACKAGE_SHELL", "HDB_PACKAGE_DATA", "HDB_PACKAGE_MAP_READY",
            "HDB_PACKAGE_CHART_READY", "HDB_PACKAGE_EXIT")
@@ -50,6 +51,10 @@ REQUIRED_MAPPED = ("libQt6Core.so", "libcoreclr.so", "libqtgeoservices_osm.so", 
 # Things a package must never read: system Qt, a host .NET, and package-manager caches.
 SYSTEM_RUNTIME_ROOTS = ("/usr/lib/qt6", "/usr/lib64/qt6", "/usr/lib/x86_64-linux-gnu/qt6", "/usr/share/qt6",
                         "/usr/share/dotnet", "/usr/lib/dotnet", "/usr/lib64/dotnet", "/etc/dotnet")
+# Qt sets both on every window from QGuiApplication::desktopFileName(), or from the executable's base name
+# ("HdbResale") when the application sets none, and gives a Wayland compositor the same value as the window's app id.
+# Desktops match it to an installed desktop entry for the window's name and icon.
+APP_ID_PROPERTIES = ("_GTK_APPLICATION_ID", "_KDE_NET_WM_DESKTOP_FILE")
 
 
 def clean_environment(original: dict[str, str], temporary: Path, api_base_url: str) -> dict[str, str]:
@@ -117,6 +122,40 @@ def forbidden_opens(trace: str, forbidden: tuple[str, ...]) -> list[str]:
     return sorted(set(hits))
 
 
+def child_windows(tree: str) -> list[str]:
+    """Window ids from `xwininfo -root -children`: the top-level windows, as no window manager reparents them."""
+    return re.findall(r"^\s+(0x[0-9a-f]+) ", tree, re.M)
+
+
+def app_id_values(properties: str) -> dict[str, str]:
+    """The app-id properties a window has, from `xprop -id <window> <properties>` output."""
+    return dict(re.findall(r'^(\w+)\(UTF8_STRING\) = "(.*)"$', properties, re.M))
+
+
+def window_app_ids(display: dict[str, str]) -> dict[str, dict[str, str]]:
+    """The app-id properties of every top-level window that has any, as the X server reports them now.
+
+    A window can close between the listing and its query; xprop then fails and that window is skipped.
+    """
+    def run(*command: str) -> str:
+        return subprocess.run(command, env=display, text=True, capture_output=True, timeout=10).stdout
+    windows = {}
+    for window in child_windows(run("xwininfo", "-root", "-children")):
+        values = app_id_values(run("xprop", "-id", window, *APP_ID_PROPERTIES))
+        if values:
+            windows[window] = values
+    return windows
+
+
+def verify_app_id(windows: dict[str, dict[str, str]]) -> None:
+    if not windows:
+        raise ValueError("No window reported an app id (" + ", ".join(APP_ID_PROPERTIES) + ")")
+    wrong = {window: values for window, values in windows.items()
+             if any(values.get(name) != APPLICATION_ID for name in APP_ID_PROPERTIES)}
+    if wrong:
+        raise ValueError(f"Windows report an app id other than {APPLICATION_ID}: " + repr(wrong))
+
+
 def process_tree(root: int) -> set[int]:
     """The process and its descendants (strace, when used, is the root's child)."""
     parents = {}
@@ -166,6 +205,7 @@ def check(package: Path, launcher: Path, log_path: Path, report_path: Path, time
     api = api_base_url or f"http://127.0.0.1:{server.server_port}/"
     started = time.monotonic()
     mapped: set[str] = set()
+    windows: dict[str, dict[str, str]] = {}
     forbidden = tuple(forbid) + SYSTEM_RUNTIME_ROOTS
     code = None
     try:
@@ -176,6 +216,11 @@ def check(package: Path, launcher: Path, log_path: Path, report_path: Path, time
             environment = clean_environment(dict(os.environ), temporary, api)
             if not environment.get("DISPLAY"):
                 raise ValueError("A real X11 DISPLAY is required; no offscreen substitution")
+            for tool in ("xwininfo", "xprop"):
+                if not shutil.which(tool):
+                    raise ValueError(tool + " is required to read the window's app id")
+            display = {key: environment[key] for key in ("DISPLAY", "XAUTHORITY") if key in environment}
+            display["PATH"] = os.environ.get("PATH", "/usr/bin:/bin")
             command = [str(launcher)]
             trace_file = temporary / "opens.txt"
             if trace:
@@ -185,10 +230,14 @@ def check(package: Path, launcher: Path, log_path: Path, report_path: Path, time
             with log_path.open("w") as log:
                 child = subprocess.Popen(command, cwd=temporary / "unrelated-cwd", env=environment,
                                          stdout=log, stderr=subprocess.STDOUT)
+                next_probe = 0.0
                 try:
                     while child.poll() is None:
                         for pid in process_tree(child.pid):
                             mapped |= mapped_files(pid)
+                        if time.monotonic() >= next_probe:
+                            windows.update(window_app_ids(display))
+                            next_probe = time.monotonic() + 0.5
                         if time.monotonic() - started > timeout:
                             child.kill()
                             child.wait()
@@ -201,12 +250,13 @@ def check(package: Path, launcher: Path, log_path: Path, report_path: Path, time
                         child.wait()
             opened = forbidden_opens(trace_file.read_text(errors="replace"), forbidden) if trace else []
         verify(code, log_path.read_text(errors="replace"), mapped, package)
+        verify_app_id(windows)
         if opened:
             raise ValueError("Package read or executed build-tree/system runtime files: " + repr(opened))
     except ValueError as error:
         report_path.parent.mkdir(parents=True, exist_ok=True)
         report_path.write_text(json.dumps({"passed": False, "package": str(package), "exit_code": code,
-            "reason": str(error), "mapped_libraries": sorted(mapped)}, indent=2) + "\n")
+            "reason": str(error), "window_app_ids": windows, "mapped_libraries": sorted(mapped)}, indent=2) + "\n")
         raise
     finally:
         if server:
@@ -217,7 +267,8 @@ def check(package: Path, launcher: Path, log_path: Path, report_path: Path, time
               "elapsed_seconds": round(time.monotonic() - started, 3),
               "exit_code": code, "markers": list(MARKERS), "fresh_home_and_xdg": True,
               "clean_loader_environment": True, "unrelated_working_directory": True,
-              "manifest_verified": True, "file_access_traced": trace, "forbidden_prefixes": list(forbidden),
+              "manifest_verified": True, "window_app_ids": windows,
+              "file_access_traced": trace, "forbidden_prefixes": list(forbidden),
               "mapped_libraries": sorted(p for p in mapped if RUNTIME_LIBRARY.search(p)),
               "tile_pixels_verified": False, "network_success_verified": False, "distribution_cleared": False}
     report_path.parent.mkdir(parents=True, exist_ok=True)
@@ -240,8 +291,8 @@ def main() -> int:
     try:
         report = check(args.package, launcher, args.log, args.report, args.timeout, args.api_base_url,
                        tuple(args.forbid), args.trace_file_access)
-        print("Package launch passed: shell/data/map engine/chart ready, native/.NET exit 0; "
-              + str(report["elapsed_seconds"]) + " seconds. Tile pixels were not tested.")
+        print("Package launch passed: shell/data/map engine/chart ready, window app id " + APPLICATION_ID
+              + ", native/.NET exit 0; " + str(report["elapsed_seconds"]) + " seconds. Tile pixels were not tested.")
     except (OSError, ValueError, subprocess.SubprocessError, KeyError) as error:
         print("Package launch FAILED: " + str(error), file=sys.stderr)
         return 1

@@ -2,9 +2,11 @@ import importlib.util
 import json
 import os
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 PACKAGE_DIR = Path(__file__).parent / "package"
 sys.path.insert(0, str(PACKAGE_DIR))
@@ -114,6 +116,50 @@ class Manifest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 launch.check(root, root / "launcher", Path(temp) / "l.log", Path(temp) / "r.json", 5,
                              api_base_url="http://127.0.0.1:9/")
+
+
+class WindowAppId(unittest.TestCase):
+    TREE = """
+xwininfo: Window id: 0x3a0 (the root window) (has no name)
+
+  Root window id: 0x3a0 (the root window) (has no name)
+  Parent window id: 0x0 (none)
+     3 children:
+     0x200008 "HDB Resale Explorer": ("HdbResale.App" "HdbResale.App")  1280x800+0+0  +0+0
+     0x200003 (has no name): ()  1x1+0+0  +0+0
+     0x200001 (has no name): ()  1x1+0+0  +0+0
+"""
+    REPORTED = (f'_GTK_APPLICATION_ID(UTF8_STRING) = "{launch.APPLICATION_ID}"\n'
+                f'_KDE_NET_WM_DESKTOP_FILE(UTF8_STRING) = "{launch.APPLICATION_ID}"\n')
+    # What Qt reports when the application sets no desktop file name: the executable's base name.
+    FALLBACK = '_GTK_APPLICATION_ID(UTF8_STRING) = "HdbResale"\n_KDE_NET_WM_DESKTOP_FILE(UTF8_STRING) = "HdbResale"\n'
+    ABSENT = "_GTK_APPLICATION_ID:  not found.\n_KDE_NET_WM_DESKTOP_FILE:  not found.\n"
+
+    def test_only_the_top_level_windows_are_listed(self):
+        self.assertEqual(launch.child_windows(self.TREE), ["0x200008", "0x200003", "0x200001"])
+
+    def test_the_properties_a_window_has_are_read(self):
+        self.assertEqual(launch.app_id_values(self.REPORTED),
+                         dict.fromkeys(launch.APP_ID_PROPERTIES, launch.APPLICATION_ID))
+        self.assertEqual(launch.app_id_values(self.ABSENT), {})
+
+    def test_windows_without_the_properties_or_closed_before_the_query_are_skipped(self):
+        outputs = {"0x200008": self.REPORTED, "0x200003": self.ABSENT, "0x200001": ""}
+
+        def run(command, **_):
+            output = self.TREE if command[0] == "xwininfo" else outputs[command[2]]
+            return subprocess.CompletedProcess(command, 0 if output else 1, output, "")
+        with mock.patch.object(launch.subprocess, "run", run):
+            self.assertEqual(launch.window_app_ids({}), {"0x200008": launch.app_id_values(self.REPORTED)})
+
+    def test_only_the_desktop_entry_id_in_both_properties_of_every_window_passes(self):
+        launch.verify_app_id({"0x200008": launch.app_id_values(self.REPORTED)})
+        half = self.REPORTED.splitlines()[0] + "\n_KDE_NET_WM_DESKTOP_FILE:  not found.\n"
+        for windows in ({}, {"0x200008": launch.app_id_values(self.FALLBACK)},
+                        {"0x200008": launch.app_id_values(half)},
+                        {"0x200008": launch.app_id_values(self.REPORTED), "0x200009": launch.app_id_values(self.FALLBACK)}):
+            with self.assertRaises(ValueError, msg=repr(windows)):
+                launch.verify_app_id(windows)
 
 
 if __name__ == "__main__":
