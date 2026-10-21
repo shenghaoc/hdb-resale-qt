@@ -60,7 +60,7 @@ case $format in
   rpm) dnf install -y -q python3 xorg-x11-server-Xvfb xauth xprop xwininfo strace desktop-file-utils appstream util-linux
        # GTK's dependency closure can install Python before this phase. DNF's no-op
        # install preserves that dependency reason; retain the verifier for phase 7.
-       dnf mark user python3 ;;
+       dnf -y mark user python3 ;;
 esac
 id hdbtest >/dev/null 2>&1 || useradd --create-home hdbtest
 
