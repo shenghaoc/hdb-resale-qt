@@ -74,6 +74,9 @@ jobs:
       - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
         with:
           global-json-file: global.json
+          # Also the exact SDK global.json names, for its runtime: staging ships .NET 10.0.12. A runner image
+          # with a newer SDK patch satisfies global.json's latestPatch roll-forward and would install neither.
+          dotnet-version: 10.0.401
 
       - name: Install build and X11 prerequisites
         run: |
