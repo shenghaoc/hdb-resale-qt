@@ -17,6 +17,15 @@ ToolBar {
     readonly property alias pricePicker: maximumSpin
     readonly property alias recencyPicker: recencyCombo
     readonly property alias resetButton: resetButton
+    readonly property alias filtersButton: filtersButton
+    // Qt keeps keyboard focus on an item that becomes invisible, so collapsing the filters while one of them holds focus
+    // would leave it on a hidden control, where an arrow key still changes that filter. Focus moves to the Filters button
+    // that collapsed them instead, for a keyboard reason so every style shows it.
+    onExpandedChanged: if (!expanded && fieldsHoldFocus()) filtersButton.forceActiveFocus(Qt.TabFocusReason)
+    function fieldsHoldFocus() {
+        for (let item = Window.activeFocusItem; item; item = item.parent) if (item === fields) return true
+        return false
+    }
     FontMetrics { id: captionMetrics; font.pointSize: root.font.pointSize * root.theme.captionScale }
     readonly property var recencyLabels: [qsTr("Any time"), qsTr("Latest 12 months"), qsTr("Latest 24 months")]
     readonly property bool priceInvalid: Resales.minimumPrice > Resales.maximumPrice
@@ -41,6 +50,7 @@ ToolBar {
             Layout.fillWidth: true
             spacing: theme.s
             Button {
+                id: filtersButton
                 text: root.activeCount > 0 ? qsTr("Filters (%1)").arg(root.activeCount) : qsTr("Filters")
                 checkable: true; checked: root.expanded
                 onToggled: root.expanded = checked
@@ -56,6 +66,7 @@ ToolBar {
             }
         }
         RowLayout {
+            id: fields
             visible: root.showFields
             Layout.fillWidth: true
             spacing: theme.m

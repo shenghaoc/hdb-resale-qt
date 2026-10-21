@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "tile_status.h"
+#include "accessibility_gate.h"
 #include <QtCore/QString>
 #include <QtCore/qlogging.h>
 #include <atomic>
@@ -52,6 +53,8 @@ void hdb_tile_status_start()
         return;
     }
     installed = true;
+    if (qEnvironmentVariable("HDB_API_GATE").startsWith(QStringLiteral("keyboard")))
+        registerAccessibilityGate();
 }
 
 std::uint64_t hdb_tile_status_exhausted()

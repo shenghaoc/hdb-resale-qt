@@ -59,6 +59,7 @@
     <None Include="FilterField.qml"/>
     <None Include="FilterBar.qml"/>
     <None Include="LoadStatus.qml"/>
+    <None Include="KeyboardGate.qml"/>
     <Compile Include="Program.cs" />
     <Compile Include="ApiRequests.cs" />
     <Compile Include="BuyerPresentation.cs" />

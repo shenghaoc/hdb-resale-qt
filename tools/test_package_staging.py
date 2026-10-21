@@ -222,6 +222,16 @@ class StagingParts(unittest.TestCase):
                 stage.validate_output(root, Path("/other/repo"))
             stage.validate_output(root / "new", Path("/other/repo"))
 
+    def test_test_only_qml_is_not_scanned_for_package_imports(self):
+        sources = {path.name for path in stage.application_qml(ROOT / "src/HdbResale.App")}
+        self.assertIn("Main.qml", sources)
+        self.assertNotIn("KeyboardGate.qml", sources)
+        # Any QML that pulls in QtTest is a test harness; it must be listed, or the package would stage Qt's test stack.
+        for path in sorted((ROOT / "src/HdbResale.App").glob("*.qml")):
+            imports = re.findall(r"^import\s+(\S+)", path.read_text(), re.M)
+            if "QtTest" in imports or "HdbResale.Acceptance" in imports:
+                self.assertIn(path.name, stage.TEST_ONLY_QML, path.name)
+
     def test_qml_copy_excludes_unselected_child_module(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
