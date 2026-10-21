@@ -1,0 +1,149 @@
+name: Release
+
+# Can this commit ship? Runs the full CI first (ci.yml via workflow_call) and only then builds the
+# tar.gz, DEB and RPM, proves a tampered staged tree is refused, smoke-tests the relocated tar on X11
+# and installs, launches and removes the DEB on Debian 13 and the RPM on Fedora 43.
+#
+# A pushed v* tag (which must match the project <Version>) attaches the verified packages and their
+# checksums to a draft GitHub release; publishing it is a manual decision. workflow_dispatch runs the
+# same verification on any branch or tag, for example one that changes packaging, and keeps the
+# packages as a run artifact without creating or changing any release.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  DEBIAN_IMAGE: "debian:13"
+  FEDORA_IMAGE: "fedora:43"
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
+  package:
+    name: Build, package and verify (Debian 13 DEB, Fedora 43 RPM)
+    needs: ci
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - name: A release tag must name the project version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          version=$(python3 -c 'import sys; sys.path.insert(0, "tools/package"); from package_common import application_version; print(application_version())')
+          if [ "$GITHUB_REF_NAME" != "v$version" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match the project <Version> $version"; exit 1
+          fi
+      - uses: ./.github/actions/qt-linux
+        with:
+          extra-packages: rpm strace desktop-file-utils appstream libgtk-3-0t64 x11-utils
+
+      - name: Build the application (Release)
+        run: dotnet build src/HdbResale.App -c Release
+      - name: Stage the runtime
+        run: |
+          dotnet_root=$(dirname "$(readlink -f "$(command -v dotnet)")")
+          python3 tools/package/stage_linux.py --qt "$QtDir" --dotnet "$dotnet_root" \
+            --bridge "$HOME/.nuget/packages/qtgroup.qt.bridge.csharp.linux-x64/0.4.0-beta" \
+            --output "$RUNNER_TEMP/stage"
+          echo "STAGED=$(echo "$RUNNER_TEMP"/stage/hdb-resale-explorer-*-linux-x64)" >> "$GITHUB_ENV"
+      - name: Build tar.gz, DEB and RPM from the staged tree
+        run: python3 tools/package/build_packages.py --staged "$STAGED" --output "$RUNNER_TEMP/dist"
+      - name: Negative control, a modified staged tree must not be packaged
+        run: |
+          mkdir "$RUNNER_TEMP/tampered"
+          cp -a "$STAGED" "$RUNNER_TEMP/tampered/"
+          printf 'x' >> "$RUNNER_TEMP/tampered/$(basename "$STAGED")/app/qt.conf"
+          if python3 tools/package/build_packages.py --staged "$RUNNER_TEMP/tampered/$(basename "$STAGED")" \
+               --output "$RUNNER_TEMP/never" --format tar; then
+            echo "::error::a tampered staged tree was packaged"; exit 1
+          fi
+      - name: Relocated tar smoke on the build host (recorded API, real X11)
+        run: |
+          mkdir "$RUNNER_TEMP/tar extract"
+          tar -xzf "$RUNNER_TEMP"/dist/*.tar.gz -C "$RUNNER_TEMP/tar extract"
+          XDG_CURRENT_DESKTOP=GNOME python3 tools/package/launch_check.py --package "$RUNNER_TEMP"/tar\ extract/hdb-resale-explorer-* \
+            --trace-file-access --forbid "$QtDir" --expect-platform-theme libqgtk3.so \
+            --log "$RUNNER_TEMP/reports/tar-launch.log" --report "$RUNNER_TEMP/reports/tar-launch-report.json"
+
+      - name: Install and verify the DEB on Debian 13
+        run: |
+          docker pull -q "$DEBIAN_IMAGE"
+          docker image inspect --format '{{index .RepoDigests 0}}' "$DEBIAN_IMAGE" | tee "$RUNNER_TEMP/reports/debian-image.txt"
+          docker run --rm -v "$RUNNER_TEMP/dist:/pkg:ro" -v "$PWD:/work:ro" -v "$RUNNER_TEMP/reports/deb:/out" \
+            "$DEBIAN_IMAGE" sh /work/tools/package/verify_installed.sh deb "/pkg/$(basename "$RUNNER_TEMP"/dist/*.deb)" /work /out
+      - name: Install and verify the RPM on Fedora 43
+        run: |
+          docker pull -q "$FEDORA_IMAGE"
+          docker image inspect --format '{{index .RepoDigests 0}}' "$FEDORA_IMAGE" | tee "$RUNNER_TEMP/reports/fedora-image.txt"
+          docker run --rm -v "$RUNNER_TEMP/dist:/pkg:ro" -v "$PWD:/work:ro" -v "$RUNNER_TEMP/reports/rpm:/out" \
+            "$FEDORA_IMAGE" sh /work/tools/package/verify_installed.sh rpm "/pkg/$(basename "$RUNNER_TEMP"/dist/*.rpm)" /work /out
+
+      - name: Collect verification reports
+        if: always()
+        run: |
+          mkdir -p "$RUNNER_TEMP/reports/package"
+          cp "$RUNNER_TEMP"/dist/{SHA256SUMS,packages.json} "$RUNNER_TEMP/reports/package/" || true
+          cp "$STAGED"/{manifest.json,system-libraries.txt} "$RUNNER_TEMP/reports/package/" || true
+          dpkg-deb -I "$RUNNER_TEMP"/dist/*.deb > "$RUNNER_TEMP/reports/package/deb-info.txt" || true
+          rpm -qpi "$RUNNER_TEMP"/dist/*.rpm > "$RUNNER_TEMP/reports/package/rpm-info.txt" || true
+          rpm -qpR "$RUNNER_TEMP"/dist/*.rpm >> "$RUNNER_TEMP/reports/package/rpm-info.txt" || true
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        if: always()
+        with:
+          name: linux-package-verification
+          path: ${{ runner.temp }}/reports
+          retention-days: 14
+          if-no-files-found: warn
+          overwrite: true  # a rerun of this job replaces the earlier attempt's reports
+      # Only reached when every verification step above passed.
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: linux-packages
+          path: |
+            ${{ runner.temp }}/dist/*.tar.gz
+            ${{ runner.temp }}/dist/*.deb
+            ${{ runner.temp }}/dist/*.rpm
+            ${{ runner.temp }}/dist/SHA256SUMS
+          retention-days: 14
+          if-no-files-found: error
+          overwrite: true  # a rerun of this job replaces the earlier attempt's packages
+
+  # Distribution is not cleared (every manifest says distribution_cleared: false; see
+  # docs/packaging/linux.md), so a tag only stages the verified packages on a draft release. Publishing the
+  # draft is a manual decision, outside CI. A workflow_dispatch never reaches this job, even on a tag.
+  publish:
+    name: Attach the verified packages to a draft GitHub release
+    needs: package
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          name: linux-packages
+          path: dist
+      - name: Attach to the draft release for this tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          if draft=$(gh release view "$GITHUB_REF_NAME" --json isDraft --jq .isDraft 2>/dev/null); then
+            # Never change a release that has been published.
+            if [ "$draft" != "true" ]; then
+              echo "::error::release $GITHUB_REF_NAME is already published; refusing to change its assets"; exit 1
+            fi
+            gh release upload "$GITHUB_REF_NAME" dist/* --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" dist/* --draft --verify-tag \
+              --title "HDB Resale Explorer ${GITHUB_REF_NAME#v}" --generate-notes
+          fi

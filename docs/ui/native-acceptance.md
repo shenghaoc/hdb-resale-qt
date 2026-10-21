@@ -27,8 +27,8 @@ every scenario on every platform: **passed**, **failed**, **unverified**.
   loaded. The packaged KDE palette is unverified pending a future Plasma check.
 - Offscreen runs are regression checks: the smoke modes of
   `tools/api_native_smoke.py` run offscreen in the web coding environment, by
-  hand, before each push. CI (`.github/workflows/domain.yml`) builds and runs
-  the C# and Python unit tests only; it does not build or run the application.
+  hand, before each push. CI (`.github/workflows/ci.yml`) also builds the
+  application on Linux and runs ctest and these smoke modes on Xvfb (X11).
   Neither establishes macOS or KDE/Wayland acceptance.
 
 ## Shared functional scenarios

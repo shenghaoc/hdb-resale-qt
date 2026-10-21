@@ -60,8 +60,10 @@
 
 ## R6 — CI structure
 
-- **R6.1** `domain.yml` stays Qt-free and fast. The package/native workflow `linux-package.yml` is separate and is
-  triggered only by inputs that can change the package (app/native source, QML, resources, project and Bridge pins,
+- **R6.1** Superseded by T4.2: `ci.yml` (pull requests, merges to `main`) runs the tests and native gates and never
+  packages; `release.yml` (a `v*` tag or `workflow_dispatch`) packages only after `ci.yml` passed, and a tag publishes
+  the verified packages. The original requirement read: `domain.yml` stays Qt-free and fast; the package/native
+  workflow `linux-package.yml` is separate and is triggered only by inputs that can change the package (app/native source, QML, resources, project and Bridge pins,
   packaging, recorded fixtures, files copied into the package, the workflow).
 - **R6.2** It builds Release from a clean checkout, runs the existing C#/Python tests and native gates first,
   then stages, packages and verifies.
