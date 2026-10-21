@@ -42,7 +42,7 @@ FAILURES = re.compile(
     r"(?:No|Only prerelease) .*\.NET runtime|No functional TLS backend|"
     r"TLS initialization failed|Error loading metadata file|Failed to load app-local ICU|ASSERT|Aborted", re.I)
 KEEP = ("DISPLAY", "XAUTHORITY", "XDG_RUNTIME_DIR", "DBUS_SESSION_BUS_ADDRESS",
-        "XDG_SESSION_TYPE", "USER", "LOGNAME", "LANG", "LC_ALL")
+        "XDG_SESSION_TYPE", "XDG_CURRENT_DESKTOP", "USER", "LOGNAME", "LANG", "LC_ALL")
 # Libraries that must come from the package, and the proof that X11 (not offscreen) was used.
 RUNTIME_LIBRARY = re.compile(
     r"/(?:libQt6[^/]*|libicu[^/]*|libcoreclr[^/]*|libhostfxr|libhostpolicy|libclrjit|libSystem\.[^/]*|libqt[^/]*"
@@ -117,8 +117,13 @@ def forbidden_opens(trace: str, forbidden: tuple[str, ...]) -> list[str]:
     hits = []
     for line in trace.splitlines():
         match = re.search(r'(?:openat|execve)\([^"]*"([^"]+)".*\)\s+=\s+(-?\d+)', line)
-        if match and not match.group(2).startswith("-") and match.group(1).startswith(forbidden):
-            hits.append(match.group(1))
+        if match and not match.group(2).startswith("-"):
+            path = match.group(1)
+            # Distribution Qt libraries also live directly in the architecture lib directory.
+            system_qt = path.startswith(("/usr/lib/", "/usr/lib64/", "/lib/", "/lib64/")) and re.search(
+                r"/libQt6[^/]*\.so(?:\.|$)", path)
+            if path.startswith(forbidden) or system_qt:
+                hits.append(path)
     return sorted(set(hits))
 
 
@@ -154,6 +159,21 @@ def verify_app_id(windows: dict[str, dict[str, str]]) -> None:
              if any(values.get(name) != APPLICATION_ID for name in APP_ID_PROPERTIES)}
     if wrong:
         raise ValueError(f"Windows report an app id other than {APPLICATION_ID}: " + repr(wrong))
+
+
+def appearance_plugins(mapped: set[str]) -> dict[str, list[str]]:
+    """Loaded plugins observed in process maps, not merely present on disk."""
+    return {category: sorted({Path(path).name for path in mapped
+                            if f"/plugins/{category}/" in path})
+            for category in ("platformthemes", "wayland-decoration-client")}
+
+
+def verify_appearance(mapped: set[str], theme: str | None, decoration: str | None) -> dict[str, list[str]]:
+    observed = appearance_plugins(mapped)
+    for category, expected in (("platformthemes", theme), ("wayland-decoration-client", decoration)):
+        if expected is not None and observed[category] != [expected]:
+            raise ValueError(f"Expected loaded {category} plugin {expected!r}, observed {observed[category]!r}")
+    return observed
 
 
 def process_tree(root: int) -> set[int]:
@@ -195,7 +215,8 @@ def serve_recorded_api() -> http.server.ThreadingHTTPServer:
 
 
 def check(package: Path, launcher: Path, log_path: Path, report_path: Path, timeout: float,
-          api_base_url: str | None = None, forbid: tuple[str, ...] = (), trace: bool = False) -> dict:
+          api_base_url: str | None = None, forbid: tuple[str, ...] = (), trace: bool = False,
+          expected_theme: str | None = None, expected_decoration: str | None = None) -> dict:
     package = package.resolve(strict=True)
     manifest = json.loads((package / "manifest.json").read_text())
     # All shipped bytes must still match staging. Tests never rewrite the package.
@@ -251,6 +272,7 @@ def check(package: Path, launcher: Path, log_path: Path, report_path: Path, time
             opened = forbidden_opens(trace_file.read_text(errors="replace"), forbidden) if trace else []
         verify(code, log_path.read_text(errors="replace"), mapped, package)
         verify_app_id(windows)
+        verify_appearance(mapped, expected_theme, expected_decoration)
         if opened:
             raise ValueError("Package read or executed build-tree/system runtime files: " + repr(opened))
     except ValueError as error:
@@ -268,6 +290,7 @@ def check(package: Path, launcher: Path, log_path: Path, report_path: Path, time
               "exit_code": code, "markers": list(MARKERS), "fresh_home_and_xdg": True,
               "clean_loader_environment": True, "unrelated_working_directory": True,
               "manifest_verified": True, "window_app_ids": windows,
+              "appearance_plugins": appearance_plugins(mapped),
               "file_access_traced": trace, "forbidden_prefixes": list(forbidden),
               "mapped_libraries": sorted(p for p in mapped if RUNTIME_LIBRARY.search(p)),
               "tile_pixels_verified": False, "network_success_verified": False, "distribution_cleared": False}
@@ -286,11 +309,13 @@ def main() -> int:
     parser.add_argument("--api-base-url", help="override the recorded API (used for negative controls only)")
     parser.add_argument("--forbid", action="append", default=[], help="path prefix the package must not read")
     parser.add_argument("--trace-file-access", action="store_true", help="use strace to prove no forbidden reads")
+    parser.add_argument("--expect-platform-theme", help="require this loaded plugin filename, e.g. libqgtk3.so")
+    parser.add_argument("--expect-decoration", help="require this loaded decoration filename where the platform uses one")
     args = parser.parse_args()
     launcher = args.launcher or args.package / "hdb-resale-explorer"
     try:
         report = check(args.package, launcher, args.log, args.report, args.timeout, args.api_base_url,
-                       tuple(args.forbid), args.trace_file_access)
+                       tuple(args.forbid), args.trace_file_access, args.expect_platform_theme, args.expect_decoration)
         print("Package launch passed: shell/data/map engine/chart ready, window app id " + APPLICATION_ID
               + ", native/.NET exit 0; " + str(report["elapsed_seconds"]) + " seconds. Tile pixels were not tested.")
     except (OSError, ValueError, subprocess.SubprocessError, KeyError) as error:

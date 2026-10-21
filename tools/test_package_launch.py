@@ -28,9 +28,11 @@ class Environment(unittest.TestCase):
                     "DOTNET_ROOT": "/sdk", "DOTNET_gcServer": "1", "QML_IMPORT_PATH": "/qml", "QT_PLUGIN_PATH": "/p",
                     "QT_QPA_PLATFORM": "offscreen", "HDB_DATA_DIRECTORY": "/private-data", "HDB_API_GATE": "x",
                     "HDB_TILE_TEST": "1", "HDB_TEST_TILE_ENDPOINT": "http://x/", "NUGET_PACKAGES": "/n",
-                    "QtDir": "/opt/Qt"}
+                    "QtDir": "/opt/Qt", "XDG_CURRENT_DESKTOP": "GNOME", "QT_QPA_PLATFORMTHEME": "xdgdesktopportal"}
         result = launch.clean_environment(original, Path("/tmp/fresh"), "http://127.0.0.1:9/")
         self.assertEqual(result["DISPLAY"], ":0")
+        self.assertEqual(result["XDG_CURRENT_DESKTOP"], "GNOME")
+        self.assertNotIn("QT_QPA_PLATFORMTHEME", result)
         self.assertEqual(result["HDB_API_BASE_URL"], "http://127.0.0.1:9/")
         self.assertEqual(result["QT_QPA_PLATFORM"], "xcb")
         self.assertEqual(result["PATH"], "/usr/bin:/bin")
@@ -92,6 +94,13 @@ class FileAccessTrace(unittest.TestCase):
         hits = launch.forbidden_opens(self.TRACE, ("/opt/Qt", "/usr/share/dotnet", "/usr/lib/qt6"))
         self.assertEqual(hits, ["/usr/share/dotnet/host/fxr/libhostfxr.so"])
         self.assertEqual(launch.forbidden_opens(self.TRACE, ("/home/runner",)), [])
+
+    def test_system_qt_opens_outside_plugin_directories_are_rejected(self):
+        trace = '\n'.join(f'openat(AT_FDCWD, "{p}", O_RDONLY) = 3' for p in (
+            '/usr/lib/x86_64-linux-gnu/libQt6Core.so.6', '/usr/lib64/libQt6Gui.so.6',
+            '/opt/hdb-resale-explorer/qt/lib/libQt6Core.so.6'))
+        self.assertEqual(launch.forbidden_opens(trace, ()), [
+            '/usr/lib/x86_64-linux-gnu/libQt6Core.so.6', '/usr/lib64/libQt6Gui.so.6'])
 
     def test_a_host_dotnet_or_system_qt_is_always_forbidden(self):
         for root in ("/usr/share/dotnet", "/usr/lib/qt6", "/usr/lib64/qt6", "/usr/lib/dotnet"):
@@ -160,6 +169,21 @@ xwininfo: Window id: 0x3a0 (the root window) (has no name)
                         {"0x200008": launch.app_id_values(self.REPORTED), "0x200009": launch.app_id_values(self.FALLBACK)}):
             with self.assertRaises(ValueError, msg=repr(windows)):
                 launch.verify_app_id(windows)
+
+
+
+class AppearancePlugins(unittest.TestCase):
+    def test_records_only_loaded_plugins_and_rejects_missing_or_wrong_choices(self):
+        mapped = MAPPED | {str(ROOT / "qt/plugins/platformthemes/libqgtk3.so"),
+                           str(ROOT / "qt/plugins/wayland-decoration-client/libadwaita.so")}
+        observed = launch.verify_appearance(mapped, "libqgtk3.so", "libadwaita.so")
+        self.assertEqual(observed["platformthemes"], ["libqgtk3.so"])
+        for actual, theme, decoration in ((MAPPED, "libqgtk3.so", None),
+                                          (mapped, "libqxdgdesktopportal.so", None),
+                                          (mapped, None, "libbradient.so")):
+            with self.assertRaises(ValueError):
+                launch.verify_appearance(actual, theme, decoration)
+        self.assertEqual(launch.verify_appearance(MAPPED, None, None)["wayland-decoration-client"], [])
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
-# Native UI acceptance: macOS and Linux KDE
+# Native UI acceptance: macOS and Linux
 
 The native-first UI redesign is accepted on **two platforms with equal standing**:
-macOS and Linux KDE Plasma on Wayland. The owner develops on Fedora KDE; the
+macOS and Linux, native Wayland (KDE Plasma or GNOME). The owner develops on Fedora KDE; the
 checked-in Linux records are a Debian 13 XFCE/X11 run ([docs/linux.md](../linux.md))
 and a Fedora KDE run through XWayland ([docs/pr8-review-verification.md](../pr8-review-verification.md)).
 No native KDE/Wayland acceptance has been recorded yet. The redesign emphasises
@@ -16,16 +16,15 @@ every scenario on every platform: **passed**, **failed**, **unverified**.
 
 ## What establishes acceptance
 
-- A real desktop session on the platform: Cocoa on macOS, a KDE Plasma
+- A real desktop session on the platform: Cocoa on macOS, a KDE Plasma or GNOME
   Wayland session on Linux. Interaction through the real menu bar, keyboard and
   pointer.
-- The platform's own Qt style, with nothing set by the application: the
-  `macOS` style on macOS; on Plasma, whatever the session selects for Qt Quick
-  Controls applications. Plasma exports `QT_QUICK_CONTROLS_STYLE=org.kde.desktop`
-  when qqc2-desktop-style is installed, which draws the controls with Breeze;
-  without it Qt's Linux default is Fusion with Plasma's palette. The record
-  names the style that loaded. Neither platform's styling is forced onto the
-  other, and no custom control is introduced to make the two look alike.
+- Native `macOS` Qt Quick Controls style on macOS. On Linux, Fusion gets its
+  palette and light/dark preference from the desktop through Qt's own theme
+  support: GTK3 on GNOME-family desktops and Qt's built-in KDE theme on Plasma.
+  KWin supplies title bars on Plasma; Qt's Adwaita decorations supply them on
+  GNOME. The record names the style, platform theme and decoration plugin that
+  loaded. The packaged KDE palette is unverified pending a future Plasma check.
 - Offscreen runs are regression checks: the smoke modes of
   `tools/api_native_smoke.py` run offscreen in the web coding environment, by
   hand, before each push. CI (`.github/workflows/domain.yml`) builds and runs
@@ -68,7 +67,7 @@ for these scenarios.)
 - Focus rings and the keyboard cursor ring show only in the active window.
 - Accessibility: VoiceOver reads result rows as one name each, announces selection and result counts, and reaches the inspector's facts.
 
-### Linux KDE Plasma (Wayland)
+### Linux, native Wayland (KDE Plasma or GNOME)
 
 Prerequisite: the build must run as a native Wayland client. The official Qt 6.12
 `linux_gcc_64` install carries `plugins/platforms/libqwayland.so`, and the
@@ -79,12 +78,12 @@ so a missing plugin fails loudly instead of falling back to XWayland, and
 confirm the window is a Wayland client (KWin's window information shows no X11
 window id). A run through XWayland does not satisfy any row below.
 
-- The controls are drawn by the style the session selected, as recorded (`org.kde.desktop`, or Fusion with Plasma's palette); the window uses Plasma's colour scheme and fonts, and nothing looks like macOS.
+- Fusion controls get the desktop palette and light/dark preference through Qt's GTK3 theme on GNOME-family desktops and built-in KDE theme on Plasma. The packaged KDE palette remains unverified pending a Plasma check. Record the desktop font and scaling and how the application compares. KWin draws the title bar where supported; GNOME uses Qt's Adwaita decoration plugin.
 - Ctrl+F focuses search; Ctrl+L focuses Filters; About is in the status bar.
-- Window resizing, including the compact breakpoint, works through the Plasma window frame; focus follows the pane shown.
+- Window resizing, including the compact breakpoint, works through the desktop window frame; focus follows the pane shown.
 - Keyboard and pointer input, including wheel scrolling and trackpad, behave under Wayland (not XWayland).
 - Map tiles render through the OSM plugin; markers and the selection highlight are visible.
-- Light and dark colour schemes follow Plasma's scheme, including the chart.
+- Light and dark colour schemes follow the desktop preference through Qt's theme support, including the chart.
 - Accessibility: the application is visible to AT-SPI (Orca or Accerciser) with row names, selection state and inspector facts.
 - Window title, and clean exit from the window frame's close. (The application menu entry and icon arrive with the package; see the packaging milestone.)
 
@@ -113,7 +112,7 @@ scenario per platform; "unverified" is a valid and expected entry.
 
 Runbook: [native-batch-1.md](native-batch-1.md).
 
-| Scenario | macOS | KDE Plasma/Wayland |
+| Scenario | macOS | Linux, native Wayland (KDE Plasma or GNOME) |
 |---|---|---|
 | F1 Launch and load | passed | unverified (pending: KDE batch not run) |
 | F2 Filters | passed | unverified (pending) |

@@ -67,9 +67,9 @@ python3 "$work/tools/package/verify_installed.py" "$format" --packages "$(dirnam
 log "phase 5: recorded-API launch through the installed launcher, as an unprivileged user on X11"
 runuser -u hdbtest -- sh -c 'Xvfb :99 -screen 0 1280x800x24 >/dev/null 2>&1 &'
 sleep 2
-launch() { runuser -u hdbtest -- env DISPLAY=:99 python3 "$work/tools/package/launch_check.py" \
+launch() { runuser -u hdbtest -- env DISPLAY=:99 XDG_CURRENT_DESKTOP=GNOME python3 "$work/tools/package/launch_check.py" \
   --package "$root" --launcher /usr/bin/hdb-resale-explorer --forbid /opt/Qt --forbid /home/runner \
-  --forbid "$work/src" --forbid "$work/tests/HdbResale.Tests" --trace-file-access "$@"; }
+  --forbid "$work/src" --forbid "$work/tests/HdbResale.Tests" --trace-file-access --expect-platform-theme libqgtk3.so "$@"; }
 launch --log "$out/launch.log" --report "$out/launch-report.json"
 
 log "phase 6: negative control: an unreachable API must fail the same check"
