@@ -22,5 +22,8 @@ public:
     // The accessible elements under an object (a window, an item) as Qt presents them to a platform bridge, depth first:
     // one map per element with role (QAccessible::Role, as Accessible.role numbers it) and name.
     Q_INVOKABLE QVariantList elements(QObject *object) const;
+    // Sets which controls Tab reaches (Qt::TabFocusBehavior), as a platform setting would: VoiceOver's full keyboard access
+    // on macOS and KDE reach every control, while macOS by default stops only at text fields and lists.
+    Q_INVOKABLE void setTabFocusBehavior(int behavior);
 };
 void registerAccessibilityGate();

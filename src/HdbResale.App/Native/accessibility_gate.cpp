@@ -5,6 +5,8 @@
 #include <QtCore/QVariantMap>
 #include <QtGui/QAccessible>
 #include <QtGui/QAccessibleEvent>
+#include <QtGui/QGuiApplication>
+#include <QtGui/QStyleHints>
 #include <QtQml/qqml.h>
 
 namespace {
@@ -125,6 +127,11 @@ QVariantList AccessibilityGate::elements(QObject *object) const
     QVariantList out;
     collect(QAccessible::queryAccessibleInterface(object), out, 0);
     return out;
+}
+
+void AccessibilityGate::setTabFocusBehavior(int behavior)
+{
+    QGuiApplication::styleHints()->setTabFocusBehavior(Qt::TabFocusBehavior(behavior));
 }
 
 void registerAccessibilityGate()

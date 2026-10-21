@@ -46,6 +46,38 @@ public sealed class BuyerTrendTests
     }
 
     [Fact]
+    public void TheSummaryNamesTheHighestAndLowestMonthsOfTheRecordedChart()
+    {
+        // 748B's recorded medians in 2024-11..2026-10: ten months, highest 1,060,000 (2026-05), lowest 653,000 (2026-06).
+        var trend = BuyerTrend.Build(Recorded("bedok-748b-bedok-reservoir-cres"), Month("2026-10"));
+        Assert.Equal("Highest S$1,060,000 in 2026-05, lowest S$653,000 in 2026-06, 10 months with sales of the 24 shown.",
+            trend.Summary);
+    }
+
+    [Fact]
+    public void TheSummaryNamesEveryMonthThatSharesAnExtreme()
+    {
+        var trend = BuyerTrend.Build(WithTrend(("2025-01", 500000, 1), ("2025-06", 500000, 2), ("2025-08", 450000, 1),
+            ("2026-01", 400000, 2), ("2026-03", 400000, 1)), Month("2026-10"));
+        Assert.Equal("Highest S$500,000 in 2025-01 and 2025-06, lowest S$400,000 in 2026-01 and 2026-03, 5 months with sales of the 24 shown.",
+            trend.Summary);
+        var level = BuyerTrend.Build(WithTrend(("2025-01", 500000, 1), ("2025-06", 500000, 2), ("2026-01", 500000, 1)), Month("2026-10"));
+        Assert.Equal("S$500,000 in 2025-01, 2025-06 and 2026-01, the only 3 months with sales of the 24 shown.", level.Summary);
+    }
+
+    [Fact]
+    public void TheSummaryOfOneMonthOrNoneIsPlain()
+    {
+        Assert.Equal("S$600,000 in 2026-01, the only month with sales of the 24 shown.",
+            BuyerTrend.Build(WithTrend(("2026-01", 600000, 1)), Month("2026-10")).Summary);
+        Assert.Equal("", BuyerTrend.Build(Recorded("ang-mo-kio-727-ang-mo-kio-ave-6"), Month("2026-10")).Summary);
+        Assert.Equal("", BuyerTrendData.Empty.Summary);
+        // The earliest data has fewer than 24 months to show.
+        Assert.Equal("S$300,000 in 0001-01, the only month with sales of the 1 shown.",
+            BuyerTrend.Build(WithTrend(("0001-01", 300000, 1)), Month("0001-01")).Summary);
+    }
+
+    [Fact]
     public void NoDetailIsTheEmptySeriesAndTheEarliestYearStillWorks()
     {
         Assert.Same(BuyerTrendData.Empty, BuyerTrend.Build(null, Month("2026-10")));
