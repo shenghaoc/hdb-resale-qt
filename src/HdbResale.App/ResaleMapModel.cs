@@ -105,17 +105,46 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public void SetRecencyMonths(int months) => mutations.Enqueue(() => ApplyFilter(Filters with { RecencyMonths = months }));
     public void ResetFilters() => mutations.Enqueue(() => ApplyFilter(AddressFilters.Default));
 
+    // Address search narrows the loaded summaries locally; typing never calls the API.
+    public string SearchText => explorer?.SearchText ?? "";
+    public void SetSearchText(string text) => mutations.Enqueue(() =>
+    {
+        if (explorer is null || (text ?? "") == explorer.SearchText) return;
+        var selected = SelectedMapKey;
+        BeginResetModel();
+        try { explorer.Search(text); }
+        finally { EndResetModel(); }
+        MapPoints.Replace(MapAddresses(), SelectedMapKey);
+        Notify(nameof(SearchText), nameof(AddressCount), nameof(MappedCount), nameof(FirstAddressKey), nameof(FilterSummary),
+            nameof(SearchMatchesOutsideFilters));
+        ListChanged(selected);
+    });
+    // When a search finds nothing, how many addresses it would find without the filters.
+    public int SearchMatchesOutsideFilters => explorer is { SearchText.Length: > 0, Addresses.Count: 0 }
+        ? explorer.CountSearchMatchesIgnoringFilters() : 0;
+
     private void ApplyFilter(AddressFilters next)
     {
         if (explorer is null || next == explorer.Filters) return;
+        var selected = SelectedMapKey;
         BeginResetModel();
         try { explorer.Filter(next); }
         finally { EndResetModel(); }
         MapPoints.Replace(MapAddresses(), SelectedMapKey);
         Notify(nameof(Town), nameof(TownIndex), nameof(FlatType), nameof(FlatTypeIndex), nameof(MinimumPrice),
             nameof(MaximumPrice), nameof(RecencyMonths), nameof(AddressCount), nameof(MappedCount), nameof(FirstAddressKey),
-            nameof(FilterSummary));
-        SelectionChanged();
+            nameof(FilterSummary), nameof(SearchMatchesOutsideFilters));
+        ListChanged(selected);
+    }
+
+    // After a search or filter change. Only a different or cleared selection is a selection change; an address that
+    // still matches keeps its selection (and is not announced again), and may only have moved in the list, whose
+    // reset also cleared the view's current row. Its metrics follow the flat-type filter.
+    private void ListChanged(string selectedBefore)
+    {
+        if (SelectedMapKey != selectedBefore) { SelectionChanged(); return; }
+        NotifyPresentation();
+        Notify(nameof(SelectedAddressIndex), nameof(SelectedMetrics));
     }
 
     public int AddressCount => explorer?.Addresses.Count ?? 0;
@@ -177,9 +206,16 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
         NotifyPresentation();
         NotifySelection();
     }
-    private void NotifySelection() => Notify(nameof(SelectedMapKey), nameof(SelectedAddressIndex), nameof(SelectedHeading),
-        nameof(SelectedMetrics), nameof(SelectedLease), nameof(SelectedLocation), nameof(DetailStatus), nameof(DetailReady), nameof(CanRetryDetail),
-        nameof(RecentTransactionsJson), nameof(TrendJson));
+    private void NotifySelection()
+    {
+        Notify(nameof(SelectedMapKey), nameof(SelectedAddressIndex), nameof(SelectedHeading), nameof(SelectedLease),
+            nameof(SelectedLocation));
+        NotifyDetail();
+    }
+    // A detail response leaves the selection as it was, so only what depends on the details changes (the metrics gain
+    // the middle half of sales): the list keeps its scroll position and the selection is not announced again.
+    private void NotifyDetail() => Notify(nameof(SelectedMetrics), nameof(DetailStatus), nameof(DetailReady),
+        nameof(CanRetryDetail), nameof(RecentTransactionsJson), nameof(TrendJson));
 
     public bool CanRetryDetail => details.CanRetry;
     public void RetryDetail() => mutations.Enqueue(() =>
@@ -190,7 +226,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     private void DetailChanged()
     {
         Notify(nameof(Busy));
-        NotifySelection();
+        NotifyDetail();
     }
 
     public string SelectionMapStatus => Selected is null ? "" : MapPoints.SelectedInView
@@ -220,7 +256,8 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     private void NotifyAll() => Notify(nameof(Busy), nameof(Loading), nameof(CanRetry), nameof(StatusText), nameof(TownsJson),
         nameof(TownIndex), nameof(FlatTypesJson), nameof(FlatTypeIndex), nameof(Town), nameof(FlatType), nameof(MinimumPrice),
         nameof(MaximumPrice), nameof(MaximumAvailablePrice), nameof(RecencyMonths), nameof(DatasetLatestMonth), nameof(AddressCount),
-        nameof(MappedCount), nameof(FirstAddressKey), nameof(FilterSummary), nameof(DatasetSummary));
+        nameof(MappedCount), nameof(FirstAddressKey), nameof(FilterSummary), nameof(DatasetSummary), nameof(SearchText),
+        nameof(SearchMatchesOutsideFilters));
     private void Notify(params string[] names)
     {
         foreach (var name in names) PropertyChanged?.Invoke(this, new(name));
@@ -237,7 +274,7 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
     public override Dictionary<int, string> RoleNames() => new()
     {
         [259] = "address", [260] = "priceLabel", [261] = "townName", [262] = "locationLabel",
-        [263] = "addressKey", [264] = "summaryLabel"
+        [263] = "addressKey", [265] = "saleCount", [266] = "flatTypes", [267] = "latestMonth"
     };
     public override object? Data(ModelIndex index, int role)
     {
@@ -250,7 +287,9 @@ public sealed class ResaleMapModel : Model, INotifyPropertyChanged
             259 => a.Address, 260 => median, 261 => a.Town,
             262 => "Approximate block location" + (string.IsNullOrWhiteSpace(a.PostalCode) ? "" : ", postal code " + a.PostalCode),
             263 => a.AddressKey,
-            264 => $"{cohort.TransactionCount:N0} {(cohort.TransactionCount == 1 ? "sale" : "sales")} · median {median}\n{string.Join(", ", a.FlatTypes)} · latest {cohort.LatestMonth}",
+            265 => cohort.TransactionCount,
+            266 => string.Join(", ", a.FlatTypes),
+            267 => cohort.LatestMonth,
             _ => null
         };
     }

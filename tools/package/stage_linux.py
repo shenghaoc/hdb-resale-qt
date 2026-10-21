@@ -222,6 +222,16 @@ def check_inputs(args: argparse.Namespace) -> tuple[str, str]:
     return application_license, version
 
 
+# The opt-in keyboard gate imports QtTest and the native HdbResale.Acceptance module, which exists only while
+# HDB_API_GATE selects it. The shipped app never loads it, so its imports must not decide what Qt is staged.
+TEST_ONLY_QML = frozenset({"KeyboardGate.qml"})
+
+
+def application_qml(source_dir: Path) -> list[Path]:
+    """The application's QML sources whose imports the package must satisfy."""
+    return [path for path in sorted(source_dir.glob("*.qml")) if path.name not in TEST_ONLY_QML]
+
+
 def stage(args: argparse.Namespace) -> Path:
     output = args.output.resolve()
     validate_output(output)
@@ -251,7 +261,7 @@ def stage(args: argparse.Namespace) -> Path:
     # Qt's own scanner chooses the QML modules; the pinned Bridge deploys none of them.
     # Do not recursively scan stale obj/bin copies beneath the source folder.
     scan_root = output / "qml-inputs"
-    for source in sorted((ROOT / "src/HdbResale.App").glob("*.qml")):
+    for source in application_qml(ROOT / "src/HdbResale.App"):
         copy(source, scan_root / source.name)
     scanned = subprocess.run([str(qt / "libexec/qmlimportscanner"), "-rootPath", str(scan_root),
                               "-importPath", str(qt / "qml")], text=True, capture_output=True, check=True)
