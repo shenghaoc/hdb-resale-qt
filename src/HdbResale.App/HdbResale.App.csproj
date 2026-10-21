@@ -78,13 +78,39 @@
   </ItemGroup>
 
   <!-- The bridge template emits an unbundled host. Stage its output into a
-       development bundle so macOS and accessibility tools identify the app. -->
+       development bundle so macOS and accessibility tools identify the app.
+       Finder, the Dock and Cmd-Tab name an app after its bundle, so the bundle carries the product name. -->
   <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-    <HdbMacBundle>$(MSBuildProjectDirectory)/obj/$(Configuration)/$(TargetFramework)/HdbResale.app</HdbMacBundle>
+    <HdbMacBundle>$(MSBuildProjectDirectory)/obj/$(Configuration)/$(TargetFramework)/HDB Resale Explorer.app</HdbMacBundle>
     <RunCommand>$(HdbMacBundle)/Contents/MacOS/HdbResale.App</RunCommand>
     <RunWorkingDirectory>$(HdbMacBundle)/Contents/MacOS</RunWorkingDirectory>
+    <HdbMacIconSource>$(MSBuildProjectDirectory)/../../packaging/linux/io.github.shenghaoc.hdb-resale-qt.svg</HdbMacIconSource>
+    <HdbMacIconSet>$(MSBuildProjectDirectory)/obj/$(Configuration)/$(TargetFramework)/AppIcon.iconset</HdbMacIconSet>
   </PropertyGroup>
-  <Target Name="StageMacDevelopmentBundle" AfterTargets="Build"
+  <!-- iconutil's iconset: each point size at 1x and 2x, 16 to 1024 pixels. -->
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+    <HdbMacIconImage Include="icon_16x16" Pixels="16" />
+    <HdbMacIconImage Include="icon_16x16%402x" Pixels="32" />
+    <HdbMacIconImage Include="icon_32x32" Pixels="32" />
+    <HdbMacIconImage Include="icon_32x32%402x" Pixels="64" />
+    <HdbMacIconImage Include="icon_128x128" Pixels="128" />
+    <HdbMacIconImage Include="icon_128x128%402x" Pixels="256" />
+    <HdbMacIconImage Include="icon_256x256" Pixels="256" />
+    <HdbMacIconImage Include="icon_256x256%402x" Pixels="512" />
+    <HdbMacIconImage Include="icon_512x512" Pixels="512" />
+    <HdbMacIconImage Include="icon_512x512%402x" Pixels="1024" />
+  </ItemGroup>
+  <!-- The icon is the Linux desktop entry's SVG, rendered at each size by the system's sips and packed by iconutil,
+       so the two platforms share one source and no binary is committed. -->
+  <Target Name="GenerateMacAppIcon" Condition="$([MSBuild]::IsOSPlatform('OSX'))"
+          Inputs="$(HdbMacIconSource)" Outputs="$(HdbMacBundle)/Contents/Resources/AppIcon.icns">
+    <RemoveDir Directories="$(HdbMacIconSet)" />
+    <MakeDir Directories="$(HdbMacIconSet);$(HdbMacBundle)/Contents/Resources" />
+    <Exec Command="sips -s format png -z %(HdbMacIconImage.Pixels) %(HdbMacIconImage.Pixels) &quot;$(HdbMacIconSource)&quot; --out &quot;$(HdbMacIconSet)/%(HdbMacIconImage.Identity).png&quot;"
+          StandardOutputImportance="low" />
+    <Exec Command="iconutil -c icns -o &quot;$(HdbMacBundle)/Contents/Resources/AppIcon.icns&quot; &quot;$(HdbMacIconSet)&quot;" />
+  </Target>
+  <Target Name="StageMacDevelopmentBundle" AfterTargets="Build" DependsOnTargets="GenerateMacAppIcon"
           Condition="$([MSBuild]::IsOSPlatform('OSX'))">
     <ItemGroup><BundleFiles Include="$(TargetDir)**/*" /></ItemGroup>
     <Copy SourceFiles="@(BundleFiles)"
