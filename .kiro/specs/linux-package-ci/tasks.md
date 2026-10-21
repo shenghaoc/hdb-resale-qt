@@ -42,7 +42,7 @@
 
 - [ ] **F1** When a *published* Bridge deploys QML imports and a relative RPATH, delete the QML scanner/RPATH steps
   (`supplier: qt` entries are the work list).
-- [ ] **F2** `setDesktopFileName("io.github.shenghaoc.hdb-resale-qt")` so Wayland windows match the desktop entry
+- [x] **F2** `setDesktopFileName("io.github.shenghaoc.hdb-resale-qt")` so Wayland windows match the desktop entry
   (UI-layer change; resume with the UI work).
 - [ ] **F3** Launch the packages under a headless Wayland compositor (weston/sway) to move Wayland from "staged" to "tested".
 - [ ] **F4** Single source for the .NET SDK/runtime so the `dotnet-sdk` Dependabot ecosystem can be enabled safely.
