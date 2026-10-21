@@ -39,6 +39,8 @@ dotnet test -c Release --no-build
 dotnet run --project src/HdbResale.App -c Release --no-build
 ```
 
+On macOS the build stages the app as `src/HdbResale.App/obj/<configuration>/net10.0/HDB Resale Explorer.app`, which `dotnet run` launches. Its icon is rendered from the Linux desktop entry's `packaging/linux/io.github.shenghaoc.hdb-resale-qt.svg` with the system's `sips` and `iconutil`.
+
 The app reads the production API by default. Set `HDB_API_BASE_URL` to use another deployment, such as a Workers preview, or the recorded responses in `tests/fixtures/worker-api` without a network:
 
 ```sh
