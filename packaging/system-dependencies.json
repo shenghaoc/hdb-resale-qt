@@ -1,6 +1,17 @@
 {
   "comment": "Maps every system shared library the package expects (system-libraries.txt) to the package that provides it, per distribution family. Debian names are for Debian 13; RPM names are for Fedora 43. The installed-package CI job proves each mapping by asking the package manager which package owns the resolved file. A library missing from this table fails package construction.",
   "libraries": {
+    "libatk-1.0.so.0": {"deb": "libatk1.0-0t64", "rpm": "atk"},
+    "libcairo-gobject.so.2": {"deb": "libcairo-gobject2", "rpm": "cairo-gobject"},
+    "libcairo.so.2": {"deb": "libcairo2", "rpm": "cairo"},
+    "libgdk-3.so.0": {"deb": "libgtk-3-0t64", "rpm": "gtk3"},
+    "libgdk_pixbuf-2.0.so.0": {"deb": "libgdk-pixbuf-2.0-0", "rpm": "gdk-pixbuf2"},
+    "libgio-2.0.so.0": {"deb": "libglib2.0-0t64", "rpm": "glib2"},
+    "libgobject-2.0.so.0": {"deb": "libglib2.0-0t64", "rpm": "glib2"},
+    "libgtk-3.so.0": {"deb": "libgtk-3-0t64", "rpm": "gtk3"},
+    "libharfbuzz.so.0": {"deb": "libharfbuzz0b", "rpm": "harfbuzz"},
+    "libpango-1.0.so.0": {"deb": "libpango-1.0-0", "rpm": "pango"},
+    "libpangocairo-1.0.so.0": {"deb": "libpangocairo-1.0-0", "rpm": "pango"},
     "libEGL.so.1": {"deb": "libegl1", "rpm": "libglvnd-egl"},
     "libGL.so.1": {"deb": "libgl1", "rpm": "libglvnd-glx"},
     "libGLX.so.0": {"deb": "libglx0", "rpm": "libglvnd-glx"},
