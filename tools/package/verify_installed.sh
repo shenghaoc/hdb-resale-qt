@@ -4,7 +4,7 @@
 #   verify_installed.sh <deb|rpm> <package-file> <repo-tools-root> <report-dir>
 #
 # Runs as root inside a pristine debian:13 / fedora:43 style container. The phases are ordered so the
-# package manager alone supplies the package's dependencies: test tooling (Python, Xvfb, strace) is added
+# package manager alone supplies the package's dependencies: test tooling (Python, Xvfb, xprop, strace) is added
 # only AFTER the dependency audit, so it cannot mask a missing dependency declaration.
 set -eu
 format=$1 package=$2 work=$3 out=$4
@@ -56,8 +56,8 @@ done
 
 log "phase 3: add test tooling"
 case $format in
-  deb) apt-get install -y -q python3 xvfb xauth strace desktop-file-utils appstream util-linux ;;
-  rpm) dnf install -y -q python3 xorg-x11-server-Xvfb xauth strace desktop-file-utils appstream util-linux ;;
+  deb) apt-get install -y -q python3 xvfb xauth x11-utils strace desktop-file-utils appstream util-linux ;;
+  rpm) dnf install -y -q python3 xorg-x11-server-Xvfb xauth xprop xwininfo strace desktop-file-utils appstream util-linux ;;
 esac
 id hdbtest >/dev/null 2>&1 || useradd --create-home hdbtest
 

@@ -51,9 +51,12 @@ docker run --rm -v "$PWD/dist:/pkg:ro" -v "$PWD:/work:ro" -v "$PWD/report:/out" 
   sh /work/tools/package/verify_installed.sh deb /pkg/hdb-resale-explorer_0.1.0-1_amd64.deb /work /out
 ```
 
-The script installs only the package, audits every ELF, then adds Python/Xvfb/strace, checks each dependency mapping
-with dpkg/rpm, launches `/usr/bin/hdb-resale-explorer` as an unprivileged user on X11 against the recorded API, runs
-an unreachable-API negative control, uninstalls and confirms nothing is left.
+The script installs only the package, audits every ELF, then adds Python/Xvfb/xprop/strace, checks each dependency
+mapping with dpkg/rpm, launches `/usr/bin/hdb-resale-explorer` as an unprivileged user on X11 against the recorded API,
+reads the app id its window reports to the X server (`_GTK_APPLICATION_ID` and `_KDE_NET_WM_DESKTOP_FILE` must both be
+`io.github.shenghaoc.hdb-resale-qt`, the desktop entry's name), runs an unreachable-API negative control, uninstalls and
+confirms nothing is left. Qt gives a Wayland compositor the same value as the window's app id, but no Wayland session is
+launched.
 
 ## CI
 
