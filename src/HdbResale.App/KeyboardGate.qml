@@ -14,8 +14,12 @@ Item {
     property int frames: 0
     property var remembered: ({})
     property int selectionSignals: 0
-    // A binding, like the details pane's label: it only sees what the model notifies.
-    readonly property string shownMetrics: Resales.selectedMetrics
+    // A binding, like the inspector's repeater: it only sees what the model notifies.
+    readonly property string shownInspector: Resales.selectedInspectorJson
+    function shownFact(label) {
+        for (const section of JSON.parse(shownInspector)) for (const fact of section.facts) if (fact.label === label) return fact.value
+        return ""
+    }
     TestEvent { id: events }
     Connections { target: gate.targetWindow; function onFrameSwapped() { gate.frames++ } }
     Connections { target: Resales; function onSelectedMapKeyChanged() { gate.selectionSignals++ } }
@@ -52,6 +56,8 @@ Item {
             return "announced " + announced[0].ms.toFixed(0) + " ms after the action and " + sinceFocus.toFixed(0) + " ms after the last focus event"
         return ""
     }
+    // macOS rows with button semantics say a selection themselves while the list has focus, so no announcement follows it.
+    function selectionSpokenByRow() { return w.macDesktop && !w.compact }
     // Another, unrelated window takes activation, so this one becomes inactive; reactivate() gives it back.
     function deactivate() {
         remembered.helper = Qt.createQmlObject('import QtQuick; Window { transientParent: null; width: 160; height: 90; visible: true; title: "Keyboard gate: inactive-window check" }', gate)
@@ -62,6 +68,14 @@ Item {
     function ringStyled(ring) {
         return ring.border.width === 2 && Qt.colorEqual(ring.border.color, w.palette.highlight) && ring.radius === w.theme.xs
     }
+    // Whether an item inside the details is shown whole in their view (or from its top, when taller than the view).
+    function fullyShown(item) {
+        const flick = w.detailsScrollView.contentItem
+        const top = item.mapToItem(flick.contentItem, 0, 0).y
+        if (item.height > flick.height) return Math.abs(top - flick.contentY) < 1
+        return top >= flick.contentY - 0.5 && top + item.height <= flick.contentY + flick.height + 0.5
+    }
+    function insideDetails(item) { for (let p = item; p; p = p.parent) if (p === w.detailsView) return true; return false }
     function advance(name) { console.log("HDB_KEYBOARD_STEP " + name); phase++; started = Date.now() }
     function fail(message) { console.error("HDB_KEYBOARD_GATE_FAIL " + message + " phase=" + phase); timer.stop(); Qt.quit() }
     Timer {
@@ -100,27 +114,73 @@ Item {
             advance("search-filters-list-and-map"); break
         }
         case 3: {
+            // Hiding the details while they hold focus moves it to the list, not nowhere; then 748B is selected again.
+            if (remembered.detailsStep === 1) {
+                if (!list.activeFocus) {
+                    if (Date.now() - remembered.hidAt > 1500) fail("hiding the details left focus on " + w.activeFocusItem)
+                    return
+                }
+                // The list holds focus here. Where the focused row does not say the selection itself (everything but a
+                // macOS window wide enough for button rows) the re-selection raises its own announcement 350 ms later.
+                if (!selectionSpokenByRow()) AccessibilityGate.clearEvents()
+                remembered.reselectedAt = Date.now()
+                Resales.selectAddress("bedok-748b-bedok-reservoir-cres")
+                remembered.detailsStep = 2
+                return
+            }
             if (Resales.selectedMapKey !== "bedok-748b-bedok-reservoir-cres" || !Resales.detailReady) return
+            if (remembered.detailsStep === 2) {
+                // Clearing the events before that announcement is raised would leave it to land in the refinement phase.
+                if (!selectionSpokenByRow()) {
+                    const raised = selectedAnnouncements().length
+                    if (raised > 1) { fail("the re-selection was announced " + raised + " times"); return }
+                    if (Date.now() - remembered.reselectedAt < 800) return     // long enough for a second one to show
+                    if (raised !== 1) { fail("the re-selection was never announced"); return }
+                }
+                search.forceActiveFocus(Qt.OtherFocusReason)
+                selectionSignals = 0
+                AccessibilityGate.clearEvents()
+                type("e")                                  // "bedok rese" still matches the selected 748B
+                advance("keyboard-select"); break
+            }
             const row = list.itemAtIndex(1)
             if (!w.detailsView.visible || !row.highlighted || !row.Accessible.selected || !search.activeFocus) {
                 fail("selection not shown: details=" + w.detailsView.visible + " highlighted=" + row.highlighted); return
             }
             // Loading the details must not signal the selection again (it would re-announce it and move the list).
             if (selectionSignals !== 1) { fail("one selection signalled " + selectionSignals + " times"); return }
-            // The details' middle half of sales (recorded priceIqr 705750–880000) reaches the metrics.
-            if (shownMetrics.indexOf("Middle half of all sales S$705,750–S$880,000") < 0) {
-                fail("details missing from the shown metrics: " + JSON.stringify(shownMetrics)); return
-            }
             // The search field keeps focus, so the one announcement carries the selection.
             if (Date.now() - started < 800) return
             {
                 const why = selectionFeedback(row, "748B BEDOK RESERVOIR CRES", false)
                 if (why !== "") { fail("Return from the search field: " + why); return }
             }
-            selectionSignals = 0
-            AccessibilityGate.clearEvents()
-            type("e")                                  // "bedok rese" still matches the selected 748B
-            advance("keyboard-select"); break
+            // The details' middle half of sales (recorded priceIqr 705750–880000) reaches the inspector, whose four
+            // sections are laid out as fact rows.
+            if (shownFact("Middle half, all types") !== "S$705,750–S$880,000") {
+                fail("details missing from the shown inspector: " + shownInspector); return
+            }
+            if (w.inspectorView.count !== 4 || !w.inspectorView.itemAt(0) || w.inspectorView.itemAt(0).factCount !== 6) {
+                fail("inspector sections " + w.inspectorView.count + " facts " + (w.inspectorView.itemAt(0) ? w.inspectorView.itemAt(0).factCount : "none")); return
+            }
+            // A click gives the details keyboard focus; End, Home and Page Down then scroll them.
+            const details = w.detailsScrollView, flick = details.contentItem
+            events.mouseClick(details, details.width / 2, 2 * w.unit, Qt.LeftButton, Qt.NoModifier, -1)
+            if (!details.activeFocus) { fail("a click in the details left focus on " + w.activeFocusItem); return }
+            const bottom = flick.originY + flick.contentHeight - flick.height
+            key(Qt.Key_End)
+            if (bottom <= flick.originY || Math.abs(flick.contentY - bottom) > 1) {
+                fail("End left the details at " + flick.contentY + " of " + bottom); return
+            }
+            key(Qt.Key_Home)
+            if (Math.abs(flick.contentY - flick.originY) > 1) { fail("Home left the details at " + flick.contentY); return }
+            key(Qt.Key_PageDown)
+            if (flick.contentY - flick.originY < flick.height / 2) { fail("Page Down moved the details only to " + flick.contentY); return }
+            key(Qt.Key_Home)
+            Resales.selectAddress("")
+            remembered.detailsStep = 1
+            remembered.hidAt = Date.now()
+            break
         }
         case 4:
             if (Resales.searchText !== "bedok rese" || list.count !== 3) return
@@ -482,6 +542,101 @@ Item {
                 fail("the menu bar drawn in the window is missing from the accessibility tree"); return
             }
             if (!w.macDesktop && found.length !== 0) { fail("an in-window menu bar on a desktop without one: " + JSON.stringify(found)); return }
+            w.width = 1360; w.height = 900
+            Resales.selectAddress("bedok-748b-bedok-reservoir-cres")
+            advance("no-in-window-menu-bar-duplicate"); break
+        }
+        case 39: {
+            // The details are reachable piece by piece: each fact group, the chart and the registrations list is a named
+            // keyboard stop, scrolled whole into view when it takes focus, and the chart has a text alternative.
+            const regs = w.registrationList
+            if (w.compact || Resales.selectedMapKey !== "bedok-748b-bedok-reservoir-cres" || !Resales.detailReady) return
+            if (!regs || regs.Accessible.role !== Accessible.List) { fail("the registrations are not an accessible list"); return }
+            if (regs.count !== 20 || !w.trendView.item) return
+            const groups = []
+            for (let i = 0; i < w.inspectorView.count; i++) groups.push(w.inspectorView.itemAt(i))
+            const chart = w.trendView.item
+            for (const stop of [...groups, chart]) {
+                if (stop.Accessible.role !== Accessible.Grouping || !stop.activeFocusOnTab || !stop.Accessible.focusable) {
+                    fail("'" + stop.Accessible.name + "' is not a focusable, named group: role " + stop.Accessible.role + ", tab " + stop.activeFocusOnTab); return
+                }
+            }
+            if (chart.Accessible.name !== "Monthly median price") { fail("the chart's group is named '" + chart.Accessible.name + "'"); return }
+            const expected = "Highest S$1,060,000 in 2026-05, lowest S$653,000 in 2026-06, 10 months with sales of the 24 shown."
+            if (!chart.summary || chart.summary.text !== expected || chart.summary.Accessible.role !== Accessible.StaticText
+                    || chart.summary.Accessible.name !== expected) {
+                fail("the chart's text alternative reads '" + (chart.summary ? chart.summary.text : "") + "'"); return
+            }
+            const first = regs.itemAtIndex(0)
+            if (!first || first.Accessible.role !== Accessible.ListItem || first.Accessible.name.indexOf("2026-09 · 3 ROOM · S$663,000. ") !== 0) {
+                fail("the first registration reads '" + (first ? first.Accessible.name : "") + "'"); return
+            }
+            // Tab from "Show on map", where Tab reaches every control (VoiceOver's full keyboard access, KDE).
+            remembered.tabFocus = Qt.styleHints.tabFocusBehavior
+            AccessibilityGate.setTabFocusBehavior(Qt.TabFocusAllControls)
+            w.showOnMapButton.forceActiveFocus(Qt.TabFocusReason)
+            const names = []
+            // A list is a focus scope: holding focus, its current row is the focused item.
+            const holds = (stop) => stop === regs ? regs.activeFocus && w.activeFocusItem === regs.currentItem : w.activeFocusItem === stop
+            for (const stop of [...groups, chart, regs]) {
+                key(Qt.Key_Tab)
+                if (!holds(stop)) {
+                    AccessibilityGate.setTabFocusBehavior(remembered.tabFocus)
+                    fail("Tab after " + JSON.stringify(names) + " reached " + w.activeFocusItem + ", not '" + stop.Accessible.name + "'"); return
+                }
+                const shown = stop === regs ? regs.currentItem : stop
+                if (!shown || !fullyShown(shown)) {
+                    AccessibilityGate.setTabFocusBehavior(remembered.tabFocus)
+                    fail("'" + stop.Accessible.name + "' took focus out of view"); return
+                }
+                names.push(stop.Accessible.name)
+            }
+            if (regs.currentIndex !== 0) { AccessibilityGate.setTabFocusBehavior(remembered.tabFocus); fail("the registrations took focus at row " + regs.currentIndex); return }
+            key(Qt.Key_Tab)
+            const after = w.activeFocusItem
+            key(Qt.Key_Backtab)
+            const back = w.activeFocusItem
+            AccessibilityGate.setTabFocusBehavior(remembered.tabFocus)
+            if (!after || insideDetails(after)) { fail("Tab after the registrations stayed in the details: " + after); return }
+            if (!holds(regs)) { fail("Shift+Tab from " + after + " reached " + back + ", not the registrations"); return }
+            console.log("HDB_KEYBOARD_DETAILS_STOPS " + JSON.stringify(names) + " then " + after)
+            // The arrows move the cursor through all 20 registrations, each kept in view; Home and End still scroll.
+            for (let i = 1; i < 20; i++) {
+                key(Qt.Key_Down)
+                if (regs.currentIndex !== i || !fullyShown(regs.currentItem)) {
+                    fail("Down to registration " + (i + 1) + ": cursor " + regs.currentIndex + ", shown " + fullyShown(regs.currentItem)); return
+                }
+            }
+            key(Qt.Key_Down)
+            if (regs.currentIndex !== 19) { fail("Down past the last registration moved the cursor to " + regs.currentIndex); return }
+            key(Qt.Key_Up)
+            if (regs.currentIndex !== 18 || !fullyShown(regs.currentItem)) { fail("Up from the last registration: cursor " + regs.currentIndex); return }
+            const flick = w.detailsScrollView.contentItem
+            key(Qt.Key_Home)
+            if (Math.abs(flick.contentY - flick.originY) > 1) { fail("Home in the registrations left the details at " + flick.contentY); return }
+            key(Qt.Key_End)
+            if (Math.abs(flick.contentY - (flick.originY + flick.contentHeight - flick.height)) > 1) {
+                fail("End in the registrations left the details at " + flick.contentY); return
+            }
+            advance("details-reachable-by-keyboard"); break
+        }
+        case 40: {
+            // The first and last months' dots are drawn whole, clear of the y axis line and inside the plot, while the
+            // month labels stay in the band below the plot, from its left edge to its right.
+            const chart = w.trendView.item, graph = chart.graphView, area = graph.plotArea, axis = graph.axisX
+            const xAt = (x) => area.x + (x - axis.min) / (axis.max - axis.min) * area.width
+            const radius = 2.5, first = xAt(0), last = xAt(chart.trend.Points.length - 1)
+            if (first - radius < area.x + 1.5 || last + radius > area.x + area.width) {
+                fail("edge dots clipped: first at " + (first - area.x).toFixed(1) + " and last at " + (area.x + area.width - last).toFixed(1)
+                    + " points from the plot's edges, radius " + radius); return
+            }
+            const below = area.y + area.height - 1
+            for (const label of [chart.startLabel, chart.endLabel]) {
+                if (label.y < below || label.y + label.height > graph.height + 1) { fail("month label '" + label.text + "' left the axis band"); return }
+            }
+            if (chart.startLabel.x < area.x - 0.5 || chart.endLabel.x + chart.endLabel.width > area.x + area.width + 0.5) {
+                fail("month labels past the plot's edges"); return
+            }
             console.log("HDB_API_KEYBOARD_PASS steps=" + phase)
             timer.stop(); w.finishGate()
             break
