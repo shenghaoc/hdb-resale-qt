@@ -57,7 +57,10 @@ done
 log "phase 3: add test tooling"
 case $format in
   deb) apt-get install -y -q python3 xvfb xauth x11-utils strace desktop-file-utils appstream util-linux ;;
-  rpm) dnf install -y -q python3 xorg-x11-server-Xvfb xauth xprop xwininfo strace desktop-file-utils appstream util-linux ;;
+  rpm) dnf install -y -q python3 xorg-x11-server-Xvfb xauth xprop xwininfo strace desktop-file-utils appstream util-linux
+       # GTK's dependency closure can install Python before this phase. DNF's no-op
+       # install preserves that dependency reason; retain the verifier for phase 7.
+       dnf mark user python3 ;;
 esac
 id hdbtest >/dev/null 2>&1 || useradd --create-home hdbtest
 
