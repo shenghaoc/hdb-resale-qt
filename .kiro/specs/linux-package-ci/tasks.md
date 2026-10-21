@@ -28,6 +28,9 @@
 
 - [x] **T4.1** `linux-package.yml` with scoped triggers, tests and native gates before packaging, Debian 13 and Fedora 43
   verification, reports-only artifact. → `test_ci_configuration.py`. (R6)
+- [x] **T4.2** Replace `domain.yml` and `linux-package.yml` with `ci.yml` (pull requests and merges: tests, native
+  build, ctest, API smoke) and `release.yml` (tag or dispatch: `ci.yml`, then package and verify; a tag publishes the
+  packages to its GitHub release); toolchain pins in `.github/actions/qt-linux`. → `test_ci_configuration.py`. (R6.1)
 
 ## Phase 5 — Dependabot
 

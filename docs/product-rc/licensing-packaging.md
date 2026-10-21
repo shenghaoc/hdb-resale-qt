@@ -262,7 +262,7 @@ or Windows packages.
 
 ## CI and validation boundary
 
-> Superseded for Linux packaging by `.github/workflows/linux-package.yml` (see [docs/packaging/linux.md](../packaging/linux.md)); the paragraph below records the state on 2026-10-03.
+> Superseded for Linux packaging by `.github/workflows/ci.yml` and `.github/workflows/release.yml` (see [docs/packaging/linux.md](../packaging/linux.md)); the paragraph below records the state on 2026-10-03.
 
 The existing `.github/workflows/domain.yml` uses pinned checkout/setup-dotnet
 actions, .NET SDK 10.0.401, C# domain tests and Python unit tests. It has no Qt

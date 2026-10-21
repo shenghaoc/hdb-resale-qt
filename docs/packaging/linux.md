@@ -23,8 +23,10 @@ modules, ICU 73), the .NET 10.0.12 runtime, licences, a launcher and a hashed ma
 Not packaged: any resale data (the app reads the Worker API through `HDB_API_BASE_URL`, production by default),
 research corpora, OneMap tile caches, credentials, source or debug tooling.
 
-**Publicly distributed: nothing.** CI builds and tests the packages and keeps only reports. No tag, release, repository,
-signature or upload exists, and `distribution_cleared` is `false` in every manifest.
+**Publicly distributed: nothing.** CI builds and tests the packages and keeps only reports. A `v*` tag attaches the
+verified packages to a **draft** release only; no release has been published, there is no repository or signature,
+and `distribution_cleared` is `false` in every manifest. Publishing a draft is a manual decision that waits on the
+distribution blockers below.
 
 ## Ownership
 
@@ -60,12 +62,20 @@ launched.
 
 ## CI
 
-`.github/workflows/linux-package.yml` (separate from the Qt-free `domain.yml`) runs for changes to app/native source,
-QML and resources, project and Bridge pins, packaging, the recorded fixtures, files copied into the package and the
-workflow itself; not for documentation-only changes. Steps: C# and Python tests, native gates against the build
-tree (ctest plus four API smoke modes on X11), Release build, staging, tar/DEB/RPM, tamper negative control, relocated
-tar smoke, DEB on Debian 13, RPM on Fedora 43. It uploads `linux-package-verification` (manifests, checksums, package
-metadata, logs, os-release and image digests) for 14 days and **never the package binaries**.
+- `.github/workflows/ci.yml` decides whether a change is correct. It runs on every pull request and on the merged
+  result on `main`: C# and Python tests on Ubuntu and Windows (the Python suite includes the packaging tools' unit
+  tests and negative controls), and on Ubuntu 24.04 a Release build, ctest and the four API smoke modes on X11
+  against the build tree. It never stages, packages or installs.
+- `.github/workflows/release.yml` decides whether a commit can ship. It runs `ci.yml` first and builds packages only
+  if every CI job passed: staging, tar/DEB/RPM, tamper negative control, relocated tar smoke, DEB on Debian 13, RPM
+  on Fedora 43. Pushing a `v*` tag, which must equal the project `<Version>`, attaches the verified tar.gz, DEB, RPM
+  and `SHA256SUMS` to a draft GitHub release; it never publishes, and never changes a release that is already
+  published. `workflow_dispatch` runs the same verification on any branch or tag (for example one that changes
+  packaging) and keeps the packages as a 14-day run artifact without creating or changing any release. Rerunning the
+  package job replaces that run's artifacts. Every run uploads
+  `linux-package-verification` (manifests, checksums, package metadata, logs, os-release and image digests).
+- The pinned toolchain (.NET SDK from `global.json`, Qt 6.12.0, aqtinstall, CMake, Ninja, X11 prerequisites) lives
+  once in `.github/actions/qt-linux`.
 
 ## What is actually tested
 

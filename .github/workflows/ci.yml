@@ -1,0 +1,68 @@
+name: CI
+
+# Is the change correct? The same gates run on every pull request, on the merged result on main,
+# and as the first stage of release.yml (workflow_call), so packages are only built from a commit
+# that passed them. Nothing here stages, packages or installs; that is release.yml.
+on:
+  pull_request:
+  push:
+    branches: [main, milestone-6-scale, milestone-7-map]
+  workflow_call:
+
+permissions:
+  contents: read
+
+concurrency:
+  # A new push to a pull request supersedes its running checks; runs on main and releases always finish.
+  group: ci-${{ github.workflow_ref }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  tests:
+    name: C# and Python tests (${{ matrix.os }})
+    # Windows covers the shared C# domain and presentation code only. Physical Windows UI and packaging
+    # acceptance are pending; see docs/ui/native-acceptance.md.
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      # The fixtures are hashed and edited byte-for-byte; a CRLF checkout would change them.
+      - run: git config --global core.autocrlf false
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        with:
+          dotnet-version: 10.0.401
+      - run: dotnet build tests/HdbResale.Tests -c Release
+      - run: dotnet test tests/HdbResale.Tests -c Release --no-build
+      # The offline tools' tests (including the packaging tools' unit tests and negative controls)
+      # assume POSIX paths and symlinks.
+      - if: runner.os == 'Linux'
+        run: python3 -m unittest discover -s tools -p 'test_*.py' -v
+
+  native:
+    name: Native build, ctest and API smoke (Ubuntu 24.04)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: ./.github/actions/qt-linux
+      - name: Build the application (Release)
+        run: dotnet build src/HdbResale.App -c Release
+      - name: Native tests and API smoke against the build tree
+        run: |
+          ctest --test-dir src/HdbResale.App/obj/Release/net10.0/qt/native/build --output-on-failure
+          for mode in recorded high-zoom unreachable tile-failure; do
+            python3 tools/api_native_smoke.py --executable src/HdbResale.App/bin/Release/net10.0/HdbResale.App \
+              --mode "$mode" --log "$RUNNER_TEMP/logs/native-$mode.log"
+          done
+        env:
+          QT_QPA_PLATFORM: xcb
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        if: failure()
+        with:
+          name: native-smoke-logs
+          path: ${{ runner.temp }}/logs
+          retention-days: 7
+          if-no-files-found: ignore

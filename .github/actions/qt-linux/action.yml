@@ -1,0 +1,57 @@
+name: Linux Qt toolchain
+description: >-
+  The verified Linux native toolchain shared by ci.yml and release.yml: .NET SDK from global.json,
+  build and X11 prerequisites, the pinned Qt and a virtual X11 display on $DISPLAY. A change to a pin
+  here is a deliberate native re-validation, not a routine bump.
+inputs:
+  extra-packages:
+    description: Additional apt packages (for example the packaging tools).
+    required: false
+    default: ""
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+      with:
+        global-json-file: global.json
+        # Also the exact SDK global.json names, for its runtime: staging ships .NET 10.0.12. A runner image
+        # with a newer SDK patch satisfies global.json's latestPatch roll-forward and would install neither.
+        dotnet-version: 10.0.401
+
+    - name: Install build and X11 prerequisites
+      shell: bash
+      env:
+        EXTRA_PACKAGES: ${{ inputs.extra-packages }}
+      run: |
+        sudo apt-get update -q
+        # shellcheck disable=SC2086 # EXTRA_PACKAGES is a word list
+        sudo apt-get install -y -q --no-install-recommends \
+          build-essential libgl-dev libglx-dev libopengl-dev libegl-dev libxkbcommon-dev libvulkan-dev \
+          libxcb-cursor0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-shape0 \
+          libxcb-xkb1 libxkbcommon-x11-0 libxcb-xinerama0 libxcb-randr0 libxcb-sync1 libxcb-xfixes0 \
+          libxcb-glx0 libx11-xcb1 libfontconfig1 libdbus-1-3 libwayland-client0 libwayland-cursor0 \
+          libwayland-egl1 libgl1 libegl1 libopengl0 libgl1-mesa-dri \
+          xvfb xauth $EXTRA_PACKAGES
+
+    - name: Provision the pinned Qt
+      shell: bash
+      env:
+        QT_VERSION: "6.12.0"
+        AQT_VERSION: "3.3.0"
+        CMAKE_VERSION: "4.4.3"
+        NINJA_VERSION: "1.13.2"
+      run: |
+        python3 -m venv "$RUNNER_TEMP/toolchain"
+        "$RUNNER_TEMP/toolchain/bin/pip" install --quiet \
+          "aqtinstall==$AQT_VERSION" "ninja==$NINJA_VERSION" "cmake==$CMAKE_VERSION"
+        echo "$RUNNER_TEMP/toolchain/bin" >> "$GITHUB_PATH"
+        "$RUNNER_TEMP/toolchain/bin/aqt" install-qt linux desktop "$QT_VERSION" linux_gcc_64 -O "$HOME/Qt" \
+          -m qtgraphs qtlocation qtpositioning qtquick3d qtquicktimeline qtshadertools
+        echo "QtDir=$HOME/Qt/$QT_VERSION/gcc_64" >> "$GITHUB_ENV"
+
+    - name: Start a virtual X11 display
+      shell: bash
+      run: |
+        echo "DISPLAY=:99" >> "$GITHUB_ENV"
+        Xvfb :99 -screen 0 1280x800x24 >"$RUNNER_TEMP/xvfb.log" 2>&1 &
+        sleep 2
