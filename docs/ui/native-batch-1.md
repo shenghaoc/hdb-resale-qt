@@ -22,7 +22,7 @@ in-process, not through the platform's input path. Expected: every mode prints
 if dotnet build -c Release -m:1 && dotnet test -c Release --no-build -m:1; then   # the rest runs only on a fresh, tested build
 case "$(uname)" in
   Darwin) # the staged bundle, so macOS and its accessibility tools see the application, not a bare host
-    exe="$PWD/src/HdbResale.App/obj/Release/net10.0/HdbResale.app/Contents/MacOS/HdbResale.App" ;;
+    exe="$PWD/src/HdbResale.App/obj/Release/net10.0/HDB Resale Explorer.app/Contents/MacOS/HdbResale.App" ;;
   *)      # Linux: the published host
     exe="$PWD/src/HdbResale.App/bin/Release/net10.0/HdbResale.App" ;;
 esac
