@@ -57,12 +57,19 @@ an unreachable-API negative control, uninstalls and confirms nothing is left.
 
 ## CI
 
-`.github/workflows/linux-package.yml` (separate from the Qt-free `domain.yml`) runs for changes to app/native source,
-QML and resources, project and Bridge pins, packaging, the recorded fixtures, files copied into the package and the
-workflow itself; not for documentation-only changes. Steps: C# and Python tests, native gates against the build
-tree (ctest plus four API smoke modes on X11), Release build, staging, tar/DEB/RPM, tamper negative control, relocated
-tar smoke, DEB on Debian 13, RPM on Fedora 43. It uploads `linux-package-verification` (manifests, checksums, package
-metadata, logs, os-release and image digests) for 14 days and **never the package binaries**.
+Three workflows, split by what they are for:
+
+- `domain.yml` (every pull request and push): Qt-free C# and Python tests, including the packaging tools' unit
+  tests and negative controls.
+- `native.yml` (pull requests that change app/native source, QML, resources, project and Bridge pins or the
+  recorded fixtures): Release build, ctest and the four API smoke modes on X11 against the build tree. Nothing is
+  staged, packaged or installed.
+- `linux-package.yml` (release verification, not pull request CI): after merge to `main` for changes to anything
+  that can change the package, and on demand with `workflow_dispatch` for a branch that changes packaging. Steps:
+  C# and Python tests, native gates against the build tree, Release build, staging, tar/DEB/RPM, tamper negative
+  control, relocated tar smoke, DEB on Debian 13, RPM on Fedora 43. It uploads `linux-package-verification`
+  (manifests, checksums, package metadata, logs, os-release and image digests) for 14 days and **never the package
+  binaries**.
 
 ## What is actually tested
 

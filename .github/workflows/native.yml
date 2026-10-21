@@ -1,0 +1,87 @@
+name: Native build (Linux)
+
+# Pull request CI for the Qt-dependent app: does it build, do the native tests pass, does it
+# launch against the recorded API. Nothing is staged, packaged or installed here; that is release
+# verification in linux-package.yml, which runs after merge to main. The C# and Python tests run in
+# domain.yml on every pull request and are not repeated.
+on:
+  pull_request:
+    paths:
+      - "src/**"                       # app/native source, QML, resources, project and Qt Bridge pins
+      - "tests/fixtures/worker-api/**" # recorded API the smoke runs against
+      - "tools/api_fixture_server.py"
+      - "tools/api_native_smoke.py"
+      - "global.json"
+      - "Directory.Build.props"
+      - "HdbResale.slnx"
+      - ".github/workflows/native.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  # Same verified toolchain as linux-package.yml.
+  QT_VERSION: "6.12.0"
+  AQT_VERSION: "3.3.0"
+  CMAKE_VERSION: "4.4.3"
+  NINJA_VERSION: "1.13.2"
+  DISPLAY: ":99"
+
+jobs:
+  native:
+    name: Build, native tests and API smoke (Ubuntu 24.04)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        with:
+          global-json-file: global.json
+
+      - name: Install build and X11 prerequisites
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q --no-install-recommends \
+            build-essential libgl-dev libglx-dev libopengl-dev libegl-dev libxkbcommon-dev libvulkan-dev \
+            libxcb-cursor0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-shape0 \
+            libxcb-xkb1 libxkbcommon-x11-0 libxcb-xinerama0 libxcb-randr0 libxcb-sync1 libxcb-xfixes0 \
+            libxcb-glx0 libx11-xcb1 libfontconfig1 libdbus-1-3 libwayland-client0 libwayland-cursor0 \
+            libwayland-egl1 libgl1 libegl1 libopengl0 libgl1-mesa-dri \
+            xvfb xauth
+      - name: Provision the pinned Qt
+        run: |
+          python3 -m venv "$RUNNER_TEMP/toolchain"
+          "$RUNNER_TEMP/toolchain/bin/pip" install --quiet \
+            "aqtinstall==$AQT_VERSION" "ninja==$NINJA_VERSION" "cmake==$CMAKE_VERSION"
+          echo "$RUNNER_TEMP/toolchain/bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/toolchain/bin/aqt" install-qt linux desktop "$QT_VERSION" linux_gcc_64 -O "$HOME/Qt" \
+            -m qtgraphs qtlocation qtpositioning qtquick3d qtquicktimeline qtshadertools
+          echo "QtDir=$HOME/Qt/$QT_VERSION/gcc_64" >> "$GITHUB_ENV"
+      - name: Start a virtual X11 display
+        run: |
+          Xvfb "$DISPLAY" -screen 0 1280x800x24 >"$RUNNER_TEMP/xvfb.log" 2>&1 &
+          sleep 2
+
+      - name: Build the application (Release)
+        run: dotnet build src/HdbResale.App -c Release
+      - name: Native tests and API smoke against the build tree
+        run: |
+          ctest --test-dir src/HdbResale.App/obj/Release/net10.0/qt/native/build --output-on-failure
+          for mode in recorded high-zoom unreachable tile-failure; do
+            python3 tools/api_native_smoke.py --executable src/HdbResale.App/bin/Release/net10.0/HdbResale.App \
+              --mode "$mode" --log "$RUNNER_TEMP/logs/native-$mode.log"
+          done
+        env:
+          QT_QPA_PLATFORM: xcb
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        if: failure()
+        with:
+          name: native-smoke-logs
+          path: ${{ runner.temp }}/logs
+          retention-days: 7
+          if-no-files-found: ignore

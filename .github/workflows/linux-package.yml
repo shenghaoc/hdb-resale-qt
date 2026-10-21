@@ -1,8 +1,11 @@
 name: Linux package (native)
 
-# Qt-dependent build, native gates and installed-package verification. The lightweight
-# domain.yml stays Qt-free and fast; this workflow runs only when something that can change
-# the packaged binary, its contents or its verification changes.
+# Release verification: Qt-dependent build, native gates, packaging and installed-package
+# verification on Debian 13 and Fedora 43. It is not pull request CI: it runs after merge to main
+# when something that can change the packaged binary, its contents or its verification changes,
+# and on demand (workflow_dispatch) for a branch that changes packaging. Pull requests get the
+# fast native build and smoke gates in native.yml; domain.yml runs the C# and Python tests,
+# including the packaging tools' unit tests and negative controls.
 #
 # Package binaries are never uploaded: CI proves they install and run, which is not a
 # distribution clearance (docs/product-rc/licensing-packaging.md). Only verification
@@ -10,24 +13,6 @@ name: Linux package (native)
 on:
   push:
     branches: [main]
-    paths:
-      - "src/**"                       # app/native source, QML, resources, project and Qt Bridge pins
-      - "tests/fixtures/worker-api/**" # recorded API the package smoke runs against
-      - "tools/package/**"
-      - "tools/api_fixture_server.py"
-      - "tools/api_native_smoke.py"
-      - "tools/test_package_*.py"
-      - "packaging/**"
-      - "global.json"
-      - "Directory.Build.props"
-      - "HdbResale.slnx"
-      - "LICENSE"                      # the next entries are copied into the package's licenses/
-      - "LICENSES/**"
-      - "REUSE.toml"
-      - "THIRD_PARTY_NOTICES.md"
-      - "docs/product-rc/licensing-packaging.md"
-      - ".github/workflows/linux-package.yml"
-  pull_request:
     paths:
       - "src/**"                       # app/native source, QML, resources, project and Qt Bridge pins
       - "tests/fixtures/worker-api/**" # recorded API the package smoke runs against

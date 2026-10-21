@@ -14,6 +14,7 @@ ROOT = Path(__file__).parents[1]
 WORKFLOWS = ROOT / ".github/workflows"
 PACKAGE = (WORKFLOWS / "linux-package.yml").read_text()
 DOMAIN = (WORKFLOWS / "domain.yml").read_text()
+NATIVE = (WORKFLOWS / "native.yml").read_text()
 DEPENDABOT = (ROOT / ".github/dependabot.yml").read_text()
 
 
@@ -54,16 +55,34 @@ class WorkflowSplit(unittest.TestCase):
         for pinned in ("AQT_VERSION", "CMAKE_VERSION", "NINJA_VERSION"):
             self.assertRegex(PACKAGE, pinned + r': "\d+\.\d+\.\d+"')
 
-    def test_package_workflow_runs_for_binary_and_package_inputs_but_not_for_documentation(self):
-        paths = re.findall(r'^      - "([^"]+)"', PACKAGE.split("pull_request:")[0], re.M)
+    def test_package_workflow_runs_after_merge_for_binary_and_package_inputs_but_not_for_documentation(self):
+        triggers = PACKAGE.split("permissions:")[0]
+        paths = re.findall(r'^      - "([^"]+)"', triggers, re.M)
         for needed in ("src/**", "packaging/**", "tools/package/**", "global.json", "LICENSES/**",
                        "tests/fixtures/worker-api/**", ".github/workflows/linux-package.yml",
                        "docs/product-rc/licensing-packaging.md"):
             self.assertIn(needed, paths)
         for broad in ("docs/**", "**", "*.md", "tests/**", "README.md"):
             self.assertNotIn(broad, paths)
-        # Both triggers use the same list.
-        self.assertEqual(paths, re.findall(r'^      - "([^"]+)"', PACKAGE.split("pull_request:")[1].split("workflow_dispatch")[0], re.M))
+        self.assertIn("workflow_dispatch:", triggers)
+
+    def test_package_verification_is_release_verification_not_pull_request_ci(self):
+        self.assertNotIn("pull_request", PACKAGE.split("permissions:")[0])
+
+    def test_pull_requests_get_a_fast_native_build_and_smoke_without_packaging(self):
+        triggers = NATIVE.split("permissions:")[0]
+        self.assertIn("pull_request:", triggers)
+        self.assertNotIn("push:", triggers)
+        paths = re.findall(r'^      - "([^"]+)"', triggers, re.M)
+        self.assertIn("src/**", paths)
+        for broad in ("docs/**", "**", "*.md", "tests/**", "README.md"):
+            self.assertNotIn(broad, paths)
+        self.assertIn(f'QT_VERSION: "{PINS["qt"]}"', NATIVE)
+        self.assertIn("ctest --test-dir", NATIVE)
+        self.assertIn("api_native_smoke.py", NATIVE)
+        for forbidden in ("docker", "stage_linux", "build_packages", "verify_installed", "rpm",
+                          "unittest discover", "dotnet test"):
+            self.assertNotIn(forbidden, NATIVE)
 
     def test_package_binaries_are_never_uploaded(self):
         upload = PACKAGE.split("actions/upload-artifact")[1]

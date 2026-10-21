@@ -60,8 +60,10 @@
 
 ## R6 — CI structure
 
-- **R6.1** `domain.yml` stays Qt-free and fast. The package/native workflow `linux-package.yml` is separate and is
-  triggered only by inputs that can change the package (app/native source, QML, resources, project and Bridge pins,
+- **R6.1** `domain.yml` stays Qt-free and fast. Pull requests that change the app get a fast native build and
+  smoke (`native.yml`) and are never staged, packaged or installed. The package workflow `linux-package.yml` is
+  release verification: it runs after merge to `main` (and on demand) and is triggered only by inputs that can
+  change the package (app/native source, QML, resources, project and Bridge pins,
   packaging, recorded fixtures, files copied into the package, the workflow).
 - **R6.2** It builds Release from a clean checkout, runs the existing C#/Python tests and native gates first,
   then stages, packages and verifies.

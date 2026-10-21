@@ -28,6 +28,8 @@
 
 - [x] **T4.1** `linux-package.yml` with scoped triggers, tests and native gates before packaging, Debian 13 and Fedora 43
   verification, reports-only artifact. → `test_ci_configuration.py`. (R6)
+- [x] **T4.2** Package verification moved off pull requests (post-merge on `main` and `workflow_dispatch`); pull
+  requests run `native.yml` (build, ctest, API smoke) instead. → `test_ci_configuration.py`. (R6.1)
 
 ## Phase 5 — Dependabot
 
