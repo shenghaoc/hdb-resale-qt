@@ -67,6 +67,7 @@ internal static class Program
             WriteReport(args[2], StartupStudy.Run(args[1]));
             return;
         }
+        DesktopEntry.Apply();
         NativeTileStatus.Start();
         Qml.LoadFromRootModule("Main");
         Qml.WaitForExit();

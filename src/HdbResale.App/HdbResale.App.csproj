@@ -66,6 +66,7 @@
     <Compile Include="LegacyFactsJsonConverter.cs" />
     <Compile Include="BasemapConfiguration.cs" />
     <Compile Include="NativeTileStatus.cs" />
+    <Compile Include="DesktopEntry.cs" />
     <Compile Include="TileFailureStatus.cs" />
     <QtDotnetCMake Include="include(&quot;$(MSBuildProjectDirectory)/Native/TileStatus.cmake&quot;)" />
     <Compile Include="ResaleMapModel.cs" />

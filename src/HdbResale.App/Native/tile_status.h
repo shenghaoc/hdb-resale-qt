@@ -15,4 +15,6 @@ extern "C" {
 // Installs the monitor once; later calls do nothing. It stays installed until the process exits.
 HDB_TILE_STATUS_API void hdb_tile_status_start();
 HDB_TILE_STATUS_API std::uint64_t hdb_tile_status_exhausted();
+// Sets QGuiApplication::desktopFileName (UTF-16, null-terminated). Call it before any window exists.
+HDB_TILE_STATUS_API void hdb_set_desktop_file_name(const char16_t *name);
 }
