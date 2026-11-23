@@ -15,7 +15,8 @@
 version: 2
 updates:
   - package-ecosystem: github-actions
-    directory: /
+    # Scan the workflows and the pins owned by local composite actions.
+    directories: [/, /.github/actions/*]
     schedule:
       interval: weekly
       day: monday
