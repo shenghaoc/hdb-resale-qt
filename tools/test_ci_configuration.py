@@ -2,6 +2,7 @@
 
 Plain text parsing on purpose: the lightweight domain workflow runs these without extra packages.
 """
+import json
 from pathlib import Path
 import re
 import sys
@@ -16,6 +17,7 @@ ACTIONS = ROOT / ".github/actions"
 CI = (WORKFLOWS / "ci.yml").read_text()
 RELEASE = (WORKFLOWS / "release.yml").read_text()
 TOOLCHAIN = (ACTIONS / "qt-linux/action.yml").read_text()
+DOTNET = ACTIONS / "dotnet-sdk/action.yml"
 CI_TESTS = CI.split("\n  tests:")[1].split("\n  native:")[0]
 CI_NATIVE = CI.split("\n  native:")[1]
 PACKAGE = RELEASE.split("\n  package:")[1].split("\n  publish:")[0]
@@ -136,7 +138,21 @@ class WorkflowRoles(unittest.TestCase):
 
     def test_the_native_toolchain_is_pinned_once_and_shared(self):
         self.assertIn(f'QT_VERSION: "{PINS["qt"]}"', TOOLCHAIN)
-        self.assertIn("global-json-file: global.json", TOOLCHAIN)
+        sdk_setup = "uses: ./.github/actions/dotnet-sdk"
+        self.assertIn(sdk_setup, TOOLCHAIN)
+        self.assertIn(sdk_setup, CI_TESTS)
+        self.assertLess(CI_TESTS.index("uses: actions/checkout@"), CI_TESTS.index(sdk_setup))
+        sdk = DOTNET.read_text()
+        self.assertIn("global-json-file: global.json", sdk)
+        version = json.loads((ROOT / "global.json").read_text())["sdk"]["version"]
+        self.assertIn(f"dotnet-version: {version}", sdk)
+        setup_dotnet_sites = [
+            file
+            for file in automation_files()
+            for reference, _ in uses(file.read_text())
+            if reference.startswith("actions/setup-dotnet@")
+        ]
+        self.assertEqual(setup_dotnet_sites, [DOTNET])
         for pinned in ("AQT_VERSION", "CMAKE_VERSION", "NINJA_VERSION"):
             self.assertRegex(TOOLCHAIN, pinned + r': "\d+\.\d+\.\d+"')
         self.assertIn("uses: ./.github/actions/qt-linux", CI_NATIVE)
